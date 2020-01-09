@@ -81,11 +81,6 @@ public abstract class GenericRobot {
       }
 
 
-
-
-
-
-
       public final void setShooterPowerPercentage(
             double upperPower,
             double lowerPower
@@ -101,7 +96,7 @@ public abstract class GenericRobot {
       public final void setShooterPowerPercentage(
             double power
       ) {
-            setShooterPowerPercentage(power,power);
+            setShooterPowerPercentageInternal(power,power);
       }
 
       protected void setShooterPowerPercentageInternal(
@@ -117,10 +112,6 @@ public abstract class GenericRobot {
       public double getShooterPowerLower() {
             return shooterLowerPower;
       }
-
-
-
-
 
       public final void spinControlPanel (
             double power
