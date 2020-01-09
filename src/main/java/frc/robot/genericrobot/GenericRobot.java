@@ -54,7 +54,7 @@ public abstract class GenericRobot {
       }
 
       public double getMotorPowerRight() {
-            return leftPower;
+            return rightPower;
       }
 
       public double getDistanceInchesLeft()  {
@@ -75,7 +75,7 @@ public abstract class GenericRobot {
             System.out.println("I don't have a navx :'(");
             return 0;
       }
-      public double getRole()  {
+      public double getRoll()  {
             System.out.println("I don't have a navx :'(");
             return 0;
       }
@@ -119,7 +119,7 @@ public abstract class GenericRobot {
             this.spinPower = power;
             spinControlPanelInternal(power);
       }
-
+      
       protected void spinControlPanelInternal (
             double power
       ) {
