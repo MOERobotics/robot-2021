@@ -13,7 +13,7 @@ import frc.robot.genericrobot.*;
 
 public class Robot extends TimedRobot {
 
-  GenericRobot steve = new Camoelot();
+  GenericRobot robot = new Camoelot();
   Joystick leftJoystick = new Joystick(0);
 
   @Override public void robotInit() {
@@ -21,8 +21,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override public void robotPeriodic() {
-    SmartDashboard.putNumber("DistanceInches", steve.getDistanceInchesLeft());
-    SmartDashboard.putNumber("Left Motor Power", steve.getMotorPowerLeft());
+    SmartDashboard.putNumber("DistanceInches", robot.getDistanceInchesLeft());
+    SmartDashboard.putNumber("Left Motor Power", robot.getMotorPowerLeft());
   }
 
   @Override public void autonomousInit() {
@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
     double leftPower  = leftJoystick.getY() + leftJoystick.getX();
     double rightPower = leftJoystick.getY() - leftJoystick.getX();
 
-    steve.setMotorPowerPercentage(leftPower,rightPower);
+    robot.setMotorPowerPercentage(leftPower,rightPower);
   }
 
   @Override public void testInit() {
