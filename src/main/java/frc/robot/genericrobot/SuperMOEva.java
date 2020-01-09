@@ -23,7 +23,7 @@ public class SuperMOEva extends GenericRobot {
     TalonSRX driveRB = new TalonSRX(15) {{
         setNeutralMode(NeutralMode.Brake);
     }};
-    
+
     {
         driveLA.setInverted(true);
         driveLB.setInverted(true);
@@ -54,7 +54,8 @@ public class SuperMOEva extends GenericRobot {
     @Override
     protected void spinControlPanelInternal(double power) {
         rollL.set(ControlMode.PercentOutput, power);
-        rollR.set(ControlMode.PercentOutput, -power);
+        //change dis to positive power
+        rollR.set(ControlMode.PercentOutput, power);
     }
 
     @Override
