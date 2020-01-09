@@ -4,11 +4,15 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 
 public class SuperMOEva extends GenericRobot {
+    double defaultLimelightValue = 0.0;
 
     //Drive motors
     TalonSRX driveLA = new TalonSRX(12) {{
@@ -29,6 +33,7 @@ public class SuperMOEva extends GenericRobot {
         driveLB.setInverted(true);
     }
 
+
     //Control panel spinners
     TalonSRX rollL = new TalonSRX(11) {{
         setNeutralMode(NeutralMode.Brake);
@@ -41,6 +46,12 @@ public class SuperMOEva extends GenericRobot {
     Encoder encoderL = new Encoder(0, 1, true, CounterBase.EncodingType.k4X);
     Encoder encoderR = new Encoder(4, 5, true, CounterBase.EncodingType.k4X);
 
+
+    //Limelight
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
 
     @Override
     protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
@@ -79,7 +90,22 @@ public class SuperMOEva extends GenericRobot {
     }
 
     @Override
-    public double getRole() {
+    public double getRoll() {
         return navX.getRoll();
+    }
+
+    @Override
+    public double getLimelightX() {
+        return tx.getDouble(defaultLimelightValue);
+    }
+
+    @Override
+    public double getLimelightY() {
+        return ty.getDouble(defaultLimelightValue);
+    }
+
+    @Override
+    public double getLimelightArea() {
+        return ta.getDouble(defaultLimelightValue);
     }
 }
