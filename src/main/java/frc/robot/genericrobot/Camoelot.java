@@ -34,13 +34,6 @@ public class Camoelot extends GenericRobot {
             rightMotorC.set(ControlMode.PercentOutput, rightPower);
       }
 
-      @Override public double getDistanceInchesLeft()  {
-            return leftEncoder.get();
-      }
-
-      @Override public double getDistanceInchesRight()  {
-            return rightEncoder.get();
-      }
 
 
 

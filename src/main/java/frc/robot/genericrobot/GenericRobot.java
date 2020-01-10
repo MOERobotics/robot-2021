@@ -25,25 +25,25 @@ public abstract class GenericRobot {
             double rightPower
       );
 
-      public void driveForward (
+      public final void driveForward (
             double power
       ) {
             setMotorPowerPercentage(power,power);
       }
 
-      public void driveReverse (
+      public final void driveReverse (
             double power
       ) {
             setMotorPowerPercentage(-power,-power);
       }
 
-      public void driveLeftInPlace (
+      public final void driveLeftInPlace (
             double power
       ) {
             setMotorPowerPercentage(-power,power);
       }
 
-      public void driveRightInPlace (
+      public final void driveRightInPlace (
             double power
       ) {
             setMotorPowerPercentage(power,-power);
@@ -54,15 +54,29 @@ public abstract class GenericRobot {
       }
 
       public final double getMotorPowerRight() {
-            return leftPower;
+            return rightPower;
       }
 
       public final double getDistanceInchesLeft()  {
+            return getDistanceTicksLeft() * getDistanceRatioLeft();
+      }
+      public double getDistanceRatioLeft()  {
+            System.out.println("I don't have an encoder :'(");
+            return 0;
+      }
+      public double getDistanceTicksLeft()  {
             System.out.println("I don't have an encoder :'(");
             return 0;
       }
 
       public double getDistanceInchesRight()  {
+            return getDistanceTicksRight() * getDistanceRatioRight();
+      }
+      public double getDistanceRatioRight()  {
+            System.out.println("I don't have an encoder :'(");
+            return 0;
+      }
+      public double getDistanceTicksRight()  {
             System.out.println("I don't have an encoder :'(");
             return 0;
       }
@@ -71,10 +85,12 @@ public abstract class GenericRobot {
             System.out.println("I don't have a navx :'(");
             return 0;
       }
+
       public double getPitch()  {
             System.out.println("I don't have a navx :'(");
             return 0;
       }
+
       public double getRoll()  {
             System.out.println("I don't have a navx :'(");
             return 0;
@@ -101,10 +117,8 @@ public abstract class GenericRobot {
       public final void setShooterPowerPercentage(
             double power
       ) {
-            setShooterPowerPercentage(power,power);
+            setShooterPowerPercentageInternal(power,power);
       }
-
-      public abstract double getRole();
 
       protected void setShooterPowerPercentageInternal(
             double upperPower,
@@ -113,10 +127,10 @@ public abstract class GenericRobot {
             System.out.println("I don't have a shooter :'(");
       }
 
-      public double getShooterPowerUpper() {
+      public final double getShooterPowerUpper() {
             return shooterUpperPower;
       }
-      public double getShooterPowerLower() {
+      public final double getShooterPowerLower() {
             return shooterLowerPower;
       }
 
@@ -137,7 +151,7 @@ public abstract class GenericRobot {
             System.out.println("I can't spin the control panel :'(");
       }
 
-      public final double getControlPanelSpinnerPower() {
+      public final double getControlPanelSpinnerPower () {
             return spinPower;
       }
 
