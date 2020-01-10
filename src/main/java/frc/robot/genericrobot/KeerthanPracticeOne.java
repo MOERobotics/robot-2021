@@ -19,19 +19,24 @@ public class KeerthanPracticeOne extends GenericRobot {
     CANEncoder encoderRight = new CANEncoder(driveRightA);
     CANEncoder encoderLeft = new CANEncoder(driveLeftA);
 
-    public KeerthanPracticeOne(){
-        driveLeftB.follow(driveLeftA);
-        driveRightB.follow(driveRightA);
-
-        driveLeftA.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        driveRightA.setIdleMode(CANSparkMax.IdleMode.kBrake);
-
-        driveRightA.setInverted(true);
+    @Override
+    public double getDistanceRatioLeft()  {
+        return 100;
     }
 
     @Override
-    public double getDistanceInchesLeft() {
+    public double getDistanceTicksLeft()  {
         return encoderLeft.getPosition();
+    }
+
+    @Override
+    public double getDistanceRatioRight()  {
+        return 100;
+    }
+
+    @Override
+    public double getDistanceTicksRight() {
+        return encoderRight.getPosition();
     }
 
     @Override
@@ -40,22 +45,12 @@ public class KeerthanPracticeOne extends GenericRobot {
     }
 
     @Override
-    public double getMotorPowerLeft() {
-        return driveLeftA.getOutputCurrent();
-    }
-
-    @Override
-    public double getMotorPowerRight() {
-        return driveRightA.getOutputCurrent();
-    }
-
-    @Override
     public double getYaw() {
         return navx.getYaw();
     }
 
     @Override
-    public double getPicth() {
+    public double getPitch() {
         return navx.getPitch();
     }
 
@@ -65,7 +60,7 @@ public class KeerthanPracticeOne extends GenericRobot {
     }
 
     @Override
-    public void setMotorPowerPercentage(double leftPower, double rightPower) {
+    public void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
         driveRightA.set(rightPower);
         driveRightB.set(rightPower);
         driveLeftA.set(leftPower);
