@@ -8,25 +8,21 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.genericrobot.CaMOElot;
-import frc.robot.genericrobot.GenericRobot;
+import frc.robot.genericrobot.*;
 
 public class Robot extends TimedRobot {
 
+  GenericRobot robot = new Camoelot();
+  Joystick leftJoystick = new Joystick(0);
 
   @Override public void robotInit() {
-    var dummyPidController = new PIDController(0,0,0) {{
-      setSetpoint(0);
-      setTolerance(0.1);
-      enableContinuousInput(-180,180);
-    }};
-    double error = 0.1;
-    double correction = dummyPidController.calculate(error);
+
   }
 
   @Override public void robotPeriodic() {
+    SmartDashboard.putNumber("DistanceInches", robot.getDistanceInchesLeft());
+    SmartDashboard.putNumber("Left Motor Power", robot.getMotorPowerLeft());
   }
 
   @Override public void autonomousInit() {
@@ -42,7 +38,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override public void teleopPeriodic() {
+    double leftPower  = leftJoystick.getY() + leftJoystick.getX();
+    double rightPower = leftJoystick.getY() - leftJoystick.getX();
 
+    robot.setMotorPowerPercentage(leftPower,rightPower);
   }
 
   @Override public void testInit() {
