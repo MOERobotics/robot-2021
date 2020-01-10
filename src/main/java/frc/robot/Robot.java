@@ -9,8 +9,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.genericrobot.CaMOElot;
+import frc.robot.genericrobot.GenericRobot;
 
 public class Robot extends TimedRobot {
+
 
   @Override public void robotInit() {
     var dummyPidController = new PIDController(0,0,0) {{
@@ -23,7 +27,6 @@ public class Robot extends TimedRobot {
   }
 
   @Override public void robotPeriodic() {
-
   }
 
   @Override public void autonomousInit() {
