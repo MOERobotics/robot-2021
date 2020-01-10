@@ -14,6 +14,10 @@ import edu.wpi.first.wpilibj.SPI;
 public class SuperMOEva extends GenericRobot {
     double defaultLimelightValue = 0.0;
 
+    //These are def wrong
+    double distanceRatioLeft = 180;
+    double distanceRatioRight = 180;
+
     //Drive motors
     TalonSRX driveLA = new TalonSRX(12) {{
         setNeutralMode(NeutralMode.Brake);
@@ -70,14 +74,16 @@ public class SuperMOEva extends GenericRobot {
     }
 
     @Override
-    public double getDistanceInchesLeft() {
-        return encoderL.getDistance();
-    }
+    public double getDistanceTicksRight()  { return encoderR.get(); }
 
     @Override
-    public double getDistanceInchesRight() {
-        return encoderR.getDistance();
-    }
+    public double getDistanceTicksLeft()  { return encoderL.get(); }
+
+    @Override
+    public double getDistanceRatioLeft()  { return distanceRatioLeft; }
+
+    @Override
+    public double getDistanceRatioRight()  { return distanceRatioRight; }
 
     @Override
     public double getYaw() {
