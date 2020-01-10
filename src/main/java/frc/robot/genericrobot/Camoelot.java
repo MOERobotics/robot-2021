@@ -40,19 +40,19 @@ public class Camoelot extends GenericRobot {
       @Override
       public double getYaw() {
             navx.getYaw();
-            return 0;
+            return navx.getYaw();
       }
 
       @Override
       public double getPitch() {
             navx.getPitch();
-            return 0;
+            return navx.getPitch();
       }
 
       @Override
-      public double getRole() {
+      public double getRoll() {
             navx.getRoll();
-            return 0;
+            return navx.getRoll();
       }
 
       @Override
