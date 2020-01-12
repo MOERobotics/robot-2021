@@ -97,11 +97,6 @@ public abstract class GenericRobot {
       }
 
 
-
-
-
-
-
       public final void setShooterPowerPercentage(
             double upperPower,
             double lowerPower
@@ -135,9 +130,6 @@ public abstract class GenericRobot {
       }
 
 
-
-
-
       public final void spinControlPanel (
             double power
       ) {
@@ -158,5 +150,20 @@ public abstract class GenericRobot {
       public char getCurrentControlPanelColor()  {
             System.out.println("I don't have a color sensor :'(");
             return '?';
+      }
+
+      public double getLimelightX(){
+            System.out.println("I don't have a limelight ;(");
+            return 0;
+      }
+
+      public double getLimelightY(){
+            System.out.println("I don't have a limelight ;(");
+            return 0;
+      }
+
+      public double getLimelightArea(){
+            System.out.println("I don't have a limelight ;(");
+            return 0;
       }
 }
