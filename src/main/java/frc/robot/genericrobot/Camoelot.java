@@ -7,20 +7,26 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Camoelot extends GenericRobot {
 
-      AHRS navx;
+      AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 50);
+
       private TalonSRX  leftMotorA = new TalonSRX(12);
       private TalonSRX  leftMotorB = new TalonSRX(13);
       private TalonSRX  leftMotorC = new TalonSRX(14);
       private TalonSRX rightMotorA = new TalonSRX( 1);
       private TalonSRX rightMotorB = new TalonSRX( 2);
       private TalonSRX rightMotorC = new TalonSRX( 3);
+
       private TalonSRX shooterA = new TalonSRX(15);
       private TalonSRX shooterB = new TalonSRX(10);
 
-
-
       private Encoder  leftEncoder = new Encoder(0,1);
-      private Encoder rightEncoder = new Encoder(0,1);
+      private Encoder rightEncoder = new Encoder(2,3);
+
+      public Camoelot () {
+            rightMotorA.setInverted(true);
+            rightMotorB.setInverted(true);
+            rightMotorC.setInverted(true);
+      }
 
       @Override public void setMotorPowerPercentageInternal(
               double leftPower,
@@ -33,8 +39,6 @@ public class Camoelot extends GenericRobot {
             rightMotorB.set(ControlMode.PercentOutput, rightPower);
             rightMotorC.set(ControlMode.PercentOutput, rightPower);
       }
-
-
 
 
       @Override
@@ -58,6 +62,23 @@ public class Camoelot extends GenericRobot {
             shooterB.set(ControlMode.PercentOutput, lowerPower);
       }
 
+      @Override
+      public double getDistanceTicksLeft() {
+            return leftEncoder.get();
+      }
 
+      @Override
+      public double getDistanceTicksRight() {
+            return -rightEncoder.get();
+      }
 
+      @Override
+      public double getDistanceRatioLeft() {
+            return 116;
+      }
+
+      @Override
+      public double getDistanceRatioRight() {
+            return 116;
+      }
 }

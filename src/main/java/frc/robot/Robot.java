@@ -9,10 +9,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.autonomous.DriveStraightOneSecond;
+import frc.robot.autonomous.GenericAutonomous;
 import frc.robot.genericrobot.*;
 
 public class Robot extends TimedRobot {
 
+  GenericAutonomous autoProgram = new DriveStraightOneSecond();
   GenericRobot robot = new Camoelot();
   Joystick leftJoystick = new Joystick(0);
 
@@ -21,16 +24,27 @@ public class Robot extends TimedRobot {
   }
 
   @Override public void robotPeriodic() {
-    SmartDashboard.putNumber("DistanceInches", robot.getDistanceInchesLeft());
-    SmartDashboard.putNumber("Left Motor Power", robot.getMotorPowerLeft());
+    SmartDashboard.putNumber("Left  Encoder Ticks", robot.getDistanceTicksLeft ());
+    SmartDashboard.putNumber("Right Encoder Ticks", robot.getDistanceTicksRight());
+    SmartDashboard.putNumber("Navx Yaw"           , robot.getYaw  ());
+    SmartDashboard.putNumber("Navx Pitch"         , robot.getPitch());
+    SmartDashboard.putNumber("Navx Roll"          , robot.getRoll ());
+
+    SmartDashboard.putNumber("Left  Motor Power"  , robot.getMotorPowerLeft ());
+    SmartDashboard.putNumber("Right Motor Power"  , robot.getMotorPowerRight());
+    SmartDashboard.putNumber("Upper Shooter Power", robot.getShooterPowerUpper());
+    SmartDashboard.putNumber("Lower Shooter Power", robot.getShooterPowerLower());
+    SmartDashboard.putNumber("Control Panel Power", robot.getControlPanelSpinnerPower());
+
+    SmartDashboard.putNumber("AutoStep", autoProgram.autonomousStep);
   }
 
   @Override public void autonomousInit() {
-
+    autoProgram.autonomousInit(robot);
   }
 
   @Override public void autonomousPeriodic() {
-
+    autoProgram.autonomousPeriodic(robot);
   }
 
   @Override public void teleopInit() {
@@ -38,8 +52,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override public void teleopPeriodic() {
-    double leftPower  = leftJoystick.getY() + leftJoystick.getX();
-    double rightPower = leftJoystick.getY() - leftJoystick.getX();
+    double leftPower  = -leftJoystick.getY() + leftJoystick.getX();
+    double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
     robot.setMotorPowerPercentage(leftPower,rightPower);
   }
