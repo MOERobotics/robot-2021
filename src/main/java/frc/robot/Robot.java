@@ -31,6 +31,9 @@ public class Robot extends TimedRobot {
   @Override public void robotPeriodic() {
     SmartDashboard.putNumber("Left  Encoder Ticks", robot.getDistanceTicksLeft ());
     SmartDashboard.putNumber("Right Encoder Ticks", robot.getDistanceTicksRight());
+    SmartDashboard.putNumber("Left Encoder Inches", robot.getDistanceInchesLeft());
+    SmartDashboard.putNumber("Right Encoder Inches", robot.getDistanceInchesRight());
+
     SmartDashboard.putNumber("Navx Yaw"           , robot.getYaw  ());
     SmartDashboard.putNumber("Navx Pitch"         , robot.getPitch());
     SmartDashboard.putNumber("Navx Roll"          , robot.getRoll ());

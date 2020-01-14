@@ -21,8 +21,9 @@ public class Win extends GenericAutonomous {
                   case 2:
                         startingYaw = robot.getYaw();
                         autonomousStep = 3;
+                        break;
                   case 3:
-                        robot.driveRightInPlace(0.5);
+                        robot.driveRightInPlace(0.2);
                         currentYaw = robot.getYaw();
                         if (currentYaw - startingYaw > 90) {
                               robot.driveForward(0);
@@ -31,8 +32,9 @@ public class Win extends GenericAutonomous {
                   case 4:
                         startingDistance = robot.getDistanceInchesLeft();
                         autonomousStep = 5;
+                        break;
                   case 5:
-                        robot.driveForward(0.5);
+                        robot.driveForward(0.2);
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > 66.91) {
                               robot.driveForward(0);
@@ -42,17 +44,18 @@ public class Win extends GenericAutonomous {
                         startingYaw = robot.getYaw();
                         autonomousStep = 7;
                   case 7:
-                        robot.driveLeftInPlace(0.5);
+                        robot.driveLeftInPlace(0.2);
                         currentYaw = robot.getYaw();
-                        if (currentYaw - startingYaw < -90) {
+                        if (currentYaw - startingYaw <-90) {
                               robot.driveForward(0);
                               autonomousStep = 8;
                         } else break;
                   case 8:
                         startingDistance = robot.getDistanceInchesLeft();
                         autonomousStep = 9;
+                        break;
                   case 9:
-                        robot.driveReverse(0.5);
+                        robot.driveForward(0.2);
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > -195) {
                               robot.driveForward(0);
