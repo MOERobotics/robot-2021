@@ -58,7 +58,7 @@ public abstract class GenericRobot {
       }
 
       public final double getDistanceInchesLeft()  {
-            return getDistanceTicksLeft() * getDistanceRatioLeft();
+            return getDistanceTicksLeft() / getDistanceRatioLeft();
       }
       public double getDistanceRatioLeft()  {
             System.out.println("I don't have an encoder :'(");
@@ -70,7 +70,7 @@ public abstract class GenericRobot {
       }
 
       public double getDistanceInchesRight()  {
-            return getDistanceTicksRight() * getDistanceRatioRight();
+            return getDistanceTicksRight() / getDistanceRatioRight();
       }
       public double getDistanceRatioRight()  {
             System.out.println("I don't have an encoder :'(");
@@ -94,6 +94,10 @@ public abstract class GenericRobot {
       public double getRoll()  {
             System.out.println("I don't have a navx :'(");
             return 0;
+      }
+
+      public void resetAttitude() {
+            System.out.println("I don't have a navx :'(");
       }
 
 

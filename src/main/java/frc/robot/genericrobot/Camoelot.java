@@ -81,4 +81,8 @@ public class Camoelot extends GenericRobot {
       public double getDistanceRatioRight() {
             return 116;
       }
+
+      @Override public void resetAttitude() {
+            navx.reset();
+      }
 }

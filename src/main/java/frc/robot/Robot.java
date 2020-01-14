@@ -11,11 +11,12 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.DriveStraightOneSecond;
 import frc.robot.autonomous.GenericAutonomous;
+import frc.robot.autonomous.Win;
 import frc.robot.genericrobot.*;
 
 public class Robot extends TimedRobot {
 
-  GenericAutonomous autoProgram = new DriveStraightOneSecond();
+  GenericAutonomous autoProgram = new Win();
   GenericRobot robot = new Camoelot();
   Joystick leftJoystick = new Joystick(0);
 
@@ -39,6 +40,13 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("AutoStep", autoProgram.autonomousStep);
   }
 
+  @Override public void disabledPeriodic() {
+    if (leftJoystick.getTriggerPressed()) {
+      System.out.println("AAAAAAAA");
+      robot.resetAttitude();
+    }
+  }
+
   @Override public void autonomousInit() {
     autoProgram.autonomousInit(robot);
   }
@@ -55,7 +63,12 @@ public class Robot extends TimedRobot {
     double leftPower  = -leftJoystick.getY() + leftJoystick.getX();
     double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
+
+    leftPower  = ( leftPower < 0.1 &&  leftPower > -0.1) ? 0 :  leftPower;
+    rightPower = (rightPower < 0.1 && rightPower > -0.1) ? 0 : rightPower;
+
     robot.setMotorPowerPercentage(leftPower,rightPower);
+    robot.setShooterPowerPercentage(0);
   }
 
   @Override public void testInit() {
