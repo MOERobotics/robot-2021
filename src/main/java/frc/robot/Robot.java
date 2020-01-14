@@ -11,16 +11,21 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.DriveStraightOneSecond;
 import frc.robot.autonomous.GenericAutonomous;
+import frc.robot.autonomous.Win;
 import frc.robot.genericrobot.*;
 
 public class Robot extends TimedRobot {
 
-  GenericAutonomous autoProgram = new DriveStraightOneSecond();
+  GenericAutonomous autoProgram = new Win();
   GenericRobot robot = new Camoelot();
   Joystick leftJoystick = new Joystick(0);
 
   @Override public void robotInit() {
+    robot.setShooterPowerPercentage(0,0);
+  }
 
+  @Override public void disabledInit() {
+    robot.setShooterPowerPercentage(0,0);
   }
 
   @Override public void robotPeriodic() {

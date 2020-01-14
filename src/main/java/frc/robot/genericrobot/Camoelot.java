@@ -72,6 +72,10 @@ public class Camoelot extends GenericRobot {
             return -rightEncoder.get();
       }
 
+      @Override public void resetTicksLeft() { leftEncoder.reset(); }
+
+      @Override public void resetTicksRight() { rightEncoder.reset(); }
+
       @Override
       public double getDistanceRatioLeft() {
             return 116;

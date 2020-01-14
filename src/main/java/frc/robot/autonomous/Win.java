@@ -12,6 +12,8 @@ public class Win extends GenericAutonomous {
             double currentDistance = 0;
             switch (autonomousStep) {
                   case 0:
+                        robot.resetTicksLeft();
+                        robot.resetTicksRight();
                         robot.setShooterPowerPercentage(1);
                         if (true) autonomousStep = 2;
                         break;

@@ -76,9 +76,16 @@ public abstract class GenericRobot {
             System.out.println("I don't have an encoder :'(");
             return 0;
       }
-      public double getDistanceTicksRight()  {
+      public double getDistanceTicksRight() {
             System.out.println("I don't have an encoder :'(");
             return 0;
+      }
+
+      public void resetTicksRight() {
+      }
+
+      public void resetTicksLeft() {
+
       }
 
       public double getYaw()  {
