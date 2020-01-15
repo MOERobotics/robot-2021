@@ -1,11 +1,14 @@
 package frc.robot.autonomous;
 
+import frc.robot.PIDModule;
 import frc.robot.genericrobot.GenericRobot;
 
 public class Win extends GenericAutonomous {
 
       double startingYaw      = 0.0;
       double startingDistance = 0.0;
+      PIDModule PIDSteering = new PIDModule(0.06, 1.0e-3, 1.0e-4);
+      double correction;
 
       @Override public void autonomousPeriodic(GenericRobot robot) {
             double currentYaw = 0;
@@ -24,13 +27,17 @@ public class Win extends GenericAutonomous {
                         currentYaw = robot.getYaw();
                         if (currentYaw - startingYaw < -90) {
                               robot.driveForward(0);
+                              currentYaw = robot.getYaw();
                               autonomousStep = 4;
                         } else break;
                   case 4:
                         startingDistance = robot.getDistanceInchesLeft();
+                        PIDSteering.resetError();
                         autonomousStep = 5;
                   case 5:
-                        robot.driveForward(0.2);
+                        PIDSteering.setHeading(robot.getYaw()-currentYaw);
+                        correction = PIDSteering.getCorrection();
+                        robot.setMotorPowerPercentage(0.2*(1+correction), 0.2*(1-correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > 66.91) {
                               robot.driveForward(0);
