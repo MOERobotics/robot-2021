@@ -7,6 +7,15 @@ public abstract class GenericRobot {
       public double         spinPower = 0;
       public double shooterUpperPower = 0;
       public double shooterLowerPower = 0;
+      public boolean gear         = false;
+
+      public void shiftHigh(){
+            System.out.println("I don't have a shifter ;(");
+      }
+
+      public void shiftLow() {
+            System.out.println("I don't have a shifter ;(");
+      }
 
       public final void setMotorPowerPercentage(
             double leftPower,
@@ -64,6 +73,7 @@ public abstract class GenericRobot {
             System.out.println("I don't have an encoder :'(");
             return 0;
       }
+
       public double getDistanceTicksLeft()  {
             System.out.println("I don't have an encoder :'(");
             return 0;
@@ -73,9 +83,11 @@ public abstract class GenericRobot {
             return getDistanceTicksRight() / getDistanceRatioRight();
       }
       public double getDistanceRatioRight()  {
+
             System.out.println("I don't have an encoder :'(");
             return 0;
       }
+
       public double getDistanceTicksRight()  {
             System.out.println("I don't have an encoder :'(");
             return 0;
@@ -169,5 +181,17 @@ public abstract class GenericRobot {
       public double getLimelightArea(){
             System.out.println("I don't have a limelight ;(");
             return 0;
+      }
+
+      public void resetEncoders(){
+            resetEncoderLeft();
+            resetEncoderRight();
+      }
+      public void resetEncoderLeft(){
+            System.out.println("I don't have encoders");
+      }
+
+      public void resetEncoderRight(){
+            System.out.println("I don't have encoders");
       }
 }

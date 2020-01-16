@@ -17,7 +17,7 @@ import frc.robot.genericrobot.*;
 public class Robot extends TimedRobot {
 
   GenericAutonomous autoProgram = new Win();
-  GenericRobot robot = new Camoelot();
+  GenericRobot robot = new KeerthanPracticeOne();
   Joystick leftJoystick = new Joystick(0);
 
   @Override public void robotInit() {
@@ -44,7 +44,9 @@ public class Robot extends TimedRobot {
     if (leftJoystick.getTriggerPressed()) {
       System.out.println("AAAAAAAA");
       robot.resetAttitude();
+      robot.resetEncoders();
     }
+
   }
 
   @Override public void autonomousInit() {
@@ -69,6 +71,16 @@ public class Robot extends TimedRobot {
 
     robot.setMotorPowerPercentage(leftPower,rightPower);
     robot.setShooterPowerPercentage(0);
+
+    if (leftJoystick.getRawButtonPressed(16)) {
+      robot.shiftLow();
+
+    }
+
+    if (leftJoystick.getRawButtonPressed(11)) {
+      robot.shiftHigh();
+
+    }
   }
 
   @Override public void testInit() {

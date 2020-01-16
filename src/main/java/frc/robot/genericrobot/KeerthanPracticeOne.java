@@ -16,22 +16,46 @@ public class KeerthanPracticeOne extends GenericRobot {
     CANSparkMax driveLeftA = new CANSparkMax(14, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax driveLeftB = new CANSparkMax(15, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+    //Right motor ratio = .78615
+    //Left motor ratio = .78949
     CANEncoder encoderRight = new CANEncoder(driveRightA);
     CANEncoder encoderLeft = new CANEncoder(driveLeftA);
 
-    @Override
-    public double getDistanceRatioLeft()  {
-        return 100;
+    Solenoid shifter = new Solenoid(0);
+
+    public KeerthanPracticeOne() {
+        driveRightB.follow(driveRightA);
+        driveLeftB.follow(driveLeftA);
+
+        driveRightA.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        driveRightB.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        driveLeftA.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        driveLeftB.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+        driveRightA.setInverted(true);
     }
 
     @Override
-    public double getDistanceTicksLeft()  {
+    public double getDistanceTicksLeft() {
         return encoderLeft.getPosition();
     }
 
     @Override
-    public double getDistanceRatioRight()  {
-        return 100;
+    public double getDistanceRatioLeft() {
+        if (!gear) {
+            return 0.78949;
+        } else {
+            return 0.1;
+        }
+    }
+
+    @Override
+    public double getDistanceRatioRight() {
+        if (!gear) {
+            return 0.78615;
+        } else {
+            return 0.1;
+        }
     }
 
     @Override
@@ -65,5 +89,30 @@ public class KeerthanPracticeOne extends GenericRobot {
         driveRightB.set(rightPower);
         driveLeftA.set(leftPower);
         driveLeftB.set(leftPower);
+    }
+
+    @Override
+    public void resetEncoders() {
+        super.resetEncoders();
+    }
+
+    @Override
+    public void resetEncoderLeft() {
+        encoderLeft.setPosition(0.0);
+    }
+
+    @Override
+    public void resetEncoderRight() {
+        encoderRight.setPosition(0.0);
+    }
+
+    @Override
+    public void shiftHigh() {
+        shifter.set(true);
+    }
+
+    @Override
+    public void shiftLow() {
+        shifter.set(false);
     }
 }
