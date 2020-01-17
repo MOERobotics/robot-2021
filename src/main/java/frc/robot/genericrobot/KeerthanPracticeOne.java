@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.SPI;
 public class KeerthanPracticeOne extends GenericRobot {
 
     AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 50);
-    private Solenoid s1 = new Solenoid(0);
+
     CANSparkMax driveRightA = new CANSparkMax(20, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax driveRightB = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax driveLeftA = new CANSparkMax(14, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -42,19 +42,21 @@ public class KeerthanPracticeOne extends GenericRobot {
 
     @Override
     public double getDistanceRatioLeft() {
-        if (!gear) {
+        if (getShifterState() == false) {
+            //High gear ratio
             return 0.78949;
         } else {
-            return 0.1;
+            //Low gear ratio
+            return 0.38913;
         }
     }
 
     @Override
     public double getDistanceRatioRight() {
-        if (!gear) {
+        if (getShifterState() == false) {
             return 0.78615;
         } else {
-            return 0.1;
+            return 0.37414;
         }
     }
 
@@ -104,6 +106,11 @@ public class KeerthanPracticeOne extends GenericRobot {
     @Override
     public void resetEncoderRight() {
         encoderRight.setPosition(0.0);
+    }
+
+    @Override
+    public boolean getShifterState() {
+        return shifter.get();
     }
 
     @Override

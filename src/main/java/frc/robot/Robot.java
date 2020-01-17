@@ -38,6 +38,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Control Panel Power", robot.getControlPanelSpinnerPower());
 
     SmartDashboard.putNumber("AutoStep", autoProgram.autonomousStep);
+    SmartDashboard.putBoolean("Shifter state", robot.getShifterState());
   }
 
   @Override public void disabledPeriodic() {
@@ -74,12 +75,13 @@ public class Robot extends TimedRobot {
 
     if (leftJoystick.getRawButtonPressed(16)) {
       robot.shiftLow();
-
     }
 
     if (leftJoystick.getRawButtonPressed(11)) {
       robot.shiftHigh();
-
+    }
+    if(leftJoystick.getTrigger()){
+      robot.driveForward(.1);
     }
   }
 
