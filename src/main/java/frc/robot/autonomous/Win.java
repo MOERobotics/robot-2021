@@ -1,5 +1,6 @@
 package frc.robot.autonomous;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.PIDModule;
 import frc.robot.genericrobot.GenericRobot;
 
@@ -7,9 +8,11 @@ public class Win extends GenericAutonomous {
 
       double startingYaw      = 0.0;
       double startingDistance = 0.0;
-      PIDModule PIDSteering = new PIDModule(1.0e-2, 1.0e-4, 0.0e-4);
+      PIDModule PIDSteering = new PIDModule(4.0e-2, 0.0e-3, 1.0e-4);
       double correction;
       static double currentYaw = 0;
+      double leftWheelArc = (Math.PI * 46) / 2;
+      double rightWheelArc = (Math.PI * 23 / 2);
 
       @Override public void autonomousInit(GenericRobot robot) {
             robot.resetAttitude();
@@ -45,20 +48,34 @@ public class Win extends GenericAutonomous {
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage(0.4*(1+correction), 0.4*(1-correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 66.91) {
+                        if (currentDistance - startingDistance > 34.5) { //drive towards wall
                               robot.driveForward(0);
                               autonomousStep = 6;
                         } else break;
                   case 6:
+                        PIDSteering.resetError();
                         startingYaw = robot.getYaw();
+                        startingDistance = robot.getDistanceTicksLeft(); //check
                         autonomousStep = 7;
                   case 7:
-                        robot.driveRightInPlace(0.4);
+                        PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-2.0);
+                        correction = PIDSteering.getCorrection();
+                        robot.setMotorPowerPercentage(0.6*(1+correction), 0.3*(1-correction));
+                        currentDistance = robot.getDistanceInchesLeft();
+                        if (currentDistance - startingDistance > leftWheelArc) {
+                              robot.driveForward(0);
+                              autonomousStep = 6;
+                        } else break;
+                        //robot.driveRightInPlace(0.4);
                         currentYaw = robot.getYaw();
-                        if (currentYaw - startingYaw > 85) {
+                        /*
+                              if (currentYaw - startingYaw > 85) {
                               robot.driveForward(0);
                               autonomousStep = 8;
                         } else break;
+                         */
+
+
                   case 8:
                         startingDistance = robot.getDistanceInchesLeft();
                         PIDSteering.resetError();
@@ -70,7 +87,6 @@ public class Win extends GenericAutonomous {
                         PIDSteering.setHeading(robot.getYaw() - currentYaw);
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage(0.4*(1+correction), 0.4*(1-correction));
-                        //robot.driveForward(0.2);
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > 195) {
                               robot.driveForward(0);
@@ -81,6 +97,7 @@ public class Win extends GenericAutonomous {
                         //                               ¯\_(ツ)_/¯
                         break;
             }
+            SmartDashboard.putNumber("Correction",correction);
       }
 }
 
@@ -91,5 +108,7 @@ public class Win extends GenericAutonomous {
       Position / Proportion  = How Far away we are
       Integral
       Derivative
+
+      wheel to wheel: 23in
 
  */
