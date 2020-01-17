@@ -7,20 +7,24 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.autonomous.DriveStraightOneSecond;
 import frc.robot.autonomous.GenericAutonomous;
 import frc.robot.autonomous.Win;
-import frc.robot.genericrobot.*;
+import frc.robot.genericrobot.GenericRobot;
+import frc.robot.genericrobot.KeerthanPracticeOne;
+import frc.robot.genericrobot.Lidar;
 
 public class Robot extends TimedRobot {
 
   GenericAutonomous autoProgram = new Win();
-  GenericRobot robot = new Camoelot();
+  GenericRobot robot = new KeerthanPracticeOne();
   Joystick leftJoystick = new Joystick(0);
+  Lidar lidar = new Lidar();
 
   @Override public void robotInit() {
+    lidar.start();
 
   }
 
@@ -38,6 +42,15 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Control Panel Power", robot.getControlPanelSpinnerPower());
 
     SmartDashboard.putNumber("AutoStep", autoProgram.autonomousStep);
+
+  for(int i = 1; i <= 4; i++) {
+    Integer lidar1 = lidar.getDistance(i);
+    String lidar1s = " ";
+    if (lidar1 != null) {
+      lidar1s = lidar1.toString();
+    }
+    SmartDashboard.putString("Lidar" + i, lidar1s);
+  }
   }
 
   @Override public void disabledPeriodic() {

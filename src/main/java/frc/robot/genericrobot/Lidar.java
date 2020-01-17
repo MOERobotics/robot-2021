@@ -46,13 +46,22 @@ public class Lidar extends Thread {
     }
 
     @Override public void run() {
+        this.setName("Lidar Thread");
         StringBuffer readText = new StringBuffer();
+        System.out.println("Lidar started");
+        try {Thread.sleep(1000);}
+        catch (Exception ignored) {}
         while(true) {
             byte newByte = lidarSerialPort.read(1)[0];
+            //System.out.printf("Lidar read character '%x'\n", newByte);
+            if (newByte == '\n') continue;
+            if (newByte == '\r') continue;
             if (newByte != ' ') {
                 readText.append((char)newByte);
             } else {
                 String lidarString = readText.toString();
+
+                System.out.printf("Lidar string is '%s'\n", lidarString);
                 readText.delete(0,999);
 
                 if (!lidarString.contains("-")) {
@@ -65,9 +74,11 @@ public class Lidar extends Thread {
                     continue;
                 }
 
+
                 int id = Integer.parseInt(lidarBlob.group("id"));
                 int distance = Integer.parseInt(lidarBlob.group("distance"));
 
+                System.out.printf("Found lidar %d with distance %d\n", id, distance);
                 writeDistance(id, distance);
 
 
