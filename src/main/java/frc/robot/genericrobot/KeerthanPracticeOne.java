@@ -4,6 +4,9 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -22,6 +25,14 @@ public class KeerthanPracticeOne extends GenericRobot {
     CANEncoder encoderLeft = new CANEncoder(driveLeftA);
 
     Solenoid shifter = new Solenoid(0);
+
+    //Limelight
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    boolean setTable = table.getEntry("pipeline").setNumber(1);
+
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry ta = table.getEntry("ta");
 
     public KeerthanPracticeOne() {
         driveRightB.follow(driveRightA);
@@ -43,20 +54,22 @@ public class KeerthanPracticeOne extends GenericRobot {
     @Override
     public double getDistanceRatioLeft() {
         if (getShifterState() == false) {
-            //High gear ratio
-            return 0.78949;
+            //low gear ratio
+            return 0.77949;
         } else {
-            //Low gear ratio
-            return 0.38913;
+            //high gear ratio
+            //78.2
+            return 0.38113;
         }
     }
 
     @Override
     public double getDistanceRatioRight() {
         if (getShifterState() == false) {
-            return 0.78615;
+            return 0.77615;
         } else {
-            return 0.37414;
+            //80
+            return 0.38014;
         }
     }
 
@@ -121,5 +134,20 @@ public class KeerthanPracticeOne extends GenericRobot {
     @Override
     public void shiftLow() {
         shifter.set(false);
+    }
+
+    @Override
+    public double getLimelightX() {
+        return tx.getDouble(0.0);
+    }
+
+    @Override
+    public double getLimelightY() {
+        return ty.getDouble(0.0);
+    }
+
+    @Override
+    public double getLimelightArea() {
+        return ta.getDouble(0.0);
     }
 }

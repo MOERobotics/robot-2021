@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getTrigger()) {
             robot.driveForward(.1);
         }
-        
+
     }
 
     @Override
