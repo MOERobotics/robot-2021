@@ -43,14 +43,14 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("AutoStep", autoProgram.autonomousStep);
 
-  for(int i = 1; i <= 4; i++) {
-    Integer lidar1 = lidar.getDistance(i);
-    String lidar1s = " ";
-    if (lidar1 != null) {
-      lidar1s = lidar1.toString();
+    for(int i = 1; i <= 4; i++) {
+      Integer lidarNum = lidar.getDistance(i);
+      String lidarString = " ";
+      if (lidarNum != null) {
+        lidarString = lidarNum.toString();
+      }
+      SmartDashboard.putString("Lidar" + i, lidarString);
     }
-    SmartDashboard.putString("Lidar" + i, lidar1s);
-  }
   }
 
   @Override public void disabledPeriodic() {
