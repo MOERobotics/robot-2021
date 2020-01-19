@@ -103,8 +103,11 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButtonPressed(11)) {
             robot.shiftHigh();
         }
-        if (leftJoystick.getTrigger()) {
-            robot.driveForward(.1);
+        if (leftJoystick.getRawButton(13)) {
+            robot.driveForward(-.2);
+        }
+        if (leftJoystick.getRawButton(14)) {
+            robot.driveForward(.2);
         }
 
     }

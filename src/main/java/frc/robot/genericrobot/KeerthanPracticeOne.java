@@ -117,6 +117,11 @@ public class KeerthanPracticeOne extends GenericRobot {
     }
 
     @Override
+    public void resetAttitude() {
+        navx.reset();
+    }
+
+    @Override
     public boolean getShifterState() {
         return shifter.get();
     }

@@ -16,6 +16,8 @@ public class Win extends GenericAutonomous {
 
       @Override public void autonomousInit(GenericRobot robot) {
             robot.resetAttitude();
+            robot.resetEncoders();
+            autonomousStep = 0;
       }
 
       @Override public void autonomousPeriodic(GenericRobot robot) {
@@ -48,14 +50,14 @@ public class Win extends GenericAutonomous {
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage(0.4*(1+correction), 0.4*(1-correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 34.5) { //drive towards wall
+                        if (currentDistance - startingDistance > 18.5) { //drive towards wall also was 34.5
                               robot.driveForward(0);
                               autonomousStep = 6;
                         } else break;
                   case 6:
                         PIDSteering.resetError();
                         startingYaw = robot.getYaw();
-                        startingDistance = robot.getDistanceTicksLeft(); //check
+                        startingDistance = robot.getDistanceInchesLeft(); //check
                         autonomousStep = 7;
                   case 7:
                         PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-2.0);
@@ -64,7 +66,7 @@ public class Win extends GenericAutonomous {
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > leftWheelArc) {
                               robot.driveForward(0);
-                              autonomousStep = 6;
+                              autonomousStep = 8;
                         } else break;
                         //robot.driveRightInPlace(0.4);
                         currentYaw = robot.getYaw();
@@ -88,7 +90,7 @@ public class Win extends GenericAutonomous {
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage(0.4*(1+correction), 0.4*(1-correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 195) {
+                        if (currentDistance - startingDistance > 135) {
                               robot.driveForward(0);
                               autonomousStep = 10;
                         } else break;
