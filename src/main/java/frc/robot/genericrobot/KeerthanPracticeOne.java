@@ -79,11 +79,6 @@ public class KeerthanPracticeOne extends GenericRobot {
     }
 
     @Override
-    public double getDistanceInchesRight() {
-        return encoderRight.getPosition();
-    }
-
-    @Override
     public double getYaw() {
         return navx.getYaw();
     }
