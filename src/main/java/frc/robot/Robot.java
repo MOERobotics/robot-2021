@@ -9,7 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.autonomous.DriveStraightOneSecond;
 import frc.robot.autonomous.GenericAutonomous;
 import frc.robot.autonomous.Win;
 import frc.robot.genericrobot.*;
@@ -20,11 +19,12 @@ public class Robot extends TimedRobot {
     GenericRobot robot = new KeerthanPracticeOne();
     Joystick leftJoystick = new Joystick(0);
     double deadZone = 0.1;
+  Lidar lidar = new Lidar();
 
-    @Override
-    public void robotInit() {
+  @Override public void robotInit() {
+    lidar.start();
 
-    }
+  }
 
     @Override
     public void robotPeriodic() {
@@ -45,7 +45,21 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Left Encoder Inches", robot.getDistanceInchesLeft());
         SmartDashboard.putNumber("Right Encoder Inches", robot.getDistanceInchesRight());
 
+        SmartDashboard.putBoolean("Lidar Locked", lidar.isLocked());
+
+        for(int i = 0; i <= 3; i++) {
+            Integer lidarNum = lidar.getDistance(i);
+            String lidarString = " ";
+            if (lidarNum != null) {
+                lidarString = lidarNum.toString();
+            }
+            SmartDashboard.putString("Lidar" + i, lidarString);
+        }
     }
+
+
+
+  }
 
     @Override
     public void disabledPeriodic() {
