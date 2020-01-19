@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("AutoStep", autoProgram.autonomousStep);
         SmartDashboard.putBoolean("Shifter state", robot.getShifterState());
         SmartDashboard.putNumber("Left Encoder Inches", robot.getDistanceInchesLeft());
-        SmartDashboard.putNumber("Left Encoder Inches", robot.getDistanceInchesRight());
+        SmartDashboard.putNumber("Right Encoder Inches", robot.getDistanceInchesRight());
 
     }
 
