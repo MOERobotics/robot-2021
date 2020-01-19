@@ -43,6 +43,8 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("AutoStep", autoProgram.autonomousStep);
 
+    SmartDashboard.putBoolean("Lidar Locked", lidar.isLocked());
+
     for(int i = 1; i <= 4; i++) {
       Integer lidarNum = lidar.getDistance(i);
       String lidarString = " ";

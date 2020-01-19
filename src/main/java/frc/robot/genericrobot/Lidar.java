@@ -9,19 +9,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Lidar extends Thread {
-    SerialPort lidarSerialPort = new SerialPort(
-            9600,
-            SerialPort.Port.kMXP,
-            8,
-            SerialPort.Parity.kNone,
-            SerialPort.StopBits.kOne
-    );
 
-    Pattern lidarFormat = Pattern.compile("(?<id>[0-9]+)-(?<distance>[0-9]+)");
+    static final Pattern lidarFormat = Pattern.compile("(?<id>[0-9]{1,9})-(?<distance>[0-9]{1,9})");
 
     Map<Integer, Integer> lidarValues = new HashMap<>();
 
     ReentrantLock dataLock = new ReentrantLock();
+
+    public boolean isLocked() {
+        return dataLock.isLocked();
+    }
 
     public Integer getDistance(int lidarID) {
         Integer distance = null;
@@ -47,21 +44,44 @@ public class Lidar extends Thread {
 
     @Override public void run() {
         this.setName("Lidar Thread");
+
+        SerialPort lidarSerialPort = null;
+        while (lidarSerialPort == null) {
+            try {
+                lidarSerialPort = new SerialPort(
+                        9600,
+                        SerialPort.Port.kMXP,
+                        8,
+                        SerialPort.Parity.kNone,
+                        SerialPort.StopBits.kOne
+                );
+            } catch (Exception e) {
+                System.out.println(e);
+                System.out.println("We couldn't make the serial port. Will try again in a few seconds.");
+                try {
+                    Thread.sleep(2000);
+                } catch (Exception ignored) {}
+            }
+        }
+        //Throws exception if it cannot open the serial port -- Maybe try again in a few seconds?
+
         StringBuffer readText = new StringBuffer();
-        System.out.println("Lidar started");
         try {Thread.sleep(1000);}
         catch (Exception ignored) {}
+        System.out.println("Lidar started");
         while(true) {
             byte newByte = lidarSerialPort.read(1)[0];
-            //System.out.printf("Lidar read character '%x'\n", newByte);
+            //Can throw if lidarSerialPort isn't feeling good today --Maybe we can try to reconnect to the serial bus
+            //Can throw if lidarSerialPort is at EOF (zero length array) -- I don't think we can recover from
+
+            if (newByte < 0) continue;
             if (newByte == '\n') continue;
             if (newByte == '\r') continue;
+            //System.out.printf("Lidar read character '%x'\n", newByte);
             if (newByte != ' ') {
                 readText.append((char)newByte);
             } else {
                 String lidarString = readText.toString();
-
-                System.out.printf("Lidar string is '%s'\n", lidarString);
                 readText.delete(0,999);
 
                 if (!lidarString.contains("-")) {
@@ -74,13 +94,11 @@ public class Lidar extends Thread {
                     continue;
                 }
 
-
                 int id = Integer.parseInt(lidarBlob.group("id"));
                 int distance = Integer.parseInt(lidarBlob.group("distance"));
 
                 System.out.printf("Found lidar %d with distance %d\n", id, distance);
                 writeDistance(id, distance);
-
 
             }
         }
