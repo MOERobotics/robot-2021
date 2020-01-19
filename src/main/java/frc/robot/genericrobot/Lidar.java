@@ -70,9 +70,15 @@ public class Lidar extends Thread {
         catch (Exception ignored) {}
         System.out.println("Lidar started");
         while(true) {
-            byte newByte = lidarSerialPort.read(1)[0];
+            byte[] newByteArr = lidarSerialPort.read(1);
+            if (newByteArr.length == 0) {
+                System.out.println("Serial Port says we are at end of file. Nothing we can read.");
+                return;
+            }
+            byte newByte = newByteArr[0];
             //Can throw if lidarSerialPort isn't feeling good today --Maybe we can try to reconnect to the serial bus
             //Can throw if lidarSerialPort is at EOF (zero length array) -- I don't think we can recover from
+
 
             if (newByte < 0) continue;
             if (newByte == '\n') continue;

@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Lidar Locked", lidar.isLocked());
 
-    for(int i = 1; i <= 4; i++) {
+    for(int i = 0; i <= 3; i++) {
       Integer lidarNum = lidar.getDistance(i);
       String lidarString = " ";
       if (lidarNum != null) {
