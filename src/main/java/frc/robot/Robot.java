@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
     GenericRobot robot = new KeerthanPracticeOne();
     Joystick leftJoystick = new Joystick(0);
     double deadZone = 0.1;
-  Lidar lidar = new Lidar();
+    Lidar lidar = new Lidar();
 
   @Override public void robotInit() {
     lidar.start();
@@ -56,10 +56,6 @@ public class Robot extends TimedRobot {
             SmartDashboard.putString("Lidar" + i, lidarString);
         }
     }
-
-
-
-  }
 
     @Override
     public void disabledPeriodic() {
