@@ -1,5 +1,6 @@
 package frc.robot.genericrobot;
 
+import edu.wpi.first.hal.util.UncleanStatusException;
 import edu.wpi.first.wpilibj.SerialPort;
 
 import java.util.HashMap;
@@ -70,7 +71,16 @@ public class Lidar extends Thread {
         catch (Exception ignored) {}
         System.out.println("Lidar started");
         while(true) {
-            byte[] newByteArr = lidarSerialPort.read(1);
+            byte[] newByteArr = null;
+            try {
+                newByteArr = lidarSerialPort.read(1);
+            } catch (UncleanStatusException e) {
+                System.out.println(e);
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception ignored) {}
+                continue;
+            }
             if (newByteArr.length == 0) {
                 System.out.println("Serial Port says we are at end of file. Nothing we can read.");
                 return;
