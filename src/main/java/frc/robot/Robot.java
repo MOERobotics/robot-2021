@@ -10,12 +10,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.GenericAutonomous;
+import frc.robot.autonomous.PlanA;
 import frc.robot.autonomous.Win;
 import frc.robot.genericrobot.*;
 
 public class Robot extends TimedRobot {
 
     GenericAutonomous autoProgram = new Win();
+    GenericAutonomous betterAuto = new PlanA();
     GenericRobot robot = new KeerthanPracticeOne();
     Joystick leftJoystick = new Joystick(0);
     double deadZone = 0.1;
@@ -40,7 +42,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Lower Shooter Power", robot.getShooterPowerLower());
         SmartDashboard.putNumber("Control Panel Power", robot.getControlPanelSpinnerPower());
 
-        SmartDashboard.putNumber("AutoStep", autoProgram.autonomousStep);
+        SmartDashboard.putNumber("AutoStep", betterAuto.autonomousStep);
         SmartDashboard.putBoolean("Shifter state", robot.getShifterState());
         SmartDashboard.putNumber("Left Encoder Inches", robot.getDistanceInchesLeft());
         SmartDashboard.putNumber("Right Encoder Inches", robot.getDistanceInchesRight());
@@ -69,12 +71,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        autoProgram.autonomousInit(robot);
+        betterAuto.autonomousInit(robot);
     }
 
     @Override
     public void autonomousPeriodic() {
-        autoProgram.autonomousPeriodic(robot);
+        betterAuto.autonomousPeriodic(robot);
     }
 
     @Override
