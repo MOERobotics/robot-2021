@@ -14,8 +14,8 @@ public class PlanA extends GenericAutonomous {
       PIDModule PIDSteering = new PIDModule(4.0e-2, 0.0e-3, 1.0e-4);
       double correction;
       static double currentYaw = 0;
-      double innerArc = 70.9; //former left
-      double outerArc = 35.45; //former right
+      double outerArc = 73.2; //former left
+      double innerArc = 35.45; //former right
 
       @Override public void autonomousInit(GenericRobot robot) {
             robot.resetAttitude();
@@ -32,6 +32,7 @@ public class PlanA extends GenericAutonomous {
                         startingYaw = robot.getYaw(); //do we need this?
                         startingDistance = robot.getDistanceInchesRight(); //check
                         autonomousStep = 1;
+                        break;
                   case 1:
                         PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-0.5); //-2 is A
                         correction = PIDSteering.getCorrection();
