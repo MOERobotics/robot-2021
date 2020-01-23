@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.PIDModule;
 import frc.robot.genericrobot.GenericRobot;
 
-public class Win extends GenericAutonomous {
+public class PlanA extends GenericAutonomous {
 
       //change speed depending on robot!! (CaMOElot = .4, TestBot = .2)
       double defaultSpeed = 0.2;
@@ -14,8 +14,8 @@ public class Win extends GenericAutonomous {
       PIDModule PIDSteering = new PIDModule(4.0e-2, 0.0e-3, 1.0e-4);
       double correction;
       static double currentYaw = 0;
-      double leftWheelArc = (Math.PI * 46) / 2;
-      double rightWheelArc = (Math.PI * 23 / 2);
+      double outerArc = 73.2; //former left
+      double innerArc = 35.45; //former right
 
       @Override public void autonomousInit(GenericRobot robot) {
             robot.resetAttitude();
@@ -26,7 +26,59 @@ public class Win extends GenericAutonomous {
       @Override public void autonomousPeriodic(GenericRobot robot) {
             double currentDistance = 0;
             switch (autonomousStep) {
-                case 0:                             //shorten steps to implement S curve B)
+
+                  case 0:
+                        PIDSteering.resetError();
+                        startingYaw = robot.getYaw(); //do we need this?
+                        startingDistance = robot.getDistanceInchesRight(); //check
+                        autonomousStep = 1;
+                        break;
+                  case 1:
+                        PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-0.5); //-2 is A
+                        correction = PIDSteering.getCorrection();
+                        robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
+                        currentDistance = robot.getDistanceInchesRight();
+                        if (currentDistance - startingDistance > outerArc) {
+                              //don't stop
+                              autonomousStep = 2;
+                        } else break;
+                  case 2:
+                        PIDSteering.resetError();
+                        robot.resetEncoders();
+                        startingDistance = robot.getDistanceInchesLeft();
+                        autonomousStep = 3;
+                  case 3:
+                        PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-2.0);
+                        correction = PIDSteering.getCorrection();
+                        robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
+                        currentDistance = robot.getDistanceInchesLeft();
+                        if(currentDistance - startingDistance > outerArc) {
+                              autonomousStep = 4;
+                        } else break;
+                  case 4:
+                        robot.resetEncoders();
+                        startingDistance = robot.getDistanceInchesLeft();
+                        PIDSteering.resetError();
+                        currentYaw = 0;
+                        autonomousStep = 5;
+                  case 5:
+                        PIDSteering.setHeading(robot.getYaw() - currentYaw);
+                        correction = PIDSteering.getCorrection();
+                        robot.setMotorPowerPercentage(defaultSpeed *(1+correction), defaultSpeed *(1-correction));
+                        currentDistance = robot.getDistanceInchesLeft();
+                        if (currentDistance - startingDistance > 100) { //maybe change depending on how far we need to go
+                              robot.driveForward(0);
+                              autonomousStep = 6;
+                        } else break;
+                  case 6:
+                        robot.driveForward(0);
+                        //                               ¯\_(ツ)_/¯
+                        break;
+
+            }
+
+                  /*
+                             case 0:                             //shorten steps to implement S curve B)
                         if (true) autonomousStep = 2;
                         break;
                   case 1:
@@ -61,7 +113,7 @@ public class Win extends GenericAutonomous {
                         startingDistance = robot.getDistanceInchesLeft(); //check
                         autonomousStep = 7;
                   case 7:
-                        PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-2.0);
+                        PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-2.0); //-2 is A
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage((defaultSpeed * 1.5) *(1+correction), (defaultSpeed * .75)*(1-correction));
                         currentDistance = robot.getDistanceInchesLeft();
@@ -91,6 +143,8 @@ public class Win extends GenericAutonomous {
                         //                               ¯\_(ツ)_/¯
                         break;
             }
+                   */
+
             SmartDashboard.putNumber("Correction",correction);
       }
 }
