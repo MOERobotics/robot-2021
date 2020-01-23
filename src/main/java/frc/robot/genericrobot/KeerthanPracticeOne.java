@@ -55,21 +55,25 @@ public class KeerthanPracticeOne extends GenericRobot {
     public double getDistanceRatioLeft() {
         if (getShifterState() == false) {
             //low gear ratio
-            return 0.77949;
+            //0.77949 independently measured
+            return 0.77782; //average of two ratios
         } else {
             //high gear ratio
             //78.2
-            return 0.38113;
+            //return 0.38113;
+            return 0.380635;
         }
     }
 
     @Override
     public double getDistanceRatioRight() {
         if (getShifterState() == false) {
-            return 0.77615;
+            //0.77615 independently measured
+            return 0.77782; //average of two ratios
         } else {
             //80
-            return 0.38014;
+            //return 0.38014;
+            return 0.380635;
         }
     }
 

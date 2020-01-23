@@ -67,6 +67,8 @@ public class Robot extends TimedRobot {
             robot.resetEncoders();
         }
 
+        betterAuto.autonomousStep = 0;
+
     }
 
     @Override

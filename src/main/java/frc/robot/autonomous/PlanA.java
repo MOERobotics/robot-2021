@@ -16,6 +16,7 @@ public class PlanA extends GenericAutonomous {
       static double currentYaw = 0;
       double outerArc = 73.2; //former left
       double innerArc = 35.45; //former right
+      double outerRadius = 50; //originally 50
 
       @Override public void autonomousInit(GenericRobot robot) {
             robot.resetAttitude();
@@ -29,47 +30,59 @@ public class PlanA extends GenericAutonomous {
 
                   case 0:
                         PIDSteering.resetError();
-                        startingYaw = robot.getYaw(); //do we need this?
+                        startingYaw = robot.getYaw();
                         startingDistance = robot.getDistanceInchesRight(); //check
                         autonomousStep = 1;
                         break;
                   case 1:
-                        PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-0.5); //-2 is A
+                        //PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-0.5); //-2 is A
+                        double yawDifference = (robot.getYaw() - startingYaw) / 180 * Math.PI;
+                        PIDSteering.setHeading((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                         currentDistance = robot.getDistanceInchesRight();
                         if (currentDistance - startingDistance > outerArc) {
                               //don't stop
                               autonomousStep = 2;
-                        } else break;
+                        }
+                        break;
+                        //idea: stop after 1 and read current distance
                   case 2:
                         PIDSteering.resetError();
                         robot.resetEncoders();
                         startingDistance = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
                         autonomousStep = 3;
+                        break;
                   case 3:
-                        PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-2.0);
+                        //PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-2.0);
+                        yawDifference = (robot.getYaw() - startingYaw) / 180 * Math.PI;
+                        PIDSteering.setHeading(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
+                        SmartDashboard.putNumber("Pid heading", outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         if(currentDistance - startingDistance > outerArc) {
                               autonomousStep = 4;
-                        } else break;
+                        }
+                        break;
                   case 4:
                         robot.resetEncoders();
                         startingDistance = robot.getDistanceInchesLeft();
                         PIDSteering.resetError();
                         currentYaw = 0;
                         autonomousStep = 5;
+                        break;
                   case 5:
                         PIDSteering.setHeading(robot.getYaw() - currentYaw);
                         correction = PIDSteering.getCorrection();
-                        robot.setMotorPowerPercentage(defaultSpeed *(1+correction), defaultSpeed *(1-correction));
+                        robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > 100) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
                               autonomousStep = 6;
-                        } else break;
+                        }
+                        break;
                   case 6:
                         robot.driveForward(0);
                         //                               ¯\_(ツ)_/¯
