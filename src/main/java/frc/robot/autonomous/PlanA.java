@@ -34,7 +34,7 @@ public class PlanA extends GenericAutonomous {
                         autonomousStep = 1;
                         break;
                   case 1:
-                        PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-0.5); //-2 is A
+                        PIDSteering.sendError(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-0.5); //-2 is A
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                         currentDistance = robot.getDistanceInchesRight();
@@ -48,7 +48,7 @@ public class PlanA extends GenericAutonomous {
                         startingDistance = robot.getDistanceInchesLeft();
                         autonomousStep = 3;
                   case 3:
-                        PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-2.0);
+                        PIDSteering.sendError(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-2.0);
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
@@ -62,7 +62,7 @@ public class PlanA extends GenericAutonomous {
                         currentYaw = 0;
                         autonomousStep = 5;
                   case 5:
-                        PIDSteering.setHeading(robot.getYaw() - currentYaw);
+                        PIDSteering.sendError(robot.getYaw() - currentYaw);
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage(defaultSpeed *(1+correction), defaultSpeed *(1-correction));
                         currentDistance = robot.getDistanceInchesLeft();

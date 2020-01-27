@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 public class PIDModule{
     public double getInput      () {return  input; }
     public double getCorrection () {return output; }
-    public void   setHeading    (double input) {this.input = input;  }
+    public void sendError(double input) {this.input = input;  }
 
     public void resetError(){
         this.input = 0;
