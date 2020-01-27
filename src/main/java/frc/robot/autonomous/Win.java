@@ -47,7 +47,7 @@ public class Win extends GenericAutonomous {
                         autonomousStep = 5;
                         break;
                   case 5:
-                        PIDSteering.setHeading(robot.getYaw()-currentYaw);
+                        PIDSteering.sendError(robot.getYaw()-currentYaw);
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage(defaultSpeed *(1+correction), defaultSpeed *(1-correction));
                         currentDistance = robot.getDistanceInchesLeft();
@@ -61,7 +61,7 @@ public class Win extends GenericAutonomous {
                         startingDistance = robot.getDistanceInchesLeft(); //check
                         autonomousStep = 7;
                   case 7:
-                        PIDSteering.setHeading(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-2.0);
+                        PIDSteering.sendError(robot.getDistanceInchesLeft()/robot.getDistanceInchesRight()-2.0);
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage((defaultSpeed * 1.5) *(1+correction), (defaultSpeed * .75)*(1-correction));
                         currentDistance = robot.getDistanceInchesLeft();
@@ -78,7 +78,7 @@ public class Win extends GenericAutonomous {
                         autonomousStep = 9;
 
                   case 9:
-                        PIDSteering.setHeading(robot.getYaw() - currentYaw);
+                        PIDSteering.sendError(robot.getYaw() - currentYaw);
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage(defaultSpeed *(1+correction), defaultSpeed *(1-correction));
                         currentDistance = robot.getDistanceInchesLeft();
