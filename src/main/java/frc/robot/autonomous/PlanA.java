@@ -41,8 +41,10 @@ public class PlanA extends GenericAutonomous {
                         startingDistance = robot.getDistanceInchesRight();
                         autonomousStep = 1;
                         break;
-                  case 1:
-                        PIDSteering.sendError(robot.getDistanceInchesLeft() / robot.getDistanceInchesRight() - 0.5); //-2 is A
+                  case 1: //1st (left) arc
+                        yawDifference = (robot.getYaw() - startingYaw) / 180 * Math.PI;
+                        PIDSteering.sendError((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
+                        SmartDashboard.putNumber("Pid heading", (robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                         currentDistance = robot.getDistanceInchesRight();
@@ -55,12 +57,14 @@ public class PlanA extends GenericAutonomous {
                         startingDistance = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
                         autonomousStep = 3;
-                  case 3:
-                        PIDSteering.sendError(robot.getDistanceInchesLeft() / robot.getDistanceInchesRight() - 2.0);
-                        correction = PIDSteering.getCorrection();
+                        break;
+                  case 3: //2nd (right) arc
+                        yawError = robot.getYaw() - startingYaw;
+                        yawDifference = yawError*Math.PI*5.55555e-3;
+                        PIDSteering.sendError(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
                         robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > outerArc) {
+                        if(currentDistance - startingDistance > outerArc) {
                               autonomousStep = 4;
                         }
                         break;
@@ -69,22 +73,27 @@ public class PlanA extends GenericAutonomous {
                         PIDSteering.resetError();
                         currentYaw = 0;
                         autonomousStep = 5;
-                  case 5:
+                        break;
+                  case 5: //straightaway, a little bit of oscillation, may need to turn P & D - PID coefficients
                         PIDSteering.sendError(robot.getYaw() - currentYaw);
                         correction = PIDSteering.getCorrection();
-                        robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
+                        robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 100) { //maybe change depending on how far we need to go
+                        if (currentDistance - startingDistance > 100) {
                               robot.driveForward(0);
                               autonomousStep = 6;
-                        } else break;
-                  case 6:
+                        }
+                        break;
+                  case 6: //cease your autnomous
                         robot.driveForward(0);
                         //                               ¯\_(ツ)_/¯
                         break;
 
             }
-      }}
+      }
+}
+
+
 
 /*
 
