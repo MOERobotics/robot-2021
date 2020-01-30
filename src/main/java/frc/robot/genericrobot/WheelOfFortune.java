@@ -9,41 +9,45 @@ import java.util.regex.Matcher;
 
 public class WheelOfFortune {
 
-    I2C.Port i2cPort = I2C.Port.kOnboard;
-    ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
-    static ColorMatch colorMatcher = new ColorMatch();
-    static Color kBlueTarget = ColorMatch.makeColor(0.214, 0.521, 0.239);
-    static Color kGreenTarget = ColorMatch.makeColor(0.250, 0.543, 0.178);
-    static Color kRedTarget = ColorMatch.makeColor(0.437, 0.444, 0.125);
-    static Color kYellowTarget = ColorMatch.makeColor(0.351, 0.500, 0.166);
+    public static class GoodColor extends Color {
+        String coolName;
 
+        public GoodColor(double red, double green, double blue, String coolName) {
+            super(red, green, blue);
+            this.coolName = coolName;
+        }
 
-
-
-
-    Queue<Color> colorQueue = new ArrayDeque<Color>(10);
-    Color currentInferredColor = null;
-
-    public static void addColors(){
-        colorMatcher.addColorMatch(kBlueTarget);
-        colorMatcher.addColorMatch(kGreenTarget);
-        colorMatcher.addColorMatch(kRedTarget);
-        colorMatcher.addColorMatch(kYellowTarget);
-
-
-
+        @Override public String toString() {
+            return "[Color "+coolName+"]";
+        }
     }
 
+    //public ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+    public static final Color kBlueTarget   = new GoodColor(0.214, 0.521, 0.239, "Blue"  );
+    public static final Color kGreenTarget  = new GoodColor(0.250, 0.543, 0.178, "Green" );
+    public static final Color kRedTarget    = new GoodColor(0.437, 0.444, 0.125, "Red"   );
+    public static final Color kYellowTarget = new GoodColor(0.351, 0.500, 0.166, "Yellow");
+    public static final ColorMatch colorMatcher = new ColorMatch() {{
+        addColorMatch(kBlueTarget);
+        addColorMatch(kGreenTarget);
+        addColorMatch(kRedTarget);
+        addColorMatch(kYellowTarget);
+    }};
+
+
+
+
+
+    public Queue<Color> colorQueue = new ArrayDeque<Color>(10);
+    public Color currentInferredColor = null;
+
     public Color getInstantColor() {
-        Color detectedColor = colorSensor.getColor();
-        return detectedColor;
+        return null;
+        //return colorMatcher.matchClosestColor(getInstantColor()).color;
     }
 
     public Color getInferredColor() {
-
-        ColorMatchResult match = colorMatcher.matchClosestColor(getInstantColor());
         return currentInferredColor;
-
     }
 
     public void storeColor(Color value) {
@@ -51,9 +55,32 @@ public class WheelOfFortune {
         if (colorQueue.size() > 10) {
             colorQueue.remove();
         }
-        if (colorQueue.size() <= 9) {
-            colorQueue.add(currentInferredColor);
+        int
+            R = 0,
+            G = 0,
+            B = 0,
+            Y = 0;
+
+        for (Color color : colorQueue) {
+            if (color == kRedTarget    ) ++R;
+            if (color == kBlueTarget   ) ++B;
+            if (color == kGreenTarget  ) ++G;
+            if (color == kYellowTarget ) ++Y;
         }
+
+        if (R >= 6){
+            currentInferredColor = kRedTarget;
+        }
+        if (G >= 6){
+            currentInferredColor = kGreenTarget;
+        }
+        if (B >= 6){
+            currentInferredColor = kBlueTarget;
+        }
+        if (Y >= 6){
+            currentInferredColor = kYellowTarget;
+        }
+
     }
     
     public Color getAndStoreInstantColor() {
@@ -61,28 +88,6 @@ public class WheelOfFortune {
         storeColor(colorSensed);
         return colorSensed;
     }
-
-    public void queue (Color value) {
-
-        Iterator iterator = colorQueue.iterator();
-
-        int R = 0;
-        int G = 0;
-        int B = 0;
-        int Y = 0;
-
-        while (iterator.hasNext()){
-            if (currentInferredColor == kRedTarget) ++R;
-            if (currentInferredColor == kBlueTarget) ++B;
-            if (currentInferredColor == kGreenTarget) ++G;
-            if (currentInferredColor == kYellowTarget) ++Y;
-        }
-
-    }
-
-
-
-
 
 
 }
