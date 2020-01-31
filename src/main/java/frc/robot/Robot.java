@@ -18,6 +18,7 @@ import frc.robot.genericrobot.Camoelot;
 import frc.robot.genericrobot.GenericRobot;
 import frc.robot.genericrobot.KeerthanPracticeOne;
 import frc.robot.genericrobot.Lidar;
+import frc.robot.vision.AutoAlign;
 
 public class Robot extends TimedRobot {
 
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
     Joystick leftJoystick = new Joystick(0);
     double deadZone = 0.1;
     Lidar lidar = new Lidar();
+    AutoAlign autoAligner = new AutoAlign();
 
   @Override public void robotInit() {
     lidar.start();
@@ -130,6 +132,9 @@ public class Robot extends TimedRobot {
             robot.driveForward(.2);
         }
 
+        if (leftJoystick.getRawButton(2)) {
+            autoAligner.run(robot, 0.0, 0.5);
+        }
     }
 
     @Override
