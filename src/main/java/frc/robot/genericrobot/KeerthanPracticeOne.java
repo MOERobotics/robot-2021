@@ -15,14 +15,12 @@ public class KeerthanPracticeOne extends GenericRobot {
     AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 50);
 
     CANSparkMax driveRightA = new CANSparkMax(20, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax driveRightB = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax driveLeftA = new CANSparkMax(14, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax driveLeftB = new CANSparkMax(15, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax driveRightB = new CANSparkMax( 1, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax driveLeftA  = new CANSparkMax(14, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax driveLeftB  = new CANSparkMax(15, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    //Right motor ratio = .78615
-    //Left motor ratio = .78949
     CANEncoder encoderRight = new CANEncoder(driveRightA);
-    CANEncoder encoderLeft = new CANEncoder(driveLeftA);
+    CANEncoder encoderLeft  = new CANEncoder(driveLeftA);
 
     Solenoid shifter = new Solenoid(0);
 
@@ -36,12 +34,12 @@ public class KeerthanPracticeOne extends GenericRobot {
 
     public KeerthanPracticeOne() {
         driveRightB.follow(driveRightA);
-        driveLeftB.follow(driveLeftA);
+        driveLeftB .follow(driveLeftA);
 
         driveRightA.setIdleMode(CANSparkMax.IdleMode.kBrake);
         driveRightB.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        driveLeftA.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        driveLeftB.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        driveLeftA .setIdleMode(CANSparkMax.IdleMode.kBrake);
+        driveLeftB .setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         driveRightA.setInverted(true);
     }
@@ -53,27 +51,19 @@ public class KeerthanPracticeOne extends GenericRobot {
 
     @Override
     public double getDistanceRatioLeft() {
-        if (getShifterState() == false) {
-            //low gear ratio
-            //0.77949 independently measured
-            return 0.77782; //average of two ratios
-        } else {
-            //high gear ratio
-            //78.2
-            //return 0.38113;
-            return 0.380635;
+        switch (getShifterState()) {
+            case HIGH: return 0.380635;
+            case LOW : return 0.77782;
+            default  : return 1;
         }
     }
 
     @Override
     public double getDistanceRatioRight() {
-        if (getShifterState() == false) {
-            //0.77615 independently measured
-            return 0.77782; //average of two ratios
-        } else {
-            //80
-            //return 0.38014;
-            return 0.380635;
+        switch (getShifterState()) {
+            case HIGH: return 0.380635;
+            case LOW : return 0.77782;
+            default  : return 1;
         }
     }
 
@@ -99,10 +89,10 @@ public class KeerthanPracticeOne extends GenericRobot {
 
     @Override
     public void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
-        driveRightA.set(rightPower);
-        driveRightB.set(rightPower);
-        driveLeftA.set(leftPower);
-        driveLeftB.set(leftPower);
+        driveRightA.set (rightPower );
+        driveRightB.set (rightPower );
+        driveLeftA.set  (leftPower  );
+        driveLeftB.set  (leftPower  );
     }
 
     @Override
@@ -126,17 +116,12 @@ public class KeerthanPracticeOne extends GenericRobot {
     }
 
     @Override
-    public boolean getShifterState() {
-        return shifter.get();
-    }
-
-    @Override
-    public void shiftHigh() {
+    public void shiftHighInternal() {
         shifter.set(true);
     }
 
     @Override
-    public void shiftLow() {
+    public void shiftLowInternal() {
         shifter.set(false);
     }
 

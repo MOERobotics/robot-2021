@@ -86,6 +86,16 @@ public class SuperMOEva extends GenericRobot {
     public double getDistanceRatioRight()  { return distanceRatioRight; }
 
     @Override
+    public void shiftHighInternal() {
+        shifter.set(true);
+    }
+
+    @Override
+    public void shiftLowInternal() {
+        shifter.set(false);
+    }
+
+    @Override
     public double getYaw() {
         return navX.getYaw();
     }

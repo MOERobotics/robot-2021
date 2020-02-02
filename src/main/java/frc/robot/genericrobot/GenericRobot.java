@@ -2,25 +2,14 @@ package frc.robot.genericrobot;
 
 public abstract class GenericRobot {
 
-    public double leftPower = 0;
-    public double rightPower = 0;
-    public double spinPower = 0;
-    public double shooterUpperPower = 0;
-    public double shooterLowerPower = 0;
-    private boolean gear = false;
+    private double       leftPower         = 0;
+    private double       rightPower        = 0;
+    private double       spinPower         = 0;
+    private double       shooterUpperPower = 0;
+    private double       shooterLowerPower = 0;
+    private ShifterState gear              = ShifterState.UNKNOWN;
 
-    public void shiftHigh() {
-        System.out.println("I don't have a shifter ;(");
-    }
-
-    public void shiftLow() {
-        System.out.println("I don't have a shifter ;(");
-    }
-
-    public boolean getShifterState() {
-        System.out.println("I don't have a shifter ;(");
-        return false;
-    }
+    //***********************************************************************//
 
     public final void setMotorPowerPercentage(
             double leftPower,
@@ -71,6 +60,37 @@ public abstract class GenericRobot {
         return rightPower;
     }
 
+    //***********************************************************************//
+
+    public final void shiftHigh(){
+        gear = ShifterState.HIGH;
+        shiftHighInternal();
+
+    }
+
+    public final void shiftLow(){
+        gear = ShifterState.LOW;
+        shiftLowInternal();
+    }
+
+    protected void shiftHighInternal() {
+        System.out.println("I don't have a shifter ;(");
+    }
+
+    protected void shiftLowInternal() {
+        System.out.println("I don't have a shifter ;(");
+    }
+
+    public ShifterState getShifterState() {
+        return gear;
+    }
+
+    public enum ShifterState {
+        HIGH,LOW,UNKNOWN;
+    }
+
+    //***********************************************************************//
+
     public final double getDistanceInchesLeft() {
         return getDistanceTicksLeft() / getDistanceRatioLeft();
     }
@@ -100,6 +120,19 @@ public abstract class GenericRobot {
         return 0;
     }
 
+    public void resetEncoders() {
+        resetEncoderLeft();
+        resetEncoderRight();
+    }
+
+    public void resetEncoderLeft() {
+        System.out.println("I don't have encoders");
+    }
+
+    public void resetEncoderRight() {
+        System.out.println("I don't have encoders");
+    }
+
     public double getYaw() {
         System.out.println("I don't have a navx :'(");
         return 0;
@@ -119,6 +152,7 @@ public abstract class GenericRobot {
         System.out.println("I don't have a navx :'(");
     }
 
+    //***********************************************************************//
 
     public final void setShooterPowerPercentage(
             double upperPower,
@@ -135,7 +169,7 @@ public abstract class GenericRobot {
     public final void setShooterPowerPercentage(
             double power
     ) {
-        setShooterPowerPercentageInternal(power, power);
+        setShooterPowerPercentage(power, power);
     }
 
     protected void setShooterPowerPercentageInternal(
@@ -153,6 +187,7 @@ public abstract class GenericRobot {
         return shooterLowerPower;
     }
 
+    //***********************************************************************//
 
     public final void spinControlPanel(
             double power
@@ -176,6 +211,8 @@ public abstract class GenericRobot {
         return '?';
     }
 
+    //***********************************************************************//
+
     public double getLimelightX() {
         System.out.println("I don't have a limelight ;(");
         return 0;
@@ -191,16 +228,4 @@ public abstract class GenericRobot {
         return 0;
     }
 
-    public void resetEncoders() {
-        resetEncoderLeft();
-        resetEncoderRight();
-    }
-
-    public void resetEncoderLeft() {
-        System.out.println("I don't have encoders");
-    }
-
-    public void resetEncoderRight() {
-        System.out.println("I don't have encoders");
-    }
 }

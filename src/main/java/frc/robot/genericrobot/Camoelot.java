@@ -58,8 +58,8 @@ public class Camoelot extends GenericRobot {
 
       @Override
       protected void setShooterPowerPercentageInternal(double upperPower, double lowerPower) {
-            shooterA.set(ControlMode.PercentOutput, upperPower);
-            shooterB.set(ControlMode.PercentOutput, lowerPower);
+            shooterA.set(ControlMode.PercentOutput, upperPower * 0.40);
+            shooterB.set(ControlMode.PercentOutput, lowerPower * 0.40);
       }
 
       @Override
