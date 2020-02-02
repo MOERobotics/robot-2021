@@ -14,7 +14,7 @@ public class PlanC extends GenericAutonomous {
       PIDModule PIDSteering = new PIDModule(4.0e-2, 0.0e-3, 1.0e-4);
       double correction;
       static double currentYaw = 0;
-      double outerArc = 50;
+      double outerArcLength = 50;
       double innerArc = 35.45;
       double innerRadius = 30;
       double outerRadius = 100;
@@ -88,7 +88,7 @@ public class PlanC extends GenericAutonomous {
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                         currentDistance = robot.getDistanceInchesRight();
-                        if (currentDistance - startingDistance > outerArc) {
+                        if (currentDistance - startingDistance > outerArcLength) {
                               autonomousStep = 6;
                         }
                         break;
