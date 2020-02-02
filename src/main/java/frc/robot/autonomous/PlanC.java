@@ -40,12 +40,14 @@ public class PlanC extends GenericAutonomous {
                               autonomousStep = 0;
                         }
                         break;
+
                   case 0: //PID reset for straightaway
                         startingDistance = robot.getDistanceInchesLeft();
                         PIDSteering.resetError();
                         currentYaw = 0;
                         autonomousStep = 1;
                         break;
+
                   case 1: //straightaway
                         PIDSteering.sendError(robot.getYaw() - currentYaw);
                         correction = PIDSteering.getCorrection();
@@ -56,12 +58,14 @@ public class PlanC extends GenericAutonomous {
                               autonomousStep = 2;
                         }
                         break;
+
                   case 2: //reset for backward straight-away
                         startingDistance = robot.getDistanceInchesLeft();
                         PIDSteering.resetError();
                         currentYaw = 0;
                         autonomousStep = 3;
                         break;
+
                   case 3: //backward straight-away
                         PIDSteering.sendError(robot.getYaw() - currentYaw);
                         correction = PIDSteering.getCorrection();
@@ -75,12 +79,14 @@ public class PlanC extends GenericAutonomous {
                               autonomousStep = 4;
                         }
                         break;
+
                   case 4: //reset for arc
                         startingDistance = robot.getDistanceInchesRight();
                         PIDSteering.resetError();
                         startingYaw = robot.getYaw();
                         autonomousStep = 5;
                         break;
+
                   case 5: //left arc to pick up third ball
                         yawDifference = (robot.getYaw() - startingYaw) / 180 * Math.PI;
                         PIDSteering.sendError((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
@@ -92,6 +98,7 @@ public class PlanC extends GenericAutonomous {
                               autonomousStep = 6;
                         }
                         break;
+
                   case 6: //reset for inverse arc (not resetting starting distance)
                         PIDSteering.resetError();
                         startingYaw = robot.getYaw();
@@ -99,6 +106,7 @@ public class PlanC extends GenericAutonomous {
                         prevStartingDistance = startingDistance;
                         startingDistance = robot.getDistanceInchesRight();
                         break;
+
                   case 7: //backwards arc to previous position
                         yawDifference = (robot.getYaw() - startingYaw) / 180 * Math.PI;
                         PIDSteering.sendError((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
@@ -110,6 +118,7 @@ public class PlanC extends GenericAutonomous {
                               autonomousStep = 8;
                         }
                         break;
+
                   case 8: //stop, hopefully auto aim to target later
                         robot.driveForward(0);
                         //                               ¯\_(ツ)_/¯

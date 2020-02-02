@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
     GenericAutonomous betterAuto = new PlanA();
     GenericAutonomous mediocreAuto = new PlanC();
     GenericAutonomous mediocreAutoPartTwo = new PlanD();
-    GenericRobot robot = new KeerthanPracticeOne();
+    GenericRobot robot = new KeerthanPracticeOne(); //robot to be used
     Joystick leftJoystick = new Joystick(0);
     double deadZone = 0.1;
     Lidar lidar = new Lidar();
@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         mediocreAutoPartTwo.autonomousInit(robot);
-    }
+    } //this is which auto routine will run
 
     @Override
     public void autonomousPeriodic() {
