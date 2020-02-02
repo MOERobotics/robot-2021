@@ -15,10 +15,7 @@ import frc.robot.autonomous.PlanA;
 import frc.robot.autonomous.PlanC;
 import frc.robot.autonomous.PlanD;
 import frc.robot.autonomous.Win;
-import frc.robot.genericrobot.Camoelot;
-import frc.robot.genericrobot.GenericRobot;
-import frc.robot.genericrobot.KeerthanPracticeOne;
-import frc.robot.genericrobot.Lidar;
+import frc.robot.genericrobot.*;
 
 public class Robot extends TimedRobot {
 
@@ -28,6 +25,7 @@ public class Robot extends TimedRobot {
     GenericAutonomous mediocreAuto = new PlanC();
     GenericAutonomous mediocreAutoPartTwo = new PlanD();
     GenericRobot robot = new KeerthanPracticeOne();
+    TrenchRun steve = new TrenchRun();
     Joystick leftJoystick = new Joystick(0);
     double deadZone = 0.1;
     Lidar lidar = new Lidar();
@@ -135,6 +133,12 @@ public class Robot extends TimedRobot {
         }
         if (leftJoystick.getRawButton(14)) {
             robot.driveForward(.2);
+        }
+        if (leftJoystick.getRawButtonPressed(1)){
+            steve.init();
+        }
+        if(leftJoystick.getRawButton(1)){
+            steve.run(robot, lidar);
         }
 
     }
