@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.PIDModule;
 import frc.robot.genericrobot.GenericRobot;
 
-public class PlanA extends GenericAutonomous {
+public class PlanE extends GenericAutonomous {
 
       //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
       double defaultSpeed = 0.3;
@@ -65,7 +65,6 @@ public class PlanA extends GenericAutonomous {
                         startingYaw = robot.getYaw();
                         autonomousStep = 3;
                         break;
-
                   case 3: //2nd (right) arc
                         yawError = robot.getYaw() - startingYaw;
                         yawDifference = yawError*Math.PI*5.55555e-3;

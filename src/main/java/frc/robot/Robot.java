@@ -11,8 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.autonomous.GenericAutonomous;
-import frc.robot.autonomous.Win;
+import frc.robot.autonomous.*;
 import frc.robot.genericrobot.*;
 import static frc.robot.Util.*;
 

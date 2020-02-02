@@ -16,8 +16,11 @@ public class Win extends GenericAutonomous {
       static double currentYaw = 0;
       double leftWheelArc = (Math.PI * 46) / 2;
       double rightWheelArc = (Math.PI * 23 / 2);
+      long startingTime = System.currentTimeMillis();
+
 
       @Override public void autonomousInit(GenericRobot robot) {
+            startingTime = System.currentTimeMillis();
             robot.resetAttitude();
             robot.resetEncoders();
             autonomousStep = 0;
