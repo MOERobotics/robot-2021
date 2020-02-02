@@ -24,6 +24,7 @@ public class PlanD extends GenericAutonomous {
 
       @Override
       public void autonomousInit(GenericRobot robot) {
+            startingTime = System.currentTimeMillis();
             autonomousStep = -1;
       }
 
@@ -69,7 +70,7 @@ public class PlanD extends GenericAutonomous {
                   case 3: //backward straight-away
                         PIDSteering.sendError(robot.getYaw() - currentYaw);
                         correction = PIDSteering.getCorrection();
-                        robot.setMotorPowerPercentage(-1 * defaultSpeed * (1 - correction), -1 * defaultSpeed * (1 + correction));
+                        robot.setMotorPowerPercentage(-1 * defaultSpeed * (1 - correction), (-1 * defaultSpeed) * (1 + correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         SmartDashboard.putNumber("startDistance", startingDistance);
                         SmartDashboard.putNumber("currentDistance", currentDistance);
@@ -116,7 +117,7 @@ public class PlanD extends GenericAutonomous {
                         }
                         break;
 
-                  case 8: //stop, hopefully auto aim to target later
+                  case 8: //cease your autnomous
                         robot.driveForward(0);
                         //                               ¯\_(ツ)_/¯
                         break;

@@ -19,11 +19,13 @@ public class PlanC extends GenericAutonomous {
       double innerRadius = 30;
       double outerRadius = 100;
       double yawDifference = 0;
-      long startingTime = System.currentTimeMillis();
       double prevStartingDistance = 0;
+      long startingTime = System.currentTimeMillis();
+
 
       @Override
       public void autonomousInit(GenericRobot robot) {
+            startingTime = System.currentTimeMillis();
             autonomousStep = -1;
       }
 
@@ -119,7 +121,7 @@ public class PlanC extends GenericAutonomous {
                         }
                         break;
 
-                  case 8: //stop, hopefully auto aim to target later
+                  case 8: //cease your autnomous
                         robot.driveForward(0);
                         //                               ¯\_(ツ)_/¯
                         break;
