@@ -23,14 +23,10 @@ public class KeerthanPracticeOne extends GenericRobot {
     CANEncoder encoderLeft  = new CANEncoder(driveLeftA);
 
     Solenoid shifter = new Solenoid(0);
+    Lidar lidar = new Lidar();
 
     //Limelight
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    boolean setTable = table.getEntry("pipeline").setNumber(1);
 
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
 
     public KeerthanPracticeOne() {
         driveRightB.follow(driveRightA);
@@ -126,17 +122,27 @@ public class KeerthanPracticeOne extends GenericRobot {
     }
 
     @Override
-    public double getLimelightX() {
-        return tx.getDouble(0.0);
+    public Lidar getLidarSubsystem() {
+        return lidar;
     }
 
     @Override
-    public double getLimelightY() {
-        return ty.getDouble(0.0);
+    public Integer getLidarDistanceFront() {
+        return lidar.getDistance(2);
     }
 
     @Override
-    public double getLimelightArea() {
-        return ta.getDouble(0.0);
+    public Integer getLidarDistanceRear() {
+        return lidar.getDistance(0);
+    }
+
+    @Override
+    public Integer getLidarDistanceLeft() {
+        return lidar.getDistance(3);
+    }
+
+    @Override
+    public Integer getLidarDistanceRight() {
+        return lidar.getDistance(1);
     }
 }

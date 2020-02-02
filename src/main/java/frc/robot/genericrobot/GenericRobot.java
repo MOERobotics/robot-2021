@@ -1,5 +1,9 @@
 package frc.robot.genericrobot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 public abstract class GenericRobot {
 
     private double       leftPower         = 0;
@@ -213,19 +217,62 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
-    public double getLimelightX() {
-        System.out.println("I don't have a limelight ;(");
-        return 0;
+    public final Limelight limelight = new Limelight();
+    public class Limelight {
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+        NetworkTableEntry tx = table.getEntry("tx");
+        NetworkTableEntry ty = table.getEntry("ty");
+        NetworkTableEntry ta = table.getEntry("ta");
+
+        private Limelight() {
+            table.getEntry("pipeline").setNumber(1);
+        }
+
+        public double getLimelightX() {
+            return tx.getDouble(0.0);
+        }
+
+        public double getLimelightY() {
+            return ty.getDouble(0.0);
+        }
+
+        public double getLimelightArea() {
+            return ta.getDouble(0.0);
+        }
     }
 
-    public double getLimelightY() {
-        System.out.println("I don't have a limelight ;(");
-        return 0;
+    //***********************************************************************//
+
+    public Lidar getLidarSubsystem() {
+        System.out.println("I don't have a lidar bus :'(");
+        return null;
     }
 
-    public double getLimelightArea() {
-        System.out.println("I don't have a limelight ;(");
-        return 0;
+    public final boolean isLidarBusLocked() {
+        Lidar lidarSystem = getLidarSubsystem();
+        if (lidarSystem == null) return false;
+        return lidarSystem.isLocked();
     }
+
+    public Integer getLidarDistanceFront() {
+        System.out.println("I don't have a front lidar :'(");
+        return null;
+    }
+
+    public Integer getLidarDistanceRear() {
+        System.out.println("I don't have a rear lidar :'(");
+        return null;
+    }
+    public Integer getLidarDistanceLeft() {
+        System.out.println("I don't have a left lidar :'(");
+        return null;
+    }
+
+    public Integer getLidarDistanceRight() {
+        System.out.println("I don't have a right lidar :'(");
+        return null;
+    }
+
 
 }

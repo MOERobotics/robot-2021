@@ -9,19 +9,23 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Lidar extends Thread {
+class Lidar extends Thread {
+
+    public Lidar() {
+        start();
+    }
 
     //Ex: "1234-5678"
-    static final Pattern lidarFormat = Pattern.compile(
+    public static final Pattern lidarFormat = Pattern.compile(
         "(?<id>[0-9]{1,9})-(?<distance>[0-9]{1,9})"
     );
 
-    ReentrantLock dataLock = new ReentrantLock();
+    private ReentrantLock dataLock = new ReentrantLock();
     public boolean isLocked() {
         return dataLock.isLocked();
     }
 
-    Map<Integer, Integer> lidarValues = new HashMap<>();
+    private Map<Integer, Integer> lidarValues = new HashMap<>();
 
     public Integer getDistance(int lidarID) {
         Integer distance = null;
@@ -36,7 +40,7 @@ public class Lidar extends Thread {
         return distance;
     }
 
-    public void writeDistance(int lidarID, int distance) {
+    private void writeDistance(int lidarID, int distance) {
         try {
             dataLock.lock();
             lidarValues.put(lidarID,distance);

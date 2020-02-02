@@ -51,12 +51,6 @@ public class SuperMOEva extends GenericRobot {
     Encoder encoderR = new Encoder(4, 5, true, CounterBase.EncodingType.k4X);
 
 
-    //Limelight
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
-
     @Override
     protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
         driveLA.set(ControlMode.PercentOutput, leftPower);
@@ -86,16 +80,6 @@ public class SuperMOEva extends GenericRobot {
     public double getDistanceRatioRight()  { return distanceRatioRight; }
 
     @Override
-    public void shiftHighInternal() {
-        shifter.set(true);
-    }
-
-    @Override
-    public void shiftLowInternal() {
-        shifter.set(false);
-    }
-
-    @Override
     public double getYaw() {
         return navX.getYaw();
     }
@@ -110,18 +94,4 @@ public class SuperMOEva extends GenericRobot {
         return navX.getRoll();
     }
 
-    @Override
-    public double getLimelightX() {
-        return tx.getDouble(defaultLimelightValue);
-    }
-
-    @Override
-    public double getLimelightY() {
-        return ty.getDouble(defaultLimelightValue);
-    }
-
-    @Override
-    public double getLimelightArea() {
-        return ta.getDouble(defaultLimelightValue);
-    }
 }
