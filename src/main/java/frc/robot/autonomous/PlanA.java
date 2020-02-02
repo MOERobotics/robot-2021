@@ -21,10 +21,9 @@ public class PlanA extends GenericAutonomous {
       double yawDifference = 0;
       long startingTime = System.currentTimeMillis();
 
-      //PIDController newPID = new PIDController();
-
       @Override public void autonomousInit(GenericRobot robot) {
             autonomousStep = -1;
+            startingTime = System.currentTimeMillis();
       }
 
       @Override public void autonomousPeriodic(GenericRobot robot) {
@@ -38,6 +37,7 @@ public class PlanA extends GenericAutonomous {
                         if (System.currentTimeMillis() >= startingTime + 100) {
                               autonomousStep = 0;
                         }
+                        break;
                   case 0: //PID reset for 1st (left) arc
                         PIDSteering.reset();
                         startingYaw = robot.getYaw();

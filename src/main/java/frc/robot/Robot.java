@@ -86,12 +86,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        mediocreAutoPartTwo.autonomousInit(robot);
+        betterAuto.autonomousInit(robot);
     }
 
     @Override
     public void autonomousPeriodic() {
-        mediocreAutoPartTwo.autonomousPeriodic(robot);
+        betterAuto.autonomousPeriodic(robot);
     }
 
     @Override
@@ -130,12 +130,15 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButtonPressed(11)) {
             robot.shiftHigh();
         }
+        /*
         if (leftJoystick.getRawButton(13)) {
             robot.driveForward(-.2);
         }
         if (leftJoystick.getRawButton(14)) {
             robot.driveForward(.2);
         }
+
+         */
 
     }
 
