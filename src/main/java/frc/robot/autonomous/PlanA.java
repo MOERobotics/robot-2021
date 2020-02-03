@@ -47,7 +47,7 @@ public class PlanA extends GenericAutonomous {
                         break;
 
                   case 1: //1st (left) arc
-                        yawDifference = (robot.getYaw() - startingYaw) / 180 * Math.PI;
+                        yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                         correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         SmartDashboard.putNumber("Pid heading", (robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
@@ -85,7 +85,7 @@ public class PlanA extends GenericAutonomous {
                         break;
 
                   case 5: //straightaway, a little bit of oscillation, may need to turn P & D - PID coefficients
-                        correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
+                        correction = PIDSteering.calculate(continuousAngleDiff(robot.getYaw() - currentYaw));
                         robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > 100) {
