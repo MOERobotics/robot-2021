@@ -1,10 +1,10 @@
 package frc.robot.autonomous;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.PIDModule;
 import frc.robot.genericrobot.GenericRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class PlanC extends GenericAutonomous {
+public class PlanD extends GenericAutonomous {
 
       //change speed depending on robot!! (CaMOElot = .4, TestBot = .2)
       double defaultSpeed = 0.2;
@@ -14,10 +14,10 @@ public class PlanC extends GenericAutonomous {
       PIDModule PIDSteering = new PIDModule(4.0e-2, 0.0e-3, 1.0e-4);
       double correction;
       static double currentYaw = 0;
-      double outerArcLength = 50;
+      double outerArcLength = 80;
       double innerArc = 35.45;
       double innerRadius = 30;
-      double outerRadius = 100;
+      double outerRadius = 82; //decrease to around 78ish
       double yawDifference = 0;
       long startingTime = System.currentTimeMillis();
       double prevStartingDistance = 0;
@@ -51,7 +51,7 @@ public class PlanC extends GenericAutonomous {
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 80) { //maybe change depending on how far we need to go
+                        if (currentDistance - startingDistance > 80) { //possibly extend
                               robot.driveForward(0);
                               autonomousStep = 2;
                         }
@@ -81,7 +81,7 @@ public class PlanC extends GenericAutonomous {
                         startingYaw = robot.getYaw();
                         autonomousStep = 5;
                         break;
-                  case 5: //left arc to pick up third ball
+                  case 5: //left arc to pick up third ball and two on other side
                         yawDifference = (robot.getYaw() - startingYaw) / 180 * Math.PI;
                         PIDSteering.sendError((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         SmartDashboard.putNumber("Pid heading", (robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
@@ -92,14 +92,24 @@ public class PlanC extends GenericAutonomous {
                               autonomousStep = 6;
                         }
                         break;
-                  case 6: //reset for inverse arc (not resetting starting distance)
+
+
+
+
+
+
+
+
+                        /*
+                        case 6: //reset for inverse arc (not resetting starting distance)
                         PIDSteering.resetError();
                         startingYaw = robot.getYaw();
                         autonomousStep = 7;
                         prevStartingDistance = startingDistance;
                         startingDistance = robot.getDistanceInchesRight();
                         break;
-                  case 7: //backwards arc to previous position
+
+                            case 7: //backwards arc to previous position
                         yawDifference = (robot.getYaw() - startingYaw) / 180 * Math.PI;
                         PIDSteering.sendError((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         SmartDashboard.putNumber("Pid heading", (robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
@@ -110,7 +120,9 @@ public class PlanC extends GenericAutonomous {
                               autonomousStep = 8;
                         }
                         break;
-                  case 8: //stop, hopefully auto aim to target later
+                         */
+
+                  case 6: //stop, hopefully auto aim to target later
                         robot.driveForward(0);
                         //                               ¯\_(ツ)_/¯
                         break;

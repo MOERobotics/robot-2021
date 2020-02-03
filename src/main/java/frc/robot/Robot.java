@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.GenericAutonomous;
 import frc.robot.autonomous.PlanA;
 import frc.robot.autonomous.PlanC;
+import frc.robot.autonomous.PlanD;
 import frc.robot.autonomous.Win;
 import frc.robot.genericrobot.Camoelot;
 import frc.robot.genericrobot.GenericRobot;
@@ -22,9 +23,11 @@ import frc.robot.vision.AutoAlign;
 
 public class Robot extends TimedRobot {
 
+    // WheelOfFortune colorWheel = new WheelOfFortune();
     GenericAutonomous autoProgram = new Win();
     GenericAutonomous betterAuto = new PlanA();
     GenericAutonomous mediocreAuto = new PlanC();
+    GenericAutonomous mediocreAutoPartTwo = new PlanD();
     GenericRobot robot = new KeerthanPracticeOne();
     Joystick leftJoystick = new Joystick(0);
     double deadZone = 0.1;
@@ -57,6 +60,10 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("Lidar Locked", lidar.isLocked());
 
+        //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
+        //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
+
+
         for(int i = 0; i <= 3; i++) {
             Integer lidarNum = lidar.getDistance(i);
             String lidarString = " ";
@@ -81,12 +88,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        mediocreAuto.autonomousInit(robot);
+        mediocreAutoPartTwo.autonomousInit(robot);
     }
 
     @Override
     public void autonomousPeriodic() {
-        mediocreAuto.autonomousPeriodic(robot);
+        mediocreAutoPartTwo.autonomousPeriodic(robot);
     }
 
     @Override
