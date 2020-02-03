@@ -19,7 +19,7 @@ public class PlanA extends GenericAutonomous {
       double innerArc = 35.45;
       double outerRadius = 70;
       double yawDifference = 0;
-      long startingTime = System.currentTimeMillis();
+      long startingTime;
 
       @Override public void autonomousInit(GenericRobot robot) {
             autonomousStep = -1;
@@ -40,6 +40,7 @@ public class PlanA extends GenericAutonomous {
                         break;
                   case 0: //PID reset for 1st (left) arc
                         PIDSteering.reset();
+                        PIDSteering.disableContinuousInput();
                         startingYaw = robot.getYaw();
                         startingDistance = robot.getDistanceInchesRight();
                         autonomousStep = 1;
@@ -56,6 +57,7 @@ public class PlanA extends GenericAutonomous {
                         break;
                   case 2: //PID reset for 2nd (right) arc
                         PIDSteering.reset();
+                        PIDSteering.disableContinuousInput();
                         startingDistance = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
                         autonomousStep = 3;
@@ -73,6 +75,7 @@ public class PlanA extends GenericAutonomous {
                   case 4: //PID reset for straightaway
                         startingDistance = robot.getDistanceInchesLeft();
                         PIDSteering.reset();
+                        PIDSteering.enableContinuousInput(-180,180);
                         currentYaw = 0;
                         autonomousStep = 5;
                         break;
@@ -94,14 +97,3 @@ public class PlanA extends GenericAutonomous {
       }
 }
 
-
-
-/*
-
-      Position / Proportion  = How Far away we are
-      Integral
-      Derivative
-
-      wheel to wheel: 23in
-
- */
