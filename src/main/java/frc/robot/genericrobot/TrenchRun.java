@@ -17,9 +17,15 @@ public class TrenchRun {
         PIDSteering.resetError();
     }
 
-    public void run(GenericRobot robot, Lidar lidar){
-        if(lidar.getDistance(3) < 650 && lidar.getDistance(3) > 550){
+    public void run(GenericRobot robot){
+        if((robot.getLidarDistanceLeft() < 630) && (robot.getLidarDistanceLeft() > 570)){
             currentYaw = 0;
+        }
+        if(robot.getLidarDistanceLeft() < 550){
+            currentYaw = 5;
+        }
+        if(robot.getLidarDistanceLeft() > 650){
+            currentYaw = -5;
         }
         PIDSteering.sendError(robot.getYaw() - currentYaw);
         correction = PIDSteering.getCorrection();

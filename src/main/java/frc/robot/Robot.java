@@ -22,6 +22,7 @@ public class Robot extends TimedRobot {
     GenericRobot      robot        = new KeerthanPracticeOne();
     Joystick          leftJoystick = new Joystick(0);
     double            deadZone     = 0.1;
+    TrenchRun trenchRun = new TrenchRun();
 
     @Override public void robotInit() {}
 
@@ -80,6 +81,12 @@ public class Robot extends TimedRobot {
         }
         if (leftJoystick.getRawButton(14)) {
             robot.driveForward(.2);
+        }
+        if(leftJoystick.getRawButtonPressed(1)){
+            trenchRun.init();
+        }
+        if(leftJoystick.getRawButton(1)){
+            trenchRun.run(robot);
         }
 
     }
