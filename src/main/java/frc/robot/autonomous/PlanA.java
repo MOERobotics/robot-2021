@@ -14,7 +14,7 @@ public class PlanA extends GenericAutonomous {
       PIDController PIDSteering = new PIDController(4.0e-2, 0.0e-3, 1.0e-4);
       double correction;
       static double currentYaw = 0;
-      double outerArc = 73.2;
+      double outerArcLength = 67.2;
       double innerArc = 35.45;
       double outerRadius = 70;
       double yawDifference = 0;
@@ -52,7 +52,7 @@ public class PlanA extends GenericAutonomous {
                         SmartDashboard.putNumber("Pid heading", (robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                         currentDistance = robot.getDistanceInchesRight();
-                        if (currentDistance - startingDistance > outerArc) {
+                        if (currentDistance - startingDistance > outerArcLength) {
                               autonomousStep = 2;
                         }
                         break;
@@ -71,7 +71,7 @@ public class PlanA extends GenericAutonomous {
                         correction = PIDSteering.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
                         robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if(currentDistance - startingDistance > outerArc) {
+                        if(currentDistance - startingDistance > outerArcLength) {
                               autonomousStep = 4;
                         }
                         break;
@@ -88,7 +88,7 @@ public class PlanA extends GenericAutonomous {
                         correction = PIDSteering.calculate(continuousAngleDiff(robot.getYaw() - currentYaw));
                         robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 100) {
+                        if (currentDistance - startingDistance > 60) {
                               robot.driveForward(0);
                               autonomousStep = 6;
                         }

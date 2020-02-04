@@ -18,7 +18,7 @@ import static frc.robot.Util.*;
 public class Robot extends TimedRobot {
 
     // WheelOfFortune colorWheel = new WheelOfFortune();
-    GenericAutonomous autoProgram = new Win();
+    GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
     GenericRobot robot = new KeerthanPracticeOne();
     Joystick leftJoystick = new Joystick(0);
     double deadZone = 0.1;
