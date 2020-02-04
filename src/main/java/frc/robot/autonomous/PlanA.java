@@ -66,8 +66,7 @@ public class PlanA extends GenericAutonomous {
                         break;
 
                   case 3: //2nd (right) arc
-                        yawError = robot.getYaw() - startingYaw;
-                        yawDifference = yawError*Math.PI*5.55555e-3;
+                        yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw)*Math.PI/180.0);
                         correction = PIDSteering.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
                         robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
@@ -85,7 +84,7 @@ public class PlanA extends GenericAutonomous {
                         break;
 
                   case 5: //straightaway, a little bit of oscillation, may need to turn P & D - PID coefficients
-                        correction = PIDSteering.calculate(continuousAngleDiff(robot.getYaw() - currentYaw));
+                        correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > 60) {
