@@ -1,4 +1,3 @@
-/*
 package frc.robot.genericrobot;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.*;
@@ -22,31 +21,24 @@ public class WheelOfFortune {
         }
     }
 
-    //
-    //public ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+
+    public ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
     public static final Color kBlueTarget   = new GoodColor(0.214, 0.521, 0.239, "Blue"  );
     public static final Color kGreenTarget  = new GoodColor(0.250, 0.543, 0.178, "Green" );
     public static final Color kRedTarget    = new GoodColor(0.437, 0.444, 0.125, "Red"   );
     public static final Color kYellowTarget = new GoodColor(0.351, 0.500, 0.166, "Yellow");
-    //public static final ColorMatch colorMatcher = new ColorMatch() {{
+    public static final ColorMatch colorMatcher = new ColorMatch() {{
         addColorMatch(kBlueTarget);
         addColorMatch(kGreenTarget);
         addColorMatch(kRedTarget);
         addColorMatch(kYellowTarget);
     }};
 
-
-
-
-
     public Queue<Color> colorQueue = new ArrayDeque<Color>(10);
     public Color currentInferredColor = null;
 
     public Color getInstantColor() {
-
-       // return colorSensor.getColor();
-        return null; //just for testing
-
+       return colorSensor.getColor();
     }
 
     public Color getInferredColor() {
@@ -97,5 +89,4 @@ public class WheelOfFortune {
 
 }
 
- */
 
