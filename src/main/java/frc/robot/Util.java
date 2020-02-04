@@ -13,13 +13,23 @@ public interface Util {
     }
 
     //https://benjiweber.co.uk/blog/2013/12/08/null-coalescing-in-java-8/
-    @SafeVarargs
-    public static <T> T coalesce(T... ts) {
+    @SafeVarargs public static <T> T coalesce(T... ts) {
         for (T t : ts)
             if (t != null)
                 return t;
 
         return null;
+    }
+
+    /* A routine to make angle differences map to a continuous domain [-Pi,Pi].*/
+    public static double normalizeAngleRadians(double radians) {
+        if (radians > Math.PI) {
+            radians -= 2*Math.PI;
+        }
+        if (radians < -Math.PI) {
+            radians += 2*Math.PI;
+        }
+        return radians;
     }
 
 }

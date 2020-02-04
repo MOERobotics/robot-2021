@@ -17,42 +17,21 @@ import static frc.robot.Util.*;
 
 public class Robot extends TimedRobot {
 
-    // WheelOfFortune colorWheel = new WheelOfFortune();
-    GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
-    GenericRobot robot = new KeerthanPracticeOne();
-    Joystick leftJoystick = new Joystick(0);
-    double deadZone = 0.1;
+    //WheelOfFortune    colorWheel   = new WheelOfFortune();
+    GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
+    GenericRobot      robot        = new KeerthanPracticeOne();
+    Joystick          leftJoystick = new Joystick(0);
+    double            deadZone     = 0.1;
 
     @Override public void robotInit() {}
 
     @Override
     public void robotPeriodic() {
-        SmartDashboard.putNumber  ("Left  Encoder Ticks"  , robot.getDistanceTicksLeft()                   );
-        SmartDashboard.putNumber  ("Right Encoder Ticks"  , robot.getDistanceTicksRight()                  );
-        SmartDashboard.putNumber  ("Navx Yaw"             , robot.getYaw()                                 );
-        SmartDashboard.putNumber  ("Navx Pitch"           , robot.getPitch()                               );
-        SmartDashboard.putNumber  ("Navx Roll"            , robot.getRoll()                                );
-
-        SmartDashboard.putNumber  ("Left  Motor Power"    , robot.getMotorPowerLeft()                      );
-        SmartDashboard.putNumber  ("Right Motor Power"    , robot.getMotorPowerRight()                     );
-        SmartDashboard.putNumber  ("Upper Shooter Power"  , robot.getShooterPowerUpper()                   );
-        SmartDashboard.putNumber  ("Lower Shooter Power"  , robot.getShooterPowerLower()                   );
-        SmartDashboard.putNumber  ("Control Panel Power"  , robot.getControlPanelSpinnerPower()            );
-
-        SmartDashboard.putNumber  ("AutoStep"             , autoProgram.autonomousStep                     );
-        SmartDashboard.putString  ("Shifter state"        , robot.getShifterState().toString()             );
-        SmartDashboard.putNumber  ("Left Encoder Inches"  , robot.getDistanceInchesLeft()                  );
-        SmartDashboard.putNumber  ("Right Encoder Inches" , robot.getDistanceInchesRight()                 );
-
-        SmartDashboard.putBoolean ("Lidar Locked"         , robot.isLidarBusLocked()                       );
-        SmartDashboard.putNumber  ("Lidar Front"          , coalesce(robot.getLidarDistanceFront(), -9999) );
-        SmartDashboard.putNumber  ("Lidar Rear"           , coalesce(robot.getLidarDistanceRear (), -9999) );
-        SmartDashboard.putNumber  ("Lidar Left"           , coalesce(robot.getLidarDistanceLeft (), -9999) );
-        SmartDashboard.putNumber  ("Lidar Right"          , coalesce(robot.getLidarDistanceRight(), -9999) );
+        robot      .printSmartDashboard();
+        autoProgram.printSmartDashboard();
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
-
     }
 
     @Override
@@ -62,8 +41,6 @@ public class Robot extends TimedRobot {
             robot.resetAttitude();
             robot.resetEncoders();
         }
-
-
     }
 
     @Override
@@ -77,9 +54,7 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopInit() {
-
-    }
+    public void teleopInit() {}
 
 
     @Override
