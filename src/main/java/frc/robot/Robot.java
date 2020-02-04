@@ -33,8 +33,9 @@ public class Robot extends TimedRobot {
     double deadZone = 0.1;
     Lidar lidar = new Lidar();
     AutoAlign autoAligner = new AutoAlign();
+    boolean aligning = false;
 
-  @Override public void robotInit() {
+    @Override public void robotInit() {
     lidar.start();
 
   }
@@ -59,7 +60,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Right Encoder Inches", robot.getDistanceInchesRight());
 
         SmartDashboard.putBoolean("Lidar Locked", lidar.isLocked());
-
+        SmartDashboard.putBoolean("Aligning", aligning);
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
 
@@ -98,7 +99,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-
+        aligning = false;
     }
 
     @Override
@@ -122,7 +123,10 @@ public class Robot extends TimedRobot {
             rightPower = 0;
         }
 
-        robot.setMotorPowerPercentage(leftPower, rightPower);
+        if(!aligning) {
+            robot.setMotorPowerPercentage(leftPower, rightPower);
+        }
+
         robot.setShooterPowerPercentage(0);
 
         if (leftJoystick.getRawButtonPressed(16)) {
@@ -139,8 +143,13 @@ public class Robot extends TimedRobot {
             robot.driveForward(.2);
         }
 
-        if (leftJoystick.getRawButton(2)) {
-            autoAligner.run(robot, 0.0, 0.5);
+        if (leftJoystick.getRawButtonPressed(2)) {
+            aligning = true;
+
+        }
+
+         if (aligning){
+             aligning = autoAligner.run(robot, 0.0, 0.5,600);
         }
     }
 
