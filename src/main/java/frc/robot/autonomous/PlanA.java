@@ -19,6 +19,7 @@ public class PlanA extends GenericAutonomous {
       double outerRadius = 70;
       double yawDifference = 0;
       long startingTime;
+      int powerDecrement;
 
       @Override public void autonomousInit(GenericRobot robot) {
             startingTime = System.currentTimeMillis();
@@ -87,6 +88,10 @@ public class PlanA extends GenericAutonomous {
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
+                        //decrescendo power
+                        if(currentDistance - startingDistance > 30){ //start to decrement?
+
+                        }
                         if (currentDistance - startingDistance > 60) {
                               robot.driveForward(0);
                               autonomousStep = 6;
@@ -95,7 +100,7 @@ public class PlanA extends GenericAutonomous {
 
                   case 6: //cease your autnomous
                         robot.driveForward(0);
-                        //                               ¯\_(ツ)_/¯
+                        //                                ¯\_(ツ)_/¯
                         break;
 
             }
