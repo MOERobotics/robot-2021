@@ -9,70 +9,33 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.autonomous.GenericAutonomous;
-import frc.robot.autonomous.PlanA;
-import frc.robot.autonomous.PlanC;
-import frc.robot.autonomous.PlanD;
-import frc.robot.autonomous.Win;
-import frc.robot.genericrobot.Camoelot;
-import frc.robot.genericrobot.GenericRobot;
-import frc.robot.genericrobot.KeerthanPracticeOne;
-import frc.robot.genericrobot.Lidar;
+import frc.robot.autonomous.*;
+import frc.robot.genericrobot.*;
 import frc.robot.vision.AutoAlign;
+
+import static frc.robot.Util.*;
 
 public class Robot extends TimedRobot {
 
-    // WheelOfFortune colorWheel = new WheelOfFortune();
-    GenericAutonomous autoProgram = new Win();
-    GenericAutonomous betterAuto = new PlanA();
-    GenericAutonomous mediocreAuto = new PlanC();
-    GenericAutonomous mediocreAutoPartTwo = new PlanD();
-    GenericRobot robot = new KeerthanPracticeOne();
-    Joystick leftJoystick = new Joystick(0);
-    double deadZone = 0.1;
-    Lidar lidar = new Lidar();
+    //WheelOfFortune    colorWheel   = new WheelOfFortune();
+    GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
+    GenericRobot      robot        = new KeerthanPracticeOne();
+    Joystick          leftJoystick = new Joystick(0);
+    double            deadZone     = 0.1;
     AutoAlign autoAligner = new AutoAlign();
     boolean aligning = false;
 
-    @Override public void robotInit() {
-    lidar.start();
-
-  }
+    @Override public void robotInit() {}
 
     @Override
     public void robotPeriodic() {
-        SmartDashboard.putNumber("Left  Encoder Ticks", robot.getDistanceTicksLeft());
-        SmartDashboard.putNumber("Right Encoder Ticks", robot.getDistanceTicksRight());
-        SmartDashboard.putNumber("Navx Yaw", robot.getYaw());
-        SmartDashboard.putNumber("Navx Pitch", robot.getPitch());
-        SmartDashboard.putNumber("Navx Roll", robot.getRoll());
+        robot      .printSmartDashboard();
+        autoProgram.printSmartDashboard();
 
-        SmartDashboard.putNumber("Left  Motor Power", robot.getMotorPowerLeft());
-        SmartDashboard.putNumber("Right Motor Power", robot.getMotorPowerRight());
-        SmartDashboard.putNumber("Upper Shooter Power", robot.getShooterPowerUpper());
-        SmartDashboard.putNumber("Lower Shooter Power", robot.getShooterPowerLower());
-        SmartDashboard.putNumber("Control Panel Power", robot.getControlPanelSpinnerPower());
-
-        SmartDashboard.putNumber("AutoStep", mediocreAuto.autonomousStep);
-        SmartDashboard.putBoolean("Shifter state", robot.getShifterState());
-        SmartDashboard.putNumber("Left Encoder Inches", robot.getDistanceInchesLeft());
-        SmartDashboard.putNumber("Right Encoder Inches", robot.getDistanceInchesRight());
-
-        SmartDashboard.putBoolean("Lidar Locked", lidar.isLocked());
-        SmartDashboard.putBoolean("Aligning", aligning);
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
-
-
-        for(int i = 0; i <= 3; i++) {
-            Integer lidarNum = lidar.getDistance(i);
-            String lidarString = " ";
-            if (lidarNum != null) {
-                lidarString = lidarNum.toString();
-            }
-            SmartDashboard.putString("Lidar" + i, lidarString);
-        }
     }
 
     @Override
@@ -82,19 +45,16 @@ public class Robot extends TimedRobot {
             robot.resetAttitude();
             robot.resetEncoders();
         }
-
-        betterAuto.autonomousStep = 0;
-
     }
 
     @Override
     public void autonomousInit() {
-        mediocreAutoPartTwo.autonomousInit(robot);
+        autoProgram.autonomousInit(robot);
     }
 
     @Override
     public void autonomousPeriodic() {
-        mediocreAutoPartTwo.autonomousPeriodic(robot);
+        autoProgram.autonomousPeriodic(robot);
     }
 
     @Override
@@ -107,21 +67,8 @@ public class Robot extends TimedRobot {
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
-        if (leftPower < -deadZone) {
-            leftPower = (leftPower + deadZone) / (1 - deadZone);
-        } else if (leftPower > deadZone) {
-            leftPower = (leftPower - deadZone) / (1 - deadZone);
-        } else {
-            leftPower = 0;
-        }
-
-        if (rightPower < -deadZone) {
-            rightPower = (rightPower + deadZone) / (1 - deadZone);
-        } else if (rightPower > deadZone) {
-            rightPower = (rightPower - deadZone) / (1 - deadZone);
-        } else {
-            rightPower = 0;
-        }
+         leftPower = deadzoneValue( leftPower,deadZone);
+        rightPower = deadzoneValue(rightPower,deadZone);
 
         if(!aligning) {
             robot.setMotorPowerPercentage(leftPower, rightPower);
