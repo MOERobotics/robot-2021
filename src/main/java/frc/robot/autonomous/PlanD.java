@@ -1,8 +1,8 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.PIDModule;
 import frc.robot.genericrobot.GenericRobot;
+import edu.wpi.first.wpilibj.controller.PIDController;
 
 public class PlanD extends GenericAutonomous {
 
@@ -11,7 +11,7 @@ public class PlanD extends GenericAutonomous {
 
       static double startingYaw = 0.0; //start at an angle, figure out later
       static double startingDistance = 0.0;
-      PIDModule PIDSteering = new PIDModule(4.0e-2, 0.0e-3, 1.0e-4);
+      PIDController PIDSteering = new PIDController(4.0e-2, 0.0e-3, 1.0e-4);
       double correction;
       static double currentYaw = 0;
       double outerArcLength = 80;
@@ -44,14 +44,14 @@ public class PlanD extends GenericAutonomous {
 
                   case 0: //PID reset for straightaway
                         startingDistance = robot.getDistanceInchesLeft();
-                        PIDSteering.resetError();
+                        PIDSteering.reset();
+                        PIDSteering.enableContinuousInput(-180,180);
                         currentYaw = 0;
                         autonomousStep = 1;
                         break;
 
                   case 1: //straightaway
-                        PIDSteering.sendError(robot.getYaw() - currentYaw);
-                        correction = PIDSteering.getCorrection();
+                        correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > 86) { //possibly extend
@@ -62,14 +62,14 @@ public class PlanD extends GenericAutonomous {
 
                   case 2: //reset for backward straight-away
                         startingDistance = robot.getDistanceInchesLeft();
-                        PIDSteering.resetError();
+                        PIDSteering.reset();
+                        PIDSteering.enableContinuousInput(-180,180);
                         currentYaw = 0;
                         autonomousStep = 3;
                         break;
 
                   case 3: //backward straight-away
-                        PIDSteering.sendError(robot.getYaw() - currentYaw);
-                        correction = PIDSteering.getCorrection();
+                        correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(-1 * defaultSpeed * (1 - correction), (-1 * defaultSpeed) * (1 + correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         SmartDashboard.putNumber("startDistance", startingDistance);
@@ -83,16 +83,15 @@ public class PlanD extends GenericAutonomous {
 
                   case 4: //reset for arc
                         startingDistance = robot.getDistanceInchesRight();
-                        PIDSteering.resetError();
+                        PIDSteering.reset();
+                        PIDSteering.disableContinuousInput();
                         startingYaw = robot.getYaw();
                         autonomousStep = 5;
                         break;
 
                   case 5: //left arc to pick up third ball and two on other side
-                        yawDifference = (robot.getYaw() - startingYaw) / 180 * Math.PI;
-                        PIDSteering.sendError((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
-                        SmartDashboard.putNumber("Pid heading", (robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
-                        correction = PIDSteering.getCorrection();
+                        yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                        correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                         currentDistance = robot.getDistanceInchesRight();
                         if (currentDistance - startingDistance > outerArcLength) {
@@ -101,15 +100,14 @@ public class PlanD extends GenericAutonomous {
                         break;
 
                   case 6: //reset for reverse arc
-                        PIDSteering.resetError();
+                        PIDSteering.reset();
+                        PIDSteering.disableContinuousInput();
                         autonomousStep = 7;
                         break;
 
                   case 7: //inverse arc
-                        yawDifference = (robot.getYaw() - startingYaw) / 180 * Math.PI;
-                        PIDSteering.sendError((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
-                        SmartDashboard.putNumber("Pid heading", (robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
-                        correction = PIDSteering.getCorrection();
+                        yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                        correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         robot.setMotorPowerPercentage((defaultSpeed * -.75) * (1 - correction), (defaultSpeed * -1.5) * (1 + correction));
                         currentDistance = robot.getDistanceInchesRight();
                         if (currentDistance - startingDistance <= 0) {
