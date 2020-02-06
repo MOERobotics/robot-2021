@@ -255,21 +255,21 @@ public abstract class GenericRobot {
         return lidarSystem.isLocked();
     }
 
-    public Integer getLidarDistanceFront() {
+    public Double getLidarDistanceInchesFront() {
         System.out.println("I don't have a front lidar :'(");
         return null;
     }
 
-    public Integer getLidarDistanceRear() {
+    public Double getLidarDistanceInchesRear() {
         System.out.println("I don't have a rear lidar :'(");
         return null;
     }
-    public Integer getLidarDistanceLeft() {
+    public Double getLidarDistanceInchesLeft() {
         System.out.println("I don't have a left lidar :'(");
         return null;
     }
 
-    public Integer getLidarDistanceRight() {
+    public Double getLidarDistanceInchesRight() {
         System.out.println("I don't have a right lidar :'(");
         return null;
     }

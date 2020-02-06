@@ -45,13 +45,14 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber  ("Right Encoder Inches" , robot.getDistanceInchesRight()                 );
 
         SmartDashboard.putBoolean ("Lidar Locked"         , robot.isLidarBusLocked()                       );
-        SmartDashboard.putNumber  ("Lidar Front"          , coalesce(robot.getLidarDistanceFront(), -9999) );
-        SmartDashboard.putNumber  ("Lidar Rear"           , coalesce(robot.getLidarDistanceRear (), -9999) );
-        SmartDashboard.putNumber  ("Lidar Left"           , coalesce(robot.getLidarDistanceLeft (), -9999) );
-        SmartDashboard.putNumber  ("Lidar Right"          , coalesce(robot.getLidarDistanceRight(), -9999) );
+        SmartDashboard.putNumber  ("Lidar Front"          , coalesce(robot.getLidarDistanceInchesFront(), -9999.0) );
+        SmartDashboard.putNumber  ("Lidar Rear"           , coalesce(robot.getLidarDistanceInchesRear(), -9999.0) );
+        SmartDashboard.putNumber  ("Lidar Left"           , coalesce(robot.getLidarDistanceInchesLeft(), -9999.0) );
+        SmartDashboard.putNumber  ("Lidar Right"          , coalesce(robot.getLidarDistanceInchesRight(), -9999.0) );
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
+
 
     }
 
