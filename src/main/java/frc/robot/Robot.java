@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
-    GenericRobot      robot        = new KeerthanPracticeOne();
+    GenericRobot      robot        = new Camoelot();
     Joystick          leftJoystick = new Joystick(0);
     double            deadZone     = 0.1;
     AutoAlign autoAligner = new AutoAlign();
@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         robot      .printSmartDashboard();
         autoProgram.printSmartDashboard();
-
+        SmartDashboard.putBoolean("Aligning", aligning);
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
     }
@@ -70,8 +70,9 @@ public class Robot extends TimedRobot {
          leftPower = deadzoneValue( leftPower,deadZone);
         rightPower = deadzoneValue(rightPower,deadZone);
 
-        if(!aligning) {
+        if(!aligning || leftPower > deadZone || rightPower > deadZone) {
             robot.setMotorPowerPercentage(leftPower, rightPower);
+            aligning = false;
         }
 
         robot.setShooterPowerPercentage(0);
@@ -94,9 +95,9 @@ public class Robot extends TimedRobot {
             aligning = true;
 
         }
-
+        //Constant for TestBot: .01852
          if (aligning){
-             aligning = autoAligner.run(robot, 0.0, 0.5,600);
+             aligning = autoAligner.run(robot, 0.0, 0.5,600, .045);
         }
     }
 

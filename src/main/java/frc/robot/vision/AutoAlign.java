@@ -14,27 +14,27 @@ public class AutoAlign {
     private boolean aligning = true;
     double currentDistance = 0;
 
-    public boolean run(GenericRobot robot, double setPoint, double setPointDeadzone, int holdTime) {
+    public boolean run(GenericRobot robot, double setPoint, double setPointDeadzone, int holdTime, double constant) {
         double minPower = .04;
 
         //don't remove this
         aligning = true;
 
-        if (robot.getLimelightX() < -setPointDeadzone + -setPoint) {
+        if (robot.limelight.getLimelightX() < -setPointDeadzone + -setPoint) {
             //Pivots to the left
-            currentDistance = Math.abs(robot.getLimelightX() + setPoint);
-            leftPower = -(.01852 * currentDistance);
-            rightPower = .01852 * currentDistance;
+            currentDistance = Math.abs(robot.limelight.getLimelightX() + setPoint);
+            leftPower = -(constant * currentDistance);
+            rightPower = constant * currentDistance;
             if (rightPower <= minPower) {
                 leftPower = -minPower;
                 rightPower = minPower;
             }
 
-        } else if (robot.getLimelightX() > setPointDeadzone + setPoint) {
+        } else if (robot.limelight.getLimelightX() > setPointDeadzone + setPoint) {
             //Pivots to the right
-            currentDistance = Math.abs(robot.getLimelightX() - setPoint);
-            leftPower = .01852 * currentDistance;
-            rightPower = -(.01852 * currentDistance);
+            currentDistance = Math.abs(robot.limelight.getLimelightX() - setPoint);
+            leftPower = constant * currentDistance;
+            rightPower = -(constant * currentDistance);
             if (leftPower <= minPower) {
                 leftPower = minPower;
                 rightPower = -minPower;
@@ -54,8 +54,6 @@ public class AutoAlign {
                     },
                     holdTime
             );
-
-
 
         }
 
