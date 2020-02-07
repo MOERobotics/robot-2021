@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
+
     }
 
     @Override
@@ -41,6 +42,8 @@ public class Robot extends TimedRobot {
             robot.resetAttitude();
             robot.resetEncoders();
         }
+
+
     }
 
     @Override
@@ -54,7 +57,9 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopInit() {}
+    public void teleopInit() {
+
+    }
 
 
     @Override
