@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
     GenericRobot      robot         = new KeerthanPracticeOne();
     Joystick          leftJoystick  = new Joystick(0);
     double            deadZone      = 0.1;
+    TrenchRun trenchRun = new TrenchRun();
 
     @Override public void robotInit() {}
 
@@ -67,7 +68,7 @@ public class Robot extends TimedRobot {
         }
 
         if (activeCommand.isEnabled()) {
-            activeCommand.step();
+            activeCommand.step(robot, 0.0);
             if (activeCommand.locksControls()) return;
         }
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
@@ -92,7 +93,12 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButton(14)) {
             robot.driveForward(.2);
         }
-
+        if(leftJoystick.getRawButtonPressed(1)){
+            trenchRun.begin();
+        }
+        if(leftJoystick.getRawButton(1)){
+            trenchRun.step(robot, (-leftJoystick.getY()/3));
+        }
     }
 
     @Override

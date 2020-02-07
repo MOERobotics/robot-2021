@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.genericrobot.GenericRobot;
 
 public abstract class GenericCommand {
 
@@ -16,7 +17,7 @@ public abstract class GenericCommand {
 		System.out.println("I don't define begin() steps in my command :'(");
 	}
 
-	public void step() {
+	public void step(GenericRobot robot, double newSpeed) {
 		System.out.println("I don't define begin() steps in my command :'(");
 	}
 
@@ -48,7 +49,7 @@ public abstract class GenericCommand {
 		@Override public void begin() {
 			setEnabled(false);
 		}
-		@Override public void step () {
+		@Override public void step (GenericRobot robot, double newSpeed) {
 			setEnabled(false);
 		}
 	}
