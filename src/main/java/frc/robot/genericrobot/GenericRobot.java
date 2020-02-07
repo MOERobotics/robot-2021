@@ -3,6 +3,10 @@ package frc.robot.genericrobot;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.autonomous.GenericAutonomous;
+
+import static frc.robot.Util.coalesce;
 
 public abstract class GenericRobot {
 
@@ -13,11 +17,41 @@ public abstract class GenericRobot {
     private double       shooterLowerPower = 0;
     private ShifterState gear              = ShifterState.UNKNOWN;
 
+    public final void printSmartDashboard() {
+        SmartDashboard.putNumber  ("Left  Encoder Ticks"  , getDistanceTicksLeft()                   );
+        SmartDashboard.putNumber  ("Right Encoder Ticks"  , getDistanceTicksRight()                  );
+        SmartDashboard.putNumber  ("Navx Yaw"             , getYaw()                                 );
+        SmartDashboard.putNumber  ("Navx Pitch"           , getPitch()                               );
+        SmartDashboard.putNumber  ("Navx Roll"            , getRoll()                                );
+        SmartDashboard.putNumber  ("Left  Motor Power"    , getMotorPowerLeft()                      );
+        SmartDashboard.putNumber  ("Right Motor Power"    , getMotorPowerRight()                     );
+        SmartDashboard.putNumber  ("Upper Shooter Power"  , getShooterPowerUpper()                   );
+        SmartDashboard.putNumber  ("Lower Shooter Power"  , getShooterPowerLower()                   );
+        SmartDashboard.putNumber  ("Control Panel Power"  , getControlPanelSpinnerPower()            );
+        SmartDashboard.putString  ("Shifter state"        , getShifterState().toString()             );
+        SmartDashboard.putNumber  ("Left Encoder Inches"  , getDistanceInchesLeft()                  );
+        SmartDashboard.putNumber  ("Right Encoder Inches" , getDistanceInchesRight()                 );
+
+        SmartDashboard.putBoolean ("Lidar Locked"         , isLidarBusLocked()                       );
+        SmartDashboard.putNumber  ("Lidar Front"          , coalesce(getLidarDistanceFront(), -9999) );
+        SmartDashboard.putNumber  ("Lidar Rear"           , coalesce(getLidarDistanceRear (), -9999) );
+        SmartDashboard.putNumber  ("Lidar Left"           , coalesce(getLidarDistanceLeft (), -9999) );
+        SmartDashboard.putNumber  ("Lidar Right"          , coalesce(getLidarDistanceRight(), -9999) );
+
+        SmartDashboard.putNumber  ("Limelight X"          , limelight.getLimelightX   ()             );
+        SmartDashboard.putNumber  ("Limelight Y"          , limelight.getLimelightY   ()             );
+        SmartDashboard.putNumber  ("Limelight A"          , limelight.getLimelightArea()             );
+
+        printSmartDashboardInternal();
+    }
+
+    protected void printSmartDashboardInternal() { }
+
     //***********************************************************************//
 
     public final void setMotorPowerPercentage(
-            double leftPower,
-            double rightPower
+        double leftPower,
+        double rightPower
     ) {
         this.leftPower = leftPower;
         this.rightPower = rightPower;
@@ -28,30 +62,30 @@ public abstract class GenericRobot {
     }
 
     protected abstract void setMotorPowerPercentageInternal(
-            double leftPower,
-            double rightPower
+        double leftPower,
+        double rightPower
     );
 
     public final void driveForward(
-            double power
+        double power
     ) {
         setMotorPowerPercentage(power, power);
     }
 
     public final void driveReverse(
-            double power
+        double power
     ) {
         setMotorPowerPercentage(-power, -power);
     }
 
     public final void driveLeftInPlace(
-            double power
+        double power
     ) {
         setMotorPowerPercentage(-power, power);
     }
 
     public final void driveRightInPlace(
-            double power
+        double power
     ) {
         setMotorPowerPercentage(power, -power);
     }
@@ -65,6 +99,10 @@ public abstract class GenericRobot {
     }
 
     //***********************************************************************//
+
+    public enum ShifterState {
+        HIGH,LOW,UNKNOWN;
+    }
 
     public final void shiftHigh(){
         gear = ShifterState.HIGH;
@@ -89,9 +127,6 @@ public abstract class GenericRobot {
         return gear;
     }
 
-    public enum ShifterState {
-        HIGH,LOW,UNKNOWN;
-    }
 
     //***********************************************************************//
 
@@ -159,8 +194,8 @@ public abstract class GenericRobot {
     //***********************************************************************//
 
     public final void setShooterPowerPercentage(
-            double upperPower,
-            double lowerPower
+        double upperPower,
+        double lowerPower
     ) {
         this.shooterUpperPower = upperPower;
         this.shooterLowerPower = lowerPower;
@@ -171,14 +206,14 @@ public abstract class GenericRobot {
     }
 
     public final void setShooterPowerPercentage(
-            double power
+        double power
     ) {
         setShooterPowerPercentage(power, power);
     }
 
     protected void setShooterPowerPercentageInternal(
-            double upperPower,
-            double lowerPower
+        double upperPower,
+        double lowerPower
     ) {
         System.out.println("I don't have a shooter :'(");
     }
@@ -194,14 +229,14 @@ public abstract class GenericRobot {
     //***********************************************************************//
 
     public final void spinControlPanel(
-            double power
+        double power
     ) {
         this.spinPower = power;
         spinControlPanelInternal(power);
     }
 
     protected void spinControlPanelInternal(
-            double power
+        double power
     ) {
         System.out.println("I can't spin the control panel :'(");
     }
@@ -217,8 +252,9 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
+    //Todo: Yeet into own class
     public final Limelight limelight = new Limelight();
-    public class Limelight {
+    public static class Limelight {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
         NetworkTableEntry tx = table.getEntry("tx");

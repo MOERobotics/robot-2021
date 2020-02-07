@@ -1,6 +1,9 @@
 package frc.robot.autonomous;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
+
+import static frc.robot.Util.normalizeAngleRadians;
 
 public abstract class GenericAutonomous {
 
@@ -8,15 +11,19 @@ public abstract class GenericAutonomous {
 
       /* A routine to make angle differences map to a continuous domain [-Pi,Pi].*/
       public double continuousAngleDiff(double theta) {
-            if (theta > Math.PI) {
-                  theta -= 2*Math.PI;
-            }
-            if (theta < -Math.PI) {
-                  theta += 2*Math.PI;
-            }
-            return theta;
+            return normalizeAngleRadians(theta);
       }
 
+
+      public final void printSmartDashboard() {
+            SmartDashboard.putNumber ("Autonomous Step"    ,            autonomousStep);
+            SmartDashboard.putString ("Autonomous Program" , this.getClass().getName());
+            printSmartDashboardInternal();
+      }
+
+      protected void printSmartDashboardInternal() {
+
+      }
       public void autonomousInit(GenericRobot robot) {
             autonomousStep = 0;
             System.out.println("I don't have autonomousInit in my autonomous program :'(");
