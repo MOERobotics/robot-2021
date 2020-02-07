@@ -33,10 +33,10 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Right Encoder Inches" , getDistanceInchesRight()                 );
 
         SmartDashboard.putBoolean ("Lidar Locked"         , isLidarBusLocked()                       );
-        SmartDashboard.putNumber  ("Lidar Front"          , coalesce(getLidarDistanceFront(), -9999) );
-        SmartDashboard.putNumber  ("Lidar Rear"           , coalesce(getLidarDistanceRear (), -9999) );
-        SmartDashboard.putNumber  ("Lidar Left"           , coalesce(getLidarDistanceLeft (), -9999) );
-        SmartDashboard.putNumber  ("Lidar Right"          , coalesce(getLidarDistanceRight(), -9999) );
+        SmartDashboard.putNumber  ("Lidar Front"          , coalesce(getLidarDistanceInchesFront(), -9999.0) );
+        SmartDashboard.putNumber  ("Lidar Rear"           , coalesce(getLidarDistanceInchesRear (), -9999.0) );
+        SmartDashboard.putNumber  ("Lidar Left"           , coalesce(getLidarDistanceInchesLeft (), -9999.0) );
+        SmartDashboard.putNumber  ("Lidar Right"          , coalesce(getLidarDistanceInchesRight(), -9999.0) );
 
         SmartDashboard.putNumber  ("Limelight X"          , limelight.getLimelightX   ()             );
         SmartDashboard.putNumber  ("Limelight Y"          , limelight.getLimelightY   ()             );
