@@ -17,24 +17,22 @@ public class TrenchRun extends GenericCommand {
     double currentDistance = 0;
     Integer upperLimit = 630;
     Integer lowerLimit = 570;
+    double newSpeed;
 
-    public TrenchRun(){
+    public TrenchRun(double newSpeed){
+        this.newSpeed = newSpeed;
+    }
+
+    @Override
+    public void begin(GenericRobot robot){
         setControlLock(false);
-    }
-
-    @Override
-    public void begin(){
-        init();
-    }
-
-    @Override
-    public void step(GenericRobot robot, double newSpeed){
-        run(robot, newSpeed);
-    }
-
-    public void init(){
         PIDSteering.reset();
         PIDSteering.enableContinuousInput(-180,180);
+    }
+
+    @Override
+    public void step(GenericRobot robot){
+        run(robot, newSpeed);
     }
 
     public void run(GenericRobot robot, double newSpeed){
