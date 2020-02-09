@@ -12,28 +12,27 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
+import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
-import frc.robot.vision.AutoAlign;
-
 import static frc.robot.Util.*;
 
 public class Robot extends TimedRobot {
 
-    //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
-    GenericRobot      robot        = new Camoelot();
-    Joystick          leftJoystick = new Joystick(0);
-    double            deadZone     = 0.1;
-    AutoAlign autoAligner = new AutoAlign();
-    boolean aligning = false;
+    //WheelOfFortune    colorWheel    = new WheelOfFortune();
+    GenericAutonomous autoProgram   = new PlanA(); //Auto routine to be used?
+    GenericCommand    activeCommand = GenericCommand.doNothingCommand;
+    GenericRobot      robot         = new KeerthanPracticeOne();
+    Joystick          leftJoystick  = new Joystick(0);
+    double            deadZone      = 0.1;
 
     @Override public void robotInit() {}
 
     @Override
     public void robotPeriodic() {
-        robot      .printSmartDashboard();
-        autoProgram.printSmartDashboard();
-        SmartDashboard.putBoolean("Aligning", aligning);
+        robot        .printSmartDashboard();
+        autoProgram  .printSmartDashboard();
+        activeCommand.printSmartDashboard();
+
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
     }
@@ -58,23 +57,26 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopInit() {
-        aligning = false;
-    }
+    public void teleopInit() {}
+
 
     @Override
     public void teleopPeriodic() {
+        if (leftJoystick.getRawButtonPressed(11)) {
+            activeCommand.setEnabled(false);
+        }
+
+        if (activeCommand.isEnabled()) {
+            activeCommand.step();
+            if (activeCommand.locksControls()) return;
+        }
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
          leftPower = deadzoneValue( leftPower,deadZone);
         rightPower = deadzoneValue(rightPower,deadZone);
 
-        if(!aligning || leftPower > deadZone || rightPower > deadZone) {
-            robot.setMotorPowerPercentage(leftPower, rightPower);
-            aligning = false;
-        }
-
+        robot.setMotorPowerPercentage(leftPower, rightPower);
         robot.setShooterPowerPercentage(0);
 
         if (leftJoystick.getRawButtonPressed(16)) {
@@ -91,14 +93,9 @@ public class Robot extends TimedRobot {
             robot.driveForward(.2);
         }
 
-        if (leftJoystick.getRawButtonPressed(2)) {
-            aligning = true;
-
-        }
         //Constant for TestBot: .01852
-         if (aligning){
-             aligning = autoAligner.run(robot, 0.0, 0.5,600, .045);
-        }
+        //Constant for CaMOElot: .045
+
     }
 
     @Override
