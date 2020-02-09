@@ -71,22 +71,76 @@ public class Robot extends TimedRobot {
         rightPower = deadzoneValue(rightPower,deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
-        robot.setShooterPowerPercentage(0);
 
-        if (leftJoystick.getRawButtonPressed(16)) {
-            robot.shiftLow();
+        //Collector
+        if (leftJoystick.getRawButton(11)) {
+            robot.collectorIn(.2);
+        } else if (leftJoystick.getRawButton(16)) {
+            robot.collectorOut(.2);
+        } else {
+            robot.collector(0);
         }
 
-        if (leftJoystick.getRawButtonPressed(11)) {
-            robot.shiftHigh();
+        //Escalator
+        if (leftJoystick.getRawButton(12)) {
+            robot.escalatorUp(.2);
+        } else if (leftJoystick.getRawButton(15)) {
+            robot.escalatorDown(.2);
+        } else {
+            robot.escalator(0);
         }
+
+        //Shooter
         if (leftJoystick.getRawButton(13)) {
-            robot.driveForward(-.2);
-        }
-        if (leftJoystick.getRawButton(14)) {
-            robot.driveForward(.2);
+            robot.setShooterPowerPercentage(.2);
+        } else if (leftJoystick.getRawButton(14)) {
+            robot.setShooterPowerPercentage(0);
         }
 
+        //Indexer
+        if (leftJoystick.getRawButton( 7)) {
+            robot.indexerIn(.2);
+        } else if (leftJoystick.getRawButton( 8)) {
+            robot.indexerOut(.2);
+        } else {
+            robot.indexer(0);
+        }
+
+        //Vert Adjust
+        if (leftJoystick.getRawButton( 6)) {
+            robot.aimUp(.2);
+        } else if (leftJoystick.getRawButton( 9)) {
+            robot.aimDown(.2);
+        } else {
+            robot.angleAdjuster(0);
+        }
+
+        //CP
+        if (leftJoystick.getRawButton( 5)) {
+            robot.spinControlPanel(-.2);
+        } else if (leftJoystick.getRawButton(10)) {
+            robot.spinControlPanel(.2);
+        } else {
+            robot.spinControlPanel(0);
+        }
+
+        //Climb vert
+        if (leftJoystick.getRawButton( 2)) {
+            robot.climbDown(.2);
+        } else if (leftJoystick.getRawButton( 1)) {
+            robot.climbUp(.2);
+        } else {
+            robot.climbVertical(0);
+        }
+
+        //climb horiz
+        if (leftJoystick.getRawButton( 3)) {
+            robot.balanceLeft(-.2);
+        } else if (leftJoystick.getRawButton( 4)) {
+            robot.balanceRight(.2);
+        } else {
+            robot.generatorShift(0);
+        }
     }
 
     @Override
