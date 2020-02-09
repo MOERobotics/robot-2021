@@ -72,11 +72,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getDistanceRatioLeft() {
-        switch (getShifterState()) {
-            case HIGH: return 1.0;
-            case LOW : return 1.0;
-            default  : return 1;
-        }
+        return 1;
     }
 
     @Override
@@ -86,12 +82,9 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getDistanceRatioRight() {
-        switch (getShifterState()) {
-            case HIGH: return 1.0;
-            case LOW : return 1.0;
-            default  : return 1;
+        return 1;
         }
-    }
+
 
     @Override
     public double getDistanceTicksRight() {
@@ -141,7 +134,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void spinControlPanelInternal(double power) {
-        super.spinControlPanelInternal(power);
+        controlPanel.set(power);
     }
 
     @Override
