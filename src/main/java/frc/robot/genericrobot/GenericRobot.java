@@ -354,7 +354,7 @@ public abstract class GenericRobot {
     protected void setEscalatorPowerInternal (
             double power
     ){
-        System.out.println("I don't have a climber ; (");
+        System.out.println("I don't have a escalator ; (");
     }
 
     //***********************************************************************//
@@ -375,7 +375,7 @@ public abstract class GenericRobot {
     protected void generatorShiftInternal(
             double shiftPower
     ){
-        System.out.println("I don't have a escalator ; (");
+        System.out.println("I don't have a generator shifter ; (");
     }
 
     //***********************************************************************//

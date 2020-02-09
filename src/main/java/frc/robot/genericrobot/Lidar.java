@@ -40,7 +40,8 @@ class Lidar extends Thread {
         return distance;
     }
     public Double getDistanceInches(int lidarID) {
-        double lidarReading = getDistance(lidarID);
+        Integer lidarReading = getDistance(lidarID);
+        if (lidarReading == null) return  null;
         double lidarInches = 5+(15/396)*(lidarReading-165);
         return lidarInches;
     }

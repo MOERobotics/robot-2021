@@ -17,19 +17,19 @@ public class Falcon extends GenericRobot{
     CANSparkMax rightDriveB     = new CANSparkMax( 1, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax rightDriveC     = new CANSparkMax( 2, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    CANSparkMax climberA        = new CANSparkMax(12, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax climberB        = new CANSparkMax( 3, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax generatorShift  = new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax climberA        = null;//= new CANSparkMax(12, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax climberB        = null;//new CANSparkMax( 3, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax generatorShift  = null;//new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     CANSparkMax shooterA        = new CANSparkMax( 5, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax shooterB        = new CANSparkMax( 4, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax indexer         = new CANSparkMax( 6, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax indexer         = new CANSparkMax( 6, CANSparkMaxLowLevel.MotorType.kBrushed);
     CANSparkMax escalator       = new CANSparkMax( 7, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax angleAdj        = new CANSparkMax( 8, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    CANSparkMax controlPanel    = new CANSparkMax( 9, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax controlPanel    = null;//= new CANSparkMax( 9, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    CANSparkMax collector       = new CANSparkMax(10, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax collector       = new CANSparkMax(10, CANSparkMaxLowLevel.MotorType.kBrushed); //Needs t
 
     CANEncoder encoderRight     = new CANEncoder(rightDriveA);
     CANEncoder encoderLeft      = new CANEncoder( leftDriveA);
@@ -124,11 +124,11 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setShooterPowerPercentageInternal(double upperPower, double lowerPower) {
-        shooterA.set(upperPower);
+        shooterA.set(-upperPower);
         shooterB.set(lowerPower);
     }
 
-    @Override
+   /* @Override
     protected void spinControlPanelInternal(double power) {
         controlPanel.set(power);
     }
@@ -137,6 +137,8 @@ public class Falcon extends GenericRobot{
     public char getCurrentControlPanelColor() {
         return super.getCurrentControlPanelColor();
     }
+
+    */
 
     @Override
     public Lidar getLidarSubsystem() {
@@ -174,21 +176,24 @@ public class Falcon extends GenericRobot{
         collector.set(collectorPower);
     }
 
-    @Override
+    /*@Override
     protected void climbVerticalInternal(double climberPower) {
         climberA.set( climberPower);
         climberB.set(-climberPower);
     }
+     */
 
     @Override
     protected void setEscalatorPowerInternal(double escalatorPower) {
         escalator.set(escalatorPower);
     }
 
-    @Override
+   /* @Override
     protected void generatorShiftInternal(double shiftPower) {
         generatorShift.set(shiftPower);
     }
+
+    */
 
     @Override
     protected void setAngleAdjusterPowerInternal(double aimPower) {
