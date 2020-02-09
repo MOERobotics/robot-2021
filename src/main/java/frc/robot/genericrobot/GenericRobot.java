@@ -255,19 +255,19 @@ public abstract class GenericRobot {
     //***********************************************************************//
 
     public final void indexerIn(double indexerPower){
-        indexer(indexerPower);
+        setIndexerPower(indexerPower);
     }
 
     public final void indexerOut(double indexerPower){
-        indexer(-indexerPower);
+        setIndexerPower(-indexerPower);
     }
 
     double indexerPower = 0;
-    public final void indexer(double power){
+    public final void setIndexerPower(double power){
         indexerPower = power;
-        indexerInternal(0.0);
+        setIndexerPowerInternal(0.0);
     }
-    protected void indexerInternal (
+    protected void setIndexerPowerInternal(
             double indexerPower
 
     ){
@@ -277,20 +277,20 @@ public abstract class GenericRobot {
     //***********************************************************************//
 
     public final void collectorIn(double collectorPower) {
-        collector(collectorPower);
+        setCollectorPower(collectorPower);
     }
 
     public final void collectorOut(double collectorPower){
-        collector(-collectorPower);
+        setCollectorPower(-collectorPower);
     }
 
     double collectorPower = 0;
-    public final void collector(double power){
+    public final void setCollectorPower(double power){
         collectorPower = power;
-        collectorInternal(0.0);
+        setCollectorPowerInternal(0.0);
     }
 
-    protected void collectorInternal (
+    protected void setCollectorPowerInternal(
             double collectorPower
     ){
         System.out.println("I don't have a collector ; (");
@@ -325,21 +325,21 @@ public abstract class GenericRobot {
     //***********************************************************************//
 
     public final void escalatorUp(double power){
-        escalator(-power) ;
+        setEscalatorPower(-power) ;
     }
 
     public final void escalatorDown(double power){
-        escalator(power);
+        setEscalatorPower(power);
     }
 
 
     double escalatorVerticalPower = 0;
-    public final void escalator(double power){
+    public final void setEscalatorPower(double power){
         escalatorVerticalPower = power;
-        escalatorInternal(0.0);
+        setEscalatorPowerInternal(0.0);
     }
 
-    protected void escalatorInternal (
+    protected void setEscalatorPowerInternal (
             double power
     ){
         System.out.println("I don't have a climber ; (");
@@ -370,19 +370,19 @@ public abstract class GenericRobot {
     //***********************************************************************//
 
     public final void aimUp(double aimPower){
-        angleAdjuster(aimPower);
+        setAngleAdjusterPower(aimPower);
     }
 
     public final void aimDown(double aimPower){
-        angleAdjuster(-aimPower);
+        setAngleAdjusterPower(-aimPower);
     }
 
     double angleAdjusterPower = 0;
-    public final void angleAdjuster(double power){
+    public final void setAngleAdjusterPower(double power){
         angleAdjusterPower = power;
-        angleAdjusterInternal(0.0);
+        setAngleAdjusterPowerInternal(0.0);
     }
-    protected void angleAdjusterInternal(double aimPower){
+    protected void setAngleAdjusterPowerInternal(double aimPower){
         System.out.println("I don't have an angle adjuster ;(");
     }
 

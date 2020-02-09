@@ -1,9 +1,14 @@
 package frc.robot.genericrobot;
 
+import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.wpilibj.SPI;
 
 public class Falcon extends GenericRobot{
+
+    AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 50);
 
     CANSparkMax leftDriveA = new CANSparkMax(13, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax leftDriveB = new CANSparkMax( 14, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -25,6 +30,9 @@ public class Falcon extends GenericRobot{
     CANSparkMax controlPanel = new CANSparkMax( 9, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     CANSparkMax collector  = new CANSparkMax(10, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    CANEncoder encoderRight = new CANEncoder(rightDriveA);
+    CANEncoder encoderLeft  = new CANEncoder(leftDriveA);
 
     public Falcon() {
         leftDriveC.follow(leftDriveA);
@@ -64,22 +72,30 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getDistanceRatioLeft() {
-        return super.getDistanceRatioLeft();
+        switch (getShifterState()) {
+            case HIGH: return 1.0;
+            case LOW : return 1.0;
+            default  : return 1;
+        }
     }
 
     @Override
     public double getDistanceTicksLeft() {
-        return super.getDistanceTicksLeft();
+        return encoderLeft.getPosition();
     }
 
     @Override
     public double getDistanceRatioRight() {
-        return super.getDistanceRatioRight();
+        switch (getShifterState()) {
+            case HIGH: return 1.0;
+            case LOW : return 1.0;
+            default  : return 1;
+        }
     }
 
     @Override
     public double getDistanceTicksRight() {
-        return super.getDistanceTicksRight();
+        return encoderRight.getPosition();
     }
 
     @Override
@@ -89,37 +105,38 @@ public class Falcon extends GenericRobot{
 
     @Override
     public void resetEncoderLeft() {
-        super.resetEncoderLeft();
+        encoderLeft.setPosition(0.0);
     }
 
     @Override
     public void resetEncoderRight() {
-        super.resetEncoderRight();
+        encoderRight.setPosition(0.0);
     }
 
     @Override
     public double getYaw() {
-        return super.getYaw();
+        return navx.getYaw();
     }
 
     @Override
     public double getPitch() {
-        return super.getPitch();
+        return navx.getPitch();
     }
 
     @Override
     public double getRoll() {
-        return super.getRoll();
+        return navx.getRoll();
     }
 
     @Override
     public void resetAttitude() {
-        super.resetAttitude();
+        navx.reset();
     }
 
     @Override
     protected void setShooterPowerPercentageInternal(double upperPower, double lowerPower) {
-        super.setShooterPowerPercentageInternal(upperPower, lowerPower);
+        shooterA.set(upperPower);
+        shooterB.set(lowerPower);
     }
 
     @Override
@@ -159,12 +176,12 @@ public class Falcon extends GenericRobot{
 
 
     @Override
-    protected void indexerInternal(double indexerPower) {
+    protected void setIndexerPowerInternal(double indexerPower) {
         indexer.set(indexerPower);
     }
 
     @Override
-    protected void collectorInternal(double collectorPower) {
+    protected void setCollectorPowerInternal(double collectorPower) {
         collector.set(collectorPower);
     }
 
@@ -175,7 +192,7 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    protected void escalatorInternal(double escalatorPower) {
+    protected void setEscalatorPowerInternal(double escalatorPower) {
         escalator.set(escalatorPower);
     }
 
@@ -185,7 +202,9 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    protected void angleAdjusterInternal(double aimPower) {
+    protected void setAngleAdjusterPowerInternal(double aimPower) {
         angleAdj.set(aimPower);
     }
+
+
 }
