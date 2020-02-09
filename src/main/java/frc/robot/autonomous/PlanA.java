@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 public class PlanA extends GenericAutonomous {
 
       //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-      double defaultSpeed = 0.3;
+      double defaultSpeed = 0.35;
 
       static double startingYaw      = 0.0;
       static double startingDistance = 0.0;
-      PIDController PIDSteering = new PIDController(4.0e-2, 0.0e-3, 1.0e-4);
+      PIDController PIDSteering = new PIDController(4.0e-2, 0.0e-3, 2.0e-4);
       double correction;
       static double currentYaw = 0;
       double outerArcLength = 67.2;
@@ -83,6 +83,7 @@ public class PlanA extends GenericAutonomous {
                         if(currentDistance - startingDistance > outerArcLength) {
                               autonomousStep = 6;
                         }
+
                         break;
 
                   case 6: //PID reset for straightaway
@@ -98,6 +99,8 @@ public class PlanA extends GenericAutonomous {
                         robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         //decrescendo power
+
+
                         if(currentDistance - startingDistance > 45){ //start to decrement?
                               autonomousStep = 8;
 
@@ -110,6 +113,7 @@ public class PlanA extends GenericAutonomous {
                         double slowToStop = (defaultSpeed - (defaultSpeed / 15)*((currentDistance-startingDistance)-45)); //?
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(1.5 * slowToStop * (1 + correction), 1.5 * slowToStop * (1 - correction)); // div by 2 to debug
+
                         if(currentDistance - startingDistance > 60){
                               autonomousStep = 9;
 
@@ -117,6 +121,9 @@ public class PlanA extends GenericAutonomous {
                         break;
 
                   case 9: //cease your autnomous
+
+
+
                         robot.driveForward(0);
                         //                               ¯\_(ツ)_/¯
                         break;

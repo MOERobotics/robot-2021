@@ -7,22 +7,29 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 public class PlanE extends GenericAutonomous {
 
       //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-      double defaultSpeed = 0.25; //CHANGE WHEN DONE
+      double defaultSpeed = 0.2; //CHANGE WHEN DONE
 
       static double startingYaw      = 0.0;
       static double startingDistance = 0.0;
-      PIDController PIDSteering = new PIDController(4.0e-2, 0.0e-3, 1.0e-4);
+      PIDController PIDSteering = new PIDController(5.0e-2, 1.0e-4, 2.0e-4);
       double correction;
       static double currentYaw = 0;
       double outerArcLength = 33;
       double innerArc = 35.45;
-      double outerRadius = 27;
+      double outerRadius = 32;
       double yawDifference = 0;
       long startingTime;
       double powerDecrement;
       double currentDistance;
 
-      @Override public void autonomousInit(GenericRobot robot) {
+    @Override
+    protected void printSmartDashboardInternal() {
+        SmartDashboard.putNumber("Current Distance", currentDistance);
+        SmartDashboard.putNumber("Starting Distance", startingDistance);
+        SmartDashboard.putNumber("distanceDifference", currentDistance-startingDistance );
+    }
+
+    @Override public void autonomousInit(GenericRobot robot) {
             startingTime = System.currentTimeMillis();
             autonomousStep = -1;
       }
@@ -61,7 +68,6 @@ public class PlanE extends GenericAutonomous {
                   case 3: //1st (left) arc
                         yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                         correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
-                        SmartDashboard.putNumber("Pid heading", (robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                         currentDistance = robot.getDistanceInchesRight();
 
@@ -103,8 +109,7 @@ public class PlanE extends GenericAutonomous {
                         robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
 
-                        SmartDashboard.putNumber("Current Distance", currentDistance);
-                        SmartDashboard.putNumber("Starting Distance", startingDistance);
+
 
                         //decrescendo power
                         //if(currentDistance - startingDistance > ){ //start to decrement?

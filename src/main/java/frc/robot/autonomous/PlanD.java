@@ -11,13 +11,13 @@ public class PlanD extends GenericAutonomous {
 
       static double startingYaw = 0.0; //start at an angle, figure out later
       static double startingDistance = 0.0;
-      PIDModule PIDSteering = new PIDModule(4.0e-2, 0.0e-3, 1.0e-4);
+      PIDModule PIDSteering = new PIDModule(4.0e-2, 0.0e-3, 2.0e-4);
       double correction;
       static double currentYaw = 0;
       double outerArcLength = 80;
       double innerArc = 35.45;
       double innerRadius = 30;
-      double outerRadius = 48; //changed from 52
+      double outerRadius = 28; //changed from 34
       double yawDifference = 0;
       long startingTime = System.currentTimeMillis();
       double prevStartingDistance = 0;
@@ -76,7 +76,6 @@ public class PlanD extends GenericAutonomous {
                         SmartDashboard.putNumber("currentDistance", currentDistance);
                         SmartDashboard.putNumber("distanceDifference", currentDistance - startingDistance);
                         if (currentDistance - startingDistance < -30) { //maybe change depending on how far we need to go
-                              robot.driveForward(0);
                               autonomousStep = 4;
                         }
                         break;

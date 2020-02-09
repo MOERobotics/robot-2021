@@ -11,7 +11,7 @@ public class PlanC extends GenericAutonomous {
 
       static double startingYaw = 0.0; //start at an angle, figure out later
       static double startingDistance = 0.0;
-      PIDModule PIDSteering = new PIDModule(4.0e-2, 0.0e-3, 1.0e-4);
+      PIDModule PIDSteering = new PIDModule(4.0e-2, 0.0e-3, 2.0e-4);
       double correction;
       static double currentYaw = 0;
       double outerArcLength = 50;
@@ -55,11 +55,12 @@ public class PlanC extends GenericAutonomous {
                         correction = PIDSteering.getCorrection();
                         robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 80) { //maybe change depending on how far we need to go
+                        if (currentDistance - startingDistance > 80) {
                               robot.driveForward(0);
                               autonomousStep = 2;
                         }
                         break;
+
 
                   case 2: //reset for backward straight-away
                         startingDistance = robot.getDistanceInchesLeft();
