@@ -4,7 +4,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.autonomous.GenericAutonomous;
 
 import static frc.robot.Util.coalesce;
 
@@ -308,6 +307,20 @@ public abstract class GenericRobot {
     public Double getLidarDistanceInchesRight() {
         System.out.println("I don't have a right lidar :'(");
         return null;
+    }
+
+    //***********************************************************************//
+
+    public void climbUp() {
+        System.out.println("I don't have a climber :'(");
+    }
+
+    public void climbDown() {
+        System.out.println("I don't have a climber :'(");
+    }
+
+    public void stopClimb() {
+        System.out.println("I don't have a climber :'(");
     }
 
 

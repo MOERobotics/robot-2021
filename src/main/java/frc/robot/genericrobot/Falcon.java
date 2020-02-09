@@ -54,9 +54,12 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
-
-
-
+        rightDriveA.set (rightPower );
+        rightDriveB.set (rightPower );
+        rightDriveC.set (rightPower );
+        leftDriveA.set  (leftPower  );
+        leftDriveB.set  (leftPower  );
+        leftDriveB.set  (leftPower  );
     }
 
     @Override
@@ -153,4 +156,26 @@ public class Falcon extends GenericRobot{
     public Double getLidarDistanceInchesRight() {
         return super.getLidarDistanceInchesRight();
     }
+
+    @Override
+    public void climbUp(double power) {
+        climberA.set(power);
+        climberB.set(power);
+    }
+
+    @Override
+    public void climbDown(double power) {
+        climberA.set(-power);
+        climberB.set(-power);
+    }
+
+    @Override
+    public void stopClimb() {
+        climberA.set(0);
+        climberB.set(0);
+    }
+
+
+
+
 }
