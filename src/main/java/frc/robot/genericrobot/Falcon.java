@@ -19,7 +19,7 @@ public class Falcon extends GenericRobot{
     CANSparkMax shooterA  = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax shooterB  = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax indexer = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax conveyorBelt = new CANSparkMax( 7, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax escalator = new CANSparkMax( 7, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax angleAdj = new CANSparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     CANSparkMax controlPanel = new CANSparkMax( 9, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -157,25 +157,35 @@ public class Falcon extends GenericRobot{
         return super.getLidarDistanceInchesRight();
     }
 
+
     @Override
-    public void climbUp(double power) {
-        climberA.set(power);
-        climberB.set(power);
+    protected void indexerInternal(double indexerPower) {
+        indexer.set(indexerPower);
     }
 
     @Override
-    public void climbDown(double power) {
-        climberA.set(-power);
-        climberB.set(-power);
+    protected void collectorInternal(double collectorPower) {
+        collector.set(collectorPower);
     }
 
     @Override
-    public void stopClimb() {
-        climberA.set(0);
-        climberB.set(0);
+    protected void climbVerticalInternal(double climberPower) {
+        climberA.set(climberPower);
+        climberB.set(-climberPower);
     }
 
+    @Override
+    protected void escalatorInternal(double escalatorPower) {
+        escalator.set(escalatorPower);
+    }
 
+    @Override
+    protected void generatorShiftInternal(double shiftPower) {
+        generatorShift.set(shiftPower);
+    }
 
-
+    @Override
+    protected void angleAdjusterInternal(double aimPower) {
+        angleAdj.set(aimPower);
+    }
 }

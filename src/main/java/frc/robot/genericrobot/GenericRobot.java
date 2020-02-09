@@ -122,6 +122,7 @@ public abstract class GenericRobot {
         System.out.println("I don't have a shifter ;(");
     }
 
+
     public ShifterState getShifterState() {
         return gear;
     }
@@ -234,6 +235,8 @@ public abstract class GenericRobot {
         spinControlPanelInternal(power);
     }
 
+
+
     protected void spinControlPanelInternal(
         double power
     ) {
@@ -250,6 +253,141 @@ public abstract class GenericRobot {
     }
 
     //***********************************************************************//
+
+    public final void indexerIn(double indexerPower){
+        indexer(indexerPower);
+    }
+
+    public final void indexerOut(double indexerPower){
+        indexer(-indexerPower);
+    }
+
+    double indexerPower = 0;
+    public final void indexer(double power){
+        indexerPower = power;
+        indexerInternal(0.0);
+    }
+    protected void indexerInternal (
+            double indexerPower
+
+    ){
+        System.out.println("I don't have an Indexer ; (");
+    }
+
+    //***********************************************************************//
+
+    public final void collectorIn(double collectorPower) {
+        collector(collectorPower);
+    }
+
+    public final void collectorOut(double collectorPower){
+        collector(-collectorPower);
+    }
+
+    double collectorPower = 0;
+    public final void collector(double power){
+        collectorPower = power;
+        collectorInternal(0.0);
+    }
+
+    protected void collectorInternal (
+            double collectorPower
+    ){
+        System.out.println("I don't have a collector ; (");
+    }
+
+    //***********************************************************************//
+
+    public final void climbUp(double power){
+        climbVertical(-power) ;
+    }
+
+    public final void climbDown(double power){
+        climbVertical(power);
+    }
+
+    public final void stopClimb() {
+        climbVertical(0.0);
+    }
+
+    double climbVerticalPower = 0;
+    public final void climbVertical(double power){
+        climbVerticalPower = power;
+        climbVerticalInternal(0.0);
+    }
+
+    protected void climbVerticalInternal (
+            double power
+    ){
+        System.out.println("I don't have a climber ; (");
+    }
+
+    //***********************************************************************//
+
+    public final void escalatorUp(double power){
+        escalator(-power) ;
+    }
+
+    public final void escalatorDown(double power){
+        escalator(power);
+    }
+
+
+    double escalatorVerticalPower = 0;
+    public final void escalator(double power){
+        escalatorVerticalPower = power;
+        escalatorInternal(0.0);
+    }
+
+    protected void escalatorInternal (
+            double power
+    ){
+        System.out.println("I don't have a climber ; (");
+    }
+
+    //***********************************************************************//
+
+    public final void balanceLeft(double power){
+        generatorShift(-power); ;
+    }
+
+    public final void balanceRight(double power){
+        generatorShift(power);
+    }
+
+    double balancePower = 0;
+    public final void generatorShift(double power){
+        balancePower = power;
+        generatorShiftInternal(0.0);
+    }
+
+    protected void generatorShiftInternal(
+            double shiftPower
+    ){
+        System.out.println("I don't have a escalator ; (");
+    }
+
+    //***********************************************************************//
+
+    public final void aimUp(double aimPower){
+        angleAdjuster(aimPower);
+    }
+
+    public final void aimDown(double aimPower){
+        angleAdjuster(-aimPower);
+    }
+
+    double angleAdjusterPower = 0;
+    public final void angleAdjuster(double power){
+        angleAdjusterPower = power;
+        angleAdjusterInternal(0.0);
+    }
+    protected void angleAdjusterInternal(double aimPower){
+        System.out.println("I don't have an angle adjuster ;(");
+    }
+
+    //***********************************************************************//
+
 
     //Todo: Yeet into own class
     public final Limelight limelight = new Limelight();
@@ -311,17 +449,6 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
-    public void climbUp() {
-        System.out.println("I don't have a climber :'(");
-    }
-
-    public void climbDown() {
-        System.out.println("I don't have a climber :'(");
-    }
-
-    public void stopClimb() {
-        System.out.println("I don't have a climber :'(");
-    }
 
 
 }
