@@ -61,7 +61,6 @@ public class Robot extends TimedRobot {
 
     }
 
-
     @Override
     public void teleopPeriodic() {
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
@@ -78,7 +77,7 @@ public class Robot extends TimedRobot {
         } else if (leftJoystick.getRawButton(16)) {
             robot.collectorOut(.2);
         } else {
-            robot.collector(0);
+            robot.setCollectorPower(0);
         }
 
         //Escalator
@@ -87,7 +86,7 @@ public class Robot extends TimedRobot {
         } else if (leftJoystick.getRawButton(15)) {
             robot.escalatorDown(.2);
         } else {
-            robot.escalator(0);
+            robot.setEscalatorPower(0);
         }
 
         //Shooter
@@ -103,7 +102,7 @@ public class Robot extends TimedRobot {
         } else if (leftJoystick.getRawButton( 8)) {
             robot.indexerOut(.2);
         } else {
-            robot.indexer(0);
+            robot.setIndexerPower(0);
         }
 
         //Vert Adjust
@@ -112,7 +111,7 @@ public class Robot extends TimedRobot {
         } else if (leftJoystick.getRawButton( 9)) {
             robot.aimDown(.2);
         } else {
-            robot.angleAdjuster(0);
+            robot.setAngleAdjusterPower(0);
         }
 
         //CP

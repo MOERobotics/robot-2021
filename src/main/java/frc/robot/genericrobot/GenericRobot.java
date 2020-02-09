@@ -9,12 +9,18 @@ import static frc.robot.Util.coalesce;
 
 public abstract class GenericRobot {
 
-    private double       leftPower         = 0;
-    private double       rightPower        = 0;
-    private double       spinPower         = 0;
-    private double       shooterUpperPower = 0;
-    private double       shooterLowerPower = 0;
-    private ShifterState gear              = ShifterState.UNKNOWN;
+    private double leftPower              = 0;
+    private double rightPower             = 0;
+    private double spinPower              = 0;
+    private double shooterUpperPower      = 0;
+    private double shooterLowerPower      = 0;
+    private double angleAdjusterPower     = 0;
+    private double balancePower           = 0;
+    private double escalatorVerticalPower = 0;
+    private double climbVerticalPower     = 0;
+    private double collectorPower         = 0;
+    private double indexerPower           = 0;
+    private ShifterState gear             = ShifterState.UNKNOWN;
 
     public final void printSmartDashboard() {
         SmartDashboard.putNumber  ("Left  Encoder Ticks"  , getDistanceTicksLeft()                   );
@@ -22,14 +28,24 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Navx Yaw"             , getYaw()                                 );
         SmartDashboard.putNumber  ("Navx Pitch"           , getPitch()                               );
         SmartDashboard.putNumber  ("Navx Roll"            , getRoll()                                );
-        SmartDashboard.putNumber  ("Left  Motor Power"    , getMotorPowerLeft()                      );
-        SmartDashboard.putNumber  ("Right Motor Power"    , getMotorPowerRight()                     );
-        SmartDashboard.putNumber  ("Upper Shooter Power"  , getShooterPowerUpper()                   );
-        SmartDashboard.putNumber  ("Lower Shooter Power"  , getShooterPowerLower()                   );
-        SmartDashboard.putNumber  ("Control Panel Power"  , getControlPanelSpinnerPower()            );
-        SmartDashboard.putString  ("Shifter state"        , getShifterState().toString()             );
+        SmartDashboard.putNumber  ("Left  Motor Power"    , leftPower                                );
+        SmartDashboard.putNumber  ("Right Motor Power"    , rightPower                               );
         SmartDashboard.putNumber  ("Left Encoder Inches"  , getDistanceInchesLeft()                  );
         SmartDashboard.putNumber  ("Right Encoder Inches" , getDistanceInchesRight()                 );
+        SmartDashboard.putString  ("Shifter state"        , getShifterState().toString()             );
+
+        SmartDashboard.putNumber  ("Collector Power"      , collectorPower                           );
+        SmartDashboard.putNumber  ("Escalator Power"      , escalatorVerticalPower                   );
+        SmartDashboard.putNumber  ("Indexer Power"        , indexerPower                             );
+        SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
+        SmartDashboard.putNumber  ("Lower Shooter Power"  , shooterLowerPower                        );
+        SmartDashboard.putNumber  ("Angle Adjust Power"   , angleAdjusterPower                       );
+
+        SmartDashboard.putNumber  ("Climber Bert Power"   , climbVerticalPower                       );
+        SmartDashboard.putNumber  ("Climber Horiz Power"  , balancePower                             );
+
+        SmartDashboard.putNumber  ("Control Panel Power"  , spinPower                                );
+
 
         SmartDashboard.putBoolean ("Lidar Locked"         , isLidarBusLocked()                       );
         SmartDashboard.putNumber  ("Lidar Front"          , coalesce(getLidarDistanceInchesFront(), -9999.0) );
@@ -262,7 +278,6 @@ public abstract class GenericRobot {
         setIndexerPower(-indexerPower);
     }
 
-    double indexerPower = 0;
     public final void setIndexerPower(double power){
         indexerPower = power;
         setIndexerPowerInternal(0.0);
@@ -284,7 +299,6 @@ public abstract class GenericRobot {
         setCollectorPower(-collectorPower);
     }
 
-    double collectorPower = 0;
     public final void setCollectorPower(double power){
         collectorPower = power;
         setCollectorPowerInternal(0.0);
@@ -310,7 +324,6 @@ public abstract class GenericRobot {
         climbVertical(0.0);
     }
 
-    double climbVerticalPower = 0;
     public final void climbVertical(double power){
         climbVerticalPower = power;
         climbVerticalInternal(0.0);
@@ -333,7 +346,6 @@ public abstract class GenericRobot {
     }
 
 
-    double escalatorVerticalPower = 0;
     public final void setEscalatorPower(double power){
         escalatorVerticalPower = power;
         setEscalatorPowerInternal(0.0);
@@ -355,7 +367,6 @@ public abstract class GenericRobot {
         generatorShift(power);
     }
 
-    double balancePower = 0;
     public final void generatorShift(double power){
         balancePower = power;
         generatorShiftInternal(0.0);
@@ -377,8 +388,7 @@ public abstract class GenericRobot {
         setAngleAdjusterPower(-aimPower);
     }
 
-    double angleAdjusterPower = 0;
-    public final void setAngleAdjusterPower(double power){
+     public final void setAngleAdjusterPower(double power){
         angleAdjusterPower = power;
         setAngleAdjusterPowerInternal(0.0);
     }
