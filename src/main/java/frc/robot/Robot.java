@@ -18,10 +18,10 @@ import static frc.robot.Util.*;
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
+    GenericAutonomous autoProgram  = new DriveStraightOneSecond(); //Auto routine to be used?
     GenericRobot      robot        = new Falcon();
     Joystick          leftJoystick = new Joystick(0);
-    double            deadZone     = 0.1;
+    double            deadZone     = 0.10;
 
     @Override public void robotInit() {}
 

@@ -58,17 +58,17 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
-        rightDriveA.set (rightPower );
-        rightDriveB.set (rightPower );
-        rightDriveC.set (rightPower );
-        leftDriveA.set  (leftPower  );
-        leftDriveB.set  (leftPower  );
-        leftDriveB.set  (leftPower  );
+        rightDriveA.set (rightPower /2);
+        rightDriveB.set (rightPower /2);
+        rightDriveC.set (rightPower /2);
+        leftDriveA.set  (leftPower /2 );
+        leftDriveB.set  (leftPower  /2);
+        leftDriveB.set  (leftPower  /2);
     }
 
     @Override
     public double getDistanceRatioLeft() {
-        return 1;
+        return 0.306;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getDistanceRatioRight() {
-        return 1;
+        return 0.306;
         }
 
 
