@@ -1,23 +1,32 @@
-package frc.robot.vision;
-
+package frc.robot.commands;
 
 import frc.robot.genericrobot.GenericRobot;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Timer;
-
-public class AutoAlign {
-
+public class LimelightAlign extends GenericCommand{
     double leftPower;
     double rightPower;
-    private boolean aligning = true;
+    private boolean aligning;
     double currentDistance = 0;
+    double setPoint;
+    double setPointDeadzone;
+    double constant;
 
-    public boolean run(GenericRobot robot, double setPoint, double setPointDeadzone, int holdTime, double constant) {
+    public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
+
+        this.setPoint = setPoint;
+        this.setPointDeadzone = setPointDeadzone;
+        this.constant = constant;
+
+    }
+    @Override
+    public void begin(GenericRobot robot) {
+
+    }
+
+    @Override
+    public void step(GenericRobot robot) {
         double minPower = .04;
 
-        //don't remove this
         aligning = true;
 
         if (robot.limelight.getLimelightX() < -setPointDeadzone + -setPoint) {
@@ -52,13 +61,18 @@ public class AutoAlign {
                             aligning = false;
                         }
                     },
-                    holdTime
+                    600
             );
 
         }
 
+        if(!aligning){
+            setEnabled(false);
+        }
+
         robot.setMotorPowerPercentage(leftPower, rightPower);
-        return aligning;
 
     }
+
+
 }

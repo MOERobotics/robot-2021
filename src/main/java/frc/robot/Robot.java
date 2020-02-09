@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
+
 import static frc.robot.Util.*;
 
 public class Robot extends TimedRobot {
@@ -24,6 +25,11 @@ public class Robot extends TimedRobot {
     GenericRobot      robot         = new KeerthanPracticeOne();
     Joystick          leftJoystick  = new Joystick(0);
     double            deadZone      = 0.1;
+
+    //Constant for TestBot: .01852
+    //Constant for CaMOElot: .045
+    //Constant for Falcon: ???
+    LimelightAlign limelightAlign = new LimelightAlign(0.0, 0.5, .0185);
 
     @Override public void robotInit() {}
 
@@ -72,7 +78,7 @@ public class Robot extends TimedRobot {
         }
 
         if (activeCommand.isEnabled()) {
-            activeCommand.step();
+            activeCommand.step(robot);
             if (activeCommand.locksControls()) return;
         }
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
@@ -98,8 +104,9 @@ public class Robot extends TimedRobot {
             robot.driveForward(.2);
         }
 
-        //Constant for TestBot: .01852
-        //Constant for CaMOElot: .045
+        if(leftJoystick.getRawButtonPressed(2)){
+            limelightAlign.setEnabled(true);
+        }
 
     }
 
