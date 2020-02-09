@@ -280,7 +280,7 @@ public abstract class GenericRobot {
 
     public final void setIndexerPower(double power){
         indexerPower = power;
-        setIndexerPowerInternal(0.0);
+        setIndexerPowerInternal(power);
     }
     protected void setIndexerPowerInternal(
             double indexerPower
@@ -301,7 +301,7 @@ public abstract class GenericRobot {
 
     public final void setCollectorPower(double power){
         collectorPower = power;
-        setCollectorPowerInternal(0.0);
+        setCollectorPowerInternal(power);
     }
 
     protected void setCollectorPowerInternal(
@@ -326,7 +326,7 @@ public abstract class GenericRobot {
 
     public final void climbVertical(double power){
         climbVerticalPower = power;
-        climbVerticalInternal(0.0);
+        climbVerticalInternal(power);
     }
 
     protected void climbVerticalInternal (
@@ -348,7 +348,7 @@ public abstract class GenericRobot {
 
     public final void setEscalatorPower(double power){
         escalatorVerticalPower = power;
-        setEscalatorPowerInternal(0.0);
+        setEscalatorPowerInternal(power);
     }
 
     protected void setEscalatorPowerInternal (
@@ -369,7 +369,7 @@ public abstract class GenericRobot {
 
     public final void generatorShift(double power){
         balancePower = power;
-        generatorShiftInternal(0.0);
+        generatorShiftInternal(power);
     }
 
     protected void generatorShiftInternal(
@@ -390,7 +390,7 @@ public abstract class GenericRobot {
 
      public final void setAngleAdjusterPower(double power){
         angleAdjusterPower = power;
-        setAngleAdjusterPowerInternal(0.0);
+        setAngleAdjusterPowerInternal(power);
     }
     protected void setAngleAdjusterPowerInternal(double aimPower){
         System.out.println("I don't have an angle adjuster ;(");

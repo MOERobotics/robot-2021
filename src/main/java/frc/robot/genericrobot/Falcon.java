@@ -185,7 +185,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setEscalatorPowerInternal(double escalatorPower) {
-        escalator.set(escalatorPower);
+        escalator.set(-escalatorPower);
     }
 
    /* @Override
