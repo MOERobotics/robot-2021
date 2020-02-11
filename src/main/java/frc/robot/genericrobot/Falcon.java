@@ -31,12 +31,13 @@ public class Falcon extends GenericRobot{
 
     CANSparkMax controlPanel    = null;//= new CANSparkMax( 9, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    CANSparkMax collector       = new CANSparkMax(10, MotorType.kBrushed); 
+    CANSparkMax collector       = new CANSparkMax(10, MotorType.kBrushed);
 
     CANEncoder encoderRight     = new CANEncoder(rightDriveA);
     CANEncoder encoderLeft      = new CANEncoder( leftDriveA);
     CANEncoder encoderShootA    = new CANEncoder(shooterA);
     CANEncoder encoderShootB    = new CANEncoder(shooterB);
+    Lidar lidar = new Lidar();
 
 
     public Falcon() {
@@ -156,30 +157,27 @@ public class Falcon extends GenericRobot{
     */
 
     @Override
-    public Lidar getLidarSubsystem() {
-        return super.getLidarSubsystem();
-    }
+    public Lidar getLidarSubsystem() {return lidar; }
 
     @Override
     public Double getLidarDistanceInchesFront() {
-        return super.getLidarDistanceInchesFront();
+        return lidar.getDistanceInches(3);
     }
 
     @Override
     public Double getLidarDistanceInchesRear() {
-        return super.getLidarDistanceInchesRear();
+        return lidar.getDistanceInches(2);
     }
 
     @Override
     public Double getLidarDistanceInchesLeft() {
-        return super.getLidarDistanceInchesLeft();
+        return lidar.getDistanceInches(0);
     }
 
     @Override
     public Double getLidarDistanceInchesRight() {
-        return super.getLidarDistanceInchesRight();
+        return lidar.getDistanceInches(1);
     }
-
 
     @Override
     protected void setIndexerPowerInternal(double indexerPower) {
