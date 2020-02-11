@@ -93,6 +93,7 @@ class Lidar extends Thread {
             }
             if (newByteArr.length == 0) {
                 System.out.println("Serial Port says we are at end of file. Nothing we can read.");
+                System.out.println("Resetting.");
                 lidarSerialPort.reset();
                 continue;
             }
@@ -116,11 +117,11 @@ class Lidar extends Thread {
                 int id       = Integer.parseInt(lidarBlob.group(      "id"));
                 int distance = Integer.parseInt(lidarBlob.group("distance"));
 
-                System.out.printf(
+                /*System.out.printf(
                     "Found lidar %d with distance %d\n",
                     id,
                     distance
-                );
+                );*/
 
                 this.writeDistance(id, distance);
 
