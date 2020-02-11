@@ -9,8 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.genericrobot.*;
 import static frc.robot.Util.*;
@@ -130,9 +128,9 @@ public class Robot extends TimedRobot {
 
         //Indexer
         if (leftJoystick.getRawButton( 7)) {
-            robot.indexerIn(1.0);
+            robot.indexerLoad(1.0);
         } else if (leftJoystick.getRawButton( 8)) {
-            robot.indexerOut(1.0);
+            robot.indexerUnload(1.0);
         } else {
             robot.setIndexerPower(0);
         }
@@ -166,11 +164,11 @@ public class Robot extends TimedRobot {
 
         //climb horiz
         if (leftJoystick.getRawButton( 3)) {
-            robot.balanceLeft(-.2);
+            robot.climberBalanceLeft(-.2);
         } else if (leftJoystick.getRawButton( 4)) {
-            robot.balanceRight(.2);
+            robot.climberBalanceRight(.2);
         } else {
-            robot.generatorShift(0);
+            robot.setBalancePower(0);
         }
 
     }

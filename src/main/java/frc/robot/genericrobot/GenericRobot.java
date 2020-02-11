@@ -15,8 +15,8 @@ public abstract class GenericRobot {
     private double shooterUpperPower      = 0;
     private double shooterLowerPower      = 0;
     private double angleAdjusterPower     = 0;
-    private double balancePower           = 0;
-    private double escalatorVerticalPower = 0;
+    private double climbBalancePower = 0;
+    private double escalatorPower = 0;
     private double climbVerticalPower     = 0;
     private double collectorPower         = 0;
     private double indexerPower           = 0;
@@ -35,7 +35,7 @@ public abstract class GenericRobot {
         SmartDashboard.putString  ("Shifter state"        , getShifterState().toString()             );
 
         SmartDashboard.putNumber  ("Collector Power"      , collectorPower                           );
-        SmartDashboard.putNumber  ("Escalator Power"      , escalatorVerticalPower                   );
+        SmartDashboard.putNumber  ("Escalator Power"      , escalatorPower);
         SmartDashboard.putNumber  ("Indexer Power"        , indexerPower                             );
         SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
         SmartDashboard.putNumber  ("Lower Shooter Power"  , shooterLowerPower                        );
@@ -45,7 +45,7 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Angle Adjust Power"   , angleAdjusterPower                       );
 
         SmartDashboard.putNumber  ("Climber Vert Power"   , climbVerticalPower                       );
-        SmartDashboard.putNumber  ("Climber Horiz Power"  , balancePower                             );
+        SmartDashboard.putNumber  ("Climber Horiz Power"  , climbBalancePower);
 
         SmartDashboard.putNumber  ("Control Panel Power"  , spinPower                                );
 
@@ -284,11 +284,11 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
-    public final void indexerIn(double indexerPower){
+    public final void indexerLoad(double indexerPower){
         setIndexerPower(indexerPower);
     }
 
-    public final void indexerOut(double indexerPower){
+    public final void indexerUnload(double indexerPower){
         setIndexerPower(-indexerPower);
     }
 
@@ -327,11 +327,11 @@ public abstract class GenericRobot {
     //***********************************************************************//
 
     public final void climbUp(double power){
-        climbVertical(-power) ;
+        climbVertical(power) ;
     }
 
     public final void climbDown(double power){
-        climbVertical(power);
+        climbVertical(-power);
     }
 
     public final void stopClimb() {
@@ -352,16 +352,16 @@ public abstract class GenericRobot {
     //***********************************************************************//
 
     public final void escalatorUp(double power){
-        setEscalatorPower(-power) ;
+        setEscalatorPower(power) ;
     }
 
     public final void escalatorDown(double power){
-        setEscalatorPower(power);
+        setEscalatorPower(-power);
     }
 
 
     public final void setEscalatorPower(double power){
-        escalatorVerticalPower = power;
+        escalatorPower = power;
         setEscalatorPowerInternal(power);
     }
 
@@ -373,20 +373,20 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
-    public final void balanceLeft(double power){
-        generatorShift(-power); ;
+    public final void climberBalanceLeft(double power){
+        setBalancePower(-power);
     }
 
-    public final void balanceRight(double power){
-        generatorShift(power);
+    public final void climberBalanceRight(double power){
+        setBalancePower(power);
     }
 
-    public final void generatorShift(double power){
-        balancePower = power;
-        generatorShiftInternal(power);
+    public final void setBalancePower(double power){
+        climbBalancePower = power;
+        setBalancePowerInternal(power);
     }
 
-    protected void generatorShiftInternal(
+    protected void setBalancePowerInternal(
             double shiftPower
     ){
         System.out.println("I don't have a generator shifter ; (");
