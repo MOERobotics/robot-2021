@@ -29,7 +29,6 @@ public class Robot extends TimedRobot {
     //Constant for TestBot: .01852
     //Constant for CaMOElot: .045
     //Constant for Falcon: ???
-    LimelightAlign limelightAlign = new LimelightAlign(0.0, 0.5, .0185);
 
     @Override public void robotInit() {}
 
@@ -105,7 +104,7 @@ public class Robot extends TimedRobot {
         }
 
         if(leftJoystick.getRawButtonPressed(2)){
-            limelightAlign.setEnabled(true);
+            activeCommand.setEnabled(true);
         }
 
     }
