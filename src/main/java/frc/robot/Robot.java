@@ -63,10 +63,20 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+    }
+
+    @Override
+    public void testInit() {
+
+    }
+
+    @Override
+    public void testPeriodic() {
+
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
-         leftPower = deadzoneValue( leftPower,deadZone);
+        leftPower = deadzoneValue( leftPower,deadZone);
         rightPower = deadzoneValue(rightPower,deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
@@ -82,25 +92,25 @@ public class Robot extends TimedRobot {
 
         //Escalator
         if (leftJoystick.getRawButton(12)) {
-            robot.escalatorUp(.2);
+            robot.escalatorUp(.5);
         } else if (leftJoystick.getRawButton(15)) {
-            robot.escalatorDown(.2);
+            robot.escalatorDown(.5);
         } else {
             robot.setEscalatorPower(0);
         }
 
         //Shooter
         if (leftJoystick.getRawButton(13)) {
-            robot.setShooterPowerPercentage(.2);
+            robot.setShooterPowerPercentage(1.0);
         } else if (leftJoystick.getRawButton(14)) {
             robot.setShooterPowerPercentage(0);
         }
 
         //Indexer
         if (leftJoystick.getRawButton( 7)) {
-            robot.indexerIn(.2);
+            robot.indexerIn(1.0);
         } else if (leftJoystick.getRawButton( 8)) {
-            robot.indexerOut(.2);
+            robot.indexerOut(1.0);
         } else {
             robot.setIndexerPower(0);
         }
@@ -140,15 +150,6 @@ public class Robot extends TimedRobot {
         } else {
             robot.generatorShift(0);
         }
-    }
-
-    @Override
-    public void testInit() {
-
-    }
-
-    @Override
-    public void testPeriodic() {
 
     }
 

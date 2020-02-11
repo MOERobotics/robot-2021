@@ -3,36 +3,41 @@ package frc.robot.genericrobot;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 
 public class Falcon extends GenericRobot{
 
     AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 50);
 
-    CANSparkMax leftDriveA      = new CANSparkMax(13, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax leftDriveB      = new CANSparkMax(14, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax leftDriveC      = new CANSparkMax(15, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax rightDriveA     = new CANSparkMax(20, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax rightDriveB     = new CANSparkMax( 1, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax rightDriveC     = new CANSparkMax( 2, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax leftDriveA      = new CANSparkMax(13, MotorType.kBrushless);
+    CANSparkMax leftDriveB      = new CANSparkMax(14, MotorType.kBrushless);
+    CANSparkMax leftDriveC      = new CANSparkMax(15, MotorType.kBrushless);
+    CANSparkMax rightDriveA     = new CANSparkMax(20, MotorType.kBrushless);
+    CANSparkMax rightDriveB     = new CANSparkMax( 1, MotorType.kBrushless);
+    CANSparkMax rightDriveC     = new CANSparkMax( 2, MotorType.kBrushless);
 
     CANSparkMax climberA        = null;//= new CANSparkMax(12, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax climberB        = null;//new CANSparkMax( 3, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax generatorShift  = null;//new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    CANSparkMax shooterA        = new CANSparkMax( 5, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax shooterB        = new CANSparkMax( 4, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax indexer         = new CANSparkMax( 6, CANSparkMaxLowLevel.MotorType.kBrushed);
-    CANSparkMax escalator       = new CANSparkMax( 7, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax angleAdj        = new CANSparkMax( 8, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax shooterA        = new CANSparkMax( 5, MotorType.kBrushless);
+    CANSparkMax shooterB        = new CANSparkMax( 4, MotorType.kBrushless);
+    CANSparkMax indexer         = new CANSparkMax( 6, MotorType.kBrushed);
+    CANSparkMax escalator       = new CANSparkMax( 7, MotorType.kBrushless);
+    CANSparkMax angleAdj        = new CANSparkMax( 8, MotorType.kBrushless);
 
     CANSparkMax controlPanel    = null;//= new CANSparkMax( 9, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    CANSparkMax collector       = new CANSparkMax(10, CANSparkMaxLowLevel.MotorType.kBrushed); //Needs t
+    CANSparkMax collector       = new CANSparkMax(10, MotorType.kBrushed); //Needs t
 
     CANEncoder encoderRight     = new CANEncoder(rightDriveA);
     CANEncoder encoderLeft      = new CANEncoder( leftDriveA);
+    CANEncoder encoderShootA    = new CANEncoder(shooterA);
+    CANEncoder encoderShootB    = new CANEncoder(shooterB);
+
 
     public Falcon() {
         leftDriveC .follow( leftDriveA);
@@ -40,15 +45,17 @@ public class Falcon extends GenericRobot{
         rightDriveB.follow(rightDriveA);
         rightDriveC.follow(rightDriveA);
 
-        rightDriveA.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        rightDriveB.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        rightDriveC.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rightDriveA.setIdleMode(IdleMode.kBrake);
+        rightDriveB.setIdleMode(IdleMode.kBrake);
+        rightDriveC.setIdleMode(IdleMode.kBrake);
 
-        leftDriveA .setIdleMode(CANSparkMax.IdleMode.kBrake);
-        leftDriveB .setIdleMode(CANSparkMax.IdleMode.kBrake);
-        leftDriveB .setIdleMode(CANSparkMax.IdleMode.kBrake);
+        leftDriveA .setIdleMode(IdleMode.kBrake);
+        leftDriveB .setIdleMode(IdleMode.kBrake);
+        leftDriveC .setIdleMode(IdleMode.kBrake);
 
         rightDriveA.setInverted(true);
+
+        escalator.setIdleMode(IdleMode.kBrake);
     }
 
     @Override
@@ -64,6 +71,14 @@ public class Falcon extends GenericRobot{
         leftDriveA.set  (leftPower /2 );
         leftDriveB.set  (leftPower  /2);
         leftDriveB.set  (leftPower  /2);
+    }
+    @Override
+    public double getShooterVelocityUpper(){
+        return encoderShootA.getVelocity();
+    }
+    @Override
+    public double getShooterVelcoityLower(){
+        return encoderShootB.getVelocity();
     }
 
     @Override

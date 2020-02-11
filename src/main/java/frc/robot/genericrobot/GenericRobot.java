@@ -39,9 +39,12 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Indexer Power"        , indexerPower                             );
         SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
         SmartDashboard.putNumber  ("Lower Shooter Power"  , shooterLowerPower                        );
+        SmartDashboard.putNumber  ("Upper Shooter Velocity", getShooterVelocityUpper()               );
+        SmartDashboard.putNumber  ("Lower Shooter Velocity", getShooterVelcoityLower()               );
+
         SmartDashboard.putNumber  ("Angle Adjust Power"   , angleAdjusterPower                       );
 
-        SmartDashboard.putNumber  ("Climber Bert Power"   , climbVerticalPower                       );
+        SmartDashboard.putNumber  ("Climber Vert Power"   , climbVerticalPower                       );
         SmartDashboard.putNumber  ("Climber Horiz Power"  , balancePower                             );
 
         SmartDashboard.putNumber  ("Control Panel Power"  , spinPower                                );
@@ -241,6 +244,17 @@ public abstract class GenericRobot {
     public final double getShooterPowerLower() {
         return shooterLowerPower;
     }
+
+    public double getShooterVelocityUpper(){
+        System.out.println("I don't have a shooter :'(");
+        return 0.0;
+    }
+
+    public double getShooterVelcoityLower(){
+        System.out.println("I don't have a shooter :'(");
+        return 0.0;
+    }
+
 
     //***********************************************************************//
 
