@@ -63,6 +63,28 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        double leftPower = -leftJoystick.getY() + leftJoystick.getX();
+        double rightPower = -leftJoystick.getY() - leftJoystick.getX();
+
+        leftPower = deadzoneValue( leftPower,deadZone);
+        rightPower = deadzoneValue(rightPower,deadZone);
+
+        robot.setMotorPowerPercentage(leftPower, rightPower);
+        robot.setShooterPowerPercentage(0);
+
+        if (leftJoystick.getRawButtonPressed(16)) {
+            robot.shiftLow();
+        }
+
+        if (leftJoystick.getRawButtonPressed(11)) {
+            robot.shiftHigh();
+        }
+        if (leftJoystick.getRawButton(13)) {
+            robot.driveForward(-.2);
+        }
+        if (leftJoystick.getRawButton(14)) {
+            robot.driveForward(.2);
+        }
     }
 
     @Override
