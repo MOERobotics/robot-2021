@@ -40,7 +40,7 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
         SmartDashboard.putNumber  ("Lower Shooter Power"  , shooterLowerPower                        );
         SmartDashboard.putNumber  ("Upper Shooter Velocity", getShooterVelocityUpper()               );
-        SmartDashboard.putNumber  ("Lower Shooter Velocity", getShooterVelcoityLower()               );
+        SmartDashboard.putNumber  ("Lower Shooter Velocity", getShooterVelocityLower()               );
 
         SmartDashboard.putNumber  ("Angle Adjust Power"   , angleAdjusterPower                       );
 
@@ -254,7 +254,7 @@ var lidar = getLidarSubsystem();
         return 0.0;
     }
 
-    public double getShooterVelcoityLower(){
+    public double getShooterVelocityLower(){
         System.out.println("I don't have a shooter :'(");
         return 0.0;
     }

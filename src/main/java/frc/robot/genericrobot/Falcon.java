@@ -78,7 +78,7 @@ public class Falcon extends GenericRobot{
         return encoderShootA.getVelocity();
     }
     @Override
-    public double getShooterVelcoityLower(){
+    public double getShooterVelocityLower(){
         return encoderShootB.getVelocity();
     }
 
