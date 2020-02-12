@@ -14,6 +14,8 @@ public abstract class GenericRobot {
     private double spinPower              = 0;
     private double shooterUpperPower      = 0;
     private double shooterLowerPower      = 0;
+    private double shooterUpperRPM        = 0;
+    private double shooterLowerRPM        = 0;
     private double angleAdjusterPower     = 0;
     private double climbBalancePower = 0;
     private double escalatorPower = 0;
@@ -234,13 +236,28 @@ var lidar = getLidarSubsystem();
         setShooterPowerPercentage(power, power);
     }
 
-    protected void setShooterPowerPercentageInternal(
+
+    public void setShooterRPM(double upperRPM, double lowerRPM) {
+        this.shooterUpperRPM = upperRPM;
+        this.shooterLowerRPM = lowerRPM;
+        setShooterRPMInternal(upperRPM,lowerRPM);
+    }
+
+    public void setShooterRPM(double RPM) {setShooterRPM(RPM,RPM); }
+
+        protected void setShooterPowerPercentageInternal(
         double upperPower,
         double lowerPower
     ) {
         System.out.println("I don't have a shooter :'(");
     }
 
+    protected void setShooterRPMInternal(
+            double upperRPM,
+            double lowerRPM
+    ) {
+        System.out.println("I don't have a shooter :'(");
+    }
     public final double getShooterPowerUpper() {
         return shooterUpperPower;
     }

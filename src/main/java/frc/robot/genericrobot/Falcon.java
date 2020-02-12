@@ -1,10 +1,8 @@
 package frc.robot.genericrobot;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.*;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -23,8 +21,10 @@ public class Falcon extends GenericRobot{
     CANSparkMax climberB        = null;//new CANSparkMax( 3, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax generatorShift  = null;//new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    CANSparkMax shooterA        = new CANSparkMax( 5, MotorType.kBrushless);
-    CANSparkMax shooterB        = new CANSparkMax( 4, MotorType.kBrushless);
+    CANSparkMax shooterA                   = new CANSparkMax( 5, MotorType.kBrushless);
+    CANPIDController shooterAPIDController = new CANPIDController(shooterA);
+    CANSparkMax shooterB                   = new CANSparkMax( 4, MotorType.kBrushless);
+    CANPIDController shooterBPIDController = new CANPIDController(shooterB);
     CANSparkMax indexer         = new CANSparkMax( 6, MotorType.kBrushed);
     CANSparkMax escalator       = new CANSparkMax( 7, MotorType.kBrushless);
     CANSparkMax angleAdj        = new CANSparkMax( 8, MotorType.kBrushless);
@@ -57,6 +57,20 @@ public class Falcon extends GenericRobot{
         rightDriveA.setInverted(true);
 
         escalator.setIdleMode(IdleMode.kBrake);
+
+        shooterAPIDController.setP(7.5e-5);
+        shooterAPIDController.setI(1.0e-6);
+        shooterAPIDController.setD(1.0e-2);
+        shooterAPIDController.setFF(1.67e-4);
+        shooterAPIDController.setIZone(200);
+        shooterAPIDController.setDFilter(0);
+
+        shooterBPIDController.setP(7.5e-5);
+        shooterBPIDController.setI(1.0e-6);
+        shooterBPIDController.setD(1.0e-2);
+        shooterBPIDController.setFF(1.67e-4);
+        shooterBPIDController.setIZone(200);
+        shooterBPIDController.setDFilter(0);
     }
 
     @Override
@@ -136,6 +150,12 @@ public class Falcon extends GenericRobot{
     @Override
     public void resetAttitude() {
         navx.reset();
+    }
+
+    @Override
+    public void setShooterRPMInternal(double upperRPM, double lowerRPM) {
+        shooterAPIDController.setReference(-upperRPM, ControlType.kVelocity);
+        shooterBPIDController.setReference( lowerRPM, ControlType.kVelocity);
     }
 
     @Override
