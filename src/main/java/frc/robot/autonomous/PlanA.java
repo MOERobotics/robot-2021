@@ -111,7 +111,6 @@ public class PlanA extends GenericAutonomous {
                 robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
                 //decrescendo power
-                SmartDashboard.putNumber("Current distance", currentDistance);
 
                 if (currentDistance - startingDistance > 45) { //start to decrement?
                     autonomousStep = 8;
@@ -152,6 +151,7 @@ public class PlanA extends GenericAutonomous {
                     robot.limelight.table.getEntry("ledMode").setNumber(1);
                     robot.driveForward(0);
                 }
+
                 break;
 
         }

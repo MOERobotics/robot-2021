@@ -263,7 +263,6 @@ public abstract class GenericRobot {
 
         private Limelight() {
             table.getEntry("pipeline").setNumber(0);
-            table.getEntry("ledMode").setNumber(1);
         }
 
         public double getLimelightX() {
