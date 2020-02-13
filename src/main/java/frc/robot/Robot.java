@@ -9,18 +9,16 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.autonomous.GenericAutonomous;
-import frc.robot.autonomous.PlanC;
-import frc.robot.genericrobot.GenericRobot;
-import frc.robot.genericrobot.KeerthanPracticeOne;
-
-import static frc.robot.Util.deadzoneValue;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.autonomous.*;
+import frc.robot.genericrobot.*;
+import static frc.robot.Util.*;
 
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram  = new PlanC(); //Auto routine to be used?
-    GenericRobot      robot        = new KeerthanPracticeOne();
+    GenericRobot robot        = new KeerthanPracticeOne();
     Joystick          leftJoystick = new Joystick(0);
     double            deadZone     = 0.1;
 
