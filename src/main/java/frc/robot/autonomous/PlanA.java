@@ -111,6 +111,8 @@ public class PlanA extends GenericAutonomous {
                 robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
                 //decrescendo power
+                SmartDashboard.putNumber("Current distance", currentDistance);
+
                 if (currentDistance - startingDistance > 45) { //start to decrement?
                     autonomousStep = 8;
 
@@ -120,9 +122,10 @@ public class PlanA extends GenericAutonomous {
 
             case 8: //decrement power
                 currentDistance = robot.getDistanceInchesLeft();
-                double slowToStop = (defaultSpeed - (defaultSpeed / 15) * ((currentDistance - startingDistance) - 45)); //?
+                double slowToStop = (defaultSpeed - (defaultSpeed / 15) * ((currentDistance - startingDistance) - 45)) + .05; //?
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage(1.5 * slowToStop * (1 + correction), 1.5 * slowToStop * (1 - correction)); // div by 2 to debug
+
                 if (currentDistance - startingDistance > 60) {
                     autonomousStep = 9;
 
