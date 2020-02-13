@@ -19,6 +19,8 @@ public class Robot extends TimedRobot {
     GenericAutonomous autoProgram  = new DriveStraightOneSecond(); //Auto routine to be used?
     GenericRobot      robot        = new Falcon();
     Joystick          leftJoystick = new Joystick(0);
+    Joystick          xboxJoystick = new Joystick(0); //to be changed
+
     double            deadZone     = 0.10;
 
     @Override public void robotInit() {}
@@ -83,7 +85,11 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButton(14)) {
             robot.driveForward(.2);
         }
+
+        //Collector
+       // if (xboxJoystick.
     }
+
 
     @Override
     public void testInit() {
