@@ -255,14 +255,14 @@ public abstract class GenericRobot {
     //Todo: Yeet into own class
     public final Limelight limelight = new Limelight();
     public static class Limelight {
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
+        public NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
         NetworkTableEntry ta = table.getEntry("ta");
 
         private Limelight() {
-            table.getEntry("pipeline").setNumber(1);
+            table.getEntry("pipeline").setNumber(0);
         }
 
         public double getLimelightX() {

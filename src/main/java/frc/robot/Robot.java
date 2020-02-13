@@ -13,16 +13,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
+
 import static frc.robot.Util.*;
 
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel    = new WheelOfFortune();
-    GenericAutonomous autoProgram   = new PlanC(); //Auto routine to be used?
+    GenericAutonomous autoProgram   = new PlanA(); //Auto routine to be used?
     GenericCommand    activeCommand = GenericCommand.doNothingCommand;
     GenericRobot      robot         = new KeerthanPracticeOne();
     Joystick          leftJoystick  = new Joystick(0);
     double            deadZone      = 0.1;
+  
+    //Constant for TestBot: .01852
+    //Constant for CaMOElot: .045
+    //Constant for Falcon: ???
 
     @Override public void robotInit() {}
 
@@ -71,7 +76,7 @@ public class Robot extends TimedRobot {
         }
 
         if (activeCommand.isEnabled()) {
-            activeCommand.step();
+            activeCommand.step(robot);
             if (activeCommand.locksControls()) return;
         }
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
@@ -95,6 +100,10 @@ public class Robot extends TimedRobot {
         }
         if (leftJoystick.getRawButton(14)) {
             robot.driveForward(.2);
+        }
+
+        if(leftJoystick.getRawButtonPressed(2)){
+            activeCommand.setEnabled(true);
         }
 
     }
