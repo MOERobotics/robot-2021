@@ -11,23 +11,26 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
+import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
 import static frc.robot.Util.*;
 
 public class Robot extends TimedRobot {
 
-    //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram  = new PlanC(); //Auto routine to be used?
-    GenericRobot robot        = new KeerthanPracticeOne();
-    Joystick          leftJoystick = new Joystick(0);
-    double            deadZone     = 0.1;
+    //WheelOfFortune    colorWheel    = new WheelOfFortune();
+    GenericAutonomous autoProgram   = new PlanC(); //Auto routine to be used?
+    GenericCommand    activeCommand = GenericCommand.doNothingCommand;
+    GenericRobot      robot         = new KeerthanPracticeOne();
+    Joystick          leftJoystick  = new Joystick(0);
+    double            deadZone      = 0.1;
 
     @Override public void robotInit() {}
 
     @Override
     public void robotPeriodic() {
-        robot      .printSmartDashboard();
-        autoProgram.printSmartDashboard();
+        robot        .printSmartDashboard();
+        autoProgram  .printSmartDashboard();
+        activeCommand.printSmartDashboard();
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
@@ -63,6 +66,14 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        if (leftJoystick.getRawButtonPressed(11)) {
+            activeCommand.setEnabled(false);
+        }
+
+        if (activeCommand.isEnabled()) {
+            activeCommand.step();
+            if (activeCommand.locksControls()) return;
+        }
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
