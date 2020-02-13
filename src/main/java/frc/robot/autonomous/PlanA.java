@@ -39,12 +39,18 @@ public class PlanA extends GenericAutonomous {
                         break;
 
 
-                  case 0:
+                  case 0: //skrts back to zero (account for 28 yaw offset)
+                        currentYaw = robot.getYaw();
+                        robot.setMotorPowerPercentage(.2, -.2);
+                        if(currentYaw > 20){
+                              robot.driveForward(0);
+                              startingYaw = 28;
+                              autonomousStep = 1;
 
-                        autonomousStep = 1;
+                        }
                         break;
 
-                  case 1: //resets everything and waits
+                  case 1:
                        autonomousStep = 2;
                        break;
 

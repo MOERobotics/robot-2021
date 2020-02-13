@@ -47,9 +47,15 @@ public class PlanE extends GenericAutonomous {
                         break;
 
 
-                  case 0:
+                  case 0: //skrts back to zero (account for 28 yaw offset)
+                        currentYaw = robot.getYaw();
+                        robot.setMotorPowerPercentage(.2, -.2);
+                        if(currentYaw > 20){
+                              robot.driveForward(0);
+                              startingYaw = 28;
+                              autonomousStep = 1;
 
-                        autonomousStep = 1;
+                        }
                         break;
 
                   case 1:
@@ -100,7 +106,7 @@ public class PlanE extends GenericAutonomous {
                         startingDistance = robot.getDistanceInchesLeft();
                         PIDSteering.reset();
                         PIDSteering.enableContinuousInput(-180,180);
-                        currentYaw = 0;
+                        currentYaw = 28; //maybe??
                         autonomousStep = 7;
                         break;
 
@@ -115,7 +121,7 @@ public class PlanE extends GenericAutonomous {
                         //if(currentDistance - startingDistance > ){ //start to decrement?
                               //autonomousStep = 4;
 
-                        //}
+                        //
                         if(currentDistance - startingDistance > 120){
                               autonomousStep = 8;
 
