@@ -32,7 +32,7 @@ public class PlanA extends GenericAutonomous {
     }
 
     @Override
-    public void autonomousPeriodic(GenericRobot robot) {
+    public void autonomousPeriodic(GenericRobot robot) { //add starting angle (pre-defined)
         double currentDistance = 0;
         double yawError;
         switch (autonomousStep) {
