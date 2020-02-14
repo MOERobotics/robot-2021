@@ -12,23 +12,30 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
+import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
 import static frc.robot.Util.*;
 
 public class Robot extends TimedRobot {
 
-    //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram  = new PlanE(); //Auto routine to be used
-    GenericRobot      robot        = new KeerthanPracticeOne();
-    Joystick          leftJoystick = new Joystick(0);
-    double            deadZone     = 0.1;
+    //WheelOfFortune    colorWheel    = new WheelOfFortune();
+    GenericAutonomous autoProgram   = new PlanA(); //Auto routine to be used?
+    GenericCommand    activeCommand = GenericCommand.doNothingCommand;
+    GenericRobot      robot         = new KeerthanPracticeOne();
+    Joystick          leftJoystick  = new Joystick(0);
+    double            deadZone      = 0.1;
+
+    //Constant for TestBot: .01852
+    //Constant for CaMOElot: .045
+    //Constant for Falcon: ???
 
     @Override public void robotInit() {}
 
     @Override
     public void robotPeriodic() {
-        robot      .printSmartDashboard();
-        autoProgram.printSmartDashboard();
+        robot        .printSmartDashboard();
+        autoProgram  .printSmartDashboard();
+        activeCommand.printSmartDashboard();
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
@@ -41,6 +48,8 @@ public class Robot extends TimedRobot {
             robot.resetAttitude();
             robot.resetEncoders();
         }
+
+
     }
 
     @Override
@@ -54,11 +63,21 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopInit() {}
+    public void teleopInit() {
+
+    }
 
 
     @Override
     public void teleopPeriodic() {
+        if (leftJoystick.getRawButtonPressed(11)) {
+            activeCommand.setEnabled(false);
+        }
+
+        if (activeCommand.isEnabled()) {
+            activeCommand.step(robot);
+            if (activeCommand.locksControls()) return;
+        }
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
@@ -80,6 +99,10 @@ public class Robot extends TimedRobot {
         }
         if (leftJoystick.getRawButton(14)) {
             robot.driveForward(.2);
+        }
+
+        if(leftJoystick.getRawButtonPressed(2)){
+            activeCommand.setEnabled(true);
         }
 
     }

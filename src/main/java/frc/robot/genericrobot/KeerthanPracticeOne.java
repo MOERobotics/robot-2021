@@ -127,22 +127,22 @@ public class KeerthanPracticeOne extends GenericRobot {
     }
 
     @Override
-    public Integer getLidarDistanceFront() {
-        return lidar.getDistance(2);
+    public Double getLidarDistanceInchesFront() {
+        return lidar.getDistanceInches(2);
     }
 
     @Override
-    public Integer getLidarDistanceRear() {
-        return lidar.getDistance(0);
+    public Double getLidarDistanceInchesRear() {
+        return lidar.getDistanceInches(0);
     }
 
     @Override
-    public Integer getLidarDistanceLeft() {
-        return lidar.getDistance(3);
+    public Double getLidarDistanceInchesLeft() {
+        return lidar.getDistanceInches(3);
     }
 
     @Override
-    public Integer getLidarDistanceRight() {
-        return lidar.getDistance(1);
+    public Double getLidarDistanceInchesRight() {
+        return lidar.getDistanceInches(1);
     }
 }

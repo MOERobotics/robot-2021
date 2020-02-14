@@ -39,6 +39,15 @@ class Lidar extends Thread {
         }
         return distance;
     }
+    public Double getDistanceInches(int lidarID) {
+        Integer lidarReading = getDistance(lidarID);
+
+        if (lidarReading == null) {return null;}
+        else {
+                double lidarInches = 5.0 + (15.0 / 396.0) * (lidarReading - 165.0);
+                return lidarInches;
+             }
+    }
 
     private void writeDistance(int lidarID, int distance) {
         try {
@@ -84,7 +93,9 @@ class Lidar extends Thread {
             }
             if (newByteArr.length == 0) {
                 System.out.println("Serial Port says we are at end of file. Nothing we can read.");
-                return;
+                System.out.println("Resetting.");
+                lidarSerialPort.reset();
+                continue;
             }
             byte newByte = newByteArr[0];
 
@@ -106,11 +117,11 @@ class Lidar extends Thread {
                 int id       = Integer.parseInt(lidarBlob.group(      "id"));
                 int distance = Integer.parseInt(lidarBlob.group("distance"));
 
-                System.out.printf(
+                /*System.out.printf(
                     "Found lidar %d with distance %d\n",
                     id,
                     distance
-                );
+                );*/
 
                 this.writeDistance(id, distance);
 
