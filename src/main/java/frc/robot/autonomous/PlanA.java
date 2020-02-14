@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 public class PlanA extends GenericAutonomous {
 
       //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-      double defaultSpeed = 0.3;
+      double defaultSpeed = 0.2;
 
       static double startingYaw      = 0.0;
       static double startingDistance = 0.0;
