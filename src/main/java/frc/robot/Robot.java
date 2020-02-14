@@ -12,12 +12,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
+
 import static frc.robot.Util.*;
 
 public class Robot extends TimedRobot {
 
-    //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram   = new PlanC(); //Auto routine to be used?
+    //WheelOfFortune    colorWheel    = new WheelOfFortune();
+    GenericAutonomous autoProgram   = new PlanA(); //Auto routine to be used?
     GenericCommand    activeCommand = GenericCommand.doNothingCommand;
     GenericRobot      robot         = new KeerthanPracticeOne();
     Joystick          leftJoystick  = new Joystick(0);
@@ -69,13 +70,13 @@ public class Robot extends TimedRobot {
         }
 
         if (activeCommand.isEnabled()) {
-            activeCommand.step();
+            activeCommand.step(robot);
             if (activeCommand.locksControls()) return;
         }
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
-        leftPower = deadzoneValue( leftPower,deadZone);
+         leftPower = deadzoneValue( leftPower,deadZone);
         rightPower = deadzoneValue(rightPower,deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
@@ -94,6 +95,11 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButton(14)) {
             robot.driveForward(.2);
         }
+
+        if(leftJoystick.getRawButtonPressed(2)){
+            activeCommand.setEnabled(true);
+        }
+
     }
 
     @Override
