@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel    = new WheelOfFortune();
     GenericAutonomous autoProgram   = new PlanE(); //Auto routine to be used?
-    GenericCommand    activeCommand = GenericCommand.doNothingCommand;
+    GenericCommand    activeCommand = new LimelightAlign(0.0, 0.5, .0185);
     GenericRobot      robot         = new KeerthanPracticeOne();
     Joystick          leftJoystick  = new Joystick(0);
     double            deadZone      = 0.1;
@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
             robot.resetAttitude();
             robot.resetEncoders();
         }
-
+        robot.limelight.table.getEntry("ledMode").setNumber(0);
 
     }
 
