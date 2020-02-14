@@ -41,10 +41,6 @@ public class Falcon extends GenericRobot{
 
 
     public Falcon() {
-        leftDriveC .follow( leftDriveA);
-        leftDriveB .follow( leftDriveA);
-        rightDriveB.follow(rightDriveA);
-        rightDriveC.follow(rightDriveA);
 
         rightDriveA.setIdleMode(IdleMode.kBrake);
         rightDriveB.setIdleMode(IdleMode.kBrake);
@@ -55,6 +51,8 @@ public class Falcon extends GenericRobot{
         leftDriveC .setIdleMode(IdleMode.kBrake);
 
         rightDriveA.setInverted(true);
+        rightDriveB.setInverted(true);
+        rightDriveC.setInverted(true);
 
         escalator.setIdleMode(IdleMode.kBrake);
     }
@@ -66,19 +64,19 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
-        rightDriveA.set (rightPower /2);
-        rightDriveB.set (rightPower /2);
-        rightDriveC.set (rightPower /2);
-        leftDriveA.set  (leftPower /2 );
-        leftDriveB.set  (leftPower  /2);
-        leftDriveB.set  (leftPower  /2);
+        rightDriveA.set (rightPower * 0.5);
+        rightDriveB.set (rightPower * 0.5);
+        rightDriveC.set (rightPower * 0.5);
+         leftDriveA.set (leftPower  * 0.5);
+         leftDriveB.set (leftPower  * 0.5);
+         leftDriveC.set (leftPower  * 0.5);
     }
     @Override
-    public double getShooterVelocityUpper(){
+    public double getShooterVelocityRPMUpper(){
         return encoderShootA.getVelocity();
     }
     @Override
-    public double getShooterVelocityLower(){
+    public double getShooterVelocityRPMLower(){
         return encoderShootB.getVelocity();
     }
 
@@ -97,15 +95,9 @@ public class Falcon extends GenericRobot{
         return 0.306;
         }
 
-
     @Override
     public double getDistanceTicksRight() {
         return encoderRight.getPosition();
-    }
-
-    @Override
-    public void resetEncoders() {
-        super.resetEncoders();
     }
 
     @Override
