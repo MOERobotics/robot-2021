@@ -186,7 +186,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setCollectorPowerInternal(double collectorPower) {
-        collector.set(collectorPower);
+        collector.set(-collectorPower);
     }
 
     /*@Override

@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram   = new PlanC(); //Auto routine to be used?
     GenericCommand    activeCommand = GenericCommand.doNothingCommand;
-    GenericRobot      robot         = new KeerthanPracticeOne();
+    GenericRobot      robot         = new Falcon();
     Joystick          leftJoystick  = new Joystick(0);
     double            deadZone      = 0.1;
 
@@ -114,9 +114,9 @@ public class Robot extends TimedRobot {
 
         //Collector
         if (leftJoystick.getRawButton(11)) {
-            robot.collectorIn(.2);
+            robot.collectorIn(1.0);
         } else if (leftJoystick.getRawButton(16)) {
-            robot.collectorOut(.2);
+            robot.collectorOut(1.0);
         } else {
             robot.setCollectorPower(0);
         }
