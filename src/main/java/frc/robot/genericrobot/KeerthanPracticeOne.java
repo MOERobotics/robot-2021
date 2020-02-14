@@ -48,7 +48,7 @@ public class KeerthanPracticeOne extends GenericRobot {
     @Override
     public double getDistanceRatioLeft() {
         switch (getShifterState()) {
-            case HIGH: return 0.380635;  //Susceptible to change
+            case HIGH: return 0.380635;
             case LOW : return 0.77782;
             default  : return 1;
         }
