@@ -1,11 +1,15 @@
 package frc.robot.genericrobot;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 
 public class Falcon extends GenericRobot{
@@ -39,6 +43,10 @@ public class Falcon extends GenericRobot{
     CANEncoder encoderShootB    = new CANEncoder(shooterB);
     Lidar lidar = new Lidar();
 
+    private CANDigitalInput angleAdjusterDigitalInputForward;
+    private CANDigitalInput angleAdjusterDigitalInputReverse;
+    private AnalogInput input = new AnalogInput(0);
+    private AnalogPotentiometer elevation = new AnalogPotentiometer(input, 180, 90);
 
     public Falcon() {
 
@@ -55,6 +63,13 @@ public class Falcon extends GenericRobot{
         rightDriveC.setInverted(true);
 
         escalator.setIdleMode(IdleMode.kBrake);
+
+        //angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
+        //angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
+
+        angleAdjusterDigitalInputForward = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
+        angleAdjusterDigitalInputReverse = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
+
     }
 
     @Override
@@ -202,8 +217,19 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setAngleAdjusterPowerInternal(double aimPower) {
-        angleAdj.set(aimPower);
+        /*
+        if (getElevationInternal() >= 155 && aimPower < 0){
+            aimPower = 0;
+        }
+        if (getElevationInternal() <= 113 && aimPower > 0){
+            aimPower = 0;
+        }
+         */
+        setAngleAdjusterPower(aimPower);
     }
+
+    @Override
+    protected double getElevationInternal(){return elevation.get();}
 
 
 }

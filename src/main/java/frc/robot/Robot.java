@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import com.revrobotics.CANDigitalInput;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.autonomous.*;
@@ -23,8 +26,10 @@ public class Robot extends TimedRobot {
     GenericRobot      robot         = new Falcon();
     Joystick          leftJoystick  = new Joystick(0);
     double            deadZone      = 0.1;
+    
 
-    @Override public void robotInit() {}
+    @Override public void robotInit() {
+    }
 
     @Override
     public void robotPeriodic() {
