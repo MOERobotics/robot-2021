@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.autonomous.*;
+import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
 import static frc.robot.Util.*;
 
@@ -18,17 +19,24 @@ public class Robot extends TimedRobot {
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram  = new DriveStraightOneSecond(); //Auto routine to be used?
     GenericRobot      robot        = new Falcon();
+    GenericCommand    activeCommand = GenericCommand.doNothingCommand;
     Joystick          leftJoystick = new Joystick(0);
     Joystick          xboxJoystick = new Joystick(0); //to be changed
 
     double            deadZone     = 0.10;
+    //WheelOfFortune    colorWheel    = new WheelOfFortune();
+    GenericAutonomous autoProgram   = new PlanA(); //Auto routine to be used?
+    GenericRobot      robot         = new Falcon();
+    Joystick          leftJoystick  = new Joystick(0);
+    double            deadZone      = 0.1;
 
     @Override public void robotInit() {}
 
     @Override
     public void robotPeriodic() {
-        robot      .printSmartDashboard();
-        autoProgram.printSmartDashboard();
+        robot        .printSmartDashboard();
+        autoProgram  .printSmartDashboard();
+        activeCommand.printSmartDashboard();
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
@@ -63,10 +71,18 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        if (leftJoystick.getRawButtonPressed(11)) {
+            activeCommand.setEnabled(false);
+        }
+
+        if (activeCommand.isEnabled()) {
+            activeCommand.step(robot);
+            if (activeCommand.locksControls()) return;
+        }
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
-        leftPower = deadzoneValue( leftPower,deadZone);
+         leftPower = deadzoneValue( leftPower,deadZone);
         rightPower = deadzoneValue(rightPower,deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
@@ -86,10 +102,11 @@ public class Robot extends TimedRobot {
             robot.driveForward(.2);
         }
 
-        //Collector
-       // if (xboxJoystick.
-    }
+        if(leftJoystick.getRawButtonPressed(2)){
+            activeCommand.setEnabled(true);
+        }
 
+    }
 
     @Override
     public void testInit() {
@@ -109,9 +126,9 @@ public class Robot extends TimedRobot {
 
         //Collector
         if (leftJoystick.getRawButton(11)) {
-            robot.collectorIn(.2);
+            robot.collectorIn(1.0);
         } else if (leftJoystick.getRawButton(16)) {
-            robot.collectorOut(.2);
+            robot.collectorOut(1.0);
         } else {
             robot.setCollectorPower(0);
         }

@@ -90,7 +90,9 @@ class Lidar extends Thread {
             }
             if (newByteArr.length == 0) {
                 System.out.println("Serial Port says we are at end of file. Nothing we can read.");
-                return;
+                System.out.println("Resetting.");
+                lidarSerialPort.reset();
+                continue;
             }
             byte newByte = newByteArr[0];
 

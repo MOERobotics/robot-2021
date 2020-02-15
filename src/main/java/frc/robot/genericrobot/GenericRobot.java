@@ -39,8 +39,8 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Indexer Power"        , indexerPower                             );
         SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
         SmartDashboard.putNumber  ("Lower Shooter Power"  , shooterLowerPower                        );
-        SmartDashboard.putNumber  ("Upper Shooter Velocity", getShooterVelocityUpper()               );
-        SmartDashboard.putNumber  ("Lower Shooter Velocity", getShooterVelcoityLower()               );
+        SmartDashboard.putNumber  ("Upper Shooter Velocity", getShooterVelocityRPMUpper()               );
+        SmartDashboard.putNumber  ("Lower Shooter Velocity", getShooterVelocityRPMLower()               );
 
         SmartDashboard.putNumber  ("Angle Adjust Power"   , angleAdjusterPower                       );
 
@@ -49,16 +49,11 @@ public abstract class GenericRobot {
 
         SmartDashboard.putNumber  ("Control Panel Power"  , spinPower                                );
 
-var lidar = getLidarSubsystem();
         SmartDashboard.putBoolean ("Lidar Locked"         , isLidarBusLocked()                       );
         SmartDashboard.putNumber  ("Lidar Front"          , coalesce(getLidarDistanceInchesFront(), -9999.0) );
         SmartDashboard.putNumber  ("Lidar Rear"           , coalesce(getLidarDistanceInchesRear (), -9999.0) );
         SmartDashboard.putNumber  ("Lidar Left"           , coalesce(getLidarDistanceInchesLeft (), -9999.0) );
         SmartDashboard.putNumber  ("Lidar Right"          , coalesce(getLidarDistanceInchesRight(), -9999.0) );
-        SmartDashboard.putNumber  ("Lidar 0 Raw"          , coalesce(lidar.getDistance(0), -9999) );
-        SmartDashboard.putNumber  ("Lidar 1 Raw"           , coalesce(lidar.getDistance (1), -9999) );
-        SmartDashboard.putNumber  ("Lidar 2 Raw"           , coalesce(lidar.getDistance (2), -9999) );
-        SmartDashboard.putNumber  ("Lidar 3 Raw"          , coalesce(lidar.getDistance(3), -9999) );
 
         SmartDashboard.putNumber  ("Limelight X"          , limelight.getLimelightX   ()             );
         SmartDashboard.putNumber  ("Limelight Y"          , limelight.getLimelightY   ()             );
@@ -249,12 +244,12 @@ var lidar = getLidarSubsystem();
         return shooterLowerPower;
     }
 
-    public double getShooterVelocityUpper(){
+    public double getShooterVelocityRPMUpper(){
         System.out.println("I don't have a shooter :'(");
         return 0.0;
     }
 
-    public double getShooterVelcoityLower(){
+    public double getShooterVelocityRPMLower(){
         System.out.println("I don't have a shooter :'(");
         return 0.0;
     }
@@ -420,14 +415,14 @@ var lidar = getLidarSubsystem();
     //Todo: Yeet into own class
     public final Limelight limelight = new Limelight();
     public static class Limelight {
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
+        public NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
         NetworkTableEntry ta = table.getEntry("ta");
 
         private Limelight() {
-            table.getEntry("pipeline").setNumber(1);
+            table.getEntry("pipeline").setNumber(0);
         }
 
         public double getLimelightX() {
