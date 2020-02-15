@@ -27,6 +27,8 @@ public class Robot extends TimedRobot {
     GenericRobot      robot         = new Falcon();
     Joystick          leftJoystick  = new Joystick(0);
     double            deadZone      = 0.1;
+    double collectorPower = 0;
+    double escalatorPower = 0;
     
 
     @Override public void robotInit() {
@@ -135,7 +137,8 @@ public class Robot extends TimedRobot {
 
         //Collector
         if (leftJoystick.getRawButton(11)) {
-            robot.collectorIn(1.0);
+            collectorPower = 1.0;
+            robot.collectorIn(collectorPower);
         } else if (leftJoystick.getRawButton(16)) {
             robot.collectorOut(1.0);
         } else {
@@ -144,7 +147,13 @@ public class Robot extends TimedRobot {
 
         //Escalator
         if (leftJoystick.getRawButton(12)) {
-            robot.escalatorUp(.5);
+            //do not do anything unless the medium sensor is tripped
+            if(robot.getElevatorSensorMedium()){
+                escalatorPower = 0.5;
+            } else {
+                escalatorPower = 0.0;
+            }
+            robot.escalatorUp(escalatorPower);
         } else if (leftJoystick.getRawButton(15)) {
             robot.escalatorDown(.5);
         } else {
