@@ -10,7 +10,7 @@ public class LimelightAlign extends GenericCommand{
     double setPoint;
     double setPointDeadzone;
     double constant;
-    boolean dunzo;
+    boolean targetCentered;
     long startingTime = 0;
 
     public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
@@ -22,7 +22,7 @@ public class LimelightAlign extends GenericCommand{
     }
     @Override
     public void begin(GenericRobot robot) {
-        dunzo = false;
+        targetCentered = false;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class LimelightAlign extends GenericCommand{
 
         if (robot.limelight.getLimelightX() < -setPointDeadzone + -setPoint) {
             //Pivots to the left
-            dunzo = false;
+            targetCentered = false;
             currentDistance = Math.abs(robot.limelight.getLimelightX() + setPoint);
             leftPower = -(constant * currentDistance);
             rightPower = constant * currentDistance;
@@ -45,7 +45,7 @@ public class LimelightAlign extends GenericCommand{
 
         } else if (robot.limelight.getLimelightX() > setPointDeadzone + setPoint) {
             //Pivots to the right
-            dunzo = false;
+            targetCentered = false;
             currentDistance = Math.abs(robot.limelight.getLimelightX() - setPoint);
             leftPower = constant * currentDistance;
             rightPower = -(constant * currentDistance);
@@ -58,13 +58,13 @@ public class LimelightAlign extends GenericCommand{
 
             leftPower = 0;
             rightPower = 0;
-            if(!dunzo){
+            if(!targetCentered){
                 startingTime = System.currentTimeMillis();
-                dunzo = true;
+                targetCentered = true;
             }
 
 
-            if(dunzo && currentTime - startingTime > 600){
+            if(targetCentered && currentTime - startingTime > 600){
                 aligning = false;
             }
 
