@@ -56,6 +56,10 @@ public class Falcon extends GenericRobot{
 
         escalator.setIdleMode(IdleMode.kBrake);
 
+        // REMOVE BEFORE FLIGHT... Just for testing.
+        shooterA.setIdleMode(IdleMode.kBrake);
+        shooterB.setIdleMode(IdleMode.kBrake);
+
         shooterAPIDController.setP(7.5e-5);
         shooterAPIDController.setI(1.0e-6);
         shooterAPIDController.setD(1.0e-2);

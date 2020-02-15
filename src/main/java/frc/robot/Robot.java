@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        robot.printSmartDashboard();
         if (leftJoystick.getRawButtonPressed(11)) {
             activeCommand.setEnabled(false);
         }
@@ -109,10 +110,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testPeriodic() {
-
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
+        robot.printSmartDashboard();
         leftPower = deadzoneValue( leftPower,deadZone);
         rightPower = deadzoneValue(rightPower,deadZone);
 
@@ -138,7 +139,7 @@ public class Robot extends TimedRobot {
 
         //Shooter
         if (leftJoystick.getRawButton(13)) {
-            robot.setShooterRPM(5000,4000);
+            robot.setShooterRPM(3000,2000);
         } else if (leftJoystick.getRawButton(14)) {
             robot.setShooterPowerPercentage(0);
         }
