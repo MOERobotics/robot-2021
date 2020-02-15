@@ -61,6 +61,8 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Limelight Y"          , limelight.getLimelightY   ()             );
         SmartDashboard.putNumber  ("Limelight A"          , limelight.getLimelightArea()             );
 
+        SmartDashboard.putNumber  ("Elevation"            , getElevation());
+
         printSmartDashboardInternal();
     }
 
@@ -416,6 +418,15 @@ public abstract class GenericRobot {
 
     public final void aimDown(double aimPower){
         setAngleAdjusterPower(-aimPower);
+    }
+
+    protected double getElevationInternal(){
+        System.out.println("I don't have an elevation.");
+        return 0.0;
+    }
+
+    public double getElevation(){
+        return getElevationInternal();
     }
 
      public final void setAngleAdjusterPower(double power){
