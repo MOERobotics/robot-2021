@@ -64,8 +64,8 @@ public class Falcon extends GenericRobot{
 
         escalator.setIdleMode(IdleMode.kBrake);
 
-        //angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
-        //angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
+        angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
+        angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
 
         angleAdjusterDigitalInputForward = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
         angleAdjusterDigitalInputReverse = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
@@ -217,15 +217,17 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setAngleAdjusterPowerInternal(double aimPower) {
-        /*
-        if (getElevationInternal() >= 155 && aimPower < 0){
+        double highLimit = 155.0;
+        double lowLimit = 113.0;
+        if ((getElevationInternal() > highLimit) && (aimPower > 0)){
             aimPower = 0;
         }
-        if (getElevationInternal() <= 113 && aimPower > 0){
+
+        if ((getElevationInternal() < lowLimit) && (aimPower < 0)){
             aimPower = 0;
         }
-         */
-        setAngleAdjusterPower(aimPower);
+
+        angleAdj.set(-aimPower);
     }
 
     @Override
