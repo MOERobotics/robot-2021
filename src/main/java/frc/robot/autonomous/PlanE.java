@@ -20,6 +20,7 @@ public class PlanE extends GenericAutonomous {
     double innerArc = 35.45;
     double outerRadius = 32;
     double yawDifference = 0;
+    double startingAngle = 20;
     long startingTime;
     double powerDecrement;
     double currentDistance;
@@ -74,9 +75,9 @@ public class PlanE extends GenericAutonomous {
             case 2://skrts back to zero (account for 28 yaw offset)
                 currentYaw = robot.getYaw();
                 robot.setMotorPowerPercentage(.2, -.2);
-                if (currentYaw > 20) {
+                if (currentYaw > startingAngle-7) {
                     robot.driveForward(0);
-                    startingYaw = 28;
+                    startingYaw = startingAngle;
                     autonomousStep = 3;
 
                 }
@@ -126,23 +127,9 @@ public class PlanE extends GenericAutonomous {
                 startingDistance = robot.getDistanceInchesLeft();
                 PIDSteering.reset();
                 PIDSteering.enableContinuousInput(-180, 180);
-                currentYaw = 28; //maybe??
+                currentYaw = startingAngle;
                 autonomousStep = 8;
                 break;
-
-/*
-                   case 4: //decrement power
-                        currentDistance = robot.getDistanceInchesLeft();
-                        double slowToStop = (defaultSpeed - (defaultSpeed / 15)*((currentDistance-startingDistance)-45)); //?
-                        correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                        robot.setMotorPowerPercentage(1.5 * slowToStop * (1 + correction), 1.5 * slowToStop * (1 - correction)); // div by 2 to debug
-                        if(currentDistance - startingDistance > 200){
-                              autonomousStep = 5;
-
-                        }
-                        break;
-
- */
 
             case 8:
                 //trench run (~200in)
@@ -150,13 +137,7 @@ public class PlanE extends GenericAutonomous {
                 robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
 
-
-                //decrescendo power
-                //if(currentDistance - startingDistance > ){ //start to decrement?
-                //autonomousStep = 4;
-
-                //
-                if (currentDistance - startingDistance > 120) {
+                if (currentDistance - startingDistance > 95) {
                     autonomousStep = 9;
 
                 }
@@ -187,8 +168,6 @@ public class PlanE extends GenericAutonomous {
 
 
         }
-
-
     }
 }
 
