@@ -66,7 +66,7 @@ public class PlanE extends GenericAutonomous {
 
                 } else {
                     robot.limelight.table.getEntry("ledMode").setNumber(1);
-                    autonomousStep = 2;
+                    autonomousStep = 11;
                 }
                 break;
 
