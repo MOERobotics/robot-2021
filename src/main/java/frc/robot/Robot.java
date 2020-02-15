@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import static frc.robot.Util.*;
 
@@ -70,7 +71,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        robot.printSmartDashboard();
         if (leftJoystick.getRawButtonPressed(11)) {
             activeCommand.setEnabled(false);
         }
@@ -110,15 +110,16 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-
+        LiveWindow.setEnabled(false);
     }
 
     @Override
     public void testPeriodic() {
+        LiveWindow.setEnabled(false);
+
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
-        robot.printSmartDashboard();
         leftPower = deadzoneValue( leftPower,deadZone);
         rightPower = deadzoneValue(rightPower,deadZone);
 
