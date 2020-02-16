@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.time.Instant;
+import java.util.Date;
+
 //Robot independent functions that could be useful any year
 public interface Util {
     public static double deadzoneValue(double input, double deadZone) {
@@ -30,6 +33,20 @@ public interface Util {
             radians += 2*Math.PI;
         }
         return radians;
+    }
+
+    public static Date getCompileDate() {
+        try {
+            return new Date(
+                Robot
+                    .class
+                    .getResource("Main.class")
+                    .openConnection()
+                    .getLastModified()
+            );
+        } catch (Exception ignored) {
+            return Date.from(Instant.EPOCH);
+        }
     }
 
 }
