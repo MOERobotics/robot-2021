@@ -137,8 +137,7 @@ public class Robot extends TimedRobot {
 
         //Collector
         if (leftJoystick.getRawButton(11)) {
-            collectorPower = 1.0;
-            robot.collectorIn(collectorPower);
+            CollectPowerCells.begin(robot);
         } else if (leftJoystick.getRawButton(16)) {
             robot.collectorOut(1.0);
         } else {
@@ -147,13 +146,7 @@ public class Robot extends TimedRobot {
 
         //Escalator
         if (leftJoystick.getRawButton(12)) {
-            //do not do anything unless the medium sensor is tripped
-            if(robot.getElevatorSensorMedium()){
-                escalatorPower = 0.5;
-            } else {
-                escalatorPower = 0.0;
-            }
-            robot.escalatorUp(escalatorPower);
+            robot.escalatorUp(0.5);
         } else if (leftJoystick.getRawButton(15)) {
             robot.escalatorDown(.5);
         } else {
