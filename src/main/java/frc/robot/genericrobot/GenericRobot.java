@@ -67,6 +67,18 @@ public abstract class GenericRobot {
     protected void printSmartDashboardInternal() { }
 
     public final void updateMotorPowers(){
+
+        double highLimit = getShooterAngleMax();
+        double lowLimit = getShooterAngleMin();
+        if ((getElevationInternal() > highLimit) && (angleAdjusterPower > 0)){
+            angleAdjusterPower = 0;
+        }
+
+        if ((getElevationInternal() < lowLimit) && (angleAdjusterPower < 0)){
+            angleAdjusterPower = 0;
+        }
+
+
         setMotorPowerPercentageInternal(leftPower, rightPower);
         setShooterPowerPercentageInternal(shooterUpperPower, shooterLowerPower);
         spinControlPanelInternal(spinPower);
@@ -428,6 +440,12 @@ public abstract class GenericRobot {
     protected void setAngleAdjusterPowerInternal(double aimPower){
         System.out.println("I don't have an angle adjuster ;(");
     }
+
+    @Override
+    public double getShooterAngleMax(){return 155.0;}
+
+    @Override
+    public double getShooterAngleMin(){return 113.0;}
 
     //***********************************************************************//
 
