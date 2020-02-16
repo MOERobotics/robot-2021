@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
@@ -20,7 +21,7 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram  = new DriveStraightOneSecond(); //Auto routine to be used?
-    GenericRobot      robot        = new Falcon();
+    GenericRobot      robot        = new KeerthanPracticeOne();
     GenericCommand    activeCommand = GenericCommand.doNothingCommand;
     Joystick          leftJoystick = new Joystick(0);
     XboxController    xboxJoystick = new XboxController(1); //to be changed
@@ -104,38 +105,54 @@ public class Robot extends TimedRobot {
         }
 
         //Collector
+        String collectorVal = "";
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             robot.collectorIn(1.0);
+            collectorVal = "in";
         } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
             robot.collectorOut(1.0);
+            collectorVal = "out";
         } else {
             robot.setCollectorPower(0);
         }
+        SmartDashboard.putString("Collector", collectorVal);
 
         //Escalator
+        String escalatorVal = "";
         if (xboxJoystick.getXButton()) {
             robot.escalatorUp(.5);
+            escalatorVal = "up";
         } else if (xboxJoystick.getAButton()) {
             robot.escalatorDown(.5);
+            escalatorVal = "down";
         } else {
             robot.setEscalatorPower(0);
         }
+        SmartDashboard.putString("Escalator", escalatorVal);
 
         //Shooter
+        String shooterVal = "";
         if (xboxJoystick.getYButton()) {
             robot.setShooterPowerPercentage(1.0);
+            shooterVal = "on";
         } else if (xboxJoystick.getBButton()) {
             robot.setShooterPowerPercentage(0);
+            shooterVal = "off";
         }
+        SmartDashboard.putString("Shooter", shooterVal);
 
         //Indexer
+        String indexerVal = "";
         if (xboxJoystick.getBumper(GenericHID.Hand.kLeft)) {
             robot.indexerLoad(1.0);
+            indexerVal = "Load";
         } else if (xboxJoystick.getBumper(GenericHID.Hand.kRight)) {
             robot.indexerUnload(1.0);
+            indexerVal = "Unload";
         } else {
             robot.setIndexerPower(0);
         }
+        SmartDashboard.putString("Indexer", indexerVal);
 
     }
 
@@ -155,75 +172,57 @@ public class Robot extends TimedRobot {
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
-        //Collector
-        if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
-            robot.collectorIn(1.0);
-        } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
-            robot.collectorOut(1.0);
-        } else {
-            robot.setCollectorPower(0);
-        }
-
-        //Escalator
-        if (xboxJoystick.getXButton()) {
-            robot.escalatorUp(.5);
-        } else if (xboxJoystick.getAButton()) {
-            robot.escalatorDown(.5);
-        } else {
-            robot.setEscalatorPower(0);
-        }
-
-        //Shooter
-        if (xboxJoystick.getYButton()) {
-            robot.setShooterPowerPercentage(1.0);
-        } else if (xboxJoystick.getBButton()) {
-            robot.setShooterPowerPercentage(0);
-        }
-
-        //Indexer
-        if (xboxJoystick.getBumper(GenericHID.Hand.kLeft)) {
-            robot.indexerLoad(1.0);
-        } else if (xboxJoystick.getBumper(GenericHID.Hand.kRight)) {
-            robot.indexerUnload(1.0);
-        } else {
-            robot.setIndexerPower(0);
-        }
-
         //Vert Adjust
+        String adjustVal = "";
         if (leftJoystick.getRawButton( 6)) {
             robot.aimUp(.2);
+            adjustVal = "up";
         } else if (leftJoystick.getRawButton( 9)) {
             robot.aimDown(.2);
+            adjustVal = "down";
         } else {
             robot.setAngleAdjusterPower(0);
         }
+        SmartDashboard.putString("Vert Adjust", adjustVal);
 
         //CP
+        String controlPanelVal = "";
         if (leftJoystick.getRawButton( 5)) {
             robot.spinControlPanel(-.2);
+            controlPanelVal = "left";
         } else if (leftJoystick.getRawButton(10)) {
             robot.spinControlPanel(.2);
+            controlPanelVal = "right";
         } else {
             robot.spinControlPanel(0);
         }
+        SmartDashboard.putString("Control Panel", controlPanelVal);
 
         //Climb vert
+        String vertClimbVal = "";
         if (leftJoystick.getRawButton( 2)) {
             robot.climbDown(.2);
+            vertClimbVal = "down";
         } else if (leftJoystick.getRawButton( 1)) {
             robot.climbUp(.2);
+            vertClimbVal = "up";
         } else {
             robot.climbVertical(0);
         }
+        SmartDashboard.putString("Vert Climb", vertClimbVal);
 
         //climb horiz
+        String horizClimbVal = "";
         if (leftJoystick.getRawButton( 3)) {
             robot.climberBalanceLeft(-.2);
+            horizClimbVal = "left";
         } else if (leftJoystick.getRawButton( 4)) {
             robot.climberBalanceRight(.2);
+            horizClimbVal = "right";
         } else {
             robot.setBalancePower(0);
         }
+        SmartDashboard.putString("Horiz Climb", horizClimbVal);
     }
 
 }
