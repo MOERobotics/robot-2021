@@ -441,9 +441,9 @@ public abstract class GenericRobot {
         System.out.println("I don't have an angle adjuster ;(");
     }
 
-    public double getShooterAngleMax(){return 155.0;}
+    public double getShooterAngleMax(){return 0;}
 
-    public double getShooterAngleMin(){return 113.0;}
+    public double getShooterAngleMin(){return 0;}
 
     //***********************************************************************//
 
