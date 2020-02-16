@@ -51,6 +51,11 @@ public class Falcon extends GenericRobot{
     private AnalogInput input = new AnalogInput(0);
     private AnalogPotentiometer elevation = new AnalogPotentiometer(input, 180, 90);
 
+    DigitalInput ElevatorSensorLow    = new DigitalInput(1);
+    DigitalInput ElevatorSensorMedium = new DigitalInput(2);
+    DigitalInput ElevatorSensorHigh   = new DigitalInput(3);
+
+
     public Falcon() {
 
         rightDriveA.setIdleMode(IdleMode.kBrake);
@@ -233,6 +238,9 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setCollectorPowerInternal(double collectorPower) {
+        //if light is unbroken, true
+        //ball in = false
+
         collector.set(-collectorPower);
     }
 
@@ -272,6 +280,21 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected double getElevationInternal(){return elevation.get();}
+
+    @Override
+    public boolean getElevatorSensorLowInternal(){
+        return ElevatorSensorLow.get();
+    }
+
+    @Override
+    public boolean getElevatorSensorMediumInternal(){
+        return ElevatorSensorMedium.get();
+    }
+
+    @Override
+    public boolean getElevatorSensorHighInternal(){
+        return ElevatorSensorHigh.get();
+    }
 
 
 }
