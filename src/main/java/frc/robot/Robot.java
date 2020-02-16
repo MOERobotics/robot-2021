@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram  = new DriveStraightOneSecond(); //Auto routine to be used?
-    GenericRobot      robot        = new KeerthanPracticeOne();
+    GenericRobot      robot        = new Falcon();
     GenericCommand    activeCommand = GenericCommand.doNothingCommand;
     Joystick          leftJoystick = new Joystick(0);
     XboxController    xboxJoystick = new XboxController(1); //to be changed
@@ -106,24 +106,6 @@ public class Robot extends TimedRobot {
             activeCommand.setEnabled(true);
         }
 
-    }
-
-    @Override
-    public void testInit() {
-        LiveWindow.setEnabled(false);
-    }
-
-    @Override
-    public void testPeriodic() {
-
-        double leftPower = -leftJoystick.getY() + leftJoystick.getX();
-        double rightPower = -leftJoystick.getY() - leftJoystick.getX();
-
-        leftPower = deadzoneValue( leftPower,deadZone);
-        rightPower = deadzoneValue(rightPower,deadZone);
-
-        robot.setMotorPowerPercentage(leftPower, rightPower);
-
         //Collector
         String collectorVal = "";
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
@@ -163,17 +145,21 @@ public class Robot extends TimedRobot {
 
         //Indexer
         String indexerVal = "";
-        if (xboxJoystick.getBumper(GenericHID.Hand.kLeft)) {
+        if (xboxJoystick.getBumper(GenericHID.Hand.kRight)) {
             robot.indexerLoad(1.0);
             indexerVal = "Load";
-        } else if (xboxJoystick.getBumper(GenericHID.Hand.kRight)) {
+        } else if (xboxJoystick.getBumper(GenericHID.Hand.kLeft)) {
             robot.indexerUnload(1.0);
             indexerVal = "Unload";
         } else {
             robot.setIndexerPower(0);
         }
         SmartDashboard.putString("Indexer", indexerVal);
+    }
 
+    @Override
+    public void testInit() {
+        LiveWindow.setEnabled(false);
     }
 
 
