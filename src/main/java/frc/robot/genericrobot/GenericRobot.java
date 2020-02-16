@@ -37,17 +37,18 @@ public abstract class GenericRobot {
         SmartDashboard.putString  ("Shifter state"        , getShifterState().toString()             );
 
         SmartDashboard.putNumber  ("Collector Power"      , collectorPower                           );
-        SmartDashboard.putNumber  ("Escalator Power"      , escalatorPower);
+        SmartDashboard.putNumber  ("Escalator Power"      , escalatorPower                           );
         SmartDashboard.putNumber  ("Indexer Power"        , indexerPower                             );
         SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
         SmartDashboard.putNumber  ("Lower Shooter Power"  , shooterLowerPower                        );
-        SmartDashboard.putNumber  ("Upper Shooter Velocity", getShooterVelocityRPMUpper()               );
-        SmartDashboard.putNumber  ("Lower Shooter Velocity", getShooterVelocityRPMLower()               );
+        SmartDashboard.putNumber  ("Upper Shooter Velocity",getShooterVelocityRPMUpper()             );
+        SmartDashboard.putNumber  ("Lower Shooter Velocity",getShooterVelocityRPMLower()             );
+        SmartDashboard.putBoolean ("Ready To Shoot"       , readyToShoot()                           );
 
         SmartDashboard.putNumber  ("Angle Adjust Power"   , angleAdjusterPower                       );
 
         SmartDashboard.putNumber  ("Climber Vert Power"   , climbVerticalPower                       );
-        SmartDashboard.putNumber  ("Climber Horiz Power"  , climbBalancePower);
+        SmartDashboard.putNumber  ("Climber Horiz Power"  , climbBalancePower                        );
 
         SmartDashboard.putNumber  ("Control Panel Power"  , spinPower                                );
 
@@ -255,6 +256,20 @@ public abstract class GenericRobot {
     ) {
         System.out.println("I don't have a shooter :'(");
     }
+
+    protected void setShooterTargetRPMUpper(double upperRPM){
+        this.shooterUpperRPM = upperRPM;
+    }
+
+    protected void setShooterTargetRPMLower(double lowerRPM){
+        this.shooterLowerRPM = lowerRPM;
+    }
+
+    protected void setShooterTargetRPM(double upperRPM, double lowerRPM){
+        setShooterTargetRPMUpper(upperRPM);
+        setShooterTargetRPMLower(lowerRPM);
+    }
+
     public final double getShooterPowerUpper() {
         return shooterUpperPower;
     }
@@ -272,6 +287,25 @@ public abstract class GenericRobot {
         System.out.println("I don't have a shooter :'(");
         return 0.0;
     }
+
+    public double getShooterTargetRPMLower(){
+        return this.shooterLowerRPM;
+    }
+
+    public double getShooterTargetRPMUpper(){
+        return this.shooterUpperRPM;
+    }
+
+    protected boolean readyToShootInternal(){
+        System.out.println("I don't have a shooter :'(");
+        return true;
+    }
+
+    public boolean readyToShoot(){
+        return readyToShootInternal();
+    }
+    //in falcon, check if both motors match target RPM within a fraction of a percentage (10th of a percent)
+    //abs((RPM - targetRPM)/targetRPM) should be between 0.999 and 1.001
 
 
     //***********************************************************************//

@@ -178,6 +178,19 @@ public class Falcon extends GenericRobot{
         shooterB.set(lowerPower);
     }
 
+    @Override
+    protected boolean readyToShootInternal(){
+        double targetUpper = getShooterTargetRPMUpper();
+        double targetLower = getShooterTargetRPMLower();
+        boolean readyToShoot = true;
+        double errorUpper = Math.abs((getShooterVelocityRPMUpper() - targetUpper) / targetUpper);
+        double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
+        if((errorUpper > 1.0e-3) || (errorLower > 1.0e-3)){
+            readyToShoot = false;
+        }
+        return readyToShoot;
+    }
+
    /* @Override
     protected void spinControlPanelInternal(double power) {
         controlPanel.set(power);

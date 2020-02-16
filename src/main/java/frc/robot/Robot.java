@@ -159,7 +159,7 @@ public class Robot extends TimedRobot {
         }
 
         //Indexer
-        if (leftJoystick.getRawButton( 7)) {
+        if (leftJoystick.getRawButton( 7) && robot.readyToShoot()) {
             robot.indexerLoad(1.0);
         } else if (leftJoystick.getRawButton( 8)) {
             robot.indexerUnload(1.0);
