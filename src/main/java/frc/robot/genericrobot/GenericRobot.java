@@ -238,6 +238,7 @@ public abstract class GenericRobot {
     public void setShooterRPM(double upperRPM, double lowerRPM) {
         this.shooterUpperRPM = upperRPM;
         this.shooterLowerRPM = lowerRPM;
+        setShooterTargetRPM(upperRPM, lowerRPM);
         setShooterRPMInternal(upperRPM,lowerRPM);
     }
 
@@ -265,7 +266,7 @@ public abstract class GenericRobot {
         this.shooterLowerRPM = lowerRPM;
     }
 
-    protected void setShooterTargetRPM(double upperRPM, double lowerRPM){
+    public void setShooterTargetRPM(double upperRPM, double lowerRPM){
         setShooterTargetRPMUpper(upperRPM);
         setShooterTargetRPMLower(lowerRPM);
     }

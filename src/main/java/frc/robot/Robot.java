@@ -134,7 +134,7 @@ public class Robot extends TimedRobot {
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
         //Collector
-        if (leftJoystick.getRawButton(11)) {
+        if (leftJoystick.getRawButton(11) && robot.readyToShoot()) {
             robot.collectorIn(1.0);
         } else if (leftJoystick.getRawButton(16)) {
             robot.collectorOut(1.0);
@@ -143,7 +143,7 @@ public class Robot extends TimedRobot {
         }
 
         //Escalator
-        if (leftJoystick.getRawButton(12)) {
+        if (leftJoystick.getRawButton(12) && robot.readyToShoot()) {
             robot.escalatorUp(.5);
         } else if (leftJoystick.getRawButton(15)) {
             robot.escalatorDown(.5);
@@ -153,7 +153,7 @@ public class Robot extends TimedRobot {
 
         //Shooter
         if (leftJoystick.getRawButton(13)) {
-            robot.setShooterRPM(3000,2000);
+            robot.setShooterRPM(2900,1900);
         } else if (leftJoystick.getRawButton(14)) {
             robot.setShooterPowerPercentage(0);
         }
