@@ -60,6 +60,9 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Limelight A"          , limelight.getLimelightArea()             );
 
         SmartDashboard.putNumber  ("Elevation"            , getElevation());
+        SmartDashboard.putBoolean("Shooter Over Limit", (getElevation() > getShooterAngleMax()));
+        SmartDashboard.putBoolean("Shooter Under Limit", (getElevation() < getShooterAngleMin()));
+
 
         printSmartDashboardInternal();
     }
@@ -68,15 +71,15 @@ public abstract class GenericRobot {
 
     public final void updateMotorPowers(){
 
-        double highLimit = getShooterAngleMax();
-        double lowLimit = getShooterAngleMin();
-        if ((getElevationInternal() > highLimit) && (angleAdjusterPower > 0)){
+        if ((getElevationInternal() > getShooterAngleMax()) && (angleAdjusterPower > 0)){
             angleAdjusterPower = 0;
         }
 
-        if ((getElevationInternal() < lowLimit) && (angleAdjusterPower < 0)){
+        if ((getElevationInternal() < getShooterAngleMin()) && (angleAdjusterPower < 0)){
             angleAdjusterPower = 0;
         }
+
+
 
 
         setMotorPowerPercentageInternal(leftPower, rightPower);
