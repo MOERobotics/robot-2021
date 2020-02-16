@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
     GenericRobot      robot         = new Falcon();
     Joystick          leftJoystick  = new Joystick(0);
     double            deadZone      = 0.1;
-    
+
     @Override public void robotInit() {
         System.out.println("Klaatu barada nikto");
     }
