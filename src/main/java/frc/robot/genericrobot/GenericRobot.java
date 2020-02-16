@@ -91,10 +91,6 @@ public abstract class GenericRobot {
     ) {
         this.leftPower = leftPower;
         this.rightPower = rightPower;
-        setMotorPowerPercentageInternal(
-                leftPower,
-                rightPower
-        );
     }
 
     protected abstract void setMotorPowerPercentageInternal(
@@ -236,10 +232,6 @@ public abstract class GenericRobot {
     ) {
         this.shooterUpperPower = upperPower;
         this.shooterLowerPower = lowerPower;
-        setShooterPowerPercentageInternal(
-                upperPower,
-                lowerPower
-        );
     }
 
     public final void setShooterPowerPercentage(
