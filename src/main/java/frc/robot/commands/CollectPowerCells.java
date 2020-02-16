@@ -2,24 +2,22 @@ package frc.robot.commands;
 
 import frc.robot.genericrobot.GenericRobot;
 
-public class CollectPowerCells extends GenericCommand{
+public class CollectPowerCells{
     double collectorPower = 0.0;
     double escalatorPower = 0.0;
     public CollectPowerCells(){
 
 
     }
-    @Override
+
     public void begin(GenericRobot robot) {
 
     }
 
-    @Override
-    public void step(GenericRobot robot) {
+    public void run(GenericRobot robot) {
         collectorPower = 1.0;
 
-
-        if(robot.getElevatorSensorMedium()){
+        if(robot.getElevatorSensorMedium()){ //escalator moves only when medium is tripped
             escalatorPower = 0.5;
         } else {
             escalatorPower = 0.0;

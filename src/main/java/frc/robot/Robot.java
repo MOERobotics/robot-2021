@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
     double            deadZone      = 0.1;
     double collectorPower = 0;
     double escalatorPower = 0;
-    
+    CollectPowerCells collectStuff = new CollectPowerCells();
 
     @Override public void robotInit() {
     }
@@ -127,17 +127,13 @@ public class Robot extends TimedRobot {
     public void testPeriodic() {
         LiveWindow.setEnabled(false);
 
-        double leftPower = -leftJoystick.getY() + leftJoystick.getX();
-        double rightPower = -leftJoystick.getY() - leftJoystick.getX();
-
-        leftPower = deadzoneValue( leftPower,deadZone);
-        rightPower = deadzoneValue(rightPower,deadZone);
-
-        robot.setMotorPowerPercentage(leftPower, rightPower);
-
         //Collector
+        if (leftJoystick.getRawButtonPressed(11)){
+            collectStuff.begin(robot);
+        }
+
         if (leftJoystick.getRawButton(11)) {
-            CollectPowerCells.begin(robot);
+            collectStuff.run(robot);
         } else if (leftJoystick.getRawButton(16)) {
             robot.collectorOut(1.0);
         } else {
@@ -204,6 +200,19 @@ public class Robot extends TimedRobot {
         } else {
             robot.setBalancePower(0);
         }
+
+        if (activeCommand.isEnabled()) {
+            activeCommand.step(robot);
+            if (activeCommand.locksControls()) return;
+        }
+        double leftPower = -leftJoystick.getY() + leftJoystick.getX();
+        double rightPower = -leftJoystick.getY() - leftJoystick.getX();
+
+        leftPower = deadzoneValue( leftPower,deadZone);
+        rightPower = deadzoneValue(rightPower,deadZone);
+
+        robot.setMotorPowerPercentage(leftPower, rightPower);
+
 
     }
 
