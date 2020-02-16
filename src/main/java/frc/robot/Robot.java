@@ -33,6 +33,7 @@ public class Robot extends TimedRobot {
         robot        .printSmartDashboard();
         autoProgram  .printSmartDashboard();
         activeCommand.printSmartDashboard();
+        robot.updateMotorPowers();
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
