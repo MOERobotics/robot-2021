@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+
 import static frc.robot.Util.*;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -104,6 +106,24 @@ public class Robot extends TimedRobot {
             activeCommand.setEnabled(true);
         }
 
+    }
+
+    @Override
+    public void testInit() {
+        LiveWindow.setEnabled(false);
+    }
+
+    @Override
+    public void testPeriodic() {
+
+        double leftPower = -leftJoystick.getY() + leftJoystick.getX();
+        double rightPower = -leftJoystick.getY() - leftJoystick.getX();
+
+        leftPower = deadzoneValue( leftPower,deadZone);
+        rightPower = deadzoneValue(rightPower,deadZone);
+
+        robot.setMotorPowerPercentage(leftPower, rightPower);
+
         //Collector
         String collectorVal = "";
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
@@ -156,10 +176,6 @@ public class Robot extends TimedRobot {
 
     }
 
-    @Override
-    public void testInit() {
-
-    }
 
     @Override
     public void testPeriodic() {
