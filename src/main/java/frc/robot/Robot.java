@@ -22,9 +22,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram  = new DriveStraightOneSecond(); //Auto routine to be used?
-    GenericRobot      robot        = new Falcon();
+    GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
     GenericCommand    activeCommand = GenericCommand.doNothingCommand;
+    GenericRobot      robot        = new Falcon();
     Joystick          leftJoystick = new Joystick(0);
     XboxController    xboxJoystick = new XboxController(1); //to be changed
 
@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-
+        LiveWindow.setEnabled(false);
     }
 
     @Override
@@ -134,10 +134,10 @@ public class Robot extends TimedRobot {
 
         //Shooter
         String shooterVal = "";
-        if (xboxJoystick.getYButton()) {
+        if (xboxJoystick.getYButtonPressed()) {
             robot.setShooterPowerPercentage(1.0);
             shooterVal = "on";
-        } else if (xboxJoystick.getBButton()) {
+        } else if (xboxJoystick.getBButtonPressed()) {
             robot.setShooterPowerPercentage(0);
             shooterVal = "off";
         }
@@ -173,6 +173,56 @@ public class Robot extends TimedRobot {
         rightPower = deadzoneValue(rightPower,deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
+
+        //Collector
+        String collectorVal = "";
+        if (leftJoystick.getRawButton(11)) {
+            robot.collectorIn(1.0);
+            collectorVal = "in";
+        } else if (leftJoystick.getRawButton(16)) {
+            robot.collectorOut(1.0);
+            collectorVal = "out";
+        } else {
+            robot.setCollectorPower(0);
+        }
+        SmartDashboard.putString("Collector", collectorVal);
+
+        //Escalator
+        String escalatorVal = "";
+        if (leftJoystick.getRawButton(12)) {
+            robot.escalatorUp(.5);
+            escalatorVal = "up";
+        } else if (leftJoystick.getRawButton(15)) {
+            robot.escalatorDown(.5);
+            escalatorVal = "down";
+        } else {
+            robot.setEscalatorPower(0);
+        }
+        SmartDashboard.putString("Escalator", escalatorVal);
+
+        //Shooter
+        String shooterVal = "";
+        if (leftJoystick.getRawButton(13)) {
+            robot.setShooterPowerPercentage(1.0);
+            shooterVal = "on";
+        } else if (leftJoystick.getRawButton(14)) {
+            robot.setShooterPowerPercentage(0);
+            shooterVal = "off";
+        }
+        SmartDashboard.putString("Shooter", shooterVal);
+
+        //Indexer
+        String indexerVal = "";
+        if (leftJoystick.getRawButton(7)) {
+            robot.indexerLoad(1.0);
+            indexerVal = "Load";
+        } else if (leftJoystick.getRawButton(8)) {
+            robot.indexerUnload(1.0);
+            indexerVal = "Unload";
+        } else {
+            robot.setIndexerPower(0);
+        }
+        SmartDashboard.putString("Indexer", indexerVal);
 
         //Vert Adjust
         String adjustVal = "";
