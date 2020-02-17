@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
     GenericCommand    activeCommand = GenericCommand.doNothingCommand;
     GenericRobot      robot        = new Falcon();
     Joystick          leftJoystick = new Joystick(0);
-    XboxController    xboxJoystick = new XboxController(1); //to be changed
+    XboxController    xboxJoystick = new XboxController(1);
 
     double            deadZone     = 0.10;
 
