@@ -15,15 +15,19 @@ import frc.robot.genericrobot.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import static frc.robot.Util.*;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID;
 
 public class Robot extends TimedRobot {
 
-    //WheelOfFortune    colorWheel    = new WheelOfFortune();
-    GenericAutonomous autoProgram   = new PlanA(); //Auto routine to be used?
+    //WheelOfFortune    colorWheel   = new WheelOfFortune();
+    GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
     GenericCommand    activeCommand = GenericCommand.doNothingCommand;
-    GenericRobot      robot         = new Falcon();
-    Joystick          leftJoystick  = new Joystick(0);
-    double            deadZone      = 0.1;
+    GenericRobot      robot        = new Falcon();
+    Joystick          leftJoystick = new Joystick(0);
+    XboxController    xboxJoystick = new XboxController(1);
+
+    double            deadZone     = 0.10;
 
     @Override public void robotInit() {}
 
@@ -61,7 +65,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-
+        LiveWindow.setEnabled(false);
     }
 
     @Override
@@ -101,12 +105,46 @@ public class Robot extends TimedRobot {
             activeCommand.setEnabled(true);
         }
 
+        //Collector
+        if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
+            robot.collectorIn(1.0);
+        } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
+            robot.collectorOut(1.0);
+        } else {
+            robot.setCollectorPower(0);
+        }
+
+        //Escalator
+        if (xboxJoystick.getXButton()) {
+            robot.escalatorUp(.5);
+        } else if (xboxJoystick.getAButton()) {
+            robot.escalatorDown(.5);
+        } else {
+            robot.setEscalatorPower(0);
+        }
+
+        //Shooter
+        if (xboxJoystick.getYButtonPressed()) {
+            robot.setShooterPowerPercentage(1.0);
+        } else if (xboxJoystick.getBButtonPressed()) {
+            robot.setShooterPowerPercentage(0);
+        }
+
+        //Indexer
+        if (xboxJoystick.getBumper(GenericHID.Hand.kRight)) {
+            robot.indexerLoad(1.0);
+        } else if (xboxJoystick.getBumper(GenericHID.Hand.kLeft)) {
+            robot.indexerUnload(1.0);
+        } else {
+            robot.setIndexerPower(0);
+        }
     }
 
     @Override
     public void testInit() {
         LiveWindow.setEnabled(false);
     }
+
 
     @Override
     public void testPeriodic() {
@@ -145,9 +183,9 @@ public class Robot extends TimedRobot {
         }
 
         //Indexer
-        if (leftJoystick.getRawButton( 7)) {
+        if (leftJoystick.getRawButton(7)) {
             robot.indexerLoad(1.0);
-        } else if (leftJoystick.getRawButton( 8)) {
+        } else if (leftJoystick.getRawButton(8)) {
             robot.indexerUnload(1.0);
         } else {
             robot.setIndexerPower(0);
@@ -188,7 +226,6 @@ public class Robot extends TimedRobot {
         } else {
             robot.setBalancePower(0);
         }
-
     }
 
 }
