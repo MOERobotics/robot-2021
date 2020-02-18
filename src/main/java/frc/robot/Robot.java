@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
@@ -30,10 +31,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
+        robot.updateMotorPowers();
         robot        .printSmartDashboard();
         autoProgram  .printSmartDashboard();
         activeCommand.printSmartDashboard();
-        robot.updateMotorPowers();
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
@@ -106,8 +107,8 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void testInit() {
-
+    public void testInit()  {
+        LiveWindow.setEnabled(false);
     }
 
     @Override
@@ -157,9 +158,9 @@ public class Robot extends TimedRobot {
 
         //Vert Adjust
         if (leftJoystick.getRawButton( 6)) {
-            robot.aimUp(.2);
+            robot.aimUp(.5);
         } else if (leftJoystick.getRawButton( 9)) {
-            robot.aimDown(.2);
+            robot.aimDown(.5);
         } else {
             robot.setAngleAdjusterPower(0);
         }

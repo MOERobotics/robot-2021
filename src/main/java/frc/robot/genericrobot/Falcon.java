@@ -215,15 +215,6 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setAngleAdjusterPowerInternal(double aimPower) {
-        double highLimit = getShooterAngleMax();
-    double lowLimit = getShooterAngleMin();
-        if ((getElevationInternal() > highLimit) && (aimPower > 0)){
-        aimPower = 0;
-    }
-
-        if ((getElevationInternal() < lowLimit) && (aimPower < 0)){
-        aimPower = 0;
-    }
 
         angleAdj.set(-aimPower);
 }
@@ -231,11 +222,13 @@ public class Falcon extends GenericRobot{
     @Override
     protected double getElevationInternal(){return elevation.get();}
 
+
+    //REMOVE BEFORE FLIGHT
     @Override
-    public double getShooterAngleMax(){return 155.0;}
+    public double getShooterAngleMax(){return 153.0;} //orig 155
 
     @Override
-    public double getShooterAngleMin(){return 113.0;}
+    public double getShooterAngleMin(){return 114.0;} //orig 113
 
 
 }
