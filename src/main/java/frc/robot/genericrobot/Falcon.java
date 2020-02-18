@@ -1,12 +1,18 @@
 package frc.robot.genericrobot;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ControlType;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Falcon extends GenericRobot{
 
@@ -23,8 +29,10 @@ public class Falcon extends GenericRobot{
     CANSparkMax climberB        = null;//new CANSparkMax( 3, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax generatorShift  = null;//new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    CANSparkMax shooterA        = new CANSparkMax( 5, MotorType.kBrushless);
-    CANSparkMax shooterB        = new CANSparkMax( 4, MotorType.kBrushless);
+    CANSparkMax shooterA                   = new CANSparkMax( 5, MotorType.kBrushless);
+    CANPIDController shooterAPIDController = new CANPIDController(shooterA);
+    CANSparkMax shooterB                   = new CANSparkMax( 4, MotorType.kBrushless);
+    CANPIDController shooterBPIDController = new CANPIDController(shooterB);
     CANSparkMax indexer         = new CANSparkMax( 6, MotorType.kBrushed);
     CANSparkMax escalator       = new CANSparkMax( 7, MotorType.kBrushless);
     CANSparkMax angleAdj        = new CANSparkMax( 8, MotorType.kBrushless);
@@ -39,6 +47,10 @@ public class Falcon extends GenericRobot{
     CANEncoder encoderShootB    = new CANEncoder(shooterB);
     Lidar lidar = new Lidar();
 
+    private CANDigitalInput angleAdjusterDigitalInputForward;
+    private CANDigitalInput angleAdjusterDigitalInputReverse;
+    private AnalogInput input = new AnalogInput(0);
+    private AnalogPotentiometer elevation = new AnalogPotentiometer(input, 180, 90);
 
     public Falcon() {
 
@@ -55,6 +67,31 @@ public class Falcon extends GenericRobot{
         rightDriveC.setInverted(true);
 
         escalator.setIdleMode(IdleMode.kBrake);
+
+        // REMOVE BEFORE FLIGHT... Just for testing.
+        shooterA.setIdleMode(IdleMode.kCoast);
+        shooterB.setIdleMode(IdleMode.kCoast);
+
+        shooterAPIDController.setP(7.5e-5);
+        shooterAPIDController.setI(1.0e-6);
+        shooterAPIDController.setD(1.0e-2);
+        shooterAPIDController.setFF(1.67e-4);
+        shooterAPIDController.setIZone(500);
+        shooterAPIDController.setDFilter(0);
+
+        shooterBPIDController.setP(7.5e-5);
+        shooterBPIDController.setI(1.0e-6);
+        shooterBPIDController.setD(1.0e-2);
+        shooterBPIDController.setFF(1.67e-4);
+        shooterBPIDController.setIZone(500);
+        shooterBPIDController.setDFilter(0);
+
+        angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
+        angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
+
+        angleAdjusterDigitalInputForward = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
+        angleAdjusterDigitalInputReverse = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
+
     }
 
     @Override
@@ -131,9 +168,30 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
+    public void setShooterRPMInternal(double upperRPM, double lowerRPM) {
+        shooterAPIDController.setReference(-upperRPM, ControlType.kVelocity);
+        shooterBPIDController.setReference( lowerRPM, ControlType.kVelocity);
+    }
+
+    @Override
     protected void setShooterPowerPercentageInternal(double upperPower, double lowerPower) {
         shooterA.set(-upperPower);
         shooterB.set(lowerPower);
+    }
+
+    @Override
+    protected boolean readyToShootInternal(){
+        double targetUpper = getShooterTargetRPMUpper();
+        double targetLower = getShooterTargetRPMLower();
+        boolean readyToShoot = true;
+        double errorUpper = Math.abs((getShooterVelocityRPMUpper() + targetUpper) / targetUpper); //upperRPM is negative for shooting operation, think about this later
+        double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
+        SmartDashboard.putNumber("errorUpper", (errorUpper * 100));
+        SmartDashboard.putNumber("errorLower", (errorLower * 100));
+        if((errorUpper > 5.0e-2) || (errorLower > 5.0e-2)){
+            readyToShoot = false;
+        }
+        return readyToShoot;
     }
 
    /* @Override
@@ -202,8 +260,21 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setAngleAdjusterPowerInternal(double aimPower) {
-        angleAdj.set(aimPower);
+        double highLimit = 155.0;
+        double lowLimit = 113.0;
+        if ((getElevationInternal() > highLimit) && (aimPower > 0)){
+            aimPower = 0;
+        }
+
+        if ((getElevationInternal() < lowLimit) && (aimPower < 0)){
+            aimPower = 0;
+        }
+
+        angleAdj.set(-aimPower);
     }
+
+    @Override
+    protected double getElevationInternal(){return elevation.get();}
 
 
 }

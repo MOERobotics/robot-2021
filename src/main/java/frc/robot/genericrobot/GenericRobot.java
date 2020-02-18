@@ -14,6 +14,8 @@ public abstract class GenericRobot {
     private double spinPower              = 0;
     private double shooterUpperPower      = 0;
     private double shooterLowerPower      = 0;
+    private double shooterUpperRPM        = 0;
+    private double shooterLowerRPM        = 0;
     private double angleAdjusterPower     = 0;
     private double climbBalancePower = 0;
     private double escalatorPower = 0;
@@ -35,17 +37,18 @@ public abstract class GenericRobot {
         SmartDashboard.putString  ("Shifter state"        , getShifterState().toString()             );
 
         SmartDashboard.putNumber  ("Collector Power"      , collectorPower                           );
-        SmartDashboard.putNumber  ("Escalator Power"      , escalatorPower);
+        SmartDashboard.putNumber  ("Escalator Power"      , escalatorPower                           );
         SmartDashboard.putNumber  ("Indexer Power"        , indexerPower                             );
         SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
         SmartDashboard.putNumber  ("Lower Shooter Power"  , shooterLowerPower                        );
-        SmartDashboard.putNumber  ("Upper Shooter Velocity", getShooterVelocityRPMUpper()               );
-        SmartDashboard.putNumber  ("Lower Shooter Velocity", getShooterVelocityRPMLower()               );
+        SmartDashboard.putNumber  ("Upper Shooter Velocity",getShooterVelocityRPMUpper()             );
+        SmartDashboard.putNumber  ("Lower Shooter Velocity",getShooterVelocityRPMLower()             );
+        SmartDashboard.putBoolean ("Ready To Shoot"       , readyToShoot()                           );
 
         SmartDashboard.putNumber  ("Angle Adjust Power"   , angleAdjusterPower                       );
 
         SmartDashboard.putNumber  ("Climber Vert Power"   , climbVerticalPower                       );
-        SmartDashboard.putNumber  ("Climber Horiz Power"  , climbBalancePower);
+        SmartDashboard.putNumber  ("Climber Horiz Power"  , climbBalancePower                        );
 
         SmartDashboard.putNumber  ("Control Panel Power"  , spinPower                                );
 
@@ -58,6 +61,8 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Limelight X"          , limelight.getLimelightX   ()             );
         SmartDashboard.putNumber  ("Limelight Y"          , limelight.getLimelightY   ()             );
         SmartDashboard.putNumber  ("Limelight A"          , limelight.getLimelightArea()             );
+
+        SmartDashboard.putNumber  ("Elevation"            , getElevation());
 
         printSmartDashboardInternal();
     }
@@ -229,11 +234,41 @@ public abstract class GenericRobot {
         setShooterPowerPercentage(power, power);
     }
 
-    protected void setShooterPowerPercentageInternal(
+
+    public void setShooterRPM(double upperRPM, double lowerRPM) {
+        this.shooterUpperRPM = upperRPM;
+        this.shooterLowerRPM = lowerRPM;
+        setShooterTargetRPM(upperRPM, lowerRPM);
+        setShooterRPMInternal(upperRPM,lowerRPM);
+    }
+
+    public void setShooterRPM(double RPM) {setShooterRPM(RPM,RPM); }
+
+        protected void setShooterPowerPercentageInternal(
         double upperPower,
         double lowerPower
     ) {
         System.out.println("I don't have a shooter :'(");
+    }
+
+    protected void setShooterRPMInternal(
+            double upperRPM,
+            double lowerRPM
+    ) {
+        System.out.println("I don't have a shooter :'(");
+    }
+
+    protected void setShooterTargetRPMUpper(double upperRPM){
+        this.shooterUpperRPM = upperRPM;
+    }
+
+    protected void setShooterTargetRPMLower(double lowerRPM){
+        this.shooterLowerRPM = lowerRPM;
+    }
+
+    public void setShooterTargetRPM(double upperRPM, double lowerRPM){
+        setShooterTargetRPMUpper(upperRPM);
+        setShooterTargetRPMLower(lowerRPM);
     }
 
     public final double getShooterPowerUpper() {
@@ -253,6 +288,25 @@ public abstract class GenericRobot {
         System.out.println("I don't have a shooter :'(");
         return 0.0;
     }
+
+    public double getShooterTargetRPMLower(){
+        return this.shooterLowerRPM;
+    }
+
+    public double getShooterTargetRPMUpper(){
+        return this.shooterUpperRPM;
+    }
+
+    protected boolean readyToShootInternal(){
+        System.out.println("I don't have a shooter :'(");
+        return true;
+    }
+
+    public boolean readyToShoot(){
+        return readyToShootInternal();
+    }
+    //in falcon, check if both motors match target RPM within a fraction of a percentage (10th of a percent)
+    //abs((RPM - targetRPM)/targetRPM) should be between 0.999 and 1.001
 
 
     //***********************************************************************//
@@ -399,6 +453,15 @@ public abstract class GenericRobot {
 
     public final void aimDown(double aimPower){
         setAngleAdjusterPower(-aimPower);
+    }
+
+    protected double getElevationInternal(){
+        System.out.println("I don't have an elevation.");
+        return 0.0;
+    }
+
+    public double getElevation(){
+        return getElevationInternal();
     }
 
      public final void setAngleAdjusterPower(double power){
