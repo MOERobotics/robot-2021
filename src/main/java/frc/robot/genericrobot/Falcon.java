@@ -10,7 +10,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -39,7 +38,7 @@ public class Falcon extends GenericRobot{
 
     CANSparkMax controlPanel    = null;//= new CANSparkMax( 9, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    CANSparkMax collector       = new CANSparkMax(10, MotorType.kBrushed);
+    CANSparkMax collector       = new CANSparkMax(10, MotorType.kBrushless);
 
     CANEncoder encoderRight     = new CANEncoder(rightDriveA);
     CANEncoder encoderLeft      = new CANEncoder( leftDriveA);
@@ -101,12 +100,12 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
-        rightDriveA.set (rightPower * 0.5);
-        rightDriveB.set (rightPower * 0.5);
-        rightDriveC.set (rightPower * 0.5);
-         leftDriveA.set (leftPower  * 0.5);
-         leftDriveB.set (leftPower  * 0.5);
-         leftDriveC.set (leftPower  * 0.5);
+        rightDriveA.set (rightPower * 0.75);
+        rightDriveB.set (rightPower * 0.75);
+        rightDriveC.set (rightPower * 0.75);
+         leftDriveA.set (leftPower  * 0.75);
+         leftDriveB.set (leftPower  * 0.75);
+         leftDriveC.set (leftPower  * 0.75);
     }
     @Override
     public double getShooterVelocityRPMUpper(){
@@ -260,21 +259,19 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setAngleAdjusterPowerInternal(double aimPower) {
-        double highLimit = 155.0;
-        double lowLimit = 113.0;
-        if ((getElevationInternal() > highLimit) && (aimPower > 0)){
-            aimPower = 0;
-        }
-
-        if ((getElevationInternal() < lowLimit) && (aimPower < 0)){
-            aimPower = 0;
-        }
 
         angleAdj.set(-aimPower);
-    }
+}
 
     @Override
     protected double getElevationInternal(){return elevation.get();}
 
+    @Override
+    public double getShooterAngleMax(){return 153.0;} //orig 155
+
+    @Override
+    public double getShooterAngleMin(){return 114.0;} //orig 113
+
 
 }
+
