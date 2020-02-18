@@ -222,8 +222,6 @@ public class Falcon extends GenericRobot{
     @Override
     protected double getElevationInternal(){return elevation.get();}
 
-
-    //REMOVE BEFORE FLIGHT
     @Override
     public double getShooterAngleMax(){return 153.0;} //orig 155
 
