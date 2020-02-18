@@ -153,7 +153,7 @@ public class Robot extends TimedRobot {
 
         //Shooter
         if (leftJoystick.getRawButton(13)) {
-            robot.setShooterRPM(2900,1900);
+            robot.setShooterRPM(3500,2500);
         } else if (leftJoystick.getRawButton(14)) {
             robot.setShooterPowerPercentage(0);
         }
