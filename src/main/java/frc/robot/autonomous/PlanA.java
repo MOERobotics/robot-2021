@@ -26,6 +26,8 @@ public class PlanA extends GenericAutonomous {
     boolean shooting = false;
     double escalatorPower;
     double indexerPower;
+    double shooterUpperRPM;
+    double shooterLowerRPM;
     GenericCommand activeCommand = new LimelightAlign(0.0, 0.5, .0185);
 
 
@@ -41,7 +43,9 @@ public class PlanA extends GenericAutonomous {
         double yawError;
         switch (autonomousStep) {
             case -1:
+                ballCount = 0;
                 shooting = false;
+                robot.setShooterRPM(2800, 1800);
                 robot.resetAttitude();
                 robot.resetEncoders();
                 if (System.currentTimeMillis() >= startingTime + 100) {
@@ -67,7 +71,6 @@ public class PlanA extends GenericAutonomous {
                 break;
 
             case 2:
-                robot.setShooterRPM(2800,1800);
                 if(robot.readyToShoot()){
                    escalatorPower = 0.5;
                    indexerPower = 1.0;
@@ -83,8 +86,10 @@ public class PlanA extends GenericAutonomous {
                     ballCount++;
                 }
                 if (ballCount == 3) {
+                    escalatorPower = 0;
+                    indexerPower = 0;
                     robot.setShooterPowerPercentage(0);
-                    autonomousStep = 3; //change case numbers
+                    autonomousStep = 3;
                 }
                 robot.escalatorUp(escalatorPower);
                 robot.indexerLoad(indexerPower);
