@@ -9,10 +9,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import static frc.robot.Util.*;
 import edu.wpi.first.wpilibj.XboxController;
@@ -29,10 +29,13 @@ public class Robot extends TimedRobot {
 
     double            deadZone     = 0.10;
 
-    @Override public void robotInit() {}
+    @Override public void robotInit() {
+        System.out.println("Klaatu barada nikto");
+    }
 
     @Override
     public void robotPeriodic() {
+        robot.updateMotorPowers();
         robot        .printSmartDashboard();
         autoProgram  .printSmartDashboard();
         activeCommand.printSmartDashboard();
@@ -141,7 +144,7 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void testInit() {
+    public void testInit()  {
         LiveWindow.setEnabled(false);
     }
 
@@ -193,9 +196,9 @@ public class Robot extends TimedRobot {
 
         //Vert Adjust
         if (leftJoystick.getRawButton( 6)) {
-            robot.aimUp(.2);
+            robot.aimUp(.4);
         } else if (leftJoystick.getRawButton( 9)) {
-            robot.aimDown(.2);
+            robot.aimDown(.4);
         } else {
             robot.setAngleAdjusterPower(0);
         }
