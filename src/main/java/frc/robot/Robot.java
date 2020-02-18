@@ -158,9 +158,9 @@ public class Robot extends TimedRobot {
 
         //Vert Adjust
         if (leftJoystick.getRawButton( 6)) {
-            robot.aimUp(.5);
+            robot.aimUp(.4);
         } else if (leftJoystick.getRawButton( 9)) {
-            robot.aimDown(.5);
+            robot.aimDown(.4);
         } else {
             robot.setAngleAdjusterPower(0);
         }
