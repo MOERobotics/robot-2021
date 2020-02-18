@@ -37,7 +37,10 @@ public abstract class GenericRobot {
         SmartDashboard.putString  ("Shifter state"        , getShifterState().toString()             );
 
         SmartDashboard.putNumber  ("Collector Power"      , collectorPower                           );
-        SmartDashboard.putNumber  ("Escalator Power"      , escalatorPower                           );
+        SmartDashboard.putNumber  ("Escalator Power"      , escalatorPower);
+        SmartDashboard.putBoolean ("Elevator Sensor Low"  , getElevatorSensorLow()                   );
+        SmartDashboard.putBoolean ("Elevator Sensor Medium", getElevatorSensorMedium()                   );
+        SmartDashboard.putBoolean ("Elevator Sensor High" , getElevatorSensorHigh()                   );
         SmartDashboard.putNumber  ("Indexer Power"        , indexerPower                             );
         SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
         SmartDashboard.putNumber  ("Lower Shooter Power"  , shooterLowerPower                        );
@@ -423,6 +426,26 @@ public abstract class GenericRobot {
     ){
         System.out.println("I don't have a escalator ; (");
     }
+
+
+    protected boolean getElevatorSensorLowInternal(){
+        System.out.println("I don't have a low elevator sensor :'(");
+        return false;
+    }
+
+    protected boolean getElevatorSensorMediumInternal(){
+        System.out.println("I don't have a medium elevator sensor :'(");
+        return false;
+    }
+    protected boolean getElevatorSensorHighInternal(){
+        System.out.println("I don't have a high elevator sensor :'(");
+        return false;
+    }
+
+    public boolean getElevatorSensorLow(){ return getElevatorSensorLowInternal();}
+    public boolean getElevatorSensorMedium(){ return getElevatorSensorMediumInternal();}
+    public boolean getElevatorSensorHigh(){ return getElevatorSensorHighInternal();}
+
 
     //***********************************************************************//
 

@@ -2,75 +2,29 @@ package frc.robot.commands;
 
 import frc.robot.genericrobot.GenericRobot;
 
-public class CollectPowerCells extends GenericCommand{
-    double leftPower;
-    double rightPower;
-    private boolean aligning;
-    double currentDistance = 0;
-    double setPoint;
-    double setPointDeadzone;
-    double constant;
+public class CollectPowerCells{
+    double collectorPower = 0.0;
+    double escalatorPower = 0.0;
+    public CollectPowerCells(){
 
-    public CollectPowerCells(double setPoint, double setPointDeadzone, double constant){
-
-        this.setPoint = setPoint;
-        this.setPointDeadzone = setPointDeadzone;
-        this.constant = constant;
 
     }
-    @Override
+
     public void begin(GenericRobot robot) {
 
     }
 
-    @Override
-    public void step(GenericRobot robot) {
-        double minPower = .04;
+    public void run(GenericRobot robot) {
+        collectorPower = 1.0;
 
-        aligning = true;
-
-        if (robot.limelight.getLimelightX() < -setPointDeadzone + -setPoint) {
-            //Pivots to the left
-            currentDistance = Math.abs(robot.limelight.getLimelightX() + setPoint);
-            leftPower = -(constant * currentDistance);
-            rightPower = constant * currentDistance;
-            if (rightPower <= minPower) {
-                leftPower = -minPower;
-                rightPower = minPower;
-            }
-
-        } else if (robot.limelight.getLimelightX() > setPointDeadzone + setPoint) {
-            //Pivots to the right
-            currentDistance = Math.abs(robot.limelight.getLimelightX() - setPoint);
-            leftPower = constant * currentDistance;
-            rightPower = -(constant * currentDistance);
-            if (leftPower <= minPower) {
-                leftPower = minPower;
-                rightPower = -minPower;
-            }
-
+        if(robot.getElevatorSensorMedium()){ //escalator moves only when medium is tripped
+            escalatorPower = 0.5;
         } else {
-
-            leftPower = 0;
-            rightPower = 0;
-
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            aligning = false;
-                        }
-                    },
-                    600
-            );
-
+            escalatorPower = 0.0;
         }
 
-        if(!aligning){
-            setEnabled(false);
-        }
-
-        robot.setMotorPowerPercentage(leftPower, rightPower);
+        robot.collectorIn(collectorPower);
+        robot.escalatorUp(escalatorPower);
 
     }
 

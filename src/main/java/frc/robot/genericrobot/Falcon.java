@@ -10,7 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -51,6 +51,11 @@ public class Falcon extends GenericRobot{
     private CANDigitalInput angleAdjusterDigitalInputReverse;
     private AnalogInput input = new AnalogInput(0);
     private AnalogPotentiometer elevation = new AnalogPotentiometer(input, 180, 90);
+
+    DigitalInput ElevatorSensorLow    = new DigitalInput(1);
+    DigitalInput ElevatorSensorMedium = new DigitalInput(2);
+    DigitalInput ElevatorSensorHigh   = new DigitalInput(3);
+
 
     public Falcon() {
 
@@ -236,6 +241,9 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setCollectorPowerInternal(double collectorPower) {
+        //if light is unbroken, true
+        //ball in = false
+
         collector.set(-collectorPower);
     }
 
@@ -275,6 +283,21 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected double getElevationInternal(){return elevation.get();}
+
+    @Override
+    public boolean getElevatorSensorLowInternal(){
+        return ElevatorSensorLow.get();
+    }
+
+    @Override
+    public boolean getElevatorSensorMediumInternal(){
+        return ElevatorSensorMedium.get();
+    }
+
+    @Override
+    public boolean getElevatorSensorHighInternal(){
+        return ElevatorSensorHigh.get();
+    }
 
 
 }
