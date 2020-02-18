@@ -36,7 +36,7 @@ public class PlanA extends GenericAutonomous {
         double currentDistance = 0;
         double yawError;
         switch (autonomousStep) {
-            case -1:
+            case -1: //resets and waits
                 robot.resetAttitude();
                 robot.resetEncoders();
                 if (System.currentTimeMillis() >= startingTime + 100) {
@@ -45,13 +45,13 @@ public class PlanA extends GenericAutonomous {
                 break;
 
 
-            case 0:
+            case 0: //turns on LEDs
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 activeCommand.setEnabled(true);
                 autonomousStep = 1;
                 break;
 
-            case 1:
+            case 1: //auto aligns
                 if (activeCommand.isEnabled()) {
                     activeCommand.step(robot);
 
