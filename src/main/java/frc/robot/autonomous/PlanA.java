@@ -22,6 +22,10 @@ public class PlanA extends GenericAutonomous {
     double yawDifference = 0;
     long startingTime;
     double powerDecrement;
+    int ballCount = 0;
+    boolean shooting = false;
+    double escalatorPower;
+    double indexerPower;
     GenericCommand activeCommand = new LimelightAlign(0.0, 0.5, .0185);
 
 
@@ -37,6 +41,7 @@ public class PlanA extends GenericAutonomous {
         double yawError;
         switch (autonomousStep) {
             case -1:
+                shooting = false;
                 robot.resetAttitude();
                 robot.resetEncoders();
                 if (System.currentTimeMillis() >= startingTime + 100) {
@@ -61,7 +66,31 @@ public class PlanA extends GenericAutonomous {
                 }
                 break;
 
-            case 2: //PID reset for 1st (left) arc
+            case 2:
+                robot.setShooterRPM(2800,1800);
+                if(robot.readyToShoot()){
+                   escalatorPower = 0.5;
+                   indexerPower = 1.0;
+                } else {
+                    escalatorPower = 0.0;
+                    indexerPower = 0.0;
+                }
+                if(robot.getElevatorSensorHigh() == true){
+                    shooting = true;
+                }
+                if ((shooting) && (robot.getElevatorSensorHigh() == false)) {
+                    shooting = false;
+                    ballCount++;
+                }
+                if (ballCount == 3) {
+                    robot.setShooterPowerPercentage(0);
+                    autonomousStep = 3; //change case numbers
+                }
+                robot.escalatorUp(escalatorPower);
+                robot.indexerLoad(indexerPower);
+                break;
+
+            case 3: //PID reset for 1st (left) arc
                 PIDSteering.reset();
                 PIDSteering.disableContinuousInput();
                 startingYaw = robot.getYaw();
@@ -69,7 +98,7 @@ public class PlanA extends GenericAutonomous {
                 autonomousStep = 3;
                 break;
 
-            case 3: //1st (left) arc
+            case 4: //1st (left) arc
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                 correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                 SmartDashboard.putNumber("Pid heading", (robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
@@ -80,7 +109,7 @@ public class PlanA extends GenericAutonomous {
                 }
                 break;
 
-            case 4: //PID reset for 2nd (right) arc
+            case 5: //PID reset for 2nd (right) arc
                 PIDSteering.reset();
                 PIDSteering.disableContinuousInput();
                 startingDistance = robot.getDistanceInchesLeft();
@@ -88,7 +117,7 @@ public class PlanA extends GenericAutonomous {
                 autonomousStep = 5;
                 break;
 
-            case 5: //2nd (right) arc
+            case 6: //2nd (right) arc
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) * Math.PI / 180.0);
                 correction = PIDSteering.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
                 robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
@@ -98,7 +127,7 @@ public class PlanA extends GenericAutonomous {
                 }
                 break;
 
-            case 6: //PID reset for straightaway
+            case 7: //PID reset for straightaway
                 startingDistance = robot.getDistanceInchesLeft();
                 PIDSteering.reset();
                 PIDSteering.enableContinuousInput(-180, 180);
@@ -106,7 +135,7 @@ public class PlanA extends GenericAutonomous {
                 autonomousStep = 7;
                 break;
 
-            case 7: //straightaway, a little bit of oscillation, may need to turn P & D - PID coefficients
+            case 8: //straightaway, a little bit of oscillation, may need to turn P & D - PID coefficients
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
@@ -119,7 +148,7 @@ public class PlanA extends GenericAutonomous {
                 break;
 
 
-            case 8: //decrement power
+            case 9: //decrement power
                 currentDistance = robot.getDistanceInchesLeft();
                 double slowToStop = (defaultSpeed - (defaultSpeed / 15) * ((currentDistance - startingDistance) - 45)) + .05; //?
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
@@ -131,19 +160,19 @@ public class PlanA extends GenericAutonomous {
                 }
                 break;
 
-            case 9:
+            case 10:
                 robot.driveForward(0);
                 autonomousStep = 10;
                 break;
 
-            case 10:
+            case 11:
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(2);
                 activeCommand.setEnabled(true);
                 autonomousStep = 11;
                 break;
 
-            case 11: //cease your autonomous
+            case 12: //cease your autonomous
                 if (activeCommand.isEnabled()) {
                     activeCommand.step(robot);
 
