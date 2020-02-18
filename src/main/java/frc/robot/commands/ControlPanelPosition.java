@@ -21,33 +21,32 @@ public class ControlPanelPosition extends GenericCommand{
         {
             switch (gameData.charAt(0))
             {
+                // Red --> Blue, Yellow --> Green, Blue --> Red, Green --> Yellow
                 case 'B' :
                     //Blue case code
-                    endColor = WheelOfFortune.kBlueTarget;
+                    endColor = WheelOfFortune.kRedTarget;
                     break;
                 case 'G' :
                     //Green case code
-                    endColor = WheelOfFortune.kGreenTarget;
+                    endColor = WheelOfFortune.kYellowTarget;
                     break;
                 case 'R' :
                     //Red case code
-                    endColor = WheelOfFortune.kRedTarget;
+                    endColor = WheelOfFortune.kBlueTarget;
                     break;
                 case 'Y' :
                     //Yellow case code
-                    endColor = WheelOfFortune.kYellowTarget;
-                    break;
-                default :
-                    //This is corrupt data
+                    endColor = WheelOfFortune.kGreenTarget;
                     break;
             }
-        } else {
-            //Code for no data received yet
         }
     }
 
     @Override
     public void step(GenericRobot robot){
-
+        spinner.set(0.1);
+        if(controlPanel.getInferredColor() == endColor){
+            spinner.set(0.0);
+        }
     }
 }

@@ -36,7 +36,7 @@ public class ControlPanelRotation extends GenericCommand{
         }
 
         if(colorFreq[0] >= 6 && colorFreq[1] >= 6 && colorFreq[2] >= 6 && colorFreq[3] >= 6 && controlPanel.getInferredColor() == endColor){
-            spinner.set(0);
+            spinner.set(0.0);
         }
     }
 }
