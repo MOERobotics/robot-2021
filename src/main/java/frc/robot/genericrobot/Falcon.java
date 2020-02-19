@@ -77,12 +77,12 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
-        rightDriveA.set (rightPower * 0.75);
-        rightDriveB.set (rightPower * 0.75);
-        rightDriveC.set (rightPower * 0.75);
-         leftDriveA.set (leftPower  * 0.75);
-         leftDriveB.set (leftPower  * 0.75);
-         leftDriveC.set (leftPower  * 0.75);
+        rightDriveA.set (rightPower);
+        rightDriveB.set (rightPower);
+        rightDriveC.set (rightPower);
+         leftDriveA.set (leftPower);
+         leftDriveB.set (leftPower);
+         leftDriveC.set (leftPower);
     }
     @Override
     public double getShooterVelocityRPMUpper(){
