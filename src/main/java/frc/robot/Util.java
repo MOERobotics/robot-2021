@@ -6,12 +6,11 @@ import java.util.Date;
 //Robot independent functions that could be useful any year
 public interface Util {
     public static double deadzoneValue(double input, double deadZone) {
-        double driverRestriction = 0.75;
 
         if (input < -deadZone) {
-            return driverRestriction*(input + deadZone) / (1 - deadZone);
+            return (input + deadZone) / (1 - deadZone);
         } else if (input > deadZone) {
-            return driverRestriction*(input - deadZone) / (1 - deadZone);
+            return (input - deadZone) / (1 - deadZone);
         } else {
             return 0;
         }
