@@ -22,7 +22,11 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
-    GenericCommand    activeCommand = GenericCommand.doNothingCommand;
+
+    //Initial setPointDeadzone = 0.5
+    //Initial constant = 0.0185
+    GenericCommand    activeCommand = new LimelightAlign(0.0, 0.7, .0185);
+
     GenericRobot      robot        = new Falcon();
     Joystick          leftJoystick = new Joystick(0);
     XboxController    xboxJoystick = new XboxController(1);

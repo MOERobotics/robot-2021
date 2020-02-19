@@ -205,5 +205,8 @@ public class Falcon extends GenericRobot{
         angleAdj.set(aimPower);
     }
 
-
+    @Override
+    public double getLimelightMinpower() {
+        return .04;
+    }
 }

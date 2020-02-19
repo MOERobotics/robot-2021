@@ -438,6 +438,11 @@ public abstract class GenericRobot {
         }
     }
 
+    public double getLimelightMinpower(){
+        System.out.println("I don't have a limelight :'(");
+        return 0;
+    }
+
     //***********************************************************************//
 
     public Lidar getLidarSubsystem() {
