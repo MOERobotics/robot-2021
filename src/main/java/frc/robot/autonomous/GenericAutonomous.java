@@ -1,6 +1,7 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Logger;
 import frc.robot.genericrobot.GenericRobot;
 
 import static frc.robot.Util.normalizeAngleRadians;
@@ -26,10 +27,10 @@ public abstract class GenericAutonomous {
       }
       public void autonomousInit(GenericRobot robot) {
             autonomousStep = 0;
-            System.out.println("I don't have autonomousInit in my autonomous program :'(");
+            Logger.log("AUTOINIT", "I don't have autonomousInit in my autonomous program :'(");
       }
 
       public void autonomousPeriodic(GenericRobot robot) {
-            System.out.println("I don't have autonomousPeriodic in my autonomous program :'(");
+            Logger.log("AUTOPERIODIC","I don't have autonomousPeriodic in my autonomous program :'(");
       }
 }

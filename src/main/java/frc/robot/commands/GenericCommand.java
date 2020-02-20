@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Logger;
 import frc.robot.genericrobot.GenericRobot;
 
 public abstract class GenericCommand {
@@ -14,11 +15,11 @@ public abstract class GenericCommand {
 	protected void printSmartDashboardInternal() {}
 
 	public void begin(GenericRobot robot) {
-		System.out.println("I don't define begin() steps in my command :'(");
+		Logger.log("BEGIN","I don't define begin() steps in my command :'(");
 	}
 
 	public void step(GenericRobot robot) {
-		System.out.println("I don't define begin() steps in my command :'(");
+		Logger.log("STEP","I don't define begin() steps in my command :'(");
 	}
 
 	//LOCK***************************************************

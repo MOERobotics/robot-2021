@@ -67,6 +67,7 @@ public abstract class GenericRobot {
 
         printSmartDashboardInternal();
 
+
         Logger.logValue("LEFTPOWER", "Power is currently" + leftPower, leftPower);
         Logger.logValue("RIGHTPOWER", "Power is currently" + rightPower, rightPower);
         Logger.logValue("SPINPOWER", "Power is currently" + spinPower, spinPower);
@@ -230,11 +231,12 @@ public abstract class GenericRobot {
     }
 
     protected void shiftHighInternal() {
-        System.out.println("I don't have a shifter ;(");
+        Logger.log("NOSHIFTERHIGH", "I don't have a shifter");
     }
 
     protected void shiftLowInternal() {
-        System.out.println("I don't have a shifter ;(");
+        Logger.log("NOSHIFTERLOW", "I don't have a shifter");
+
     }
 
 
@@ -254,23 +256,23 @@ public abstract class GenericRobot {
     }
 
     public double getDistanceRatioLeft() {
-        System.out.println("I don't have an encoder :'(");
+        Logger.log("NORATIOLEFT", "I don't have a encoder");
         return 0;
     }
 
     public double getDistanceTicksLeft() {
-        System.out.println("I don't have an encoder :'(");
+        Logger.log("NOTICKSLEFT", "I don't have a encoder");
         return 0;
     }
 
     public double getDistanceRatioRight() {
 
-        System.out.println("I don't have an encoder :'(");
+        Logger.log("NORATIORIGHT", "I don't have a encoder");
         return 0;
     }
 
     public double getDistanceTicksRight() {
-        System.out.println("I don't have an encoder :'(");
+        Logger.log("NOTICKSRIGHT", "I don't have a encoder");
         return 0;
     }
 
@@ -280,30 +282,31 @@ public abstract class GenericRobot {
     }
 
     public void resetEncoderLeft() {
-        System.out.println("I don't have encoders");
+        Logger.log("ENCODERLEFT", "I don't have an encoder");
     }
 
     public void resetEncoderRight() {
-        System.out.println("I don't have encoders");
+
+        Logger.log("ENCODERRIGHT","I don't have encoders");
     }
 
     public double getYaw() {
-        System.out.println("I don't have a navx :'(");
+        Logger.log("GETYAW","I don't have a navx :'(");
         return 0;
     }
 
     public double getPitch() {
-        System.out.println("I don't have a navx :'(");
+        Logger.log("GETPITCH","I don't have a navx :'(");
         return 0;
     }
 
     public double getRoll() {
-        System.out.println("I don't have a navx :'(");
+        Logger.log("GETROLL","I don't have a navx :'(");
         return 0;
     }
 
     public void resetAttitude() {
-        System.out.println("I don't have a navx :'(");
+        Logger.log("ATTITUDERESET","I don't have a navx :'(");
     }
 
     //***********************************************************************//
@@ -326,7 +329,7 @@ public abstract class GenericRobot {
         double upperPower,
         double lowerPower
     ) {
-        System.out.println("I don't have a shooter :'(");
+        Logger.log("SETSHOOTERINT","I don't have a shooter :'(");
     }
 
     public final double getShooterPowerUpper() {
@@ -338,12 +341,12 @@ public abstract class GenericRobot {
     }
 
     public double getShooterVelocityRPMUpper(){
-        System.out.println("I don't have a shooter :'(");
+        Logger.log("SHOOTERUP","I don't have a shooter :'(");
         return 0.0;
     }
 
     public double getShooterVelocityRPMLower(){
-        System.out.println("I don't have a shooter :'(");
+        Logger.log("SHOOTERLOW","I don't have a shooter :'(");
         return 0.0;
     }
 
@@ -362,7 +365,7 @@ public abstract class GenericRobot {
     protected void spinControlPanelInternal(
         double power
     ) {
-        System.out.println("I can't spin the control panel :'(");
+        Logger.log("CTRLPANELINT","I can't spin the control panel :'(");
     }
 
     public final double getControlPanelSpinnerPower() {
@@ -370,7 +373,7 @@ public abstract class GenericRobot {
     }
 
     public char getCurrentControlPanelColor() {
-        System.out.println("I don't have a color sensor :'(");
+        Logger.log("CURRCTRLCOLOR","I don't have a color sensor :'(");
         return '?';
     }
 
@@ -392,7 +395,7 @@ public abstract class GenericRobot {
             double indexerPower
 
     ){
-        System.out.println("I don't have an Indexer ; (");
+        Logger.log("INDEXINT","I don't have an Indexer ; (");
     }
 
     //***********************************************************************//
@@ -413,7 +416,7 @@ public abstract class GenericRobot {
     protected void setCollectorPowerInternal(
             double collectorPower
     ){
-        System.out.println("I don't have a collector ; (");
+        Logger.log("COLLECTORINT","I don't have a collector ; (");
     }
 
     //***********************************************************************//
@@ -438,7 +441,7 @@ public abstract class GenericRobot {
     protected void climbVerticalInternal (
             double power
     ){
-        System.out.println("I don't have a climber ; (");
+        Logger.log("CLIMBVERTINT","I don't have a climber ; (");
     }
 
     //***********************************************************************//
@@ -460,7 +463,7 @@ public abstract class GenericRobot {
     protected void setEscalatorPowerInternal (
             double power
     ){
-        System.out.println("I don't have a escalator ; (");
+        Logger.log("ESCALATORINT","I don't have a escalator ; (");
     }
 
     //***********************************************************************//
@@ -481,7 +484,7 @@ public abstract class GenericRobot {
     protected void setBalancePowerInternal(
             double shiftPower
     ){
-        System.out.println("I don't have a generator shifter ; (");
+        Logger.log("BALANCEINT","I don't have a generator shifter ; (");
     }
 
     //***********************************************************************//
@@ -495,7 +498,7 @@ public abstract class GenericRobot {
     }
 
     protected double getElevationInternal(){
-        System.out.println("I don't have an elevation.");
+        Logger.log("ELEVATIONINT","I don't have an elevation.");
         return 0.0;
     }
 
@@ -508,7 +511,7 @@ public abstract class GenericRobot {
 
     }
     protected void setAngleAdjusterPowerInternal(double aimPower){
-        System.out.println("I don't have an angle adjuster ;(");
+        Logger.log("ANGLEADJINT","I don't have an angle adjuster ;(");
     }
 
     public double getShooterAngleMax(){return 0;}
@@ -547,7 +550,7 @@ public abstract class GenericRobot {
     //***********************************************************************//
 
     public Lidar getLidarSubsystem() {
-        System.out.println("I don't have a lidar bus :'(");
+       Logger.log("LIDARSUB","I don't have a lidar bus :'(");
         return null;
     }
 
@@ -558,21 +561,21 @@ public abstract class GenericRobot {
     }
 
     public Double getLidarDistanceInchesFront() {
-        System.out.println("I don't have a front lidar :'(");
+        Logger.log("NOLIDARFRONT", "I don't lave a lidar");
         return null;
     }
 
     public Double getLidarDistanceInchesRear() {
-        System.out.println("I don't have a rear lidar :'(");
+        Logger.log("NOLIDARREAR", "I don't lave a lidar");
         return null;
     }
     public Double getLidarDistanceInchesLeft() {
-        System.out.println("I don't have a left lidar :'(");
+        Logger.log("NOLIDARLEFT", "I don't lave a lidar");
         return null;
     }
 
     public Double getLidarDistanceInchesRight() {
-        System.out.println("I don't have a right lidar :'(");
+        Logger.log("NOLIDARRIGHT", "I don't lave a lidar");
         return null;
     }
 
