@@ -99,7 +99,6 @@ public class Robot extends TimedRobot {
         rightPower = deadzoneValue(rightPower,deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
-        robot.setShooterPowerPercentage(0);
 
         if (leftJoystick.getRawButtonPressed(16)) {
             robot.shiftLow();
