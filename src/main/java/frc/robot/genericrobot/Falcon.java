@@ -230,7 +230,8 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getLimelightMinpower() {
-        return .04;
+        return .07;
+
     }
 }
 
