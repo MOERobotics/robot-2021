@@ -59,10 +59,44 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Limelight Y"          , limelight.getLimelightY   ()             );
         SmartDashboard.putNumber  ("Limelight A"          , limelight.getLimelightArea()             );
 
+        SmartDashboard.putNumber  ("Elevation"            , getElevation());
+        SmartDashboard.putBoolean("Shooter Over Limit", (getElevation() > getShooterAngleMax()));
+        SmartDashboard.putBoolean("Shooter Under Limit", (getElevation() < getShooterAngleMin()));
+
+
         printSmartDashboardInternal();
     }
 
     protected void printSmartDashboardInternal() { }
+
+    public final void updateMotorPowers(){
+
+        if ((getElevationInternal() > getShooterAngleMax()) && (angleAdjusterPower > 0)){
+            angleAdjusterPower = 0;
+        }
+
+        if ((getElevationInternal() < getShooterAngleMin()) && (angleAdjusterPower < 0)){
+            angleAdjusterPower = 0;
+        }
+
+
+
+
+        setMotorPowerPercentageInternal(leftPower, rightPower);
+        setShooterPowerPercentageInternal(shooterUpperPower, shooterLowerPower);
+        spinControlPanelInternal(spinPower);
+        setIndexerPowerInternal(indexerPower);
+        setCollectorPowerInternal(collectorPower);
+        setAngleAdjusterPowerInternal(angleAdjusterPower);
+        setEscalatorPowerInternal(escalatorPower);
+        climbVerticalInternal(climbVerticalPower);
+        setBalancePowerInternal(climbBalancePower);
+    }
+
+
+
+
+
 
     //***********************************************************************//
 
@@ -72,10 +106,6 @@ public abstract class GenericRobot {
     ) {
         this.leftPower = leftPower;
         this.rightPower = rightPower;
-        setMotorPowerPercentageInternal(
-                leftPower,
-                rightPower
-        );
     }
 
     protected abstract void setMotorPowerPercentageInternal(
@@ -217,10 +247,6 @@ public abstract class GenericRobot {
     ) {
         this.shooterUpperPower = upperPower;
         this.shooterLowerPower = lowerPower;
-        setShooterPowerPercentageInternal(
-                upperPower,
-                lowerPower
-        );
     }
 
     public final void setShooterPowerPercentage(
@@ -261,7 +287,7 @@ public abstract class GenericRobot {
         double power
     ) {
         this.spinPower = power;
-        spinControlPanelInternal(power);
+
     }
 
 
@@ -293,7 +319,7 @@ public abstract class GenericRobot {
 
     public final void setIndexerPower(double power){
         indexerPower = power;
-        setIndexerPowerInternal(power);
+
     }
     protected void setIndexerPowerInternal(
             double indexerPower
@@ -314,7 +340,7 @@ public abstract class GenericRobot {
 
     public final void setCollectorPower(double power){
         collectorPower = power;
-        setCollectorPowerInternal(power);
+
     }
 
     protected void setCollectorPowerInternal(
@@ -339,7 +365,7 @@ public abstract class GenericRobot {
 
     public final void climbVertical(double power){
         climbVerticalPower = power;
-        climbVerticalInternal(power);
+
     }
 
     protected void climbVerticalInternal (
@@ -361,7 +387,7 @@ public abstract class GenericRobot {
 
     public final void setEscalatorPower(double power){
         escalatorPower = power;
-        setEscalatorPowerInternal(power);
+
     }
 
     protected void setEscalatorPowerInternal (
@@ -382,7 +408,7 @@ public abstract class GenericRobot {
 
     public final void setBalancePower(double power){
         climbBalancePower = power;
-        setBalancePowerInternal(power);
+
     }
 
     protected void setBalancePowerInternal(
@@ -401,13 +427,26 @@ public abstract class GenericRobot {
         setAngleAdjusterPower(-aimPower);
     }
 
+    protected double getElevationInternal(){
+        System.out.println("I don't have an elevation.");
+        return 0.0;
+    }
+
+    public double getElevation(){
+        return getElevationInternal();
+    }
+
      public final void setAngleAdjusterPower(double power){
         angleAdjusterPower = power;
-        setAngleAdjusterPowerInternal(power);
+
     }
     protected void setAngleAdjusterPowerInternal(double aimPower){
         System.out.println("I don't have an angle adjuster ;(");
     }
+
+    public double getShooterAngleMax(){return 0;}
+
+    public double getShooterAngleMin(){return 0;}
 
     //***********************************************************************//
 
