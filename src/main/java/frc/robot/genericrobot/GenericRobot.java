@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Logger;
 
 import static frc.robot.Util.coalesce;
 
@@ -65,6 +66,72 @@ public abstract class GenericRobot {
 
 
         printSmartDashboardInternal();
+
+        Logger.logValue("LEFTPOWER", "Power is currently" + leftPower, leftPower);
+        Logger.logValue("RIGHTPOWER", "Power is currently" + rightPower, rightPower);
+        Logger.logValue("SPINPOWER", "Power is currently" + spinPower, spinPower);
+        Logger.logValue("SHOOTERUPPER", "Shooter power is currently" + shooterUpperPower, shooterUpperPower );
+        Logger.logValue("SHOOTERLOWER", "Shooter power is currently" + shooterLowerPower, shooterLowerPower);
+        Logger.logValue("ANGLEADJ", "Angle adjuster power is currently" + angleAdjusterPower, angleAdjusterPower);
+        Logger.logValue("CLIMBBALANCE", "Climb balance power is currently" + climbBalancePower, climbBalancePower);
+        Logger.logValue("CLIMBVERTICAL", "Climb vertical power is currently" + climbVerticalPower, climbVerticalPower);
+        Logger.logValue("ESCALATOR", "Escalator power is currently" + escalatorPower, escalatorPower);
+        Logger.logValue("COLLECTOR", "Collector power is currently" + collectorPower, collectorPower);
+        Logger.logValue("INDEXER", "Indexer power is currently" + indexerPower, indexerPower);
+
+        Logger.logTTL("LEFTENCODER", "Left encoder ticks are" + getDistanceTicksLeft(), 1000);
+        Logger.logTTL("RIGHTENCODER", "Right encoder ticks are" + getDistanceTicksRight(), 1000);
+        Logger.logTTL("NAVXYAW", "Navx's yaw reading is" + getYaw(), 1000);
+        Logger.logTTL("NAVXPITCH", "Navx's pitch reading is" + getPitch(), 1000);
+        Logger.logTTL("NAVXROLL", "Navx's roll reading is" + getRoll(), 1000);
+        Logger.logTTL("LEFTENCODEIN", "Left encoder inches are" + getDistanceInchesLeft(), 1000);
+        Logger.logTTL("RIGHTENCODEIN", "Right encoder inches are" + getDistanceInchesRight(), 1000);
+        Logger.logTTL("SHIFTERSTATE", "The shifter state is " + getShifterState(), 1000);
+        Logger.logTTL("UPPERVELOCITY", "The upper shooter velocity is" + getShooterVelocityRPMUpper(), 1000);
+        Logger.logTTL("LOWERVELOCITY", "The lower shooter velocity is" + getShooterVelocityRPMLower(), 1000);
+        Logger.logTTL("LIDARLOCKED", "Is the lidar locked?" + isLidarBusLocked(), 1000);
+        Logger.logTTL("LIDARFRONTDIS", "The lidar front distance (inches) is" + getLidarDistanceInchesFront(), 1000);
+        Logger.logTTL("LIDARREARTDIS", "The lidar rear distance (inches) is" + getLidarDistanceInchesRear(), 1000);
+        Logger.logTTL("LIDARLEFTDIS", "The lidar left distance (inches) is" + getLidarDistanceInchesLeft(), 1000);
+        Logger.logTTL("LIDARRIGHTDIS", "The lidar right distance (inches) is" + getLidarDistanceInchesRight(), 1000);
+        Logger.logTTL("LIMELIGHTX", "The limelight X axis is" + limelight.getLimelightX(), 1000);
+        Logger.logTTL("LIMELIGHTY", "The limelight Y axis is" + limelight.getLimelightY(), 1000);
+        Logger.logTTL("LIMELIGHTA", "The limelight area is" + limelight.getLimelightArea(), 1000);
+        Logger.logTTL("ELEVATION", "The elevation is" + getElevation(), 1000);
+        Logger.logTTL("SHOOTEROVER", "The shooter over limit is" + (getElevation() > getShooterAngleMax()), 1000);
+        Logger.logTTL("SHOOTERUNDER", "The shooter under limit is" + (getElevation() < getShooterAngleMin()), 1000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     protected void printSmartDashboardInternal() { }

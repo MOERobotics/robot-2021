@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
     double            deadZone     = 0.10;
 
     @Override public void robotInit() {
-        System.out.println("Klaatu barada nikto");
+        Logger.log( "STARTUP","Klaatu barada nikto");
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         if (leftJoystick.getTriggerPressed()) {
-            System.out.println("AAAAAAAA");
+            Logger.logTTL("DISABLEDPERIODIC","AAAAAAAA", 1000);
             robot.resetAttitude();
             robot.resetEncoders();
         }
@@ -74,6 +74,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         if (leftJoystick.getRawButtonPressed(11)) {
+            Logger.log("COMMAND", "Disabled");
             activeCommand.setEnabled(false);
         }
 
@@ -107,6 +108,7 @@ public class Robot extends TimedRobot {
         }
 
         if(leftJoystick.getRawButtonPressed(2)){
+            Logger.log("COMMAND", "Enabling Limelight Align");
             activeCommand.setEnabled(true);
         }
 
