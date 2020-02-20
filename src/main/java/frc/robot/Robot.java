@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import com.revrobotics.CANDigitalInput;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -53,6 +56,14 @@ public class Robot extends TimedRobot {
             robot.resetEncoders();
         }
 
+        robot.setShooterPowerPercentage(0);
+        robot.setCollectorPower(0);
+        robot.setEscalatorPower(0);
+        robot.setIndexerPower(0);
+        robot.setAngleAdjusterPower(0);
+        robot.spinControlPanel(0);
+        robot.climbVertical(0);
+        robot.setBalancePower(0);
 
     }
 
@@ -153,6 +164,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testPeriodic() {
+        LiveWindow.setEnabled(false);
 
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
@@ -163,7 +175,7 @@ public class Robot extends TimedRobot {
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
         //Collector
-        if (leftJoystick.getRawButton(11)) {
+        if (leftJoystick.getRawButton(11) && robot.readyToShoot()) {
             robot.collectorIn(1.0);
         } else if (leftJoystick.getRawButton(16)) {
             robot.collectorOut(1.0);
@@ -172,7 +184,7 @@ public class Robot extends TimedRobot {
         }
 
         //Escalator
-        if (leftJoystick.getRawButton(12)) {
+        if (leftJoystick.getRawButton(12) && robot.readyToShoot()) {
             robot.escalatorUp(.5);
         } else if (leftJoystick.getRawButton(15)) {
             robot.escalatorDown(.5);
@@ -182,13 +194,13 @@ public class Robot extends TimedRobot {
 
         //Shooter
         if (leftJoystick.getRawButton(13)) {
-            robot.setShooterPowerPercentage(1.0);
+            robot.setShooterRPM(3500,2500);
         } else if (leftJoystick.getRawButton(14)) {
             robot.setShooterPowerPercentage(0);
         }
 
         //Indexer
-        if (leftJoystick.getRawButton(7)) {
+        if (leftJoystick.getRawButton( 7) && robot.readyToShoot()) {
             robot.indexerLoad(1.0);
         } else if (leftJoystick.getRawButton(8)) {
             robot.indexerUnload(1.0);
