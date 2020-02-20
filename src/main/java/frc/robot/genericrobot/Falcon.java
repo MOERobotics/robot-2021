@@ -8,7 +8,10 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Logger;
 
 public class Falcon extends GenericRobot{
 
@@ -46,6 +49,9 @@ public class Falcon extends GenericRobot{
     private AnalogInput input = new AnalogInput(0);
     private AnalogPotentiometer elevation = new AnalogPotentiometer(input, 180, 90);
 
+    PowerDistributionPanel powerPanel = new PowerDistributionPanel();
+
+
     public Falcon() {
 
         rightDriveA.setIdleMode(IdleMode.kBrake);
@@ -72,7 +78,13 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void printSmartDashboardInternal() {
-        super.printSmartDashboardInternal();
+
+        Logger.logTTL("CLIMBERA", "Climber A Amperage: " + powerPanel.getCurrent(12) , 100 );
+        SmartDashboard.putNumber("Climber A Amperage", powerPanel.getCurrent(12));
+        Logger.logTTL("CLIMBERB", "Climber B Amperage: " + powerPanel.getCurrent(3), 100);
+        SmartDashboard.putNumber("Climber B Amperage", powerPanel.getCurrent(3));
+
+
     }
 
     @Override
