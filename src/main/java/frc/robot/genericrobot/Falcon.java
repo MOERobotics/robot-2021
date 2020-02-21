@@ -4,7 +4,9 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.*;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.SPI;
 
 public class Falcon extends GenericRobot{
 
@@ -67,10 +69,6 @@ public class Falcon extends GenericRobot{
 
         escalator.setIdleMode(IdleMode.kBrake);
 
-        // REMOVE BEFORE FLIGHT... Just for testing.
-        shooterA.setIdleMode(IdleMode.kBrake);
-        shooterB.setIdleMode(IdleMode.kBrake);
-
         shooterAPIDController.setP(7.5e-5);
         shooterAPIDController.setI(1.0e-6);
         shooterAPIDController.setD(1.0e-2);
@@ -100,12 +98,12 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
-        rightDriveA.set (rightPower * 0.5);
-        rightDriveB.set (rightPower * 0.5);
-        rightDriveC.set (rightPower * 0.5);
-         leftDriveA.set (leftPower  * 0.5);
-         leftDriveB.set (leftPower  * 0.5);
-         leftDriveC.set (leftPower  * 0.5);
+        rightDriveA.set (rightPower);
+        rightDriveB.set (rightPower);
+        rightDriveC.set (rightPower);
+         leftDriveA.set (leftPower);
+         leftDriveB.set (leftPower);
+         leftDriveC.set (leftPower);
     }
     @Override
     public double getShooterVelocityRPMUpper(){
@@ -220,9 +218,6 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setCollectorPowerInternal(double collectorPower) {
-        //if light is unbroken, true
-        //ball in = false
-
         collector.set(-collectorPower);
     }
 
@@ -247,21 +242,18 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setAngleAdjusterPowerInternal(double aimPower) {
-        double highLimit = 155.0;
-        double lowLimit = 113.0;
-        if ((getElevationInternal() > highLimit) && (aimPower > 0)){
-            aimPower = 0;
-        }
-
-        if ((getElevationInternal() < lowLimit) && (aimPower < 0)){
-            aimPower = 0;
-        }
 
         angleAdj.set(-aimPower);
-    }
+}
 
     @Override
     protected double getElevationInternal(){return elevation.get();}
+
+    @Override
+    public double getShooterAngleMax(){return 153.0;} //orig 155
+
+    @Override
+    public double getShooterAngleMin(){return 114.0;} //orig 113
 
     @Override
     public boolean getElevatorSensorLowInternal(){
@@ -280,3 +272,4 @@ public class Falcon extends GenericRobot{
 
 
 }
+

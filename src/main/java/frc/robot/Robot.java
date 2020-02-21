@@ -7,35 +7,36 @@
 
 package frc.robot;
 
-import com.revrobotics.CANDigitalInput;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import static frc.robot.Util.*;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID;
 
 public class Robot extends TimedRobot {
 
-    //WheelOfFortune    colorWheel    = new WheelOfFortune();
-    GenericAutonomous autoProgram   = new PlanA(); //Auto routine to be used?
+    //WheelOfFortune    colorWheel   = new WheelOfFortune();
+    GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
     GenericCommand    activeCommand = GenericCommand.doNothingCommand;
-    GenericRobot      robot         = new Falcon();
-    Joystick          leftJoystick  = new Joystick(0);
-    double            deadZone      = 0.1;
-    double collectorPower = 0;
-    double escalatorPower = 0;
-    
+    GenericRobot      robot        = new Falcon();
+    Joystick          leftJoystick = new Joystick(0);
+    XboxController    xboxJoystick = new XboxController(1);
+
+    double            deadZone     = 0.10;
 
     @Override public void robotInit() {
+        System.out.println("Klaatu barada nikto");
     }
 
     @Override
     public void robotPeriodic() {
+        robot.updateMotorPowers();
         robot        .printSmartDashboard();
         autoProgram  .printSmartDashboard();
         activeCommand.printSmartDashboard();
@@ -76,7 +77,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-
+        LiveWindow.setEnabled(false);
     }
 
     @Override
@@ -92,8 +93,10 @@ public class Robot extends TimedRobot {
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
-         leftPower = deadzoneValue( leftPower,deadZone);
-        rightPower = deadzoneValue(rightPower,deadZone);
+        double driverRestriction = 0.75;
+
+         leftPower = driverRestriction*deadzoneValue( leftPower,deadZone);
+        rightPower = driverRestriction*deadzoneValue(rightPower,deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
         robot.setShooterPowerPercentage(0);
@@ -168,9 +171,9 @@ public class Robot extends TimedRobot {
         }
 
         //Indexer
-        if (leftJoystick.getRawButton( 7)) {
+        if (leftJoystick.getRawButton(7)) {
             robot.indexerLoad(1.0);
-        } else if (leftJoystick.getRawButton( 8)) {
+        } else if (leftJoystick.getRawButton(8)) {
             robot.indexerUnload(1.0);
         } else {
             robot.setIndexerPower(0);
@@ -178,9 +181,9 @@ public class Robot extends TimedRobot {
 
         //Vert Adjust
         if (leftJoystick.getRawButton( 6)) {
-            robot.aimUp(.2);
+            robot.aimUp(.4);
         } else if (leftJoystick.getRawButton( 9)) {
-            robot.aimDown(.2);
+            robot.aimDown(.4);
         } else {
             robot.setAngleAdjusterPower(0);
         }
@@ -211,7 +214,6 @@ public class Robot extends TimedRobot {
         } else {
             robot.setBalancePower(0);
         }
-
     }
 
 }
