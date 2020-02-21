@@ -143,4 +143,9 @@ public class KeerthanPracticeOne extends GenericRobot {
     public Double getLidarDistanceInchesRight() {
         return lidar.getDistanceInches(1);
     }
+
+    @Override
+    public double getLimelightMinpower() {
+        return .04;
+    }
 }

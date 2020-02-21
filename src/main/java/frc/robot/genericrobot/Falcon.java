@@ -241,8 +241,6 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setCollectorPowerInternal(double collectorPower) {
-        //if light is unbroken, true
-        //ball in = false
 
         collector.set(-collectorPower);
     }
@@ -282,6 +280,9 @@ public class Falcon extends GenericRobot{
     public double getShooterAngleMin(){return 114.0;} //orig 113
 
     @Override
+    public double getLimelightMinpower() {
+        return .07;
+    @Override
     public boolean getElevatorSensorLowInternal(){
         return ElevatorSensorLow.get();
     }
@@ -297,5 +298,6 @@ public class Falcon extends GenericRobot{
     }
 
 
+    }
 }
 

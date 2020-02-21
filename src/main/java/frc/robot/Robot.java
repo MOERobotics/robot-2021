@@ -80,6 +80,7 @@ public class Robot extends TimedRobot {
             autoProgram = new PlanE();
         }
 
+        robot.limelight.table.getEntry("ledMode").setNumber(0);
     }
 
     @Override
@@ -107,6 +108,7 @@ public class Robot extends TimedRobot {
             activeCommand.step(robot);
             if (activeCommand.locksControls()) return;
         }
+
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
