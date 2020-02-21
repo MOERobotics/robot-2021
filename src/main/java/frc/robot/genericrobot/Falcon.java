@@ -216,7 +216,10 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    protected double getClimberVerticalPortCurrent() {return powerPanel.getTotalCurrent()}
+    protected double getClimberVerticalStarboardCurrent() {return powerPanel.getTotalCurrent(12);}
+
+    @Override
+    protected double getClimberVerticalPortCurrent() {return powerPanel.getTotalCurrent(3);}
 
     @Override
     protected void setEscalatorPowerInternal(double escalatorPower) {
