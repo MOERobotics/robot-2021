@@ -80,27 +80,27 @@ public abstract class GenericRobot {
         Logger.logValue("COLLECTOR", "Collector power is currently" + collectorPower, collectorPower);
         Logger.logValue("INDEXER", "Indexer power is currently" + indexerPower, indexerPower);
 
-        Logger.logTTL("LEFTENCODER", "Left encoder ticks are" + getDistanceTicksLeft(), 1000);
-        Logger.logTTL("RIGHTENCODER", "Right encoder ticks are" + getDistanceTicksRight(), 1000);
-        Logger.logTTL("NAVXYAW", "Navx's yaw reading is" + getYaw(), 1000);
-        Logger.logTTL("NAVXPITCH", "Navx's pitch reading is" + getPitch(), 1000);
-        Logger.logTTL("NAVXROLL", "Navx's roll reading is" + getRoll(), 1000);
-        Logger.logTTL("LEFTENCODEIN", "Left encoder inches are" + getDistanceInchesLeft(), 1000);
-        Logger.logTTL("RIGHTENCODEIN", "Right encoder inches are" + getDistanceInchesRight(), 1000);
-        Logger.logTTL("SHIFTERSTATE", "The shifter state is " + getShifterState(), 1000);
-        Logger.logTTL("UPPERVELOCITY", "The upper shooter velocity is" + getShooterVelocityRPMUpper(), 1000);
-        Logger.logTTL("LOWERVELOCITY", "The lower shooter velocity is" + getShooterVelocityRPMLower(), 1000);
-        Logger.logTTL("LIDARLOCKED", "Is the lidar locked?" + isLidarBusLocked(), 1000);
-        Logger.logTTL("LIDARFRONTDIS", "The lidar front distance (inches) is" + getLidarDistanceInchesFront(), 1000);
-        Logger.logTTL("LIDARREARTDIS", "The lidar rear distance (inches) is" + getLidarDistanceInchesRear(), 1000);
-        Logger.logTTL("LIDARLEFTDIS", "The lidar left distance (inches) is" + getLidarDistanceInchesLeft(), 1000);
-        Logger.logTTL("LIDARRIGHTDIS", "The lidar right distance (inches) is" + getLidarDistanceInchesRight(), 1000);
-        Logger.logTTL("LIMELIGHTX", "The limelight X axis is" + limelight.getLimelightX(), 1000);
-        Logger.logTTL("LIMELIGHTY", "The limelight Y axis is" + limelight.getLimelightY(), 1000);
-        Logger.logTTL("LIMELIGHTA", "The limelight area is" + limelight.getLimelightArea(), 1000);
-        Logger.logTTL("ELEVATION", "The elevation is" + getElevation(), 1000);
-        Logger.logTTL("SHOOTEROVER", "The shooter over limit is" + (getElevation() > getShooterAngleMax()), 1000);
-        Logger.logTTL("SHOOTERUNDER", "The shooter under limit is" + (getElevation() < getShooterAngleMin()), 1000);
+        //Logger.logTTL("LEFTENCODER", "Left encoder ticks are" + getDistanceTicksLeft(), 1000);
+        //Logger.logTTL("RIGHTENCODER", "Right encoder ticks are" + getDistanceTicksRight(), 1000);
+        //Logger.logTTL("NAVXYAW", "Navx's yaw reading is" + getYaw(), 1000);
+        //Logger.logTTL("NAVXPITCH", "Navx's pitch reading is" + getPitch(), 1000);
+        //Logger.logTTL("NAVXROLL", "Navx's roll reading is" + getRoll(), 1000);
+        //Logger.logTTL("LEFTENCODEIN", "Left encoder inches are" + getDistanceInchesLeft(), 1000);
+        //Logger.logTTL("RIGHTENCODEIN", "Right encoder inches are" + getDistanceInchesRight(), 1000);
+        //Logger.logTTL("SHIFTERSTATE", "The shifter state is " + getShifterState(), 1000);
+        //Logger.logTTL("UPPERVELOCITY", "The upper shooter velocity is" + getShooterVelocityRPMUpper(), 1000);
+        //Logger.logTTL("LOWERVELOCITY", "The lower shooter velocity is" + getShooterVelocityRPMLower(), 1000);
+        //Logger.logTTL("LIDARLOCKED", "Is the lidar locked?" + isLidarBusLocked(), 1000);
+        //Logger.logTTL("LIDARFRONTDIS", "The lidar front distance (inches) is" + getLidarDistanceInchesFront(), 1000);
+        //Logger.logTTL("LIDARREARTDIS", "The lidar rear distance (inches) is" + getLidarDistanceInchesRear(), 1000);
+        //Logger.logTTL("LIDARLEFTDIS", "The lidar left distance (inches) is" + getLidarDistanceInchesLeft(), 1000);
+        //Logger.logTTL("LIDARRIGHTDIS", "The lidar right distance (inches) is" + getLidarDistanceInchesRight(), 1000);
+        //Logger.logTTL("LIMELIGHTX", "The limelight X axis is" + limelight.getLimelightX(), 1000);
+        //Logger.logTTL("LIMELIGHTY", "The limelight Y axis is" + limelight.getLimelightY(), 1000);
+        //Logger.logTTL("LIMELIGHTA", "The limelight area is" + limelight.getLimelightArea(), 1000);
+        //Logger.logTTL("ELEVATION", "The elevation is" + getElevation(), 1000);
+        //Logger.logTTL("SHOOTEROVER", "The shooter over limit is" + (getElevation() > getShooterAngleMax()), 1000);
+        //Logger.logTTL("SHOOTERUNDER", "The shooter under limit is" + (getElevation() < getShooterAngleMin()), 1000);
 
 
 

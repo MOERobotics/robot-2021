@@ -79,9 +79,9 @@ public class Falcon extends GenericRobot{
     @Override
     protected void printSmartDashboardInternal() {
 
-        Logger.logTTL("CLIMBERA", "Climber A Amperage: " + powerPanel.getCurrent(12) , 100 );
+        Logger.logValueTTL("CLIMBERA", "Climber A Amperage: " + powerPanel.getCurrent(12) , powerPanel.getCurrent(12),100 );
         SmartDashboard.putNumber("Climber A Amperage", powerPanel.getCurrent(12));
-        Logger.logTTL("CLIMBERB", "Climber B Amperage: " + powerPanel.getCurrent(3), 100);
+        Logger.logValueTTL("CLIMBERB", "Climber B Amperage: " + powerPanel.getCurrent(3), powerPanel.getCurrent(3),100);
         SmartDashboard.putNumber("Climber B Amperage", powerPanel.getCurrent(3));
 
 

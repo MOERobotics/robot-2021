@@ -134,6 +134,21 @@ public class Logger {
 
 			var oldMessage = loggedMessages.get(key);
 
+			System.err.printf("old key:'%s' value:'%s' \n", oldMessage.key, oldMessage.hashString());
+			System.err.printf("new key:'%s' value:'%s' \n", newMessage.key, newMessage.hashString());
+			System.err.printf("KEY: '%s' VALUE: '%s' DATE: '%s'\n",
+					Boolean.toString(!Objects.equals(oldMessage.key, newMessage.key)),
+					Boolean.toString(
+							oldMessage.hash != null &&
+									newMessage.hash != null &&
+									oldMessage.hash.intValue() == newMessage.hash.intValue()
+					),
+					Boolean.toString(
+							newMessage.expiryTime != null &&
+									oldMessage.expiryTime != null &&
+									oldMessage.expiryTime.isBefore(LocalDateTime.now())
+					)
+			);
 			if (
 					ignoreChecks == true ||
 							checkMessageExpired(oldMessage,newMessage) == true
@@ -163,10 +178,11 @@ public class Logger {
 		if (
 				oldMsg.hash != null &&
 						newMsg.hash != null &&
-						Objects.equals(oldMsg.hash, newMsg.hash)
+						oldMsg.hash.intValue() == newMsg.hash.intValue()
 		) return true;
 		//Datetime expired case
 		if (
+				newMsg.expiryTime != null &&
 				oldMsg.expiryTime != null &&
 						oldMsg.expiryTime.isBefore(LocalDateTime.now())
 		) return true;
