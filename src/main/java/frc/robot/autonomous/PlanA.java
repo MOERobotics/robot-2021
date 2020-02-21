@@ -154,7 +154,7 @@ public class PlanA extends GenericAutonomous {
 
             case 9: //decrement power
                 currentDistance = robot.getDistanceInchesLeft();
-                double slowToStop = (defaultSpeed - (defaultSpeed / 15) * ((currentDistance - startingDistance) - 45)) + .05; //?
+                double slowToStop = (defaultSpeed - (defaultSpeed / 25) * ((currentDistance - startingDistance) - 35)) + .05; //?
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage(1.5 * slowToStop * (1 + correction), 1.5 * slowToStop * (1 - correction)); // div by 2 to debug
 

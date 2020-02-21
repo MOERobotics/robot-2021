@@ -67,6 +67,19 @@ public class Robot extends TimedRobot {
         robot.climbVertical(0);
         robot.setBalancePower(0);
 
+        if (leftJoystick.getRawButtonPressed(5)) {
+            autoProgram = new PlanA();
+        }
+        if (leftJoystick.getRawButtonPressed(6)) {
+            autoProgram = new PlanC();
+        }
+        if (leftJoystick.getRawButtonPressed(7)) {
+            autoProgram = new PlanD();
+        }
+        if (leftJoystick.getRawButtonPressed(8)) {
+            autoProgram = new PlanE();
+        }
+
     }
 
     @Override
