@@ -26,8 +26,6 @@ public class KeerthanPracticeOne extends GenericRobot {
     Lidar lidar = new Lidar();
 
     //Limelight
-
-
     public KeerthanPracticeOne() {
         driveRightB.follow(driveRightA);
         driveLeftB .follow(driveLeftA);

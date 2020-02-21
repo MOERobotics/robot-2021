@@ -11,10 +11,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
 import static frc.robot.Util.*;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID;
 
 public class Robot extends TimedRobot {
 
@@ -29,10 +32,13 @@ public class Robot extends TimedRobot {
     //Constant for CaMOElot: .045
     //Constant for Falcon: ???
 
-    @Override public void robotInit() {}
+    @Override public void robotInit() {
+        System.out.println("Klaatu barada nikto");
+    }
 
     @Override
     public void robotPeriodic() {
+        robot.updateMotorPowers();
         robot        .printSmartDashboard();
         autoProgram  .printSmartDashboard();
         activeCommand.printSmartDashboard();
@@ -64,9 +70,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-
+        LiveWindow.setEnabled(false);
     }
-
 
     @Override
     public void teleopPeriodic() {
@@ -81,8 +86,10 @@ public class Robot extends TimedRobot {
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
-         leftPower = deadzoneValue( leftPower,deadZone);
-        rightPower = deadzoneValue(rightPower,deadZone);
+        double driverRestriction = 0.75;
+
+         leftPower = driverRestriction*deadzoneValue( leftPower,deadZone);
+        rightPower = driverRestriction*deadzoneValue(rightPower,deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
         robot.setShooterPowerPercentage(0);
@@ -105,16 +112,127 @@ public class Robot extends TimedRobot {
             activeCommand.setEnabled(true);
         }
 
+        //Collector
+        if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
+            robot.collectorIn(1.0);
+        } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
+            robot.collectorOut(1.0);
+        } else {
+            robot.setCollectorPower(0);
+        }
+
+        //Escalator
+        if (xboxJoystick.getXButton()) {
+            robot.escalatorUp(.5);
+        } else if (xboxJoystick.getAButton()) {
+            robot.escalatorDown(.5);
+        } else {
+            robot.setEscalatorPower(0);
+        }
+
+        //Shooter
+        if (xboxJoystick.getYButtonPressed()) {
+            robot.setShooterPowerPercentage(1.0);
+        } else if (xboxJoystick.getBButtonPressed()) {
+            robot.setShooterPowerPercentage(0);
+        }
+
+        //Indexer
+        if (xboxJoystick.getBumper(GenericHID.Hand.kRight)) {
+            robot.indexerLoad(1.0);
+        } else if (xboxJoystick.getBumper(GenericHID.Hand.kLeft)) {
+            robot.indexerUnload(1.0);
+        } else {
+            robot.setIndexerPower(0);
+        }
     }
 
     @Override
-    public void testInit() {
-
+    public void testInit()  {
+        LiveWindow.setEnabled(false);
     }
+
 
     @Override
     public void testPeriodic() {
 
+        double leftPower = -leftJoystick.getY() + leftJoystick.getX();
+        double rightPower = -leftJoystick.getY() - leftJoystick.getX();
+
+        leftPower = deadzoneValue( leftPower,deadZone);
+        rightPower = deadzoneValue(rightPower,deadZone);
+
+        robot.setMotorPowerPercentage(leftPower, rightPower);
+
+        //Collector
+        if (leftJoystick.getRawButton(11)) {
+            robot.collectorIn(1.0);
+        } else if (leftJoystick.getRawButton(16)) {
+            robot.collectorOut(1.0);
+        } else {
+            robot.setCollectorPower(0);
+        }
+
+        //Escalator
+        if (leftJoystick.getRawButton(12)) {
+            robot.escalatorUp(.5);
+        } else if (leftJoystick.getRawButton(15)) {
+            robot.escalatorDown(.5);
+        } else {
+            robot.setEscalatorPower(0);
+        }
+
+        //Shooter
+        if (leftJoystick.getRawButton(13)) {
+            robot.setShooterPowerPercentage(1.0);
+        } else if (leftJoystick.getRawButton(14)) {
+            robot.setShooterPowerPercentage(0);
+        }
+
+        //Indexer
+        if (leftJoystick.getRawButton(7)) {
+            robot.indexerLoad(1.0);
+        } else if (leftJoystick.getRawButton(8)) {
+            robot.indexerUnload(1.0);
+        } else {
+            robot.setIndexerPower(0);
+        }
+
+        //Vert Adjust
+        if (leftJoystick.getRawButton( 6)) {
+            robot.aimUp(.4);
+        } else if (leftJoystick.getRawButton( 9)) {
+            robot.aimDown(.4);
+        } else {
+            robot.setAngleAdjusterPower(0);
+        }
+
+        //CP
+        if (leftJoystick.getRawButton( 5)) {
+            robot.spinControlPanel(-.2);
+        } else if (leftJoystick.getRawButton(10)) {
+            robot.spinControlPanel(.2);
+        } else {
+            robot.spinControlPanel(0);
+        }
+
+        //Climb vert
+        if (leftJoystick.getRawButton( 2)) {
+            robot.climbDown(.2);
+        } else if (leftJoystick.getRawButton( 1)) {
+            robot.climbUp(.2);
+        } else {
+            robot.climbVertical(0);
+        }
+
+        //climb horiz
+        if (leftJoystick.getRawButton( 3)) {
+            robot.climberBalanceLeft(-.2);
+        } else if (leftJoystick.getRawButton( 4)) {
+            robot.climberBalanceRight(.2);
+        } else {
+            robot.setBalancePower(0);
+        }
     }
 
 }

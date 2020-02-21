@@ -41,12 +41,9 @@ class Lidar extends Thread {
     }
     public Double getDistanceInches(int lidarID) {
         Integer lidarReading = getDistance(lidarID);
-
-        if (lidarReading == null) {return null;}
-        else {
-                double lidarInches = 5.0 + (15.0 / 396.0) * (lidarReading - 165.0);
-                return lidarInches;
-             }
+        if (lidarReading == null) return  null;
+        double lidarInches = 5+(15/396.0)*(lidarReading-165);
+        return lidarInches;
     }
 
     private void writeDistance(int lidarID, int distance) {
@@ -117,11 +114,11 @@ class Lidar extends Thread {
                 int id       = Integer.parseInt(lidarBlob.group(      "id"));
                 int distance = Integer.parseInt(lidarBlob.group("distance"));
 
-                /*System.out.printf(
+                System.out.printf(
                     "Found lidar %d with distance %d\n",
                     id,
                     distance
-                );*/
+                );
 
                 this.writeDistance(id, distance);
 

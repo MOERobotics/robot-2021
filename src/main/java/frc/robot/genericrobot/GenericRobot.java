@@ -4,18 +4,23 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.autonomous.GenericAutonomous;
 
 import static frc.robot.Util.coalesce;
 
 public abstract class GenericRobot {
 
-    private double       leftPower         = 0;
-    private double       rightPower        = 0;
-    private double       spinPower         = 0;
-    private double       shooterUpperPower = 0;
-    private double       shooterLowerPower = 0;
-    private ShifterState gear              = ShifterState.UNKNOWN;
+    private double leftPower              = 0;
+    private double rightPower             = 0;
+    private double spinPower              = 0;
+    private double shooterUpperPower      = 0;
+    private double shooterLowerPower      = 0;
+    private double angleAdjusterPower     = 0;
+    private double climbBalancePower = 0;
+    private double escalatorPower = 0;
+    private double climbVerticalPower     = 0;
+    private double collectorPower         = 0;
+    private double indexerPower           = 0;
+    private ShifterState gear             = ShifterState.UNKNOWN;
 
     public final void printSmartDashboard() {
         SmartDashboard.putNumber  ("Left  Encoder Ticks"  , getDistanceTicksLeft()                   );
@@ -23,14 +28,26 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Navx Yaw"             , getYaw()                                 );
         SmartDashboard.putNumber  ("Navx Pitch"           , getPitch()                               );
         SmartDashboard.putNumber  ("Navx Roll"            , getRoll()                                );
-        SmartDashboard.putNumber  ("Left  Motor Power"    , getMotorPowerLeft()                      );
-        SmartDashboard.putNumber  ("Right Motor Power"    , getMotorPowerRight()                     );
-        SmartDashboard.putNumber  ("Upper Shooter Power"  , getShooterPowerUpper()                   );
-        SmartDashboard.putNumber  ("Lower Shooter Power"  , getShooterPowerLower()                   );
-        SmartDashboard.putNumber  ("Control Panel Power"  , getControlPanelSpinnerPower()            );
-        SmartDashboard.putString  ("Shifter state"        , getShifterState().toString()             );
+        SmartDashboard.putNumber  ("Left  Motor Power"    , leftPower                                );
+        SmartDashboard.putNumber  ("Right Motor Power"    , rightPower                               );
         SmartDashboard.putNumber  ("Left Encoder Inches"  , getDistanceInchesLeft()                  );
         SmartDashboard.putNumber  ("Right Encoder Inches" , getDistanceInchesRight()                 );
+        SmartDashboard.putString  ("Shifter state"        , getShifterState().toString()             );
+
+        SmartDashboard.putNumber  ("Collector Power"      , collectorPower                           );
+        SmartDashboard.putNumber  ("Escalator Power"      , escalatorPower);
+        SmartDashboard.putNumber  ("Indexer Power"        , indexerPower                             );
+        SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
+        SmartDashboard.putNumber  ("Lower Shooter Power"  , shooterLowerPower                        );
+        SmartDashboard.putNumber  ("Upper Shooter Velocity", getShooterVelocityRPMUpper()               );
+        SmartDashboard.putNumber  ("Lower Shooter Velocity", getShooterVelocityRPMLower()               );
+
+        SmartDashboard.putNumber  ("Angle Adjust Power"   , angleAdjusterPower                       );
+
+        SmartDashboard.putNumber  ("Climber Vert Power"   , climbVerticalPower                       );
+        SmartDashboard.putNumber  ("Climber Horiz Power"  , climbBalancePower);
+
+        SmartDashboard.putNumber  ("Control Panel Power"  , spinPower                                );
 
         SmartDashboard.putBoolean ("Lidar Locked"         , isLidarBusLocked()                       );
         SmartDashboard.putNumber  ("Lidar Front"          , coalesce(getLidarDistanceInchesFront(), -9999.0) );
@@ -42,10 +59,44 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Limelight Y"          , limelight.getLimelightY   ()             );
         SmartDashboard.putNumber  ("Limelight A"          , limelight.getLimelightArea()             );
 
+        SmartDashboard.putNumber  ("Elevation"            , getElevation());
+        SmartDashboard.putBoolean("Shooter Over Limit", (getElevation() > getShooterAngleMax()));
+        SmartDashboard.putBoolean("Shooter Under Limit", (getElevation() < getShooterAngleMin()));
+
+
         printSmartDashboardInternal();
     }
 
     protected void printSmartDashboardInternal() { }
+
+    public final void updateMotorPowers(){
+
+        if ((getElevationInternal() > getShooterAngleMax()) && (angleAdjusterPower > 0)){
+            angleAdjusterPower = 0;
+        }
+
+        if ((getElevationInternal() < getShooterAngleMin()) && (angleAdjusterPower < 0)){
+            angleAdjusterPower = 0;
+        }
+
+
+
+
+        setMotorPowerPercentageInternal(leftPower, rightPower);
+        setShooterPowerPercentageInternal(shooterUpperPower, shooterLowerPower);
+        spinControlPanelInternal(spinPower);
+        setIndexerPowerInternal(indexerPower);
+        setCollectorPowerInternal(collectorPower);
+        setAngleAdjusterPowerInternal(angleAdjusterPower);
+        setEscalatorPowerInternal(escalatorPower);
+        climbVerticalInternal(climbVerticalPower);
+        setBalancePowerInternal(climbBalancePower);
+    }
+
+
+
+
+
 
     //***********************************************************************//
 
@@ -55,10 +106,6 @@ public abstract class GenericRobot {
     ) {
         this.leftPower = leftPower;
         this.rightPower = rightPower;
-        setMotorPowerPercentageInternal(
-                leftPower,
-                rightPower
-        );
     }
 
     protected abstract void setMotorPowerPercentageInternal(
@@ -122,6 +169,7 @@ public abstract class GenericRobot {
     protected void shiftLowInternal() {
         System.out.println("I don't have a shifter ;(");
     }
+
 
     public ShifterState getShifterState() {
         return gear;
@@ -199,10 +247,6 @@ public abstract class GenericRobot {
     ) {
         this.shooterUpperPower = upperPower;
         this.shooterLowerPower = lowerPower;
-        setShooterPowerPercentageInternal(
-                upperPower,
-                lowerPower
-        );
     }
 
     public final void setShooterPowerPercentage(
@@ -226,14 +270,27 @@ public abstract class GenericRobot {
         return shooterLowerPower;
     }
 
+    public double getShooterVelocityRPMUpper(){
+        System.out.println("I don't have a shooter :'(");
+        return 0.0;
+    }
+
+    public double getShooterVelocityRPMLower(){
+        System.out.println("I don't have a shooter :'(");
+        return 0.0;
+    }
+
+
     //***********************************************************************//
 
     public final void spinControlPanel(
         double power
     ) {
         this.spinPower = power;
-        spinControlPanelInternal(power);
+
     }
+
+
 
     protected void spinControlPanelInternal(
         double power
@@ -251,6 +308,148 @@ public abstract class GenericRobot {
     }
 
     //***********************************************************************//
+
+    public final void indexerLoad(double indexerPower){
+        setIndexerPower(indexerPower);
+    }
+
+    public final void indexerUnload(double indexerPower){
+        setIndexerPower(-indexerPower);
+    }
+
+    public final void setIndexerPower(double power){
+        indexerPower = power;
+
+    }
+    protected void setIndexerPowerInternal(
+            double indexerPower
+
+    ){
+        System.out.println("I don't have an Indexer ; (");
+    }
+
+    //***********************************************************************//
+
+    public final void collectorIn(double collectorPower) {
+        setCollectorPower(collectorPower);
+    }
+
+    public final void collectorOut(double collectorPower){
+        setCollectorPower(-collectorPower);
+    }
+
+    public final void setCollectorPower(double power){
+        collectorPower = power;
+
+    }
+
+    protected void setCollectorPowerInternal(
+            double collectorPower
+    ){
+        System.out.println("I don't have a collector ; (");
+    }
+
+    //***********************************************************************//
+
+    public final void climbUp(double power){
+        climbVertical(power) ;
+    }
+
+    public final void climbDown(double power){
+        climbVertical(-power);
+    }
+
+    public final void stopClimb() {
+        climbVertical(0.0);
+    }
+
+    public final void climbVertical(double power){
+        climbVerticalPower = power;
+
+    }
+
+    protected void climbVerticalInternal (
+            double power
+    ){
+        System.out.println("I don't have a climber ; (");
+    }
+
+    //***********************************************************************//
+
+    public final void escalatorUp(double power){
+        setEscalatorPower(power) ;
+    }
+
+    public final void escalatorDown(double power){
+        setEscalatorPower(-power);
+    }
+
+
+    public final void setEscalatorPower(double power){
+        escalatorPower = power;
+
+    }
+
+    protected void setEscalatorPowerInternal (
+            double power
+    ){
+        System.out.println("I don't have a escalator ; (");
+    }
+
+    //***********************************************************************//
+
+    public final void climberBalanceLeft(double power){
+        setBalancePower(-power);
+    }
+
+    public final void climberBalanceRight(double power){
+        setBalancePower(power);
+    }
+
+    public final void setBalancePower(double power){
+        climbBalancePower = power;
+
+    }
+
+    protected void setBalancePowerInternal(
+            double shiftPower
+    ){
+        System.out.println("I don't have a generator shifter ; (");
+    }
+
+    //***********************************************************************//
+
+    public final void aimUp(double aimPower){
+        setAngleAdjusterPower(aimPower);
+    }
+
+    public final void aimDown(double aimPower){
+        setAngleAdjusterPower(-aimPower);
+    }
+
+    protected double getElevationInternal(){
+        System.out.println("I don't have an elevation.");
+        return 0.0;
+    }
+
+    public double getElevation(){
+        return getElevationInternal();
+    }
+
+     public final void setAngleAdjusterPower(double power){
+        angleAdjusterPower = power;
+
+    }
+    protected void setAngleAdjusterPowerInternal(double aimPower){
+        System.out.println("I don't have an angle adjuster ;(");
+    }
+
+    public double getShooterAngleMax(){return 0;}
+
+    public double getShooterAngleMin(){return 0;}
+
+    //***********************************************************************//
+
 
     //Todo: Yeet into own class
     public final Limelight limelight = new Limelight();
@@ -309,6 +508,9 @@ public abstract class GenericRobot {
         System.out.println("I don't have a right lidar :'(");
         return null;
     }
+
+    //***********************************************************************//
+
 
 
 }
