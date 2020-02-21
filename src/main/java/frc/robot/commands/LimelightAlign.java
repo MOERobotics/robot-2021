@@ -10,6 +10,8 @@ public class LimelightAlign extends GenericCommand{
     double setPoint;
     double setPointDeadzone;
     double constant;
+    boolean targetCentered;
+    long startingTime = 0;
 
     public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
 
@@ -20,17 +22,19 @@ public class LimelightAlign extends GenericCommand{
     }
     @Override
     public void begin(GenericRobot robot) {
-
+        targetCentered = false;
     }
 
     @Override
     public void step(GenericRobot robot) {
         double minPower = .04;
+        double currentTime = System.currentTimeMillis();
 
         aligning = true;
 
         if (robot.limelight.getLimelightX() < -setPointDeadzone + -setPoint) {
             //Pivots to the left
+            targetCentered = false;
             currentDistance = Math.abs(robot.limelight.getLimelightX() + setPoint);
             leftPower = -(constant * currentDistance);
             rightPower = constant * currentDistance;
@@ -41,6 +45,7 @@ public class LimelightAlign extends GenericCommand{
 
         } else if (robot.limelight.getLimelightX() > setPointDeadzone + setPoint) {
             //Pivots to the right
+            targetCentered = false;
             currentDistance = Math.abs(robot.limelight.getLimelightX() - setPoint);
             leftPower = constant * currentDistance;
             rightPower = -(constant * currentDistance);
@@ -53,16 +58,15 @@ public class LimelightAlign extends GenericCommand{
 
             leftPower = 0;
             rightPower = 0;
+            if(!targetCentered){
+                startingTime = System.currentTimeMillis();
+                targetCentered = true;
+            }
 
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            aligning = false;
-                        }
-                    },
-                    600
-            );
+
+            if(targetCentered && currentTime - startingTime > 600){
+                aligning = false;
+            }
 
         }
 
