@@ -26,7 +26,6 @@ public class SmartClimb extends GenericCommand{
 
     @Override
     public void step(GenericRobot robot) {
-
     }
 
 

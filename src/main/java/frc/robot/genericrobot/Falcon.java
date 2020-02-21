@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI;
 
 public class Falcon extends GenericRobot{
@@ -40,6 +41,9 @@ public class Falcon extends GenericRobot{
     CANEncoder encoderShootA    = new CANEncoder(shooterA);
     CANEncoder encoderShootB    = new CANEncoder(shooterB);
     Lidar lidar = new Lidar();
+
+    PowerDistributionPanel powerPanel = new PowerDistributionPanel();
+
 
     private CANDigitalInput angleAdjusterDigitalInputForward;
     private CANDigitalInput angleAdjusterDigitalInputReverse;
