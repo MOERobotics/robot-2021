@@ -14,8 +14,6 @@ public class SmartClimb extends GenericCommand{
      */
     double currentRoll;
 
-
-
     public SmartClimb(){
 
     }

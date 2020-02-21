@@ -22,8 +22,8 @@ public class Falcon extends GenericRobot{
     CANSparkMax rightDriveB     = new CANSparkMax( 1, MotorType.kBrushless);
     CANSparkMax rightDriveC     = new CANSparkMax( 2, MotorType.kBrushless);
 
-    CANSparkMax climberA        = null;//= new CANSparkMax(12, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax climberB        = null;//new CANSparkMax( 3, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax climberA        = new CANSparkMax(12, MotorType.kBrushless);
+    CANSparkMax climberB        = new CANSparkMax( 3, MotorType.kBrushless);
     CANSparkMax generatorShift  = null;//new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     CANSparkMax shooterA        = new CANSparkMax( 5, MotorType.kBrushless);
@@ -204,6 +204,19 @@ public class Falcon extends GenericRobot{
         climberB.set(-climberPower);
     }
      */
+
+    @Override
+    protected void setClimbVerticalStarboardInternal(double power) {
+        climberA.set(power);
+    }
+
+    @Override
+    protected void setClimbVerticalPortInternal(double power) {
+        climberB.set(-power);
+    }
+
+    @Override
+    protected double getClimberVerticalPortCurrent() {return powerPanel.getTotalCurrent()}
 
     @Override
     protected void setEscalatorPowerInternal(double escalatorPower) {
