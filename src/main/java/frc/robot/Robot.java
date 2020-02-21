@@ -23,6 +23,7 @@ public class Robot extends TimedRobot {
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
     GenericCommand    activeCommand = GenericCommand.doNothingCommand;
+    SmartClimb        getOutaDodge = new SmartClimb();
     GenericRobot      robot        = new Falcon();
     Joystick          leftJoystick = new Joystick(0);
     XboxController    xboxJoystick = new XboxController(1);
@@ -215,8 +216,13 @@ public class Robot extends TimedRobot {
         }
 
         //Climb vert
+        if (leftJoystick.getRawButtonPressed(2))
+        {
+            getOutaDodge.begin(robot);
+        }
         if (leftJoystick.getRawButton( 2)) {
-            robot.climbDown(.2);
+            //robot.climbDown(.2);
+            getOutaDodge.step(robot);
         } else if (leftJoystick.getRawButton( 1)) {
             robot.climbUp(.2);
         } else {

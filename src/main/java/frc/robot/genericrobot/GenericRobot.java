@@ -206,12 +206,12 @@ public abstract class GenericRobot {
         return 0;
     }
 
-    protected double getClimberVerticalPortCurrent() {
+    public double getClimberVerticalPortCurrent() {
         System.out.println("I don't have any current data for the port climber :'(");
         return 0;
     }
 
-    protected double getClimberVerticalStarboardCurrent() {
+    public double getClimberVerticalStarboardCurrent() {
         System.out.println("I don't have any current data for the starboard side climber :'(");
         return 0;
     }
