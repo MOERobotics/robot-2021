@@ -27,7 +27,7 @@ public class LimelightAlign extends GenericCommand{
 
     @Override
     public void step(GenericRobot robot) {
-        double minPower = .07;
+        double minPower = .08;
         double currentTime = System.currentTimeMillis();
 
         aligning = true;

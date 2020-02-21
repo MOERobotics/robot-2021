@@ -13,10 +13,10 @@ public class PlanE extends GenericAutonomous {
 
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
-    PIDController PIDSteering = new PIDController(5.0e-2, 1.0e-4, 2.0e-4);
+    PIDController PIDSteering = new PIDController(1.0e-2, 1.0e-4, 2.0e-4);
     double correction;
     static double currentYaw = 0;
-    double outerArcLength = 33;
+    double outerArcLength = 39;
     double innerArc = 35.45;
     double outerRadius = 32;
     double yawDifference = 0;
@@ -24,7 +24,7 @@ public class PlanE extends GenericAutonomous {
     long startingTime;
     double powerDecrement;
     double currentDistance;
-    GenericCommand activeCommand = new LimelightAlign(0.0, 0.9, 0.0155);
+    GenericCommand activeCommand = new LimelightAlign(0.0, 0.9, 0.0165);
 
     @Override
     protected void printSmartDashboardInternal() {
