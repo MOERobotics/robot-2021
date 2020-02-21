@@ -24,7 +24,7 @@ public class SmartClimb{
         climbPowerPort = 0.4;
         climbPowerStarboard = 0.4;
 
-        if (Math.abs(robot.getClimberVerticalPortCurrent()) > currentTolerance) { engagedPort = true;}
+        if (Math.abs(robot.getClimberVerticalPortCurrent())      > currentTolerance) { engagedPort = true;}
         if (Math.abs(robot.getClimberVerticalStarboardCurrent()) > currentTolerance) { engagedStarboard = true;}
 
         if (engagedPort)
@@ -52,8 +52,8 @@ public class SmartClimb{
             }
         }
 
-        robot.setClimbVerticalPortPower(-climbPowerPort);
-        robot.setClimbVerticalPortPower(-climbPowerStarboard);
+        robot.setClimbVerticalPortPower     (-climbPowerPort);
+        robot.setClimbVerticalStarboardPower(-climbPowerStarboard);
     }
 
 
