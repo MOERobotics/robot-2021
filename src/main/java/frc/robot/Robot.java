@@ -19,6 +19,7 @@ import static frc.robot.Util.*;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
 
+
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
@@ -29,6 +30,9 @@ public class Robot extends TimedRobot {
     XboxController    xboxJoystick = new XboxController(1);
 
     double            deadZone     = 0.10;
+    double timeStart;
+    boolean counting;
+
 
     @Override public void robotInit() {
         System.out.println("Klaatu barada nikto");
@@ -73,11 +77,13 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         autoProgram.autonomousPeriodic(robot);
+
     }
 
     @Override
     public void teleopInit() {
         LiveWindow.setEnabled(false);
+
     }
 
     @Override
@@ -155,9 +161,14 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButton(12)) {
             //do not do anything unless the medium sensor is tripped
             if(robot.getElevatorSensorMedium()){
+                timeStart = System.currentTimeMillis();
+                boolean counting = true;
                 escalatorPower = 0.5;
             } else {
-                escalatorPower = 0.0;
+                if(System.currentTimeMillis() >= timeStart + 1000 & counting){
+                    counting = false;
+                    escalatorPower = 0.0;
+                }
             }
             robot.escalatorUp(escalatorPower);
         } else if (leftJoystick.getRawButton(15)) {
