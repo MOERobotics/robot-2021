@@ -24,7 +24,7 @@ public class PlanE extends GenericAutonomous {
     long startingTime;
     double powerDecrement;
     double currentDistance;
-    GenericCommand activeCommand = new LimelightAlign(0.0, 0.5, .0185);
+    GenericCommand activeCommand = new LimelightAlign(0.0, 0.9, 0.0155);
 
     @Override
     protected void printSmartDashboardInternal() {
@@ -149,7 +149,7 @@ public class PlanE extends GenericAutonomous {
 
             case 10:
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
-                robot.limelight.table.getEntry("pipeline").setNumber(2);
+                robot.limelight.table.getEntry("pipeline").setNumber(1);
                 activeCommand.setEnabled(true);
                 activeCommand.begin(robot);
                 autonomousStep = 11;

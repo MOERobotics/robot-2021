@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
     GenericCommand    activeCommand = new LimelightAlign(0.0, 0.5, .0185);
     GenericRobot      robot         = new Falcon();
     Joystick          leftJoystick  = new Joystick(0);
+    XboxController          xboxJoystick = new XboxController(1);
     double            deadZone      = 0.1;
 
     //Constant for TestBot: .01852
