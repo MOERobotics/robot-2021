@@ -89,7 +89,7 @@ public class PlanA extends GenericAutonomous {
                     escalatorPower = 0;
                     indexerPower = 0;
                     robot.setShooterPowerPercentage(0);
-                    autonomousStep = 3;
+                    autonomousStep = 12;
                 }
                 robot.escalatorUp(escalatorPower);
                 robot.indexerLoad(indexerPower);
@@ -100,7 +100,7 @@ public class PlanA extends GenericAutonomous {
                 PIDSteering.disableContinuousInput();
                 startingYaw = robot.getYaw();
                 startingDistance = robot.getDistanceInchesRight();
-                autonomousStep = 3;
+                autonomousStep = 4;
                 break;
 
             case 4: //1st (left) arc
@@ -110,7 +110,7 @@ public class PlanA extends GenericAutonomous {
                 robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                 currentDistance = robot.getDistanceInchesRight();
                 if (currentDistance - startingDistance > outerArcLength) {
-                    autonomousStep = 4;
+                    autonomousStep = 5;
                 }
                 break;
 
@@ -119,7 +119,7 @@ public class PlanA extends GenericAutonomous {
                 PIDSteering.disableContinuousInput();
                 startingDistance = robot.getDistanceInchesLeft();
                 startingYaw = robot.getYaw();
-                autonomousStep = 5;
+                autonomousStep = 6;
                 break;
 
             case 6: //2nd (right) arc
@@ -128,7 +128,7 @@ public class PlanA extends GenericAutonomous {
                 robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
                 if (currentDistance - startingDistance > outerArcLength) {
-                    autonomousStep = 6;
+                    autonomousStep = 7;
                 }
                 break;
 
@@ -137,7 +137,7 @@ public class PlanA extends GenericAutonomous {
                 PIDSteering.reset();
                 PIDSteering.enableContinuousInput(-180, 180);
                 currentYaw = 0;
-                autonomousStep = 7;
+                autonomousStep = 9;
                 break;
 
             case 8: //straightaway, a little bit of oscillation, may need to turn P & D - PID coefficients
@@ -147,7 +147,7 @@ public class PlanA extends GenericAutonomous {
                 //decrescendo power
 
                 if (currentDistance - startingDistance > 45) { //start to decrement?
-                    autonomousStep = 8;
+                    autonomousStep = 9;
 
                 }
                 break;
@@ -160,21 +160,21 @@ public class PlanA extends GenericAutonomous {
                 robot.setMotorPowerPercentage(1.5 * slowToStop * (1 + correction), 1.5 * slowToStop * (1 - correction)); // div by 2 to debug
 
                 if (currentDistance - startingDistance > 60) {
-                    autonomousStep = 9;
+                    autonomousStep = 10;
 
                 }
                 break;
 
             case 10:
                 robot.driveForward(0);
-                autonomousStep = 10;
+                autonomousStep = 11;
                 break;
 
             case 11:
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(2);
                 activeCommand.setEnabled(true);
-                autonomousStep = 11;
+                autonomousStep = 12;
                 break;
 
             case 12: //cease your autonomous
