@@ -128,6 +128,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testPeriodic() {
+        double escalatorPower;
+        double collectorPower;
+
         LiveWindow.setEnabled(false);
 
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
