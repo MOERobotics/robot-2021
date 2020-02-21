@@ -6,6 +6,7 @@ import java.util.Date;
 //Robot independent functions that could be useful any year
 public interface Util {
     public static double deadzoneValue(double input, double deadZone) {
+
         if (input < -deadZone) {
             return (input + deadZone) / (1 - deadZone);
         } else if (input > deadZone) {

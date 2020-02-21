@@ -95,8 +95,10 @@ public class Robot extends TimedRobot {
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
-         leftPower = deadzoneValue( leftPower,deadZone);
-        rightPower = deadzoneValue(rightPower,deadZone);
+        double driverRestriction = 0.75;
+
+         leftPower = driverRestriction*deadzoneValue( leftPower,deadZone);
+        rightPower = driverRestriction*deadzoneValue(rightPower,deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
