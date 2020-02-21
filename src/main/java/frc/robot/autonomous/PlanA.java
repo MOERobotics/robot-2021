@@ -30,7 +30,6 @@ public class PlanA extends GenericAutonomous {
     double shooterLowerRPM;
     GenericCommand activeCommand = new LimelightAlign(0.0, 0.5, .0185);
 
-
     @Override
     public void autonomousInit(GenericRobot robot) {
         startingTime = System.currentTimeMillis();

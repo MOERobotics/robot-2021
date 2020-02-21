@@ -72,7 +72,6 @@ public abstract class GenericRobot {
         SmartDashboard.putBoolean("Shooter Over Limit", (getElevation() > getShooterAngleMax()));
         SmartDashboard.putBoolean("Shooter Under Limit", (getElevation() < getShooterAngleMin()));
 
-
         printSmartDashboardInternal();
     }
 

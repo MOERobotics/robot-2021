@@ -1,7 +1,6 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.PIDModule;
 import frc.robot.genericrobot.GenericRobot;
 
 public class PlanE extends GenericAutonomous {
