@@ -31,7 +31,7 @@ public class Falcon extends GenericRobot{
 
     CANSparkMax controlPanel    = null;//= new CANSparkMax( 9, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    CANSparkMax collector       = new CANSparkMax(10, MotorType.kBrushed);
+    CANSparkMax collector       = new CANSparkMax(10, MotorType.kBrushless);
 
     CANEncoder encoderRight     = new CANEncoder(rightDriveA);
     CANEncoder encoderLeft      = new CANEncoder( leftDriveA);
@@ -62,6 +62,8 @@ public class Falcon extends GenericRobot{
         rightDriveA.setInverted(true);
         rightDriveB.setInverted(true);
         rightDriveC.setInverted(true);
+
+        collector.setInverted(true);
 
         escalator.setIdleMode(IdleMode.kBrake);
 
