@@ -9,15 +9,15 @@ public class LimelightAlign extends GenericCommand{
     double currentDistance = 0;
     double setPoint;
     double setPointDeadzone;
-    double constant;
+    double pivotCoefficient;
     boolean targetCentered;
     long startingTime = 0;
 
-    public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
+    public LimelightAlign(double setPoint, double setPointDeadzone, double pivotCoefficient){
 
         this.setPoint = setPoint;
         this.setPointDeadzone = setPointDeadzone;
-        this.constant = constant;
+        this.pivotCoefficient = pivotCoefficient;
 
     }
     @Override
@@ -32,12 +32,12 @@ public class LimelightAlign extends GenericCommand{
 
         aligning = true;
 
-        if (robot.limelight.getLimelightX() < -setPointDeadzone + -setPoint) {
+        if (robot.limelight.getLimelightX() < -setPointDeadzone + setPoint) {
             //Pivots to the left
             targetCentered = false;
-            currentDistance = Math.abs(robot.limelight.getLimelightX() + setPoint);
-            leftPower = -(constant * currentDistance);
-            rightPower = constant * currentDistance;
+            currentDistance = setPoint - robot.limelight.getLimelightX();
+            leftPower = -(pivotCoefficient * currentDistance);
+            rightPower = pivotCoefficient * currentDistance;
             if (rightPower <= minPower) {
                 leftPower = -minPower;
                 rightPower = minPower;
@@ -46,25 +46,24 @@ public class LimelightAlign extends GenericCommand{
         } else if (robot.limelight.getLimelightX() > setPointDeadzone + setPoint) {
             //Pivots to the right
             targetCentered = false;
-            currentDistance = Math.abs(robot.limelight.getLimelightX() - setPoint);
-            leftPower = constant * currentDistance;
-            rightPower = -(constant * currentDistance);
+            currentDistance = robot.limelight.getLimelightX() - setPoint;
+            leftPower = pivotCoefficient * currentDistance;
+            rightPower = -(pivotCoefficient * currentDistance);
             if (leftPower <= minPower) {
                 leftPower = minPower;
                 rightPower = -minPower;
             }
 
         } else {
-
             leftPower = 0;
             rightPower = 0;
-            if(!targetCentered){
+            if (!targetCentered) {
                 startingTime = System.currentTimeMillis();
                 targetCentered = true;
             }
 
 
-            if(targetCentered && currentTime - startingTime > 600){
+            if(targetCentered && currentTime - startingTime > 500){
                 aligning = false;
             }
 

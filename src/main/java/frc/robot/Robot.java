@@ -22,10 +22,7 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
-
-    GenericCommand    activeCommand = new LimelightAlign(0.0, .9, .0155);
-    //Constant is .0165 for close range, .0155 for long range
-
+    GenericCommand    activeCommand = GenericCommand.doNothingCommand;
     GenericRobot      robot        = new Falcon();
     Joystick          leftJoystick = new Joystick(0);
     XboxController    xboxJoystick = new XboxController(1);
@@ -93,7 +90,6 @@ public class Robot extends TimedRobot {
         rightPower = driverRestriction*deadzoneValue(rightPower,deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
-//        robot.setShooterPowerPercentage(0);
 
         if (leftJoystick.getRawButtonPressed(16)) {
             robot.shiftLow();
