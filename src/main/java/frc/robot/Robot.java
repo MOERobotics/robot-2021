@@ -7,18 +7,19 @@
 
 package frc.robot;
 
+import com.revrobotics.CANDigitalInput;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import static frc.robot.Util.*;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
-
 
 public class Robot extends TimedRobot {
 
@@ -77,13 +78,11 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         autoProgram.autonomousPeriodic(robot);
-
     }
 
     @Override
     public void teleopInit() {
         LiveWindow.setEnabled(false);
-
     }
 
     @Override
@@ -125,6 +124,39 @@ public class Robot extends TimedRobot {
             activeCommand.setEnabled(true);
         }
 
+        //Collector
+        if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
+            robot.collectorIn(1.0);
+        } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
+            robot.collectorOut(1.0);
+        } else {
+            robot.setCollectorPower(0);
+        }
+
+        //Escalator
+        if (xboxJoystick.getXButton()) {
+            robot.escalatorUp(.5);
+        } else if (xboxJoystick.getAButton()) {
+            robot.escalatorDown(.5);
+        } else {
+            robot.setEscalatorPower(0);
+        }
+
+        //Shooter
+        if (xboxJoystick.getYButtonPressed()) {
+            robot.setShooterPowerPercentage(1.0);
+        } else if (xboxJoystick.getBButtonPressed()) {
+            robot.setShooterPowerPercentage(0);
+        }
+
+        //Indexer
+        if (xboxJoystick.getBumper(GenericHID.Hand.kRight)) {
+            robot.indexerLoad(1.0);
+        } else if (xboxJoystick.getBumper(GenericHID.Hand.kLeft)) {
+            robot.indexerUnload(1.0);
+        } else {
+            robot.setIndexerPower(0);
+        }
     }
 
     @Override
@@ -151,6 +183,8 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButton(11)) {
             collectorPower = 1.0;
             robot.collectorIn(collectorPower);
+        if (leftJoystick.getRawButton(11) && robot.readyToShoot()) {
+            robot.collectorIn(1.0);
         } else if (leftJoystick.getRawButton(16)) {
             robot.collectorOut(1.0);
         } else {
@@ -179,13 +213,13 @@ public class Robot extends TimedRobot {
 
         //Shooter
         if (leftJoystick.getRawButton(13)) {
-            robot.setShooterRPM(3000,2000);
+            robot.setShooterRPM(3500,2500);
         } else if (leftJoystick.getRawButton(14)) {
             robot.setShooterPowerPercentage(0);
         }
 
         //Indexer
-        if (leftJoystick.getRawButton(7)) {
+        if (leftJoystick.getRawButton( 7) && robot.readyToShoot()) {
             robot.indexerLoad(1.0);
         } else if (leftJoystick.getRawButton(8)) {
             robot.indexerUnload(1.0);

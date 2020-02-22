@@ -1,13 +1,18 @@
 package frc.robot.genericrobot;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.*;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Falcon extends GenericRobot{
 
@@ -70,18 +75,22 @@ public class Falcon extends GenericRobot{
 
         escalator.setIdleMode(IdleMode.kBrake);
 
+        // REMOVE BEFORE FLIGHT... Just for testing.
+        shooterA.setIdleMode(IdleMode.kBrake);
+        shooterB.setIdleMode(IdleMode.kBrake);
+
         shooterAPIDController.setP(7.5e-5);
         shooterAPIDController.setI(1.0e-6);
         shooterAPIDController.setD(1.0e-2);
         shooterAPIDController.setFF(1.67e-4);
-        shooterAPIDController.setIZone(200);
+        shooterAPIDController.setIZone(500);
         shooterAPIDController.setDFilter(0);
 
         shooterBPIDController.setP(7.5e-5);
         shooterBPIDController.setI(1.0e-6);
         shooterBPIDController.setD(1.0e-2);
         shooterBPIDController.setFF(1.67e-4);
-        shooterBPIDController.setIZone(200);
+        shooterBPIDController.setIZone(500);
         shooterBPIDController.setDFilter(0);
 
         angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
@@ -175,6 +184,21 @@ public class Falcon extends GenericRobot{
     protected void setShooterPowerPercentageInternal(double upperPower, double lowerPower) {
         shooterA.set(-upperPower);
         shooterB.set(lowerPower);
+    }
+
+    @Override
+    protected boolean readyToShootInternal(){
+        double targetUpper = getShooterTargetRPMUpper();
+        double targetLower = getShooterTargetRPMLower();
+        boolean readyToShoot = true;
+        double errorUpper = Math.abs((getShooterVelocityRPMUpper() + targetUpper) / targetUpper); //upperRPM is negative for shooting operation, think about this later
+        double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
+        SmartDashboard.putNumber("errorUpper", (errorUpper * 100));
+        SmartDashboard.putNumber("errorLower", (errorLower * 100));
+        if((errorUpper > 5.0e-2) || (errorLower > 5.0e-2)){
+            readyToShoot = false;
+        }
+        return readyToShoot;
     }
 
    /* @Override
