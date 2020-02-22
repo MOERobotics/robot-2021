@@ -43,6 +43,7 @@ public abstract class GenericRobot {
         SmartDashboard.putBoolean ("Elevator Sensor Low"  , getElevatorSensorLow()                   );
         SmartDashboard.putBoolean ("Elevator Sensor Medium", getElevatorSensorMedium()                   );
         SmartDashboard.putBoolean ("Elevator Sensor High" , getElevatorSensorHigh()                   );
+        SmartDashboard.putNumber  ("Escalator Power"      , escalatorPower                           );
         SmartDashboard.putNumber  ("Indexer Power"        , indexerPower                             );
         SmartDashboard.putString  ("Shooter State"        , shooterState.toString()                  );
         SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );

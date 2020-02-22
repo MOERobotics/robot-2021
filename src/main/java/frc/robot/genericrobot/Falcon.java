@@ -52,9 +52,9 @@ public class Falcon extends GenericRobot{
     private AnalogInput input = new AnalogInput(0);
     private AnalogPotentiometer elevation = new AnalogPotentiometer(input, 180, 90);
 
-    DigitalInput ElevatorSensorLow    = new DigitalInput(1);
-    DigitalInput ElevatorSensorMedium = new DigitalInput(2);
-    DigitalInput ElevatorSensorHigh   = new DigitalInput(3);
+    DigitalInput escalatorSensorLow = new DigitalInput(1);
+    DigitalInput escalatorSensorMedium = new DigitalInput(2);
+    DigitalInput escalatorSensorHigh = new DigitalInput(3);
 
 
     public Falcon() {
@@ -71,11 +71,13 @@ public class Falcon extends GenericRobot{
         rightDriveB.setInverted(true);
         rightDriveC.setInverted(true);
 
+        collector.setInverted(true);
+
         escalator.setIdleMode(IdleMode.kBrake);
 
         // REMOVE BEFORE FLIGHT... Just for testing.
-        shooterA.setIdleMode(IdleMode.kCoast);
-        shooterB.setIdleMode(IdleMode.kCoast);
+        shooterA.setIdleMode(IdleMode.kBrake);
+        shooterB.setIdleMode(IdleMode.kBrake);
 
         shooterAPIDController.setP(7.5e-5);
         shooterAPIDController.setI(1.0e-6);
@@ -285,18 +287,24 @@ public class Falcon extends GenericRobot{
     }
     @Override
     public boolean getElevatorSensorLowInternal(){
-        return ElevatorSensorLow.get();
+        return escalatorSensorLow.get();
     }
 
     @Override
     public boolean getElevatorSensorMediumInternal(){
-        return ElevatorSensorMedium.get();
+        return escalatorSensorMedium.get();
     }
 
     @Override
     public boolean getElevatorSensorHighInternal(){
-        return ElevatorSensorHigh.get();
+        return escalatorSensorHigh.get();
     }
+=========
+    public double getShooterAngleMax(){return 153.0;} //orig 155
+
+    @Override
+    public double getShooterAngleMin(){return 114.0;} //orig 113
+>>>>>>>>> Temporary merge branch 2
 
 
 }
