@@ -48,6 +48,12 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Climber Vert Port Power"   , climbVerticalPortPower                       );
         SmartDashboard.putNumber  ("Climber Vert Stb Power"   , climbVerticalStarboardPower                       );
         SmartDashboard.putNumber  ("Climber Horiz Power"  , climbBalancePower);
+        SmartDashboard.putNumber("Climber Port Ticks", getClimberPortTicks());
+        SmartDashboard.putNumber("Climber Starboard Ticks", getClimberStarboardTicks());
+        SmartDashboard.putNumber("Climber Port Current", getClimberVerticalPortCurrent());
+        SmartDashboard.putNumber("Climber Starboard Current", getClimberVerticalStarboardCurrent());
+
+
 
         SmartDashboard.putNumber  ("Control Panel Power"  , spinPower                                );
 
@@ -402,6 +408,33 @@ public abstract class GenericRobot {
     ){
         System.out.println("I don't have a climber ; (");
     }
+
+    public final double getClimberPortTicks(){
+        return getClimberPortTicksInternal();
+
+    }
+    protected double getClimberPortTicksInternal(){
+        System.out.println("I don't have a climber port ;(");
+        return 0; //?
+    }
+
+    public final double getClimberStarboardTicks(){
+        return getClimberStarboardTicksInternal();
+
+    }
+    protected double getClimberStarboardTicksInternal(){
+        System.out.println("I don't have a climber starboard ;(");
+        return 0; //?
+    }
+
+    public void resetClimberTicks(){
+        resetClimberTicksInternal();
+    }
+
+    public void resetClimberTicksInternal() {
+        System.out.println("No Climber Encoders to reset");
+    }
+
 
     //***********************************************************************//
 

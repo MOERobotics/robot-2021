@@ -52,6 +52,7 @@ public class Robot extends TimedRobot {
             System.out.println("AAAAAAAA");
             robot.resetAttitude();
             robot.resetEncoders();
+            robot.resetClimberTicks();
         }
 
 
@@ -220,13 +221,21 @@ public class Robot extends TimedRobot {
         {
             getOutaDodge.begin(robot);
         }
+        if (leftJoystick.getRawButtonReleased(2)) {getOutaDodge.holding=true;}
+        if (getOutaDodge.holding)
+        {
+            getOutaDodge.hold(robot);
+        }
+
         if (leftJoystick.getRawButton( 2)) {
             //robot.climbDown(.2);
             getOutaDodge.step(robot);
         } else if (leftJoystick.getRawButton( 1)) {
             robot.climbUp(.2);
+            getOutaDodge.holding=false;
         } else {
-            robot.climbVertical(0);
+            if (!getOutaDodge.holding) {
+            robot.climbVertical(0);}
         }
 
         //climb horiz

@@ -40,6 +40,10 @@ public class Falcon extends GenericRobot{
     CANEncoder encoderLeft      = new CANEncoder( leftDriveA);
     CANEncoder encoderShootA    = new CANEncoder(shooterA);
     CANEncoder encoderShootB    = new CANEncoder(shooterB);
+
+    CANEncoder encoderClimbPort = new CANEncoder(climberA);
+    CANEncoder encoderClimbStarboard = new CANEncoder(climberB);
+
     Lidar lidar = new Lidar();
 
     PowerDistributionPanel powerPanel = new PowerDistributionPanel();
@@ -207,19 +211,33 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setClimbVerticalStarboardInternal(double power) {
-        climberA.set(power);
-    }
-
-    @Override
-    protected void setClimbVerticalPortInternal(double power) {
         climberB.set(-power);
     }
 
     @Override
-    public double getClimberVerticalStarboardCurrent() {return powerPanel.getCurrent(12);}
+    protected void setClimbVerticalPortInternal(double power) {
+        climberA.set(power);
+    }
 
     @Override
-    public double getClimberVerticalPortCurrent() {return powerPanel.getCurrent(3);}
+    //public double getClimberVerticalStarboardCurrent() {return powerPanel.getCurrent(3);}
+    public double getClimberVerticalStarboardCurrent() {return climberB.getOutputCurrent();}
+
+    @Override
+    //public double getClimberVerticalPortCurrent() {return powerPanel.getCurrent(12);}
+    public double getClimberVerticalPortCurrent() {return climberA.getOutputCurrent();}
+
+    @Override
+    protected double getClimberPortTicksInternal() {return Math.abs(encoderClimbPort.getPosition());}
+
+    @Override
+    protected double getClimberStarboardTicksInternal() {return Math.abs(encoderClimbStarboard.getPosition());}
+
+    @Override
+    public void resetClimberTicksInternal() {
+        encoderClimbPort.setPosition(0.0);
+        encoderClimbStarboard.setPosition(0.0);
+    }
 
     @Override
     protected void setEscalatorPowerInternal(double escalatorPower) {
