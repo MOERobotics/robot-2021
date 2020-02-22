@@ -16,13 +16,21 @@ public class SmartClimb{
     long startTime;
     double encoderPort;
     double encoderStarboard;
-    public boolean holding=false;
+    private boolean holding = false;
 
     PIDController PIDPortHold = new PIDController(1.0e-2, 2.0e-3, 0.0e-4);
     PIDController PIDStarboardHold = new PIDController(1.0e-2, 2.0e-3, 0.0e-4);
 
     public SmartClimb(){
 
+    }
+
+    public void setHolding(boolean input){
+        holding = input;
+    }
+
+    public boolean getHolding(){
+        return holding;
     }
 
     public void begin(GenericRobot robot) {

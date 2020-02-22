@@ -221,8 +221,8 @@ public class Robot extends TimedRobot {
         {
             getOutaDodge.begin(robot);
         }
-        if (leftJoystick.getRawButtonReleased(2)) {getOutaDodge.holding=true;}
-        if (getOutaDodge.holding)
+        if (leftJoystick.getRawButtonReleased(2)) {getOutaDodge.setHolding(true);}
+        if (getOutaDodge.getHolding())
         {
             getOutaDodge.hold(robot);
         }
@@ -232,9 +232,9 @@ public class Robot extends TimedRobot {
             getOutaDodge.step(robot);
         } else if (leftJoystick.getRawButton( 1)) {
             robot.climbUp(.2);
-            getOutaDodge.holding=false;
+            getOutaDodge.setHolding(false);
         } else {
-            if (!getOutaDodge.holding) {
+            if (!getOutaDodge.getHolding()) {
             robot.climbVertical(0);}
         }
 
