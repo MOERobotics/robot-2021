@@ -281,7 +281,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getLimelightMinpower() {
-        return .02;
+        return .03;
     }
     @Override
     public boolean getElevatorSensorLowInternal(){

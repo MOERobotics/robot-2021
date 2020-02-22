@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
     GenericCommand    activeCommand = GenericCommand.doNothingCommand;
-    GenericRobot      robot        = new Falcon();
+    GenericRobot      robot        = new KeerthanPracticeOne();
     Joystick          leftJoystick = new Joystick(0);
     XboxController    xboxJoystick = new XboxController(1);
 
@@ -126,12 +126,12 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButtonPressed(11)) {
             robot.shiftHigh();
         }
-        if (leftJoystick.getRawButton(13)) {
-            robot.driveForward(-.2);
-        }
-        if (leftJoystick.getRawButton(14)) {
-            robot.driveForward(.2);
-        }
+//        if (leftJoystick.getRawButton(13)) {
+//            robot.driveForward(-.2);
+//        }
+//        if (leftJoystick.getRawButton(14)) {
+//            robot.driveForward(.2);
+//        }
 
         if(leftJoystick.getRawButtonPressed(2)){
             activeCommand.setEnabled(true);

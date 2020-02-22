@@ -32,10 +32,10 @@ public class LimelightAlign extends GenericCommand{
 
         aligning = true;
 
-        if (robot.limelight.getLimelightX() < -setPointDeadzone + -setPoint) {
+        if (robot.limelight.getLimelightX() < -setPointDeadzone + setPoint) {
             //Pivots to the left
             targetCentered = false;
-            currentDistance = Math.abs(robot.limelight.getLimelightX() + setPoint);
+            currentDistance = setPoint - robot.limelight.getLimelightX();
             leftPower = -(constant * currentDistance);
             rightPower = constant * currentDistance;
             if (rightPower <= minPower) {
@@ -46,7 +46,7 @@ public class LimelightAlign extends GenericCommand{
         } else if (robot.limelight.getLimelightX() > setPointDeadzone + setPoint) {
             //Pivots to the right
             targetCentered = false;
-            currentDistance = Math.abs(robot.limelight.getLimelightX() - setPoint);
+            currentDistance = robot.limelight.getLimelightX() - setPoint;
             leftPower = constant * currentDistance;
             rightPower = -(constant * currentDistance);
             if (leftPower <= minPower) {
@@ -63,7 +63,7 @@ public class LimelightAlign extends GenericCommand{
             }
 
 
-            if(targetCentered && currentTime - startingTime > 0){
+            if(targetCentered && currentTime - startingTime > 2000){
                 aligning = false;
             }
 

@@ -28,7 +28,7 @@ public class PlanA extends GenericAutonomous {
     double indexerPower;
     double shooterUpperRPM;
     double shooterLowerRPM;
-    GenericCommand activeCommand = new LimelightAlign( 0.0, 0.9, .0175);
+    GenericCommand activeCommand = new LimelightAlign( -2.0, 0.5, .0185);
 
     @Override
     public void autonomousInit(GenericRobot robot) {
