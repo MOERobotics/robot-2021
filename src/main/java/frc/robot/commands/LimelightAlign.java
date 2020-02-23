@@ -10,28 +10,32 @@ public class LimelightAlign extends GenericCommand{
     double setPoint;
     double setPointDeadzone;
     double constant;
+    boolean targetCentered;
+    long startingTime = 0;
 
     public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
 
-        this.setPoint = setPoint;
+        this.setPoint = -setPoint;
         this.setPointDeadzone = setPointDeadzone;
         this.constant = constant;
 
     }
     @Override
     public void begin(GenericRobot robot) {
-
+        targetCentered = false;
     }
 
     @Override
     public void step(GenericRobot robot) {
-        double minPower = .04;
+        double minPower = robot.getLimelightMinpower();
+        double currentTime = System.currentTimeMillis();
 
         aligning = true;
 
-        if (robot.limelight.getLimelightX() < -setPointDeadzone + -setPoint) {
+        if (robot.limelight.getLimelightX() < -setPointDeadzone + setPoint) {
             //Pivots to the left
-            currentDistance = Math.abs(robot.limelight.getLimelightX() + setPoint);
+            targetCentered = false;
+            currentDistance = setPoint - robot.limelight.getLimelightX();
             leftPower = -(constant * currentDistance);
             rightPower = constant * currentDistance;
             if (rightPower <= minPower) {
@@ -41,7 +45,8 @@ public class LimelightAlign extends GenericCommand{
 
         } else if (robot.limelight.getLimelightX() > setPointDeadzone + setPoint) {
             //Pivots to the right
-            currentDistance = Math.abs(robot.limelight.getLimelightX() - setPoint);
+            targetCentered = false;
+            currentDistance = robot.limelight.getLimelightX() - setPoint;
             leftPower = constant * currentDistance;
             rightPower = -(constant * currentDistance);
             if (leftPower <= minPower) {
@@ -50,19 +55,17 @@ public class LimelightAlign extends GenericCommand{
             }
 
         } else {
-
             leftPower = 0;
             rightPower = 0;
+            if (!targetCentered) {
+                startingTime = System.currentTimeMillis();
+                targetCentered = true;
+            }
 
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            aligning = false;
-                        }
-                    },
-                    600
-            );
+
+            if(targetCentered && currentTime - startingTime > 2000){
+                aligning = false;
+            }
 
         }
 

@@ -67,6 +67,15 @@ public class KeerthanPracticeOne extends GenericRobot {
     }
 
     @Override
+    public double getPIDmaneuverP(){return 4.0e-2;}
+
+    @Override
+    public double getPIDmaneuverI(){return 0.0e-2;}
+
+    @Override
+    public double getPIDmaneuverD(){return 1.0e-4;}
+
+    @Override
     public double getYaw() {
         return navx.getYaw();
     }
@@ -142,5 +151,10 @@ public class KeerthanPracticeOne extends GenericRobot {
     @Override
     public Double getLidarDistanceInchesRight() {
         return lidar.getDistanceInches(1);
+    }
+
+    @Override
+    public double getLimelightMinpower() {
+        return .04;
     }
 }

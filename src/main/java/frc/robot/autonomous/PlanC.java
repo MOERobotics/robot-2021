@@ -11,7 +11,6 @@ public class PlanC extends GenericAutonomous {
 
       static double startingYaw = 0.0; //start at an angle, figure out later
       static double startingDistance = 0.0;
-      PIDController PIDSteering = new PIDController(4.0e-2, 0.0e-3, 1.0e-4);
       double correction;
       static double currentYaw = 0;
       double outerArcLength = 50;
@@ -31,6 +30,8 @@ public class PlanC extends GenericAutonomous {
 
       @Override
       public void autonomousPeriodic(GenericRobot robot) {
+            PIDController PIDSteering = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
+
             double currentDistance = 0;
             double yawError;
             switch (autonomousStep) {
