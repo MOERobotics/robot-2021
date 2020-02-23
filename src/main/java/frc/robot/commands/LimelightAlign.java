@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.genericrobot.GenericRobot;
 
 public class LimelightAlign extends GenericCommand{
@@ -13,7 +14,8 @@ public class LimelightAlign extends GenericCommand{
     boolean targetCentered;
     long startingTime = 0;
     long startTime;
-    long timeoutTime = 3000;
+    long timeoutTime = 4000;
+    double correction;
 
     public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
 
@@ -25,43 +27,40 @@ public class LimelightAlign extends GenericCommand{
     @Override
     public void begin(GenericRobot robot) {
         targetCentered = false;
-        //startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
     }
 
     @Override
     public void step(GenericRobot robot) {
+        PIDController PIDPivot = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
+
         double minPower = robot.getLimelightMinpower();
         long currentTime = System.currentTimeMillis();
 
         aligning = true;
 
-//        if((currentTime - startingTime) > timeoutTime){
-//            aligning = false;
-//        }
+        if((currentTime - startTime) > timeoutTime){
+            aligning = false;
+        }
 
 
 
         if (robot.limelight.getLimelightX() < -setPointDeadzone + setPoint) {
             //Pivots to the left
             targetCentered = false;
-            currentDistance = setPoint - robot.limelight.getLimelightX();
-            leftPower = -(constant * currentDistance);
-            rightPower = constant * currentDistance;
-            if (rightPower <= minPower) {
-                leftPower = -minPower;
-                rightPower = minPower;
-            }
+
+            correction = PIDPivot.calculate(setPoint - robot.limelight.getLimelightX());
+            leftPower = 0.35 * correction;
+            rightPower = -0.35 * correction;
+
 
         } else if (robot.limelight.getLimelightX() > setPointDeadzone + setPoint) {
             //Pivots to the right
             targetCentered = false;
-            currentDistance = robot.limelight.getLimelightX() - setPoint;
-            leftPower = constant * currentDistance;
-            rightPower = -(constant * currentDistance);
-            if (leftPower <= minPower) {
-                leftPower = minPower;
-                rightPower = -minPower;
-            }
+            correction = PIDPivot.calculate(robot.limelight.getLimelightX() - setPoint);
+            leftPower = -0.35 * correction;
+            rightPower = 0.35 * correction;
+
 
         } else {
             leftPower = 0;
