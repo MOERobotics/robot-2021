@@ -169,10 +169,10 @@ public class Robot extends TimedRobot {
         }
 
         //Right individual control
-        if (leftJoystick.getRawButton( 5)) {
+        if (leftJoystick.getRawButton(11)) {
             getOutaDodge.setHolding(false);
             robot.setClimbVerticalStarboardPower( .6);
-        } else if (leftJoystick.getRawButton(10)) {
+        } else if (leftJoystick.getRawButton(16)) {
             getOutaDodge.setHolding(false);
             robot.setClimbVerticalStarboardPower(-.2);
         }
