@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
@@ -31,6 +32,9 @@ public class Robot extends TimedRobot {
     long timeStart;
     //boolean escalatorSpaceCounting =false;
     long escalatorSpacing = 100;
+    int ballCount = 0;
+    boolean ballCollectCounted = false;
+    boolean ballShootCounted = false;
 
     @Override
     public void robotInit() {
@@ -185,6 +189,28 @@ public class Robot extends TimedRobot {
         } else {
             robot.setIndexerPower(0);
         }
+
+        //below is code for keeping track of number of balls on robot
+        if(robot.getEscalatorSensorMedium()){
+            if (ballCollectCounted == false) {
+                ballCount++;
+                ballCollectCounted = true;
+            }
+        }
+        else {
+            ballCollectCounted = false;
+        }
+
+        if(robot.getEscalatorSensorHigh()){
+            if (ballShootCounted == false) {
+                ballCount--;
+                ballShootCounted = true;
+            }
+        }
+        else {
+            ballShootCounted = false;
+        }
+        SmartDashboard.putNumber("Ball Count", ballCount);
     }
 
     @Override
