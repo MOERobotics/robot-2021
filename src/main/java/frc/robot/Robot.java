@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButton( 7)) {
             getOutaDodge.step(robot);
         }
-        if (leftJoystick.getRawButton(11)) {
+        if (leftJoystick.getRawButton(13)) {
             robot.raiseClimberArms(.2);
             getOutaDodge.setHolding(false);
         }
