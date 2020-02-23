@@ -15,7 +15,7 @@ public class PlanA extends GenericAutonomous {
     static double startingDistance = 0.0;
     double correction;
     static double currentYaw = 0;
-    double outerArcLength = 87.2;
+    double outerArcLength = 81.2;
     double innerArc = 35.45;
     double outerRadius = 60;
     double yawDifference = 0;
