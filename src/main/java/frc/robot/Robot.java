@@ -192,7 +192,7 @@ public class Robot extends TimedRobot {
 
         //below is code for keeping track of number of balls on robot
         if(robot.getEscalatorSensorMedium()){
-            if (ballCollectCounted == false) {
+            if (ballCollectCounted == false) { //add ball
                 ballCount++;
                 ballCollectCounted = true;
             }
@@ -201,8 +201,21 @@ public class Robot extends TimedRobot {
             ballCollectCounted = false;
         }
 
+        //potential fix to double counting problem when shooting
+        /**
         if(robot.getEscalatorSensorHigh()){
-            if (ballShootCounted == false) {
+            ballShootCounted = true;
+        }
+        else {
+            if (ballShootCounted == true){
+                ballCount--;
+            }
+            ballShootCounted = false;
+        }
+         */
+
+        if(robot.getEscalatorSensorHigh()){
+            if (ballShootCounted == false) { //subtract ball
                 ballCount--;
                 ballShootCounted = true;
             }
