@@ -172,7 +172,7 @@ public class Robot extends TimedRobot {
 
         //Shooter
         if (xboxJoystick.getYButtonPressed()) {
-            robot.setShooterPowerPercentage(1.0);
+            robot.setShooterRPM(3000,2500);
         } else if (xboxJoystick.getBButtonPressed()) {
             robot.setShooterPowerPercentage(0);
         }

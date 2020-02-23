@@ -26,8 +26,8 @@ public class PlanA extends GenericAutonomous {
     boolean shooting = false;
     double escalatorPower;
     double indexerPower;
-    double shooterUpperRPM;
-    double shooterLowerRPM;
+    double shooterUpperRPM=2500;
+    double shooterLowerRPM=2000;
     GenericCommand activeCommand = new LimelightAlign( -2.0, 0.5, .0185);
 
     @Override
@@ -44,7 +44,7 @@ public class PlanA extends GenericAutonomous {
             case -1: //resets and waits
                 ballCount = 0;
                 shooting = false;
-                robot.setShooterRPM(2500, 2000);
+                robot.setShooterRPM(shooterUpperRPM, shooterLowerRPM);
                 robot.resetAttitude();
                 robot.resetEncoders();
                 if (System.currentTimeMillis() >= startingTime + 100) {
