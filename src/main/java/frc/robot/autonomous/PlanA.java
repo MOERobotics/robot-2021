@@ -52,7 +52,6 @@ public class PlanA extends GenericAutonomous {
                 }
                 break;
 
-
             case 0: //turns on LEDs
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 activeCommand.begin(robot);
@@ -78,10 +77,10 @@ public class PlanA extends GenericAutonomous {
                     escalatorPower = 0.0;
                     indexerPower = 0.0;
                 }
-                if(robot.getElevatorSensorHigh() == true){
+                if(robot.getEscalatorSensorHigh() == true){
                     shooting = true;
                 }
-                if ((shooting) && (robot.getElevatorSensorHigh() == false)) {
+                if ((shooting) && (robot.getEscalatorSensorHigh() == false)) {
                     shooting = false;
                     ballCount++;
                 }

@@ -17,7 +17,7 @@ public class CollectPowerCells{
     public void run(GenericRobot robot) {
         collectorPower = 1.0;
 
-        if(robot.getElevatorSensorMedium()){ //escalator moves only when medium is tripped
+        if(robot.getEscalatorSensorMedium()){ //escalator moves only when medium is tripped
             escalatorPower = 0.5;
         } else {
             escalatorPower = 0.0;

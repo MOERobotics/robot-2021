@@ -7,13 +7,9 @@
 
 package frc.robot;
 
-import com.revrobotics.CANDigitalInput;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
@@ -35,7 +31,6 @@ public class Robot extends TimedRobot {
     long timeStart;
     //boolean escalatorSpaceCounting =false;
     long escalatorSpacing = 500;
-    double            deadZone     = 0.10;
 
     @Override
     public void robotInit() {
