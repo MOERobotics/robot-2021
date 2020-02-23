@@ -252,6 +252,10 @@ public abstract class GenericRobot {
         System.out.println("I don't have a navx :'(");
     }
 
+    public double getPIDmaneuverP() {return 0.0;}
+    public double getPIDmaneuverI() {return 0.0;}
+    public double getPIDmaneuverD() {return 0.0;}
+
     //***********************************************************************//
 
     public enum ShooterState {

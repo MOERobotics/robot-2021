@@ -13,7 +13,6 @@ public class PlanE extends GenericAutonomous {
 
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
-    PIDController PIDSteering = new PIDController(1.0e-2, 1.0e-4, 2.0e-4);
     double correction;
     static double currentYaw = 0;
     double outerArcLength = 39;
@@ -46,6 +45,8 @@ public class PlanE extends GenericAutonomous {
 
     @Override
     public void autonomousPeriodic(GenericRobot robot) {
+        PIDController PIDSteering = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
+
         currentDistance = 0;
         double yawError;
         switch (autonomousStep) {
