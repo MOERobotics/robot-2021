@@ -32,7 +32,7 @@ public class LimelightAlign extends GenericCommand{
 
     @Override
     public void step(GenericRobot robot) {
-        PIDController PIDPivot = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
+        PIDController PIDPivot = new PIDController(4.0e-2, 1.0e-2, 1.0e-4);
 
         long currentTime = System.currentTimeMillis();
 
@@ -65,7 +65,6 @@ public class LimelightAlign extends GenericCommand{
                 startingTime = System.currentTimeMillis();
                 targetCentered = true;
             }
-
 
             if(targetCentered && currentTime - startingTime > 500){
                 aligning = false;
