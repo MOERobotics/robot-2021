@@ -92,19 +92,11 @@ public class Robot extends TimedRobot {
         rightPower = driverRestriction*deadzoneValue(rightPower,deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
-        robot.setShooterPowerPercentage(0);
 
-        if (leftJoystick.getRawButtonPressed(16)) {
-            robot.shiftLow();
-        }
-
-        if (leftJoystick.getRawButtonPressed(11)) {
-            robot.shiftHigh();
-        }
-        if (leftJoystick.getRawButton(13)) {
+        if (leftJoystick.getRawButton( 3)) {
             robot.driveForward(-.2);
         }
-        if (leftJoystick.getRawButton(14)) {
+        if (leftJoystick.getRawButton( 4)) {
             robot.driveForward(.2);
         }
 
@@ -145,11 +137,52 @@ public class Robot extends TimedRobot {
         } else {
             robot.setIndexerPower(0);
         }
+
+        //Climb vert
+        if (getOutaDodge.getHolding()) {
+            getOutaDodge.hold(robot);
+        } else {
+            robot.setClimbVerticalPower(0);
+        }
+
+        if (leftJoystick.getRawButtonPressed(7)) {
+            getOutaDodge.begin(robot);
+        }
+        if (leftJoystick.getRawButtonReleased(7)) {
+            getOutaDodge.setHolding(true);
+        }
+        if (leftJoystick.getRawButton( 7)) {
+            getOutaDodge.step(robot);
+        }
+        if (leftJoystick.getRawButton(11)) {
+            robot.raiseClimberArms(.2);
+            getOutaDodge.setHolding(false);
+        }
+
+        //Left individual control
+        if (leftJoystick.getRawButton( 5)) {
+            getOutaDodge.setHolding(false);
+            robot.setClimbVerticalPortPower( .6);
+        } else if (leftJoystick.getRawButton(10)) {
+            getOutaDodge.setHolding(false);
+            robot.setClimbVerticalPortPower(-.2);
+        }
+
+        //Right individual control
+        if (leftJoystick.getRawButton( 5)) {
+            getOutaDodge.setHolding(false);
+            robot.setClimbVerticalStarboardPower( .6);
+        } else if (leftJoystick.getRawButton(10)) {
+            getOutaDodge.setHolding(false);
+            robot.setClimbVerticalStarboardPower(-.2);
+        }
+
     }
 
     @Override
     public void testInit()  {
         LiveWindow.setEnabled(false);
+        getOutaDodge.setHolding(false);
     }
 
 
@@ -216,36 +249,24 @@ public class Robot extends TimedRobot {
             robot.spinControlPanel(0);
         }
 
-        //Climb vert
-        if (leftJoystick.getRawButtonPressed(2))
-        {
-            getOutaDodge.begin(robot);
-        }
-        if (leftJoystick.getRawButtonReleased(2)) {getOutaDodge.setHolding(true);}
-        if (getOutaDodge.getHolding())
-        {
-            getOutaDodge.hold(robot);
-        }
-
+        //Climber
         if (leftJoystick.getRawButton( 2)) {
-            //robot.climbDown(.2);
-            getOutaDodge.step(robot);
+            robot.setClimbVerticalPower( .6);
         } else if (leftJoystick.getRawButton( 1)) {
-            robot.climbUp(.2);
-            getOutaDodge.setHolding(false);
+            robot.setClimbVerticalPower(-.2);
         } else {
-            if (!getOutaDodge.getHolding()) {
-            robot.climbVertical(0);}
+            robot.setClimbVerticalPower(0.0);
         }
 
-        //climb horiz
-        if (leftJoystick.getRawButton( 3)) {
-            robot.climberBalanceLeft(-.2);
-        } else if (leftJoystick.getRawButton( 4)) {
-            robot.climberBalanceRight(.2);
-        } else {
-            robot.setBalancePower(0);
+        //Left individual control
+        if (leftJoystick.getRawButton(3)) {
+            robot.setClimbVerticalStarboardPower(0);
         }
+        //Right individual control
+        if (leftJoystick.getRawButton(4)) {
+            robot.setClimbVerticalPortPower(0);
+        }
+
     }
 
 }

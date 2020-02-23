@@ -277,16 +277,6 @@ public abstract class GenericRobot {
         System.out.println("I don't have a shooter :'(");
     }
 
-    protected void setClimbVerticalPortInternal(double power)
-    {
-        System.out.println("I don't have a portside climber :'(");
-    }
-
-    protected void setClimbVerticalStarboardInternal(double power)
-    {
-        System.out.println("I don't have a starboard side climber :'(");
-    }
-
     public final double getShooterPowerUpper() {
         return shooterUpperPower;
     }
@@ -376,16 +366,16 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
-    public final void climbUp(double power){
-        climbVertical(power) ;
+    public final void lowerClimberArms(double power){
+        setClimbVerticalPower(-power) ;
     }
 
-    public final void climbDown(double power){
-        climbVertical(-power);
+    public final void raiseClimberArms(double power){
+        setClimbVerticalPower(power);
     }
 
     public final void stopClimb() {
-        climbVertical(0.0);
+        setClimbVerticalPower(0.0);
     }
 
     public final void setClimbVerticalPortPower(double power){
@@ -396,7 +386,15 @@ public abstract class GenericRobot {
         climbVerticalStarboardPower = power;
     }
 
-    public final void climbVertical(double power){
+    protected void setClimbVerticalPortInternal(double power) {
+        System.out.println("I don't have a portside climber :'(");
+    }
+
+    protected void setClimbVerticalStarboardInternal(double power) {
+        System.out.println("I don't have a starboard side climber :'(");
+    }
+
+    public final void setClimbVerticalPower(double power){
         climbVerticalPortPower = power;
         climbVerticalStarboardPower = power;
         setClimbVerticalPortPower(power);
