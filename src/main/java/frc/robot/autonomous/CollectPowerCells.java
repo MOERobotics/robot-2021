@@ -6,7 +6,7 @@ public class CollectPowerCells {
     double collectorPower = 0.0;
     double escalatorPower = 0.0;
     long timeStart;
-    long escalatorSpacing = 1000;
+    long escalatorSpacing = 100;
 
     public CollectPowerCells(){
 

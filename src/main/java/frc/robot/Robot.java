@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
     double deadZone = 0.10;
     long timeStart;
     //boolean escalatorSpaceCounting =false;
-    long escalatorSpacing = 500;
+    long escalatorSpacing = 100;
 
     @Override
     public void robotInit() {
