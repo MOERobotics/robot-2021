@@ -40,9 +40,10 @@ public abstract class GenericRobot {
 
         SmartDashboard.putNumber  ("Collector Power"      , collectorPower                           );
         SmartDashboard.putNumber  ("Escalator Power"      , escalatorPower);
-        SmartDashboard.putBoolean ("Elevator Sensor Low"  , getElevatorSensorLow()                   );
-        SmartDashboard.putBoolean ("Elevator Sensor Medium", getElevatorSensorMedium()                   );
-        SmartDashboard.putBoolean ("Elevator Sensor High" , getElevatorSensorHigh()                   );
+        SmartDashboard.putBoolean ("Escalator Sensor Low"  , getEscalatorSensorLow()                   );
+        SmartDashboard.putBoolean ("Escalator Sensor Medium", getEscalatorSensorMedium()                   );
+        SmartDashboard.putBoolean ("Escalator Sensor High" , getEscalatorSensorHigh()                   );
+        SmartDashboard.putNumber  ("Escalator Power"      , escalatorPower                           );
         SmartDashboard.putNumber  ("Indexer Power"        , indexerPower                             );
         SmartDashboard.putString  ("Shooter State"        , shooterState.toString()                  );
         SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
@@ -453,23 +454,23 @@ public abstract class GenericRobot {
     }
 
 
-    protected boolean getElevatorSensorLowInternal(){
+    protected boolean getEscalatorSensorLowInternal(){
         System.out.println("I don't have a low elevator sensor :'(");
         return false;
     }
 
-    protected boolean getElevatorSensorMediumInternal(){
+    protected boolean getEscalatorSensorMediumInternal(){
         System.out.println("I don't have a medium elevator sensor :'(");
         return false;
     }
-    protected boolean getElevatorSensorHighInternal(){
+    protected boolean getEscalatorSensorHighInternal(){
         System.out.println("I don't have a high elevator sensor :'(");
         return false;
     }
 
-    public boolean getElevatorSensorLow(){ return getElevatorSensorLowInternal();}
-    public boolean getElevatorSensorMedium(){ return getElevatorSensorMediumInternal();}
-    public boolean getElevatorSensorHigh(){ return getElevatorSensorHighInternal();}
+    public boolean getEscalatorSensorLow(){ return getEscalatorSensorLowInternal();}
+    public boolean getEscalatorSensorMedium(){ return getEscalatorSensorMediumInternal();}
+    public boolean getEscalatorSensorHigh(){ return getEscalatorSensorHighInternal();}
 
 
     //***********************************************************************//

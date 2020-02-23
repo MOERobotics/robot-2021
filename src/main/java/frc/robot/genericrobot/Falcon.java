@@ -52,9 +52,9 @@ public class Falcon extends GenericRobot{
     private AnalogInput input = new AnalogInput(0);
     private AnalogPotentiometer elevation = new AnalogPotentiometer(input, 180, 90);
 
-    DigitalInput ElevatorSensorLow    = new DigitalInput(1);
-    DigitalInput ElevatorSensorMedium = new DigitalInput(2);
-    DigitalInput ElevatorSensorHigh   = new DigitalInput(3);
+    DigitalInput escalatorSensorLow = new DigitalInput(1);
+    DigitalInput escalatorSensorMedium = new DigitalInput(2);
+    DigitalInput escalatorSensorHigh = new DigitalInput(3);
 
 
     public Falcon() {
@@ -70,6 +70,8 @@ public class Falcon extends GenericRobot{
         rightDriveA.setInverted(true);
         rightDriveB.setInverted(true);
         rightDriveC.setInverted(true);
+
+        collector.setInverted(true);
 
         escalator.setIdleMode(IdleMode.kBrake);
 
@@ -283,22 +285,22 @@ public class Falcon extends GenericRobot{
     public double getLimelightMinpower() {
         return .03;
     }
+
     @Override
-    public boolean getElevatorSensorLowInternal(){
-        return ElevatorSensorLow.get();
+    public boolean getEscalatorSensorLowInternal(){
+        return escalatorSensorLow.get();
     }
 
     @Override
-    public boolean getElevatorSensorMediumInternal(){
-        return ElevatorSensorMedium.get();
+    public boolean getEscalatorSensorMediumInternal(){
+        return escalatorSensorMedium.get();
     }
 
     @Override
-    public boolean getElevatorSensorHighInternal(){
-        return ElevatorSensorHigh.get();
+    public boolean getEscalatorSensorHighInternal(){
+        return escalatorSensorHigh.get();
     }
 
 
 }
-
 
