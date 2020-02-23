@@ -281,17 +281,17 @@ public class Falcon extends GenericRobot{
     public double getShooterAngleMin(){return 114.0;} //orig 113
 
     @Override
-    public boolean getElevatorSensorLowInternal(){
+    public boolean getEscalatorSensorLowInternal(){
         return escalatorSensorLow.get();
     }
 
     @Override
-    public boolean getElevatorSensorMediumInternal(){
+    public boolean getEscalatorSensorMediumInternal(){
         return escalatorSensorMedium.get();
     }
 
     @Override
-    public boolean getElevatorSensorHighInternal(){
+    public boolean getEscalatorSensorHighInternal(){
         return escalatorSensorHigh.get();
     }
 

@@ -128,12 +128,16 @@ public class Robot extends TimedRobot {
         //Collector
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             robot.collectorIn(1.0);
-            escalatorPower = 0.5;
-            if (robot.getElevatorSensorMedium()) {
+            escalatorPower = 0.0;
+            if (robot.getEscalatorSensorMedium()) {
                 timeStart = System.currentTimeMillis();
+                escalatorPower = 0.5;
             } else {
                 if ((System.currentTimeMillis() >= timeStart + escalatorSpacing)) {
                     escalatorPower = 0.0;
+                }
+                else {
+                    escalatorPower = 0.5;
                 }
             }
             robot.escalatorUp(escalatorPower);
@@ -204,12 +208,16 @@ public class Robot extends TimedRobot {
             //Escalator
             if (leftJoystick.getRawButton(12)) {
                 //do not do anything unless the medium sensor is tripped
-                escalatorPower = 0.5;
-                if (robot.getElevatorSensorMedium()) {
+                escalatorPower = 0.0;
+                if (robot.getEscalatorSensorMedium()) {
                     timeStart = System.currentTimeMillis();
+                    escalatorPower = 0.5;
                 } else {
                     if ( (System.currentTimeMillis() >= timeStart + escalatorSpacing)){
                         escalatorPower = 0.0;
+                    }
+                    else {
+                        escalatorPower = 0.5;
                     }
                 }
                 robot.escalatorUp(escalatorPower);
