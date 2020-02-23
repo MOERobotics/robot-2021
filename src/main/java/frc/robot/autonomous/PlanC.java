@@ -37,6 +37,7 @@ public class PlanC extends GenericAutonomous {
       public void autonomousInit(GenericRobot robot) {
             startingTime = System.currentTimeMillis();
             autonomousStep = 0;
+            getCells.begin(robot);
       }
 
       @Override
@@ -46,9 +47,10 @@ public class PlanC extends GenericAutonomous {
             double currentDistance = 0;
             double yawError;
             switch (autonomousStep) {
-
-
-                  case 0: //resets everything and waits
+                  case -1: //resets and waits
+                        ballCount = 0;
+                        shooting = false;
+                        robot.setShooterRPM(shooterUpperRPMNear, shooterLowerRPMNear);
                         robot.resetAttitude();
                         robot.resetEncoders();
                         if (System.currentTimeMillis() >= startingTime + 100) {
@@ -56,19 +58,60 @@ public class PlanC extends GenericAutonomous {
                         }
                         break;
 
-                  case 1: //auto-align
+                  case 0: //turns on LEDs
+                        robot.limelight.table.getEntry("ledMode").setNumber(3);
+                        robot.limelight.table.getEntry("pipeline").setNumber(0);
+
+                        activeCommand.begin(robot);
+                        activeCommand.setEnabled(true);
                         autonomousStep += 1;
                         break;
 
-                  case 2: //PID reset for straightaway
+                  case 1: //auto aligns
+                        if (activeCommand.isEnabled()) {
+                              activeCommand.step(robot);
+
+                        } else {
+                              robot.limelight.table.getEntry("ledMode").setNumber(1);
+                              autonomousStep += 1;
+                        }
+                        break;
+
+                  case 2:
+                        if (robot.readyToShoot()) {
+                              escalatorPower = 0.5;
+                              indexerPower = 1.0;
+                        } else {
+                              escalatorPower = 0.0;
+                              indexerPower = 0.0;
+                        }
+                        if (robot.getEscalatorSensorHigh() == true) {
+                              shooting = true;
+                        }
+                        if ((shooting) && (robot.getEscalatorSensorHigh() == false)) {
+                              shooting = false;
+                              ballCount++;
+                        }
+                        if (ballCount == 3) {
+                              escalatorPower = 0;
+                              indexerPower = 0;
+                              autonomousStep += 1;
+                        }
+                        robot.escalatorUp(escalatorPower);
+                        robot.indexerLoad(indexerPower);
+                        break;
+
+                  case 3: //PID reset for straightaway
                         startingDistance = robot.getDistanceInchesLeft();
                         PIDSteering.reset();
-                        PIDSteering.enableContinuousInput(-180,180);
+                        PIDSteering.enableContinuousInput(-180, 180);
                         currentYaw = 0;
                         autonomousStep += 1;
                         break;
 
-                  case 3: //straightaway
+                  case 4: //straightaway
+                        getCells.run(robot);
+
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
@@ -78,15 +121,19 @@ public class PlanC extends GenericAutonomous {
                         }
                         break;
 
-                  case 4: //reset for backward straight-away
+                  case 5: //reset for backward straight-away
+                        getCells.run(robot);
+
                         startingDistance = robot.getDistanceInchesLeft();
                         PIDSteering.reset();
-                        PIDSteering.enableContinuousInput(-180,180);
+                        PIDSteering.enableContinuousInput(-180, 180);
                         currentYaw = 0;
                         autonomousStep += 1;
                         break;
 
-                  case 5: //backward straight-away
+                  case 6: //backward straight-away
+                        getCells.run(robot);
+
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(-1 * defaultSpeed * (1 - correction), -1 * defaultSpeed * (1 + correction));
                         currentDistance = robot.getDistanceInchesLeft();
@@ -99,7 +146,9 @@ public class PlanC extends GenericAutonomous {
                         }
                         break;
 
-                  case 6: //reset for arc
+                  case 7: //reset for arc
+                        getCells.run(robot);
+
                         startingDistance = robot.getDistanceInchesRight();
                         PIDSteering.reset();
                         PIDSteering.disableContinuousInput();
@@ -107,7 +156,9 @@ public class PlanC extends GenericAutonomous {
                         autonomousStep += 1;
                         break;
 
-                  case 7: //left arc to pick up third ball
+                  case 8: //left arc to pick up third ball
+                        getCells.run(robot);
+
                         yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                         correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
@@ -117,7 +168,9 @@ public class PlanC extends GenericAutonomous {
                         }
                         break;
 
-                  case 8: //reset for inverse arc (not resetting starting distance)
+                  case 9: //reset for inverse arc (not resetting starting distance)
+                        getCells.run(robot);
+
                         PIDSteering.reset();
                         PIDSteering.disableContinuousInput();
                         startingYaw = robot.getYaw();
@@ -126,7 +179,9 @@ public class PlanC extends GenericAutonomous {
                         autonomousStep += 1;
                         break;
 
-                  case 9: //backwards arc to previous position
+                  case 10: //backwards arc to previous position
+                        getCells.run(robot);
+
                         yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                         correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         robot.setMotorPowerPercentage((defaultSpeed * -.75) * (1 - correction), (defaultSpeed * -1.5) * (1 + correction));
@@ -135,16 +190,69 @@ public class PlanC extends GenericAutonomous {
                               autonomousStep += 1;
                         }
                         break;
-
-                  case 10: //cease your autnomous
-                        robot.driveForward(0);
-                        //                               ¯\_(ツ)_/¯
+                  case 11:
+                        getCells.run(robot);
+                        startingTime = System.currentTimeMillis();
                         autonomousStep += 1;
                         break;
 
-                  case 11: //auto-align
+                  case 12:
+                        getCells.run(robot);
+                        long currentTime = System.currentTimeMillis();
+                        if ((currentTime - startingTime) > 2000) {
+                              autonomousStep += 1;
+                              break;
+                        }
+
+                  case 13:
+                        getCells.stop(robot);
+                        robot.driveForward(0);
+                        ballCount = 0;
+                        autonomousStep += 1;
                         break;
 
+                  case 14:
+                        robot.limelight.table.getEntry("ledMode").setNumber(3);
+                        robot.limelight.table.getEntry("pipeline").setNumber(1);
+                        activeCommand.setEnabled(true);
+                        ballCount = 0;
+                        autonomousStep += 1;
+                        break;
+
+                  case 15:
+                        if (robot.readyToShoot()) {
+                              escalatorPower = 0.5;
+                              indexerPower = 1.0;
+                        } else {
+                              escalatorPower = 0.0;
+                              indexerPower = 0.0;
+                        }
+                        if (robot.getEscalatorSensorHigh() == true) {
+                              shooting = true;
+                        }
+                        if ((shooting) && (robot.getEscalatorSensorHigh() == false)) {
+                              shooting = false;
+                              ballCount++;
+                        }
+                        if (ballCount == 3) {
+                              escalatorPower = 0;
+                              indexerPower = 0;
+                              autonomousStep += 1;
+                        }
+                        robot.escalatorUp(escalatorPower);
+                        robot.indexerLoad(indexerPower);
+                        break;
+
+                  case 16: //cease your autonomous
+                        robot.setShooterPowerPercentage(0);
+                        if (activeCommand.isEnabled()) {
+                              activeCommand.step(robot);
+
+                        } else {
+                              robot.limelight.table.getEntry("ledMode").setNumber(1);
+                              robot.driveForward(0);
+                        }
+                        break;
             }
       }
 }
