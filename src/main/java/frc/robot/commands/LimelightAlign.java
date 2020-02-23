@@ -15,7 +15,7 @@ public class LimelightAlign extends GenericCommand{
 
     public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
 
-        this.setPoint = setPoint;
+        this.setPoint = -setPoint;
         this.setPointDeadzone = setPointDeadzone;
         this.constant = constant;
 

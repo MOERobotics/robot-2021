@@ -27,7 +27,7 @@ public class PlanA extends GenericAutonomous {
     double indexerPower;
     double shooterUpperRPM=2500;
     double shooterLowerRPM=2000;
-    GenericCommand activeCommand = new LimelightAlign( -2.0, 0.5, .0185);
+    GenericCommand activeCommand = new LimelightAlign( -8.0, 0.5, .0185);
     CollectPowerCells getCells = new CollectPowerCells();
 
     @Override
