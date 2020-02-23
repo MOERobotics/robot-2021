@@ -1,6 +1,8 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import frc.robot.commands.GenericCommand;
+import frc.robot.commands.LimelightAlign;
 import frc.robot.genericrobot.GenericRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -20,7 +22,16 @@ public class PlanC extends GenericAutonomous {
       double yawDifference = 0;
       double prevStartingDistance = 0;
       long startingTime = System.currentTimeMillis();
-
+      int ballCount = 0;
+      boolean shooting = false;
+      double escalatorPower;
+      double indexerPower;
+      double shooterUpperRPMNear = 2210;
+      double shooterLowerRPMNear = 2210;
+      double shooterUpperRPMFar = 2430;
+      double shooterLowerRPMFar = 2430;
+      GenericCommand activeCommand = new LimelightAlign( -4, .8, .0185); //planA set setPoint to -2
+      CollectPowerCells getCells = new CollectPowerCells();
 
       @Override
       public void autonomousInit(GenericRobot robot) {
@@ -41,12 +52,12 @@ public class PlanC extends GenericAutonomous {
                         robot.resetAttitude();
                         robot.resetEncoders();
                         if (System.currentTimeMillis() >= startingTime + 100) {
-                              autonomousStep = 1;
+                              autonomousStep += 1;
                         }
                         break;
 
                   case 1: //auto-align
-                        autonomousStep = 2;
+                        autonomousStep += 1;
                         break;
 
                   case 2: //PID reset for straightaway
@@ -54,7 +65,7 @@ public class PlanC extends GenericAutonomous {
                         PIDSteering.reset();
                         PIDSteering.enableContinuousInput(-180,180);
                         currentYaw = 0;
-                        autonomousStep = 3;
+                        autonomousStep += 1;
                         break;
 
                   case 3: //straightaway
@@ -63,7 +74,7 @@ public class PlanC extends GenericAutonomous {
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > 80) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
-                              autonomousStep = 4;
+                              autonomousStep += 1;
                         }
                         break;
 
@@ -72,7 +83,7 @@ public class PlanC extends GenericAutonomous {
                         PIDSteering.reset();
                         PIDSteering.enableContinuousInput(-180,180);
                         currentYaw = 0;
-                        autonomousStep = 5;
+                        autonomousStep += 1;
                         break;
 
                   case 5: //backward straight-away
@@ -84,7 +95,7 @@ public class PlanC extends GenericAutonomous {
                         SmartDashboard.putNumber("distanceDifference", currentDistance - startingDistance);
                         if (currentDistance - startingDistance < -40) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
-                              autonomousStep = 6;
+                              autonomousStep += 1;
                         }
                         break;
 
@@ -93,7 +104,7 @@ public class PlanC extends GenericAutonomous {
                         PIDSteering.reset();
                         PIDSteering.disableContinuousInput();
                         startingYaw = robot.getYaw();
-                        autonomousStep = 7;
+                        autonomousStep += 1;
                         break;
 
                   case 7: //left arc to pick up third ball
@@ -102,7 +113,7 @@ public class PlanC extends GenericAutonomous {
                         robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                         currentDistance = robot.getDistanceInchesRight();
                         if (currentDistance - startingDistance > outerArcLength) {
-                              autonomousStep = 8;
+                              autonomousStep += 1;
                         }
                         break;
 
@@ -112,7 +123,7 @@ public class PlanC extends GenericAutonomous {
                         startingYaw = robot.getYaw();
                         prevStartingDistance = startingDistance;
                         startingDistance = robot.getDistanceInchesRight();
-                        autonomousStep = 9;
+                        autonomousStep += 1;
                         break;
 
                   case 9: //backwards arc to previous position
@@ -121,14 +132,14 @@ public class PlanC extends GenericAutonomous {
                         robot.setMotorPowerPercentage((defaultSpeed * -.75) * (1 - correction), (defaultSpeed * -1.5) * (1 + correction));
                         currentDistance = robot.getDistanceInchesRight();
                         if (currentDistance - prevStartingDistance <= 0) {
-                              autonomousStep = 10;
+                              autonomousStep += 1;
                         }
                         break;
 
                   case 10: //cease your autnomous
                         robot.driveForward(0);
                         //                               ¯\_(ツ)_/¯
-                        autonomousStep = 11;
+                        autonomousStep += 1;
                         break;
 
                   case 11: //auto-align
