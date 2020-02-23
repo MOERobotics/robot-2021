@@ -7,7 +7,6 @@ public class LimelightAlign extends GenericCommand{
     double leftPower;
     double rightPower;
     private boolean aligning;
-    double currentDistance = 0;
     double setPoint;
     double setPointDeadzone;
     double constant;
@@ -16,6 +15,7 @@ public class LimelightAlign extends GenericCommand{
     long startTime;
     long timeoutTime = 4000;
     double correction;
+    double defaultSpeed = 0.35;
 
     public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
 
@@ -34,7 +34,6 @@ public class LimelightAlign extends GenericCommand{
     public void step(GenericRobot robot) {
         PIDController PIDPivot = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
 
-        double minPower = robot.getLimelightMinpower();
         long currentTime = System.currentTimeMillis();
 
         aligning = true;
@@ -43,24 +42,21 @@ public class LimelightAlign extends GenericCommand{
             aligning = false;
         }
 
-
-
         if (robot.limelight.getLimelightX() < -setPointDeadzone + setPoint) {
             //Pivots to the left
             targetCentered = false;
 
             correction = PIDPivot.calculate(setPoint - robot.limelight.getLimelightX());
-            leftPower = 0.35 * correction;
-            rightPower = -0.35 * correction;
+            leftPower = defaultSpeed * correction;
+            rightPower = -defaultSpeed * correction;
 
 
         } else if (robot.limelight.getLimelightX() > setPointDeadzone + setPoint) {
             //Pivots to the right
             targetCentered = false;
             correction = PIDPivot.calculate(robot.limelight.getLimelightX() - setPoint);
-            leftPower = -0.35 * correction;
-            rightPower = 0.35 * correction;
-
+            leftPower = -defaultSpeed * correction;
+            rightPower = defaultSpeed * correction;
 
         } else {
             leftPower = 0;
