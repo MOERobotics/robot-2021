@@ -1,8 +1,8 @@
-package frc.robot.commands;
+package frc.robot.autonomous;
 
 import frc.robot.genericrobot.GenericRobot;
 
-public class CollectPowerCells{
+public class CollectPowerCells {
     double collectorPower = 0.0;
     double escalatorPower = 0.0;
     long timeStart;

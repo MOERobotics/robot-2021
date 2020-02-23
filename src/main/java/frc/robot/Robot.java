@@ -141,7 +141,6 @@ public class Robot extends TimedRobot {
 
         //Collector
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
-            robot.collectorIn(1.0);
             escalatorPower = 0.0;
             if (robot.getEscalatorSensorMedium()) {
                 timeStart = System.currentTimeMillis();
@@ -154,6 +153,7 @@ public class Robot extends TimedRobot {
                     escalatorPower = 0.5;
                 }
             }
+            robot.collectorIn(1.0);
             robot.escalatorUp(escalatorPower);
         } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
             robot.collectorOut(1.0);
