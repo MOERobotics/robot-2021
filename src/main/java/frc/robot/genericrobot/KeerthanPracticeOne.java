@@ -26,8 +26,6 @@ public class KeerthanPracticeOne extends GenericRobot {
     Lidar lidar = new Lidar();
 
     //Limelight
-
-
     public KeerthanPracticeOne() {
         driveRightB.follow(driveRightA);
         driveLeftB .follow(driveLeftA);
@@ -67,6 +65,15 @@ public class KeerthanPracticeOne extends GenericRobot {
     public double getDistanceTicksRight() {
         return encoderRight.getPosition();
     }
+
+    @Override
+    public double getPIDmaneuverP(){return 4.0e-2;}
+
+    @Override
+    public double getPIDmaneuverI(){return 0.0e-2;}
+
+    @Override
+    public double getPIDmaneuverD(){return 1.0e-4;}
 
     @Override
     public double getYaw() {
@@ -127,22 +134,27 @@ public class KeerthanPracticeOne extends GenericRobot {
     }
 
     @Override
-    public Integer getLidarDistanceFront() {
-        return lidar.getDistance(2);
+    public Double getLidarDistanceInchesFront() {
+        return lidar.getDistanceInches(2);
     }
 
     @Override
-    public Integer getLidarDistanceRear() {
-        return lidar.getDistance(0);
+    public Double getLidarDistanceInchesRear() {
+        return lidar.getDistanceInches(0);
     }
 
     @Override
-    public Integer getLidarDistanceLeft() {
-        return lidar.getDistance(3);
+    public Double getLidarDistanceInchesLeft() {
+        return lidar.getDistanceInches(3);
     }
 
     @Override
-    public Integer getLidarDistanceRight() {
-        return lidar.getDistance(1);
+    public Double getLidarDistanceInchesRight() {
+        return lidar.getDistanceInches(1);
+    }
+
+    @Override
+    public double getLimelightMinpower() {
+        return .04;
     }
 }

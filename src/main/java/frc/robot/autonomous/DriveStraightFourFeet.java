@@ -12,7 +12,7 @@ public class DriveStraightFourFeet extends GenericAutonomous {
                   case 1:
                         robot.driveForward(0.3);
                         double currentDistance = robot.getDistanceInchesLeft();
-                        if (startingDistance - currentDistance > 48) {
+                        if (startingDistance - currentDistance > 12) {
                               autonomousStep = 2;
                         }
                         break;
