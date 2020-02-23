@@ -7,16 +7,24 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
 
 import static frc.robot.Util.*;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Robot extends TimedRobot {
 
@@ -26,6 +34,7 @@ public class Robot extends TimedRobot {
     GenericRobot robot = new Falcon();
     Joystick leftJoystick = new Joystick(0);
     XboxController xboxJoystick = new XboxController(1);
+    boolean shooterOn = false;
 
     double deadZone = 0.10;
     long timeStart;
@@ -40,9 +49,10 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         robot.updateMotorPowers();
-        robot        .printSmartDashboard();
-        autoProgram  .printSmartDashboard();
+        robot.printSmartDashboard();
+        autoProgram.printSmartDashboard();
         activeCommand.printSmartDashboard();
+        SmartDashboard.putBoolean("Is Shooter On", shooterOn);
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
@@ -116,8 +126,8 @@ public class Robot extends TimedRobot {
 
         double driverRestriction = 0.75;
 
-         leftPower = driverRestriction*deadzoneValue( leftPower,deadZone);
-        rightPower = driverRestriction*deadzoneValue(rightPower,deadZone);
+        leftPower = driverRestriction * deadzoneValue(leftPower, deadZone);
+        rightPower = driverRestriction * deadzoneValue(rightPower, deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
@@ -135,7 +145,7 @@ public class Robot extends TimedRobot {
 //            robot.driveForward(.2);
 //        }
 
-        if(leftJoystick.getRawButtonPressed(2)){
+        if (leftJoystick.getRawButtonPressed(2)) {
             activeCommand.setEnabled(true);
         }
 
@@ -148,8 +158,7 @@ public class Robot extends TimedRobot {
             } else {
                 if ((System.currentTimeMillis() >= timeStart + escalatorSpacing)) {
                     escalatorPower = 0.0;
-                }
-                else {
+                } else {
                     escalatorPower = 0.5;
                 }
             }
@@ -166,16 +175,10 @@ public class Robot extends TimedRobot {
             robot.escalatorUp(.5);
         } else if (xboxJoystick.getAButton()) {
             robot.escalatorDown(.5);
-        } else if (!(xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0)){
+        } else if (!(xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0)) {
             robot.setEscalatorPower(0);
         }
 
-        //Shooter
-        if (xboxJoystick.getYButtonPressed()) {
-            robot.setShooterRPM(3000,2500);
-        } else if (xboxJoystick.getBButtonPressed()) {
-            robot.setShooterPowerPercentage(0);
-        }
 
         //Indexer
         if (xboxJoystick.getBumper(GenericHID.Hand.kRight)) {
@@ -185,10 +188,46 @@ public class Robot extends TimedRobot {
         } else {
             robot.setIndexerPower(0);
         }
+
+
+        POVDirection xboxDPadDirection = POVDirection.getDirection(xboxJoystick.getPOV());
+
+        switch (xboxDPadDirection) {
+            case NORTH: //high velocity (long range)
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.LONG_RANGE);
+                break;
+
+            case SOUTH: //low velocity (short range)
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
+                break;
+
+            case EAST: //medium velocity (mid range)
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.MID_RANGE);
+                break;
+
+            case WEST: //YEET
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
+                break;
+
+        }
+
+        //Shooter
+        if (xboxJoystick.getYButtonPressed()) {
+            shooterOn = true;
+        } else if (xboxJoystick.getBButtonPressed()) {
+            shooterOn = false;
+        }
+
+        if (shooterOn) {
+            robot.setShooterRPMFromSpeedConst();
+        } else {
+            robot.setShooterPowerPercentage(0);
+        }
+
     }
 
     @Override
-    public void testInit()  {
+    public void testInit() {
         LiveWindow.setEnabled(false);
     }
 
@@ -203,8 +242,8 @@ public class Robot extends TimedRobot {
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
-        leftPower = deadzoneValue( leftPower,deadZone);
-        rightPower = deadzoneValue(rightPower,deadZone);
+        leftPower = deadzoneValue(leftPower, deadZone);
+        rightPower = deadzoneValue(rightPower, deadZone);
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
@@ -228,10 +267,9 @@ public class Robot extends TimedRobot {
                     timeStart = System.currentTimeMillis();
                     escalatorPower = 0.5;
                 } else {
-                    if ( (System.currentTimeMillis() >= timeStart + escalatorSpacing)){
+                    if ((System.currentTimeMillis() >= timeStart + escalatorSpacing)) {
                         escalatorPower = 0.0;
-                    }
-                    else {
+                    } else {
                         escalatorPower = 0.5;
                     }
                 }
@@ -242,58 +280,95 @@ public class Robot extends TimedRobot {
                 robot.setEscalatorPower(0);
             }
 
-        //Shooter
-        if (leftJoystick.getRawButton(13)) {
-            robot.setShooterRPM(3500,2500);
-        } else if (leftJoystick.getRawButton(14)) {
-            robot.setShooterPowerPercentage(0);
+            //Shooter
+            if (leftJoystick.getRawButton(13)) {
+                robot.setShooterRPM(3500, 2500);
+            } else if (leftJoystick.getRawButton(14)) {
+                robot.setShooterPowerPercentage(0);
+            }
+
+            //Indexer
+            if (leftJoystick.getRawButton(7) && robot.readyToShoot()) {
+                robot.indexerLoad(1.0);
+            } else if (leftJoystick.getRawButton(8)) {
+                robot.indexerUnload(1.0);
+            } else {
+                robot.setIndexerPower(0);
+            }
+
+            //Vert Adjust
+            if (leftJoystick.getRawButton(6)) {
+                robot.aimUp(.4);
+            } else if (leftJoystick.getRawButton(9)) {
+                robot.aimDown(.4);
+            } else {
+                robot.setAngleAdjusterPower(0);
+            }
+
+            //CP
+            if (leftJoystick.getRawButton(5)) {
+                robot.spinControlPanel(-.2);
+            } else if (leftJoystick.getRawButton(10)) {
+                robot.spinControlPanel(.2);
+            } else {
+                robot.spinControlPanel(0);
+            }
+
+            //Climb vert
+            if (leftJoystick.getRawButton(2)) {
+                robot.climbDown(.2);
+            } else if (leftJoystick.getRawButton(1)) {
+                robot.climbUp(.2);
+            } else {
+                robot.climbVertical(0);
+            }
+
+            //climb horiz
+            if (leftJoystick.getRawButton(3)) {
+                robot.climberBalanceLeft(-.2);
+            } else if (leftJoystick.getRawButton(4)) {
+                robot.climberBalanceRight(.2);
+            } else {
+                robot.setBalancePower(0);
+            }
         }
 
-        //Indexer
-        if (leftJoystick.getRawButton( 7) && robot.readyToShoot()) {
-            robot.indexerLoad(1.0);
-        } else if (leftJoystick.getRawButton(8)) {
-            robot.indexerUnload(1.0);
-        } else {
-            robot.setIndexerPower(0);
+
+    }
+
+    public enum POVDirection {
+        NORTH(0),
+        NORTHEAST(45),
+        EAST(90),
+        SOUTHEAST(135),
+        SOUTH(180),
+        SOUTHWEST(225),
+        WEST(270), //best
+        NORTHWEST(315),
+        NULL(-1);
+
+        private final int angle;
+
+        POVDirection(int angle) {
+            this.angle = angle;
         }
 
-        //Vert Adjust
-        if (leftJoystick.getRawButton( 6)) {
-            robot.aimUp(.4);
-        } else if (leftJoystick.getRawButton( 9)) {
-            robot.aimDown(.4);
-        } else {
-            robot.setAngleAdjusterPower(0);
+        public int getAngle() {
+            return angle;
         }
 
-        //CP
-        if (leftJoystick.getRawButton( 5)) {
-            robot.spinControlPanel(-.2);
-        } else if (leftJoystick.getRawButton(10)) {
-            robot.spinControlPanel(.2);
-        } else {
-            robot.spinControlPanel(0);
-        }
+        //Kevin voodoo to turn ints into directions
+        public static final Map<Integer, POVDirection> directionMap =
+                Arrays.stream(POVDirection.values()).collect(
+                        Collectors.toMap(
+                                POVDirection::getAngle,
+                                Function.identity()
+                        )
+                );
 
-        //Climb vert
-        if (leftJoystick.getRawButton( 2)) {
-            robot.climbDown(.2);
-        } else if (leftJoystick.getRawButton( 1)) {
-            robot.climbUp(.2);
-        } else {
-            robot.climbVertical(0);
-        }
-
-        //climb horiz
-        if (leftJoystick.getRawButton( 3)) {
-            robot.climberBalanceLeft(-.2);
-        } else if (leftJoystick.getRawButton( 4)) {
-            robot.climberBalanceRight(.2);
-        } else {
-            robot.setBalancePower(0);
+        public static POVDirection getDirection(int angle) {
+            return directionMap.getOrDefault(angle, POVDirection.NULL);
         }
     }
 
-    }
 }

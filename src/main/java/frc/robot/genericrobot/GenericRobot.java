@@ -48,8 +48,11 @@ public abstract class GenericRobot {
         SmartDashboard.putString  ("Shooter State"        , shooterState.toString()                  );
         SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
         SmartDashboard.putNumber  ("Lower Shooter Power"  , shooterLowerPower                        );
+        SmartDashboard.putNumber  ("Upper Shooter Target Velocity"  , shooterUpperRPM                        );
+        SmartDashboard.putNumber  ("Lower Shooter Target Velocity"  , shooterLowerRPM                        );
         SmartDashboard.putNumber  ("Upper Shooter Velocity",getShooterVelocityRPMUpper()             );
         SmartDashboard.putNumber  ("Lower Shooter Velocity",getShooterVelocityRPMLower()             );
+        SmartDashboard.putString  ("Shooter Speed Setting" ,shooterSpeedPresetName.name());
         SmartDashboard.putBoolean ("Ready To Shoot"       , readyToShoot()                           );
 
         SmartDashboard.putNumber  ("Angle Adjust Power"   , angleAdjusterPower                       );
@@ -262,6 +265,24 @@ public abstract class GenericRobot {
         POWER,VELOCITY,UNKNOWN;
     }
 
+    public enum ShooterSpeedPresetName {
+        UNKOWN, SHORT_RANGE, MID_RANGE, LONG_RANGE, YEET;
+    }
+
+    public static class ShooterSpeedPreset{
+        public final int
+            upperRPM,
+            lowerRPM;
+        public ShooterSpeedPreset(
+            int upperRPM,
+            int lowerRPM
+        ){
+            this.upperRPM = upperRPM;
+            this.lowerRPM = lowerRPM;
+
+        }
+    }
+
     public final void setShooterPowerPercentage(
         double upperPower,
         double lowerPower
@@ -273,9 +294,14 @@ public abstract class GenericRobot {
 
     public final void setShooterPowerPercentage(
         double power
+
     ) {
         setShooterPowerPercentage(power, power);
     }
+
+    public ShooterSpeedPresetName shooterSpeedPresetName //?
+                = ShooterSpeedPresetName.UNKOWN;
+
 
 
     public void setShooterRPM(double upperRPM, double lowerRPM) {
@@ -341,6 +367,42 @@ public abstract class GenericRobot {
     public ShooterState getShooterState() {
         return shooterState;
     }
+
+    public final ShooterSpeedPresetName getShooterSpeedConstant() {
+        return shooterSpeedPresetName;
+    }
+
+    public final void setShooterSpeedPresetName(ShooterSpeedPresetName speedPresetName){
+        this.shooterSpeedPresetName = speedPresetName;
+    }
+
+    public final void setShooterRPMFromSpeedConst(){
+        setShooterRPMFromSpeedConstInternal(shooterSpeedPresetName);
+    }
+
+    public final void setShooterRPMFromSpeedConst(ShooterSpeedPresetName speedPresetName){
+        this.shooterSpeedPresetName = speedPresetName;
+        setShooterRPMFromSpeedConstInternal(speedPresetName);
+    }
+
+    public final void setShooterRPMFromSpeedConstInternal(ShooterSpeedPresetName speedPresetName) {
+        ShooterSpeedPreset speed = getShooterSpeedPreset(speedPresetName);
+        setShooterRPM(
+                speed.upperRPM,
+                speed.lowerRPM
+        );
+    }
+
+    private static final ShooterSpeedPreset
+            SHOOTER_SPEED_OFF = new ShooterSpeedPreset(0,0);
+
+    public ShooterSpeedPreset getShooterSpeedPreset(
+            ShooterSpeedPresetName speedType
+    ){
+        return SHOOTER_SPEED_OFF;
+    }
+
+
 
     //***********************************************************************//
 
