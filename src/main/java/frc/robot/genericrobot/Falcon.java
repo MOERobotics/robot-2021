@@ -204,7 +204,7 @@ public class Falcon extends GenericRobot{
         double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
         SmartDashboard.putNumber("errorUpper", (errorUpper * 100));
         SmartDashboard.putNumber("errorLower", (errorLower * 100));
-        if((errorUpper > 5.0e-2) || (errorLower > 5.0e-2)){
+        if((errorUpper > 1.0e-2) || (errorLower > 1.0e-2)){
             readyToShoot = false;
         }
         return readyToShoot;
@@ -292,7 +292,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getLimelightMinpower() {
-        return .03;
+        return .045;
     }
 
     @Override

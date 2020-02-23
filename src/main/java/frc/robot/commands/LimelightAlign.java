@@ -12,6 +12,8 @@ public class LimelightAlign extends GenericCommand{
     double constant;
     boolean targetCentered;
     long startingTime = 0;
+    long startTime;
+    long timeoutTime = 3000;
 
     public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
 
@@ -23,14 +25,21 @@ public class LimelightAlign extends GenericCommand{
     @Override
     public void begin(GenericRobot robot) {
         targetCentered = false;
+        //startTime = System.currentTimeMillis();
     }
 
     @Override
     public void step(GenericRobot robot) {
         double minPower = robot.getLimelightMinpower();
-        double currentTime = System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
 
         aligning = true;
+
+//        if((currentTime - startingTime) > timeoutTime){
+//            aligning = false;
+//        }
+
+
 
         if (robot.limelight.getLimelightX() < -setPointDeadzone + setPoint) {
             //Pivots to the left
@@ -63,7 +72,7 @@ public class LimelightAlign extends GenericCommand{
             }
 
 
-            if(targetCentered && currentTime - startingTime > 2000){
+            if(targetCentered && currentTime - startingTime > 500){
                 aligning = false;
             }
 
