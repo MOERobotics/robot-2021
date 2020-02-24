@@ -332,16 +332,16 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    public double getClimberVerticalPortPositionMin(){return 1.0;}
+    public double getClimberVerticalPortPositionMin(){return 10.0;}
 
     @Override
-    public double getClimberVerticalStarboardPositionMin(){return 1.0;}
+    public double getClimberVerticalStarboardPositionMin(){return 10.0;}
 
     @Override
-    public double getClimberVerticalPortPositionMax(){return 1.0e6;}
+    public double getClimberVerticalPortPositionMax(){return 130.0;}
 
     @Override
-    public double getClimberVerticalStarboardPositionMax(){return 1.0e6;}
+    public double getClimberVerticalStarboardPositionMax(){return 130.0;}
 
     @Override
     //public double getClimberVerticalStarboardCurrent() {return powerPanel.getCurrent(3);}
