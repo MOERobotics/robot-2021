@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
         robot.setIndexerPower(0);
         robot.setAngleAdjusterPower(0);
         robot.spinControlPanel(0);
-        robot.climbVertical(0);
+        robot.setClimbVerticalPower(0);
         robot.setBalancePower(0);
 
         if (leftJoystick.getRawButtonPressed(5)) {
