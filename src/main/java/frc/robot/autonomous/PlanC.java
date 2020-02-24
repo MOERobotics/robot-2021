@@ -30,7 +30,7 @@ public class PlanC extends GenericAutonomous {
       double shooterLowerRPMNear = 2210;
       double shooterUpperRPMFar = 2430;
       double shooterLowerRPMFar = 2430;
-      GenericCommand activeCommand = new LimelightAlign( -4, .8, .0185); //planA set setPoint to -2
+      GenericCommand activeCommand = new LimelightAlign( 0, .8, .0185); //planA set setPoint to -2
       CollectPowerCells getCells = new CollectPowerCells();
 
       @Override
