@@ -26,9 +26,13 @@ public class PlanE extends GenericAutonomous {
     double escalatorPower;
     double indexerPower;
     boolean shooting = false;
-    int ballCount;
-
-    GenericCommand activeCommand = new LimelightAlign(0.0, 0.9, 0.0165);
+    int ballCount = 0;
+    double shooterUpperRPMNear = 2210;
+    double shooterLowerRPMNear = 2210;
+    double shooterUpperRPMFar = 2430; //PlanA: 2210
+    double shooterLowerRPMFar = 2430; //PlanA: 2210
+    GenericCommand activeCommand = new LimelightAlign( -4, .8, .0185); //planA set setPoint to -2
+    CollectPowerCells getCells = new CollectPowerCells();
 
     @Override
     protected void printSmartDashboardInternal() {
