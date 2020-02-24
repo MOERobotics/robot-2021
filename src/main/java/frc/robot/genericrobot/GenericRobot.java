@@ -107,11 +107,11 @@ public abstract class GenericRobot {
             climbVerticalStarboardPower = 0;
         }
 
-        if ((getClimberPortTicks() < getClimberVerticalPortPositionMax()) && (climbVerticalPortPower > 0)){
+        if ((getClimberPortTicks() > getClimberVerticalPortPositionMax()) && (climbVerticalPortPower > 0)){
             climbVerticalPortPower = 0;
         }
 
-        if ((getClimberStarboardTicks() < getClimberVerticalStarboardPositionMax()) && (climbVerticalStarboardPower > 0)){
+        if ((getClimberStarboardTicks() > getClimberVerticalStarboardPositionMax()) && (climbVerticalStarboardPower > 0)){
             climbVerticalStarboardPower = 0;
         }
 
