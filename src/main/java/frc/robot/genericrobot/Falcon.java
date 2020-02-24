@@ -64,6 +64,7 @@ public class Falcon extends GenericRobot{
     DigitalInput escalatorSensorMedium = new DigitalInput(2);
     DigitalInput escalatorSensorHigh = new DigitalInput(3);
 
+    long startTime= 0;
 
     public Falcon() {
 
@@ -89,14 +90,14 @@ public class Falcon extends GenericRobot{
 
         shooterAPIDController.setP(7.5e-5);
         shooterAPIDController.setI(1.0e-6);
-        shooterAPIDController.setD(1.0e-2);
+        shooterAPIDController.setD(2.0e-2);
         shooterAPIDController.setFF(1.67e-4);
         shooterAPIDController.setIZone(500);
         shooterAPIDController.setDFilter(0);
 
         shooterBPIDController.setP(7.5e-5);
         shooterBPIDController.setI(1.0e-6);
-        shooterBPIDController.setD(1.0e-2);
+        shooterBPIDController.setD(2.0e-2);
         shooterBPIDController.setFF(1.67e-4);
         shooterBPIDController.setIZone(500);
         shooterBPIDController.setDFilter(0);
@@ -209,14 +210,22 @@ public class Falcon extends GenericRobot{
     protected boolean readyToShootInternal(){
         double targetUpper = getShooterTargetRPMUpper();
         double targetLower = getShooterTargetRPMLower();
-        boolean readyToShoot = true;
+        boolean readyToShoot = false;
         double errorUpper = Math.abs((getShooterVelocityRPMUpper() + targetUpper) / targetUpper); //upperRPM is negative for shooting operation, think about this later
         double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
         SmartDashboard.putNumber("errorUpper", (errorUpper * 100));
         SmartDashboard.putNumber("errorLower", (errorLower * 100));
-        if((errorUpper > 5.0e-2) || (errorLower > 5.0e-2)){
-            readyToShoot = false;
+        if((errorUpper < 2.0e-2) && (errorLower < 2.0e-2)) {
+                if (System.currentTimeMillis() - startTime > 100) {
+                    readyToShoot = true;
+                } else {
+                    readyToShoot = false;
+                }
         }
+        else {
+                startTime = System.currentTimeMillis();
+                readyToShoot = false;
+                }
         return readyToShoot;
     }
 
@@ -371,7 +380,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getLimelightMinpower() {
-        return .03;
+        return .045;
     }
 
     @Override
