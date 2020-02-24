@@ -99,6 +99,22 @@ public abstract class GenericRobot {
             angleAdjusterPower = 0;
         }
 
+        if ((getClimberPortTicks() < getClimberVerticalPortPositionMin()) && (climbVerticalPortPower < 0)){
+            climbVerticalPortPower = 0;
+        }
+
+        if ((getClimberStarboardTicks() < getClimberVerticalStarboardPositionMin()) && (climbVerticalStarboardPower < 0)){
+            climbVerticalStarboardPower = 0;
+        }
+
+        if ((getClimberPortTicks() > getClimberVerticalPortPositionMax()) && (climbVerticalPortPower > 0)){
+            climbVerticalPortPower = 0;
+        }
+
+        if ((getClimberStarboardTicks() > getClimberVerticalStarboardPositionMax()) && (climbVerticalStarboardPower > 0)){
+            climbVerticalStarboardPower = 0;
+        }
+
         setMotorPowerPercentageInternal(leftPower, rightPower);
         spinControlPanelInternal(spinPower);
         setIndexerPowerInternal(indexerPower);
@@ -114,11 +130,6 @@ public abstract class GenericRobot {
         if (shooterState == VELOCITY)
             setShooterRPMInternal(shooterUpperRPM, shooterLowerRPM);
     }
-
-
-
-
-
 
     //***********************************************************************//
 
@@ -237,6 +248,13 @@ public abstract class GenericRobot {
         System.out.println("I don't have any current data for the starboard side climber :'(");
         return 0;
     }
+
+    public double getClimberVerticalPortPositionMin(){return 1.0;}
+    public double getClimberVerticalStarboardPositionMin(){return 1.0;}
+
+    public double getClimberVerticalPortPositionMax(){return 1.0e6;}
+    public double getClimberVerticalStarboardPositionMax(){return 1.0e6;}
+
 
     public void resetEncoders() {
         resetEncoderLeft();
