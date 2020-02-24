@@ -20,7 +20,8 @@ public abstract class GenericRobot {
     private double angleAdjusterPower     = 0;
     private double climbBalancePower = 0;
     private double escalatorPower = 0;
-    private double climbVerticalPower     = 0;
+    private double climbVerticalPortPower     = 0;
+    private double climbVerticalStarboardPower     = 0;
     private double collectorPower         = 0;
     private double indexerPower           = 0;
     private ShifterState gear             = ShifterState.UNKNOWN;
@@ -54,8 +55,15 @@ public abstract class GenericRobot {
 
         SmartDashboard.putNumber  ("Angle Adjust Power"   , angleAdjusterPower                       );
 
-        SmartDashboard.putNumber  ("Climber Vert Power"   , climbVerticalPower                       );
-        SmartDashboard.putNumber  ("Climber Horiz Power"  , climbBalancePower                        );
+        SmartDashboard.putNumber  ("Climber Vert Port Power"   , climbVerticalPortPower                       );
+        SmartDashboard.putNumber  ("Climber Vert Stb Power"   , climbVerticalStarboardPower                       );
+        SmartDashboard.putNumber  ("Climber Horiz Power"  , climbBalancePower);
+        SmartDashboard.putNumber("Climber Port Ticks", getClimberPortTicks());
+        SmartDashboard.putNumber("Climber Starboard Ticks", getClimberStarboardTicks());
+        SmartDashboard.putNumber("Climber Port Current", getClimberVerticalPortCurrent());
+        SmartDashboard.putNumber("Climber Starboard Current", getClimberVerticalStarboardCurrent());
+
+
 
         SmartDashboard.putNumber  ("Control Panel Power"  , spinPower                                );
 
@@ -88,16 +96,14 @@ public abstract class GenericRobot {
             angleAdjusterPower = 0;
         }
 
-
-
-
         setMotorPowerPercentageInternal(leftPower, rightPower);
         spinControlPanelInternal(spinPower);
         setIndexerPowerInternal(indexerPower);
         setCollectorPowerInternal(collectorPower);
         setAngleAdjusterPowerInternal(angleAdjusterPower);
         setEscalatorPowerInternal(escalatorPower);
-        climbVerticalInternal(climbVerticalPower);
+        setClimbVerticalPortInternal(climbVerticalPortPower);
+        setClimbVerticalStarboardInternal(climbVerticalStarboardPower);
         setBalancePowerInternal(climbBalancePower);
 
         if (shooterState == POWER)
@@ -183,7 +189,6 @@ public abstract class GenericRobot {
         System.out.println("I don't have a shifter ;(");
     }
 
-
     public ShifterState getShifterState() {
         return gear;
     }
@@ -217,6 +222,16 @@ public abstract class GenericRobot {
 
     public double getDistanceTicksRight() {
         System.out.println("I don't have an encoder :'(");
+        return 0;
+    }
+
+    public double getClimberVerticalPortCurrent() {
+        System.out.println("I don't have any current data for the port climber :'(");
+        return 0;
+    }
+
+    public double getClimberVerticalStarboardCurrent() {
+        System.out.println("I don't have any current data for the starboard side climber :'(");
         return 0;
     }
 
@@ -412,21 +427,39 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
-    public final void climbUp(double power){
-        climbVertical(power) ;
+    public final void lowerClimberArms(double power){
+        setClimbVerticalPower(-power) ;
     }
 
-    public final void climbDown(double power){
-        climbVertical(-power);
+    public final void raiseClimberArms(double power){
+        setClimbVerticalPower(power);
     }
 
     public final void stopClimb() {
-        climbVertical(0.0);
+        setClimbVerticalPower(0.0);
     }
 
-    public final void climbVertical(double power){
-        climbVerticalPower = power;
+    public final void setClimbVerticalPortPower(double power){
+        climbVerticalPortPower = power;
+    }
 
+    public final void setClimbVerticalStarboardPower(double power){
+        climbVerticalStarboardPower = power;
+    }
+
+    protected void setClimbVerticalPortInternal(double power) {
+        System.out.println("I don't have a portside climber :'(");
+    }
+
+    protected void setClimbVerticalStarboardInternal(double power) {
+        System.out.println("I don't have a starboard side climber :'(");
+    }
+
+    public final void setClimbVerticalPower(double power){
+        climbVerticalPortPower = power;
+        climbVerticalStarboardPower = power;
+        setClimbVerticalPortPower(power);
+        setClimbVerticalStarboardPower(power);
     }
 
     protected void climbVerticalInternal (
@@ -434,6 +467,33 @@ public abstract class GenericRobot {
     ){
         System.out.println("I don't have a climber ; (");
     }
+
+    public final double getClimberPortTicks(){
+        return getClimberPortTicksInternal();
+
+    }
+    protected double getClimberPortTicksInternal(){
+        System.out.println("I don't have a climber port ;(");
+        return 0; //?
+    }
+
+    public final double getClimberStarboardTicks(){
+        return getClimberStarboardTicksInternal();
+
+    }
+    protected double getClimberStarboardTicksInternal(){
+        System.out.println("I don't have a climber starboard ;(");
+        return 0; //?
+    }
+
+    public void resetClimberTicks(){
+        resetClimberTicksInternal();
+    }
+
+    public void resetClimberTicksInternal() {
+        System.out.println("No Climber Encoders to reset");
+    }
+
 
     //***********************************************************************//
 

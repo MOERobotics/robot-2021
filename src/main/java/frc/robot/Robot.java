@@ -21,11 +21,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
-    GenericCommand activeCommand = GenericCommand.doNothingCommand;
-    GenericRobot robot = new Falcon();
-    Joystick leftJoystick = new Joystick(0);
-    XboxController xboxJoystick = new XboxController(1);
+    GenericAutonomous autoProgram  = new PlanA(); //Auto routine to be used?
+    GenericCommand    activeCommand = GenericCommand.doNothingCommand;
+    SmartClimb        getOutaDodge = new SmartClimb();
+    GenericRobot      robot        = new Falcon();
+    Joystick          leftJoystick = new Joystick(0);
+    XboxController    xboxJoystick = new XboxController(1);
 
     double deadZone = 0.10;
     long timeStart;
@@ -49,13 +50,13 @@ public class Robot extends TimedRobot {
 
     }
 
-
     @Override
     public void disabledPeriodic() {
         if (leftJoystick.getTriggerPressed()) {
             System.out.println("AAAAAAAA");
             robot.resetAttitude();
             robot.resetEncoders();
+            robot.resetClimberTicks();
         }
 
         robot.setShooterPowerPercentage(0);
@@ -121,19 +122,12 @@ public class Robot extends TimedRobot {
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
-        if (leftJoystick.getRawButtonPressed(16)) {
-            robot.shiftLow();
+        if (leftJoystick.getRawButton( 3)) {
+            robot.driveForward(-.2);
         }
-
-        if (leftJoystick.getRawButtonPressed(11)) {
-            robot.shiftHigh();
+        if (leftJoystick.getRawButton( 4)) {
+            robot.driveForward(.2);
         }
-//        if (leftJoystick.getRawButton(13)) {
-//            robot.driveForward(-.2);
-//        }
-//        if (leftJoystick.getRawButton(14)) {
-//            robot.driveForward(.2);
-//        }
 
         if(leftJoystick.getRawButtonPressed(2)){
             activeCommand.setEnabled(true);
@@ -185,11 +179,52 @@ public class Robot extends TimedRobot {
         } else {
             robot.setIndexerPower(0);
         }
+
+        //Climb vert
+        if (getOutaDodge.getHolding()) {
+            getOutaDodge.hold(robot);
+        } else {
+            robot.setClimbVerticalPower(0);
+        }
+
+        if (leftJoystick.getRawButtonPressed(7)) {
+            getOutaDodge.begin(robot);
+        }
+        if (leftJoystick.getRawButtonReleased(7)) {
+            getOutaDodge.setHolding(true);
+        }
+        if (leftJoystick.getRawButton( 7)) {
+            getOutaDodge.step(robot);
+        }
+        if (leftJoystick.getRawButton(13)) {
+            robot.raiseClimberArms(.2);
+            getOutaDodge.setHolding(false);
+        }
+
+        //Left individual control
+        if (leftJoystick.getRawButton( 5)) {
+            getOutaDodge.setHolding(false);
+            robot.setClimbVerticalPortPower( .6);
+        } else if (leftJoystick.getRawButton(10)) {
+            getOutaDodge.setHolding(false);
+            robot.setClimbVerticalPortPower(-.2);
+        }
+
+        //Right individual control
+        if (leftJoystick.getRawButton(11)) {
+            getOutaDodge.setHolding(false);
+            robot.setClimbVerticalStarboardPower( .6);
+        } else if (leftJoystick.getRawButton(16)) {
+            getOutaDodge.setHolding(false);
+            robot.setClimbVerticalStarboardPower(-.2);
+        }
+
     }
 
     @Override
     public void testInit()  {
         LiveWindow.setEnabled(false);
+        getOutaDodge.setHolding(false);
     }
 
 
@@ -210,15 +245,12 @@ public class Robot extends TimedRobot {
 
         //Collector
         if (leftJoystick.getRawButton(11)) {
-            collectorPower = 1.0;
-            robot.collectorIn(collectorPower);
-            if (leftJoystick.getRawButton(11) && robot.readyToShoot()) {
-                robot.collectorIn(1.0);
-            } else if (leftJoystick.getRawButton(16)) {
-                robot.collectorOut(1.0);
-            } else {
-                robot.setCollectorPower(0);
-            }
+            robot.collectorIn(1.0);
+        } else if (leftJoystick.getRawButton(16)) {
+            robot.collectorOut(1.0);
+        } else {
+            robot.setCollectorPower(0);
+        }
 
             //Escalator
             if (leftJoystick.getRawButton(12)) {
@@ -276,15 +308,16 @@ public class Robot extends TimedRobot {
             robot.spinControlPanel(0);
         }
 
-        //Climb vert
+        //Climber
         if (leftJoystick.getRawButton( 2)) {
-            robot.climbDown(.2);
+            robot.setClimbVerticalPower( .6);
         } else if (leftJoystick.getRawButton( 1)) {
-            robot.climbUp(.2);
+            robot.setClimbVerticalPower(-.2);
         } else {
-            robot.climbVertical(0);
+            robot.setClimbVerticalPower(0.0);
         }
 
+        /* conflicting buttons
         //climb horiz
         if (leftJoystick.getRawButton( 3)) {
             robot.climberBalanceLeft(-.2);
@@ -293,7 +326,17 @@ public class Robot extends TimedRobot {
         } else {
             robot.setBalancePower(0);
         }
-    }
+         */
+
+        //Left individual control
+        if (leftJoystick.getRawButton(3)) {
+            robot.setClimbVerticalStarboardPower(0);
+        }
+        //Right individual control
+        if (leftJoystick.getRawButton(4)) {
+            robot.setClimbVerticalPortPower(0);
+        }
 
     }
+
 }
