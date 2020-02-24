@@ -71,7 +71,7 @@ public class PlanA extends GenericAutonomous {
                 }
                 break;
 
-            case 2:
+            case 2: //you may fire at will
                 if(robot.readyToShoot()){
                    escalatorPower = 0.5;
                    indexerPower = 1.0;
