@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
-import frc.robot.PIDModule;
 import frc.robot.genericrobot.GenericRobot;
 
 public class SmartClimb{
