@@ -177,12 +177,13 @@ public class PlanA extends GenericAutonomous {
                 }
                 break;
 
-            case 10:
+            case 10: // continues collecting and start timer
                 getCells.run(robot);
                 startingTime = System.currentTimeMillis();
                 autonomousStep += 1;
                 break;
-            case 11:
+
+            case 11: // continues collecting for 2 seconds
                 getCells.run(robot);
                 long currentTime = System.currentTimeMillis();
                 if ((currentTime - startingTime) > 2000){
@@ -191,14 +192,14 @@ public class PlanA extends GenericAutonomous {
                 }
 
 
-            case 12:
+            case 12: // stops collection
                 getCells.stop(robot);
                 robot.driveForward(0);
                 ballCount = 0;
                 autonomousStep += 1;
                 break;
 
-            case 13:
+            case 13: // align
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
                 activeCommand.setEnabled(true);
@@ -208,7 +209,7 @@ public class PlanA extends GenericAutonomous {
 
 
 
-            case 14:
+            case 14: // shoot
 
                 if(robot.readyToShoot()){
                     escalatorPower = 0.5;

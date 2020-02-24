@@ -190,13 +190,13 @@ public class PlanC extends GenericAutonomous {
                               autonomousStep += 1;
                         }
                         break;
-                  case 11:
+                  case 11: // continue collecting and start timer
                         getCells.run(robot);
                         startingTime = System.currentTimeMillis();
                         autonomousStep += 1;
                         break;
 
-                  case 12:
+                  case 12: // continue collecting for 2 seconds
                         getCells.run(robot);
                         long currentTime = System.currentTimeMillis();
                         if ((currentTime - startingTime) > 2000) {
@@ -204,14 +204,14 @@ public class PlanC extends GenericAutonomous {
                               break;
                         }
 
-                  case 13:
+                  case 13: // stop collecting
                         getCells.stop(robot);
                         robot.driveForward(0);
                         ballCount = 0;
                         autonomousStep += 1;
                         break;
 
-                  case 14:
+                  case 14: // align
                         robot.limelight.table.getEntry("ledMode").setNumber(3);
                         robot.limelight.table.getEntry("pipeline").setNumber(1);
                         activeCommand.setEnabled(true);
@@ -219,7 +219,7 @@ public class PlanC extends GenericAutonomous {
                         autonomousStep += 1;
                         break;
 
-                  case 15:
+                  case 15: // you may fire when ready
                         if (robot.readyToShoot()) {
                               escalatorPower = 0.5;
                               indexerPower = 1.0;
