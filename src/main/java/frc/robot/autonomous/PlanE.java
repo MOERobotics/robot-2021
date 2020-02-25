@@ -62,7 +62,7 @@ public class PlanE extends GenericAutonomous {
                 robot.resetAttitude();
                 robot.resetEncoders();
                 if (System.currentTimeMillis() >= startingTime + 100) {
-                    autonomousStep += 0;
+                    autonomousStep += 1;
                 }
                 break;
 
@@ -209,6 +209,7 @@ public class PlanE extends GenericAutonomous {
             case 13: // align
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
+                activeCommand.begin(robot);
                 activeCommand.setEnabled(true);
                 ballCount = 0;
                 autonomousStep += 1;
