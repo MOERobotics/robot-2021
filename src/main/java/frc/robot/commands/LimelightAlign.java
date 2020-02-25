@@ -9,7 +9,6 @@ public class LimelightAlign extends GenericCommand{
     private boolean aligning;
     double setPoint;
     double setPointDeadzone;
-    double constant;
     boolean targetCentered;
     long startingTime = 0;
     long startTime;
@@ -17,11 +16,10 @@ public class LimelightAlign extends GenericCommand{
     double correction;
     double defaultSpeed = 0.35;
 
-    public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
+    public LimelightAlign(double setPoint, double setPointDeadzone){
 
         this.setPoint = -setPoint;
         this.setPointDeadzone = setPointDeadzone;
-        this.constant = constant;
 
     }
     @Override
@@ -32,7 +30,7 @@ public class LimelightAlign extends GenericCommand{
 
     @Override
     public void step(GenericRobot robot) {
-        PIDController PIDPivot = new PIDController(4.0e-2, 1.0e-2, 1.0e-4);
+        PIDController PIDPivot = new PIDController(robot.getPIDpivotP(), robot.getPIDpivotI(), robot.getPIDpivotD());
 
         long currentTime = System.currentTimeMillis();
 

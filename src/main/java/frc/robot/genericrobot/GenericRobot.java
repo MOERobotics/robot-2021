@@ -558,10 +558,9 @@ public abstract class GenericRobot {
         }
     }
 
-    public double getLimelightMinpower(){
-        System.out.println("I don't have a limelight :'(");
-        return 0;
-    }
+    public double getPIDpivotP() {return 0.0;}
+    public double getPIDpivotI() {return 0.0;}
+    public double getPIDpivotD() {return 0.0;}
 
     //***********************************************************************//
 
