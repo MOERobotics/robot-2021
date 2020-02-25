@@ -32,7 +32,7 @@ public class LimelightAlign extends GenericCommand{
 
     @Override
     public void step(GenericRobot robot) {
-        PIDController PIDPivot = new PIDController(4.5e-2, 3.0e-2, 1.0e-4);
+        PIDController PIDPivot = new PIDController(4.5e-2, 1.0e-1, 1.0e-4);
 
         long currentTime = System.currentTimeMillis();
 

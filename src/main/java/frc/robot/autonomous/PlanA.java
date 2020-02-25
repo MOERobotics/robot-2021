@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 public class PlanA extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-    double defaultSpeed = 0.2;
+    double defaultSpeed = 0.15;
 
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
     double correction;
     static double currentYaw = 0;
-    double outerArcLength = 81.2;
+    double outerArcLength = 80; //89.2
     double innerArc = 35.45;
-    double outerRadius = 60;
+    double outerRadius = 50;
     double yawDifference = 0;
     long startingTime;
     double powerDecrement;
@@ -25,11 +25,7 @@ public class PlanA extends GenericAutonomous {
     boolean shooting = false;
     double escalatorPower;
     double indexerPower;
-    double shooterUpperRPMNear = 2210;
-    double shooterLowerRPMNear = 2210;
-    double shooterUpperRPMFar = 2430; //PlanA: 2210
-    double shooterLowerRPMFar = 2430; //PlanA: 2210
-    GenericCommand activeCommand = new LimelightAlign( -4, .8, .0185); //planA set setPoint to -2
+    GenericCommand activeCommand = new LimelightAlign( -0.5, .8, .0185); //planA set setPoint to -2
     CollectPowerCells getCells = new CollectPowerCells();
 
     @Override
@@ -48,7 +44,8 @@ public class PlanA extends GenericAutonomous {
             case -1: //resets and waits
                 ballCount = 0;
                 shooting = false;
-                robot.setShooterRPM(shooterUpperRPMNear, shooterLowerRPMNear);
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
+                robot.setShooterRPMFromSpeedConst();
                 robot.resetAttitude();
                 robot.resetEncoders();
                 if (System.currentTimeMillis() >= startingTime + 100) {
@@ -105,7 +102,8 @@ public class PlanA extends GenericAutonomous {
                 PIDSteering.disableContinuousInput();
                 startingYaw = robot.getYaw();
                 startingDistance = robot.getDistanceInchesRight();
-                robot.setShooterRPM(shooterUpperRPMFar, shooterLowerRPMFar);
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.LONG_RANGE);
+                robot.setShooterRPMFromSpeedConst();
                 autonomousStep += 1;
                 break;
 
@@ -157,7 +155,7 @@ public class PlanA extends GenericAutonomous {
                 currentDistance = robot.getDistanceInchesLeft();
                 //decrescendo power
 
-                if (currentDistance - startingDistance > 35) { //start to decrement?
+                if (currentDistance - startingDistance > 75) { //start to decrement?
                     autonomousStep += 1;
 
                 }
@@ -167,11 +165,11 @@ public class PlanA extends GenericAutonomous {
             case 9: //decrement power
                 getCells.run(robot);
                 currentDistance = robot.getDistanceInchesLeft();
-                double slowToStop = (defaultSpeed - (defaultSpeed / 25) * ((currentDistance - startingDistance) - 35)) + .05; //?
+                double slowToStop = (defaultSpeed - (defaultSpeed / 25) * ((currentDistance - startingDistance) - 75)) + .05; //?
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage(0.5 * slowToStop * (1 + correction), 0.5 * slowToStop * (1 - correction)); // div by 2 to debug
 
-                if (currentDistance - startingDistance > 60) {
+                if (currentDistance - startingDistance > 100) {
                     autonomousStep += 1;
 
                 }
