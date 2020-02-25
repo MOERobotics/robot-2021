@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
     double deadZone = 0.10;
     long timeStart;
     //boolean escalatorSpaceCounting =false;
-    long escalatorSpacing = 100;
+    long escalatorSpacing = 0;
 
     @Override
     public void robotInit() {
@@ -131,16 +131,16 @@ public class Robot extends TimedRobot {
         rightPower = driverRestriction * deadzoneValue(rightPower, deadZone);
 
         if (leftJoystick.getRawButton(3)) { //nudge left
-            leftPower = -0.1;
-            rightPower = 0.1;
+            leftPower = -0.2;
+            rightPower = 0.2;
         } else if (leftJoystick.getRawButtonReleased(3)) { //nudge left release
             leftPower = 0.0;
             rightPower = 0.0;
         }
 
         if (leftJoystick.getRawButton(4)) { //nudge right
-            leftPower = 0.1;
-            rightPower = -0.1;
+            leftPower = 0.2;
+            rightPower = -0.2;
         } else if (leftJoystick.getRawButtonReleased(4)) { //nudge right release
             leftPower = 0.0;
             rightPower = 0.0;
