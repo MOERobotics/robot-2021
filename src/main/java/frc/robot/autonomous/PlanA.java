@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 public class PlanA extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-    double defaultSpeed = 0.15;
+    double defaultSpeed = 0.075;
 
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
@@ -151,11 +151,11 @@ public class PlanA extends GenericAutonomous {
             case 8: //straightaway, a little bit of oscillation, may need to turn P & D - PID coefficients
                 getCells.run(robot);
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), 0.5 * defaultSpeed * (1 - correction));
+                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
                 //decrescendo power
 
-                if (currentDistance - startingDistance > 75) { //start to decrement?
+                if (currentDistance - startingDistance > 65) { //start to decrement?
                     autonomousStep += 1;
 
                 }
@@ -165,11 +165,11 @@ public class PlanA extends GenericAutonomous {
             case 9: //decrement power
                 getCells.run(robot);
                 currentDistance = robot.getDistanceInchesLeft();
-                double slowToStop = (defaultSpeed - (defaultSpeed / 25) * ((currentDistance - startingDistance) - 75)) + .05; //?
+                double slowToStop = (defaultSpeed - (defaultSpeed / 25) * ((currentDistance - startingDistance) - 65)) + .05; //?
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                robot.setMotorPowerPercentage(0.5 * slowToStop * (1 + correction), 0.5 * slowToStop * (1 - correction)); // div by 2 to debug
+                robot.setMotorPowerPercentage(slowToStop * (1 + correction), slowToStop * (1 - correction)); // div by 2 to debug
 
-                if (currentDistance - startingDistance > 100) {
+                if (currentDistance - startingDistance > 90) {
                     autonomousStep += 1;
 
                 }
@@ -200,12 +200,25 @@ public class PlanA extends GenericAutonomous {
             case 13:
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
+                activeCommand = new LimelightAlign(-.5,.8,.0185);
+                activeCommand.begin(robot);
                 activeCommand.setEnabled(true);
                 ballCount = 0;
                 autonomousStep += 1;
                 break;
 
             case 14:
+                if (activeCommand.isEnabled()) {
+                    activeCommand.step(robot);
+
+                } else {
+                    robot.limelight.table.getEntry("ledMode").setNumber(1);
+                    autonomousStep += 1;
+                }
+                break;
+
+
+            case 15:
 
                 if(robot.readyToShoot()){
                     escalatorPower = 0.5;
@@ -230,7 +243,7 @@ public class PlanA extends GenericAutonomous {
                 robot.indexerLoad(indexerPower);
                 break;
 
-            case 15: //cease your autonomous
+            case 16: //cease your autonomous
                 robot.setShooterPowerPercentage(0);
                 if (activeCommand.isEnabled()) {
                     activeCommand.step(robot);
