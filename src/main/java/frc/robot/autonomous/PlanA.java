@@ -199,15 +199,25 @@ public class PlanA extends GenericAutonomous {
             case 13:
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
+                activeCommand = new LimelightAlign(-.5,.8,.0185);
                 activeCommand.begin(robot);
                 activeCommand.setEnabled(true);
                 ballCount = 0;
                 autonomousStep += 1;
                 break;
 
-
-
             case 14:
+                if (activeCommand.isEnabled()) {
+                    activeCommand.step(robot);
+
+                } else {
+                    robot.limelight.table.getEntry("ledMode").setNumber(1);
+                    autonomousStep += 1;
+                }
+                break;
+
+
+            case 15:
 
                 if(robot.readyToShoot()){
                     escalatorPower = 0.5;
@@ -232,7 +242,7 @@ public class PlanA extends GenericAutonomous {
                 robot.indexerLoad(indexerPower);
                 break;
 
-            case 15: //cease your autonomous
+            case 16: //cease your autonomous
                 robot.setShooterPowerPercentage(0);
                 if (activeCommand.isEnabled()) {
                     activeCommand.step(robot);
