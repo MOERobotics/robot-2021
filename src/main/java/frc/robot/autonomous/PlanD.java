@@ -15,10 +15,10 @@ public class PlanD extends GenericAutonomous {
       static double startingDistance = 0.0;
       double correction;
       static double currentYaw = 0;
-      double outerArcLength = 50;
+      double outerArcLength = 80;
       double innerArc = 35.45;
       double innerRadius = 30;
-      double outerRadius = 50;
+      double outerRadius = 48;
       double yawDifference = 0;
       double prevStartingDistance = 0;
       long startingTime = System.currentTimeMillis();
