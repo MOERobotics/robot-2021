@@ -9,7 +9,7 @@ import frc.robot.genericrobot.WheelOfFortune;
 
 public class ControlPanelPosition extends GenericCommand{
 
-    CANSparkMax spinner = new CANSparkMax(99, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax spinner = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
     WheelOfFortune controlPanel = new WheelOfFortune();
     Color endColor = new WheelOfFortune.GoodColor(0, 0, 0, "Default");
 

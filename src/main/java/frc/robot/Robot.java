@@ -197,72 +197,8 @@ public class Robot extends TimedRobot {
         LiveWindow.setEnabled(false);
     }
 
-
     @Override
     public void testPeriodic() {
-        double escalatorPower;
-        double collectorPower;
-
-        LiveWindow.setEnabled(false);
-
-        double leftPower = -leftJoystick.getY() + leftJoystick.getX();
-        double rightPower = -leftJoystick.getY() - leftJoystick.getX();
-
-        leftPower = deadzoneValue( leftPower,deadZone);
-        rightPower = deadzoneValue(rightPower,deadZone);
-
-        robot.setMotorPowerPercentage(leftPower, rightPower);
-
-        //Collector
-        if (leftJoystick.getRawButton(11)) {
-            collectorPower = 1.0;
-            robot.collectorIn(collectorPower);
-            if (leftJoystick.getRawButton(11) && robot.readyToShoot()) {
-                robot.collectorIn(1.0);
-            } else if (leftJoystick.getRawButton(16)) {
-                robot.collectorOut(1.0);
-            } else {
-                robot.setCollectorPower(0);
-            }
-
-            //Escalator
-            if (leftJoystick.getRawButton(12)) {
-                //do not do anything unless the medium sensor is tripped
-                escalatorPower = 0.0;
-                if (robot.getEscalatorSensorMedium()) {
-                    timeStart = System.currentTimeMillis();
-                    escalatorPower = 0.5;
-                } else {
-                    if ( (System.currentTimeMillis() >= timeStart + escalatorSpacing)){
-                        escalatorPower = 0.0;
-                    }
-                    else {
-                        escalatorPower = 0.5;
-                    }
-                }
-                robot.escalatorUp(escalatorPower);
-            } else if (leftJoystick.getRawButton(15)) {
-                robot.escalatorDown(.5);
-            } else {
-                robot.setEscalatorPower(0);
-            }
-
-        //Shooter
-        if (leftJoystick.getRawButton(13)) {
-            robot.setShooterRPM(3500,2500);
-        } else if (leftJoystick.getRawButton(14)) {
-            robot.setShooterPowerPercentage(0);
-        }
-
-        //Indexer
-        if (leftJoystick.getRawButton( 7) && robot.readyToShoot()) {
-            robot.indexerLoad(1.0);
-        } else if (leftJoystick.getRawButton(8)) {
-            robot.indexerUnload(1.0);
-        } else {
-            robot.setIndexerPower(0);
-        }
-
         //Vert Adjust
         if (leftJoystick.getRawButton( 6)) {
             robot.aimUp(.4);
@@ -298,7 +234,5 @@ public class Robot extends TimedRobot {
         } else {
             robot.setBalancePower(0);
         }
-    }
-
     }
 }

@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import frc.robot.PIDModule;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.commands.GenericCommand;
 import frc.robot.genericrobot.GenericRobot;
@@ -39,17 +38,6 @@ public class TrenchRun extends GenericCommand {
         // Rear lidar values
         // 3 inches = 119 | 5 inches = 165 | 10 inches = 302 | 15 inches = 434 | 20 inches = 561
         defaultSpeed = newSpeed;
-        if(robot.getLidarDistanceLeft() != -9999){
-            if((robot.getLidarDistanceLeft() < upperLimit) && (robot.getLidarDistanceLeft() > lowerLimit)){
-                currentYaw = 0;
-            }
-            if(robot.getLidarDistanceLeft() < lowerLimit){
-                currentYaw = 6;
-            }
-            if(robot.getLidarDistanceLeft() > upperLimit){
-                currentYaw = -6;
-            }
-        }
         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
         robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
         currentDistance = robot.getDistanceInchesLeft();
