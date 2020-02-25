@@ -9,8 +9,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 public class PlanE extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-    double defaultSpeed = 0.2; //CHANGE WHEN DONE
-
+    double defaultSpeed = 0.075;
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
     double correction;
@@ -47,11 +46,10 @@ public class PlanE extends GenericAutonomous {
     @Override
     public void autonomousPeriodic(GenericRobot robot) {
         PIDController PIDSteering = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
-
         currentDistance = 0;
         double yawError;
         switch (autonomousStep) {
-            case -1:
+            case -1: // resets and waits
                 ballCount = 0;
                 shooting = false;
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
@@ -157,7 +155,6 @@ public class PlanE extends GenericAutonomous {
                 correction = PIDSteering.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
                 robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-
                 if (currentDistance - startingDistance > outerArcLength) {
                     autonomousStep += 1;
                 }
@@ -172,25 +169,37 @@ public class PlanE extends GenericAutonomous {
                 autonomousStep += 1;
                 break;
 
-            case 9:
-                //trench run (~200in)
+            case 9: //straightaway
                 getCells.run(robot);
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
 
-                if (currentDistance - startingDistance > 95) {
+                if (currentDistance - startingDistance > 60) {
                     autonomousStep += 1;
                 }
                 break;
 
-            case 10: // continues collection and starts timer
+            case 10: //decrement power
+                getCells.run(robot);
+                currentDistance = robot.getDistanceInchesLeft();
+                double slowToStop = (defaultSpeed - (defaultSpeed / 25) * ((currentDistance - startingDistance) - 60)) + .05; //?
+                correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
+                robot.setMotorPowerPercentage(slowToStop * (1 + correction), slowToStop * (1 - correction)); // div by 2 to debug
+
+                if (currentDistance - startingDistance > 85) {
+                    autonomousStep += 1;
+
+                }
+                break;
+
+            case 11: // continues collection and starts timer
                 getCells.run(robot);
                 startingTime = System.currentTimeMillis();
                 autonomousStep += 1;
                 break;
 
-            case 11: // continues collection for 2 seconds
+            case 12: // continues collection for 2 seconds
                 getCells.run(robot);
                 long currentTime = System.currentTimeMillis();
                 if ((currentTime - startingTime) > 2000){
@@ -198,22 +207,24 @@ public class PlanE extends GenericAutonomous {
                     break;
                 }
 
-            case 12: // stops collection and stop robot motion
+            case 13: // stops collection and stop robot motion
                 getCells.stop(robot);
                 robot.driveForward(0);
+                ballCount = 0;
                 autonomousStep += 1;
                 break;
 
-            case 13: // align
+            case 14: // align
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
+                activeCommand = new LimelightAlign(-.5,.8,.0185);
                 activeCommand.begin(robot);
                 activeCommand.setEnabled(true);
                 ballCount = 0;
                 autonomousStep += 1;
                 break;
 
-            case 14: // shoot
+            case 15: // shoot
                 if(robot.readyToShoot()){
                     escalatorPower = 0.5;
                     indexerPower = 1.0;
@@ -237,7 +248,7 @@ public class PlanE extends GenericAutonomous {
                 robot.indexerLoad(indexerPower);
                 break;
 
-            case 15: //cease your autonomous
+            case 16: //cease your autonomous
                 robot.setShooterPowerPercentage(0);
                 if (activeCommand.isEnabled()) {
                     activeCommand.step(robot);

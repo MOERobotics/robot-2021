@@ -10,7 +10,6 @@ public class PlanA extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
     double defaultSpeed = 0.075;
-
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
     double correction;
