@@ -151,7 +151,7 @@ public class PlanA extends GenericAutonomous {
             case 8: //straightaway, a little bit of oscillation, may need to turn P & D - PID coefficients
                 getCells.run(robot);
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                robot.setMotorPowerPercentage(0.5 * defaultSpeed * (1 + correction), 0.5 * defaultSpeed * (1 - correction));
+                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), 0.5 * defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
                 //decrescendo power
 

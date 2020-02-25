@@ -27,11 +27,7 @@ public class PlanE extends GenericAutonomous {
     double indexerPower;
     boolean shooting = false;
     int ballCount = 0;
-    double shooterUpperRPMNear = 2210;
-    double shooterLowerRPMNear = 2210;
-    double shooterUpperRPMFar = 2430; //PlanA: 2210
-    double shooterLowerRPMFar = 2430; //PlanA: 2210
-    GenericCommand activeCommand = new LimelightAlign(0.0, 0.9, 0.0165);
+    GenericCommand activeCommand = new LimelightAlign(0.0, 0.8, 0.0185);
     CollectPowerCells getCells = new CollectPowerCells();
 
     @Override
@@ -58,7 +54,8 @@ public class PlanE extends GenericAutonomous {
             case -1:
                 ballCount = 0;
                 shooting = false;
-                robot.setShooterRPM(shooterUpperRPMNear, shooterLowerRPMNear);
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
+                robot.setShooterRPMFromSpeedConst();
                 robot.resetAttitude();
                 robot.resetEncoders();
                 if (System.currentTimeMillis() >= startingTime + 100) {
@@ -127,7 +124,8 @@ public class PlanE extends GenericAutonomous {
                 PIDSteering.disableContinuousInput();
                 startingYaw = robot.getYaw();
                 startingDistance = robot.getDistanceInchesRight();
-
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.LONG_RANGE);
+                robot.setShooterRPMFromSpeedConst();
                 autonomousStep += 1;
                 break;
 
@@ -192,7 +190,7 @@ public class PlanE extends GenericAutonomous {
                 autonomousStep += 1;
                 break;
 
-            case 11: // continues collection fro 2 seconds
+            case 11: // continues collection for 2 seconds
                 getCells.run(robot);
                 long currentTime = System.currentTimeMillis();
                 if ((currentTime - startingTime) > 2000){
