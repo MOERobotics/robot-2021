@@ -15,10 +15,12 @@ public class SmartClimb{
     long startTime;
     double encoderPort;
     double encoderStarboard;
+    double rollTrim;
     private boolean holding = false;
 
     PIDController PIDPortHold = new PIDController(1.0e-2, 2.0e-3, 0.0e-4);
     PIDController PIDStarboardHold = new PIDController(1.0e-2, 2.0e-3, 0.0e-4);
+    PIDController PIDRollHold = new PIDController(1.0e-2, 2.0e-3, 0.0e-4);
 
     public SmartClimb(){
 
@@ -81,8 +83,10 @@ public class SmartClimb{
 
             encoderPort = robot.getClimberPortTicks();
             encoderStarboard = robot.getClimberStarboardTicks();
+	    rollTrim = robot.getRoll();
             PIDPortHold.reset();
             PIDStarboardHold.reset();
+	    PIDRollHold.reset();
         }
 
         robot.setClimbVerticalPortPower     (-climbPowerPort);
@@ -94,7 +98,23 @@ public class SmartClimb{
 
         double correctionStarboard = PIDStarboardHold.calculate(robot.getClimberStarboardTicks() - encoderStarboard);
 
-        robot.setClimbVerticalPortPower(-correctionPort);
-        robot.setClimbVerticalStarboardPower(-correctionStarboard);
-    }
+	double rollCorrection = PIDRollHold.calculate(robot.getRoll());
+
+	/*
+	  rollTrim, encoderPort and encoderStarboard represent the state that we are trying to hold.  
+	  It's possible the bar will shift after we start to hold.
+
+	  If you are listing to starboard, lower the port side and hold the starboard side.
+	  If you are listing to port, lower the stb side and hold the port side.
+	 */
+
+	if (robot.getRoll() > rollTrim){
+	    robot.setClimbVerticalPortPower(rollCorrection);
+	    robot.setClimbVerticalStarboardPower(-correctionPort);  
+	}
+	else if (robot.getRoll() < rollTrim){
+	    robot.setClimbVerticalStarboardPower(rollCorrection);
+	    robot.setClimbVerticalPortPower(-correctionPort);
+	}
+     }
 }
