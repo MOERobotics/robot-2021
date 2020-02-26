@@ -170,7 +170,7 @@ public class Robot extends TimedRobot {
                 if ((System.currentTimeMillis() >= timeStart + escalatorSpacing)) {
                     escalatorPower = 0.0;
                 } else {
-                    escalatorPower = 0.5;
+                    if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0.8){ escalatorPower = 0.5;}
                 }
             }
             robot.collectorIn(1.0);
