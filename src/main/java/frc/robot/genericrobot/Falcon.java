@@ -11,6 +11,7 @@ import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -25,8 +26,8 @@ public class Falcon extends GenericRobot{
     CANSparkMax rightDriveB     = new CANSparkMax( 1, MotorType.kBrushless);
     CANSparkMax rightDriveC     = new CANSparkMax( 2, MotorType.kBrushless);
 
-    CANSparkMax climberA        = null;//= new CANSparkMax(12, CANSparkMaxLowLevel.MotorType.kBrushless);
-    CANSparkMax climberB        = null;//new CANSparkMax( 3, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax climberPort = new CANSparkMax(12, MotorType.kBrushless);
+    CANSparkMax climberStarboard = new CANSparkMax( 3, MotorType.kBrushless);
     CANSparkMax generatorShift  = null;//new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     CANSparkMax shooterA                   = new CANSparkMax( 5, MotorType.kBrushless);
@@ -45,7 +46,14 @@ public class Falcon extends GenericRobot{
     CANEncoder encoderLeft      = new CANEncoder( leftDriveA);
     CANEncoder encoderShootA    = new CANEncoder(shooterA);
     CANEncoder encoderShootB    = new CANEncoder(shooterB);
+
+    CANEncoder encoderClimbPort = new CANEncoder(climberPort);
+    CANEncoder encoderClimbStarboard = new CANEncoder(climberStarboard);
+
     Lidar lidar = new Lidar();
+
+    PowerDistributionPanel powerPanel = new PowerDistributionPanel();
+
 
     private CANDigitalInput angleAdjusterDigitalInputForward;
     private CANDigitalInput angleAdjusterDigitalInputReverse;
@@ -56,6 +64,7 @@ public class Falcon extends GenericRobot{
     DigitalInput escalatorSensorMedium = new DigitalInput(2);
     DigitalInput escalatorSensorHigh = new DigitalInput(3);
 
+    long startTime= 0;
 
     public Falcon() {
 
@@ -81,14 +90,14 @@ public class Falcon extends GenericRobot{
 
         shooterAPIDController.setP(7.5e-5);
         shooterAPIDController.setI(1.0e-6);
-        shooterAPIDController.setD(1.0e-2);
+        shooterAPIDController.setD(2.0e-2);
         shooterAPIDController.setFF(1.67e-4);
         shooterAPIDController.setIZone(500);
         shooterAPIDController.setDFilter(0);
 
         shooterBPIDController.setP(7.5e-5);
         shooterBPIDController.setI(1.0e-6);
-        shooterBPIDController.setD(1.0e-2);
+        shooterBPIDController.setD(2.0e-2);
         shooterBPIDController.setFF(1.67e-4);
         shooterBPIDController.setIZone(500);
         shooterBPIDController.setDFilter(0);
@@ -99,6 +108,8 @@ public class Falcon extends GenericRobot{
         angleAdjusterDigitalInputForward = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
         angleAdjusterDigitalInputReverse = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
 
+        climberPort.setIdleMode     (IdleMode.kBrake);
+        climberStarboard.setIdleMode(IdleMode.kBrake);
     }
 
     @Override
@@ -155,10 +166,10 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    public double getPIDmaneuverP(){return 1.0e-2;}
+    public double getPIDmaneuverP(){return 1.0e-1;}
 
     @Override
-    public double getPIDmaneuverI(){return 1.0e-4;}
+    public double getPIDmaneuverI(){return 1.0e-2;}
 
     @Override
     public double getPIDmaneuverD(){return 2.0e-4;}
@@ -199,16 +210,64 @@ public class Falcon extends GenericRobot{
     protected boolean readyToShootInternal(){
         double targetUpper = getShooterTargetRPMUpper();
         double targetLower = getShooterTargetRPMLower();
-        boolean readyToShoot = true;
+        boolean readyToShoot = false;
         double errorUpper = Math.abs((getShooterVelocityRPMUpper() + targetUpper) / targetUpper); //upperRPM is negative for shooting operation, think about this later
         double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
         SmartDashboard.putNumber("errorUpper", (errorUpper * 100));
         SmartDashboard.putNumber("errorLower", (errorLower * 100));
-        if((errorUpper > 1.0e-2) || (errorLower > 1.0e-2)){
-            readyToShoot = false;
+        if((errorUpper < 2.0e-2) && (errorLower < 2.0e-2)) {
+                if (System.currentTimeMillis() - startTime > 100) {
+                    readyToShoot = true;
+                } else {
+                    readyToShoot = false;
+                }
         }
+        else {
+                startTime = System.currentTimeMillis();
+                readyToShoot = false;
+                }
         return readyToShoot;
     }
+
+
+    private static final ShooterSpeedPreset
+            SHOOTER_SPEED_OFF = new ShooterSpeedPreset(0,0),
+            SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2285, 2285),
+            SHOOTER_SPEED_MID = new ShooterSpeedPreset(2620, 2620),
+            SHOOTER_SPEED_LONG = new ShooterSpeedPreset(4000, 3000), //not final
+            SHOOTER_SPEED_YEET = new ShooterSpeedPreset(5000, 5000);
+
+
+
+
+    @Override
+    public ShooterSpeedPreset getShooterSpeedPreset(
+            ShooterSpeedPresetName speedType
+    ){
+        switch (speedType){
+            case SHORT_RANGE:
+                return SHOOTER_SPEED_SHORT;
+
+            case MID_RANGE:
+                return SHOOTER_SPEED_MID;
+
+            case LONG_RANGE:
+                return SHOOTER_SPEED_LONG;
+
+            case YEET:
+                return SHOOTER_SPEED_YEET;
+
+            default:
+                return SHOOTER_SPEED_OFF;
+
+        }
+    }
+
+
+
+
+
+
 
    /* @Override
     protected void spinControlPanelInternal(double power) {
@@ -252,7 +311,6 @@ public class Falcon extends GenericRobot{
 
     @Override
     protected void setCollectorPowerInternal(double collectorPower) {
-
         collector.set(-collectorPower);
     }
 
@@ -262,6 +320,48 @@ public class Falcon extends GenericRobot{
         climberB.set(-climberPower);
     }
      */
+
+    @Override
+    protected void setClimbVerticalStarboardInternal(double power) {
+        climberStarboard.set(-power);
+    }
+
+    @Override
+    protected void setClimbVerticalPortInternal(double power) {
+        climberPort.set(power);
+    }
+
+    @Override
+    public double getClimberVerticalPortPositionMin(){return 10.0;}
+
+    @Override
+    public double getClimberVerticalStarboardPositionMin(){return 10.0;}
+
+    @Override
+    public double getClimberVerticalPortPositionMax(){return 130.0;}
+
+    @Override
+    public double getClimberVerticalStarboardPositionMax(){return 130.0;}
+
+    @Override
+    //public double getClimberVerticalStarboardCurrent() {return powerPanel.getCurrent(3);}
+    public double getClimberVerticalStarboardCurrent() {return climberStarboard.getOutputCurrent();}
+
+    @Override
+    //public double getClimberVerticalPortCurrent() {return powerPanel.getCurrent(12);}
+    public double getClimberVerticalPortCurrent() {return climberPort.getOutputCurrent();}
+
+    @Override
+    protected double getClimberPortTicksInternal() {return Math.abs(encoderClimbPort.getPosition());}
+
+    @Override
+    protected double getClimberStarboardTicksInternal() {return Math.abs(encoderClimbStarboard.getPosition());}
+
+    @Override
+    public void resetClimberTicksInternal() {
+        encoderClimbPort.setPosition(0.0);
+        encoderClimbStarboard.setPosition(0.0);
+    }
 
     @Override
     protected void setEscalatorPowerInternal(double escalatorPower) {
