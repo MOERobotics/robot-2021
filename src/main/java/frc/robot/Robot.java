@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
-    GenericCommand activeCommand = GenericCommand.doNothingCommand;
+    GenericCommand activeCommand = new LimelightAlign( -0.5, .8, .0185);
     SmartClimb getOutaDodge = new SmartClimb();
     GenericRobot robot = new Falcon();
     Joystick leftJoystick = new Joystick(0);
@@ -106,6 +106,9 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         LiveWindow.setEnabled(false);
+        robot.limelight.table.getEntry("ledMode").setNumber(3);
+        robot.limelight.table.getEntry("pipeline").setNumber(0);
+        activeCommand.begin(robot);
     }
 
     @Override
@@ -115,6 +118,11 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButtonPressed(8)) { //INFORM 3 and 4 to jerk sideways
             activeCommand.setEnabled(false);
         }
+
+        if (leftJoystick.getRawButtonReleased(2)){
+            activeCommand.setEnabled(false);
+        }
+
 
         if (activeCommand.isEnabled()) {
             activeCommand.step(robot);
