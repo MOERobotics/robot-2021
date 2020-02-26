@@ -166,10 +166,10 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    public double getPIDmaneuverP(){return 1.0e-2;}
+    public double getPIDmaneuverP(){return 1.0e-1;}
 
     @Override
-    public double getPIDmaneuverI(){return 1.0e-4;}
+    public double getPIDmaneuverI(){return 1.0e-2;}
 
     @Override
     public double getPIDmaneuverD(){return 2.0e-4;}
@@ -232,8 +232,8 @@ public class Falcon extends GenericRobot{
 
     private static final ShooterSpeedPreset
             SHOOTER_SPEED_OFF = new ShooterSpeedPreset(0,0),
-            SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2210, 2210),
-            SHOOTER_SPEED_MID = new ShooterSpeedPreset(2430, 2430),
+            SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2285, 2285),
+            SHOOTER_SPEED_MID = new ShooterSpeedPreset(2620, 2620),
             SHOOTER_SPEED_LONG = new ShooterSpeedPreset(4000, 3000), //not final
             SHOOTER_SPEED_YEET = new ShooterSpeedPreset(5000, 5000);
 

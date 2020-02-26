@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
-    GenericCommand activeCommand = GenericCommand.doNothingCommand;
+    GenericCommand activeCommand = new LimelightAlign( -0.5, .8, .0185);
     SmartClimb getOutaDodge = new SmartClimb();
     GenericRobot robot = new Falcon();
     Joystick leftJoystick = new Joystick(0);
@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
     double deadZone = 0.10;
     long timeStart;
     //boolean escalatorSpaceCounting =false;
-    long escalatorSpacing = 100;
+    long escalatorSpacing = 0;
     int ballCount = 0;
     boolean ballCollectCounted = false;
     boolean ballShootCounted = false;
@@ -109,6 +109,9 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         LiveWindow.setEnabled(false);
+        robot.limelight.table.getEntry("ledMode").setNumber(3);
+        robot.limelight.table.getEntry("pipeline").setNumber(0);
+        activeCommand.begin(robot);
     }
 
     @Override
@@ -118,6 +121,11 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButtonPressed(8)) { //INFORM 3 and 4 to jerk sideways
             activeCommand.setEnabled(false);
         }
+
+        if (leftJoystick.getRawButtonReleased(2)){
+            activeCommand.setEnabled(false);
+        }
+
 
         if (activeCommand.isEnabled()) {
             activeCommand.step(robot);
@@ -134,16 +142,16 @@ public class Robot extends TimedRobot {
         rightPower = driverRestriction * deadzoneValue(rightPower, deadZone);
 
         if (leftJoystick.getRawButton(3)) { //nudge left
-            leftPower = -0.1;
-            rightPower = 0.1;
+            leftPower = -0.2;
+            rightPower = 0.2;
         } else if (leftJoystick.getRawButtonReleased(3)) { //nudge left release
             leftPower = 0.0;
             rightPower = 0.0;
         }
 
         if (leftJoystick.getRawButton(4)) { //nudge right
-            leftPower = 0.1;
-            rightPower = -0.1;
+            leftPower = 0.2;
+            rightPower = -0.2;
         } else if (leftJoystick.getRawButtonReleased(4)) { //nudge right release
             leftPower = 0.0;
             rightPower = 0.0;
@@ -165,7 +173,7 @@ public class Robot extends TimedRobot {
                 if ((System.currentTimeMillis() >= timeStart + escalatorSpacing)) {
                     escalatorPower = 0.0;
                 } else {
-                    escalatorPower = 0.5;
+                    if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0.8){ escalatorPower = 0.5;}
                 }
             }
             robot.collectorIn(1.0);
