@@ -9,6 +9,7 @@ public abstract class GenericCommand {
 	public final void printSmartDashboard() {
 		SmartDashboard.putNumber ("Command Step"   ,               commandStep);
 		SmartDashboard.putString ("Command Loaded" , this.getClass().getName());
+		SmartDashboard.putBoolean("Command Enabled",this.isEnabled());
 		printSmartDashboardInternal();
 	}
 	protected void printSmartDashboardInternal() {}

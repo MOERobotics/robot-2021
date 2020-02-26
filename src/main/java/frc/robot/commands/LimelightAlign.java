@@ -16,31 +16,35 @@ public class LimelightAlign extends GenericCommand{
     long timeoutTime = 4000;
     double correction;
     double defaultSpeed = 0.35;
+    PIDController PIDPivot = new PIDController(6.0e-2, 1.0e-2, 1.0e-3);
 
     public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
 
         this.setPoint = -setPoint;
         this.setPointDeadzone = setPointDeadzone;
         this.constant = constant;
-
+        PIDPivot.reset();
     }
     @Override
     public void begin(GenericRobot robot) {
         targetCentered = false;
         startTime = System.currentTimeMillis();
+        PIDPivot.reset();
     }
 
     @Override
     public void step(GenericRobot robot) {
-        PIDController PIDPivot = new PIDController(4.5e-2, 1.0e-1, 1.0e-4);
 
         long currentTime = System.currentTimeMillis();
 
         aligning = true;
 
-        if((currentTime - startTime) > timeoutTime){
+        /*
+        if((currentTime - startTime) > timeoutTime) {
+            System.out.println("Limelight timed out.");
             aligning = false;
         }
+        */
 
         if (robot.limelight.getLimelightX() < -setPointDeadzone + setPoint) {
             //Pivots to the left
