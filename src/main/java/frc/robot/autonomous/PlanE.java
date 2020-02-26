@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 public class PlanE extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-    double defaultSpeed = 0.075;
+    double defaultSpeed = 0.1; //need to test, orig: 0.075 //dont forget to change default speeds below
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
     double correction;
@@ -26,7 +26,8 @@ public class PlanE extends GenericAutonomous {
     double indexerPower;
     boolean shooting = false;
     int ballCount = 0;
-    GenericCommand activeCommand = new LimelightAlign(0.0, 0.8, 0.0185);
+    long alignWait = 2000;
+    GenericCommand activeCommand = new LimelightAlign(-0.5, 0.8, 0.0185); //needs to be tested
     CollectPowerCells getCells = new CollectPowerCells();
 
     @Override
@@ -50,6 +51,7 @@ public class PlanE extends GenericAutonomous {
         double yawError;
         switch (autonomousStep) {
             case -1: // resets and waits
+                defaultSpeed = 0.1;
                 ballCount = 0;
                 shooting = false;
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
@@ -67,11 +69,12 @@ public class PlanE extends GenericAutonomous {
 
                 activeCommand.begin(robot);
                 activeCommand.setEnabled(true);
+                startingTime = System.currentTimeMillis();
                 autonomousStep += 1;
                 break;
 
             case 1: //auto aligns
-            if (activeCommand.isEnabled()) {
+            if (activeCommand.isEnabled() && ((System.currentTimeMillis() - startingTime) < alignWait)) {
                 activeCommand.step(robot);
 
             } else {
@@ -122,7 +125,7 @@ public class PlanE extends GenericAutonomous {
                 PIDSteering.disableContinuousInput();
                 startingYaw = robot.getYaw();
                 startingDistance = robot.getDistanceInchesRight();
-                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.LONG_RANGE);
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.MID_RANGE);
                 robot.setShooterRPMFromSpeedConst();
                 autonomousStep += 1;
                 break;
@@ -161,6 +164,7 @@ public class PlanE extends GenericAutonomous {
                 break;
 
             case 8: //PID reset for straightaway
+                defaultSpeed = 0.09;
                 getCells.run(robot);
                 startingDistance = robot.getDistanceInchesLeft();
                 PIDSteering.reset();
@@ -172,7 +176,7 @@ public class PlanE extends GenericAutonomous {
             case 9: //straightaway
                 getCells.run(robot);
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                robot.setMotorPowerPercentage(1.5 * defaultSpeed * (1 + correction), 1.5 * defaultSpeed * (1 - correction));
+                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
 
                 if (currentDistance - startingDistance > 60) {
@@ -202,7 +206,7 @@ public class PlanE extends GenericAutonomous {
             case 12: // continues collection for 2 seconds
                 getCells.run(robot);
                 long currentTime = System.currentTimeMillis();
-                if ((currentTime - startingTime) > 2000){
+                if ((currentTime - startingTime) > 0){
                     autonomousStep += 1;
                     break;
                 }
@@ -217,14 +221,25 @@ public class PlanE extends GenericAutonomous {
             case 14: // align
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
-                activeCommand = new LimelightAlign(-.5,.8,.0185);
+                activeCommand = new LimelightAlign(-3,.8,.0185);
                 activeCommand.begin(robot);
                 activeCommand.setEnabled(true);
                 ballCount = 0;
+                startingTime = System.currentTimeMillis();
                 autonomousStep += 1;
                 break;
 
-            case 15: // shoot
+            case 15:
+                if (activeCommand.isEnabled() && ((System.currentTimeMillis() - startingTime) < alignWait)) {
+                    activeCommand.step(robot);
+
+                } else {
+                    robot.limelight.table.getEntry("ledMode").setNumber(1);
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 16: // shoot
                 if(robot.readyToShoot()){
                     escalatorPower = 0.5;
                     indexerPower = 1.0;
@@ -248,7 +263,7 @@ public class PlanE extends GenericAutonomous {
                 robot.indexerLoad(indexerPower);
                 break;
 
-            case 16: //cease your autonomous
+            case 17: //cease your autonomous
                 robot.setShooterPowerPercentage(0);
                 if (activeCommand.isEnabled()) {
                     activeCommand.step(robot);
