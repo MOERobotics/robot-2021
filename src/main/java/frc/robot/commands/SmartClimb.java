@@ -113,7 +113,7 @@ public class SmartClimb{
 	    robot.setClimbVerticalStarboardPower(-correctionPort);  
 	}
 	else if (robot.getRoll() < rollTrim){
-	    robot.setClimbVerticalStarboardPower(rollCorrection);
+	    robot.setClimbVerticalStarboardPower(-rollCorrection);
 	    robot.setClimbVerticalPortPower(-correctionPort);
 	}
      }
