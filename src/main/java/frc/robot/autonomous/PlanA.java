@@ -184,6 +184,7 @@ public class PlanA extends GenericAutonomous {
                 startingTime = System.currentTimeMillis();
                 autonomousStep += 1;
                 break;
+
             case 11:
                 getCells.run(robot);
                 long currentTime = System.currentTimeMillis();
