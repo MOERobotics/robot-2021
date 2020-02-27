@@ -112,11 +112,13 @@ public class Robot extends TimedRobot {
         robot.limelight.table.getEntry("ledMode").setNumber(3);
         robot.limelight.table.getEntry("pipeline").setNumber(0);
         activeCommand.begin(robot);
+
     }
 
     @Override
     public void teleopPeriodic() {
         double escalatorPower = 0.0;
+        double collectorPower = 0.0;
 
         if (leftJoystick.getRawButtonPressed(8)) { //INFORM 3 and 4 to jerk sideways
             activeCommand.setEnabled(false);
@@ -166,17 +168,19 @@ public class Robot extends TimedRobot {
         //Collector
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             escalatorPower = 0.0;
-            if (robot.getEscalatorSensorMedium()) {
+            if (robot.getEscalatorSensorMedium() && (ballCount<=3)) {
                 timeStart = System.currentTimeMillis();
                 escalatorPower = 0.5;
             } else {
                 if ((System.currentTimeMillis() >= timeStart + escalatorSpacing)) {
                     escalatorPower = 0.0;
                 } else {
-                    if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0.8){ escalatorPower = 0.5;}
+                    escalatorPower = 0.5;
                 }
             }
-            robot.collectorIn(1.0);
+            if (ballCount<=4){collectorPower = 1.0;}
+            if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
+            robot.collectorIn(collectorPower);
             robot.escalatorUp(escalatorPower);
         } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
             robot.collectorOut(1.0);
@@ -279,8 +283,8 @@ public class Robot extends TimedRobot {
 
 
         //below is code for keeping track of number of balls on robot
-        if(robot.getEscalatorSensorMedium()){
-            if (ballCollectCounted == false) { //add ball
+        if(robot.getEscalatorSensorLow()){
+            if (!ballCollectCounted) { //add ball
                 ballCount++;
                 ballCollectCounted = true;
             }
@@ -289,26 +293,13 @@ public class Robot extends TimedRobot {
             ballCollectCounted = false;
         }
 
-        //potential fix to double counting problem when shooting
-        /**
         if(robot.getEscalatorSensorHigh()){
             ballShootCounted = true;
         }
         else {
-            if (ballShootCounted == true){
-                ballCount--;
+            if (ballShootCounted){
+                ballCount--;              // subtract ball
             }
-            ballShootCounted = false;
-        }
-         */
-
-        if(robot.getEscalatorSensorHigh()){
-            if (ballShootCounted == false) { //subtract ball
-                ballCount--;
-                ballShootCounted = true;
-            }
-        }
-        else {
             ballShootCounted = false;
         }
         SmartDashboard.putNumber("Ball Count", ballCount);
