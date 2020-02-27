@@ -98,7 +98,7 @@ public class SmartClimb{
 
         double correctionStarboard = PIDStarboardHold.calculate(robot.getClimberStarboardTicks() - encoderStarboard);
 
-	double rollCorrection = PIDRollHold.calculate(robot.getRoll());
+	double rollCorrection = PIDRollHold.calculate(robot.getRoll()-rollTrim);
 
 	/*
 	  rollTrim, encoderPort and encoderStarboard represent the state that we are trying to hold.  
@@ -110,7 +110,7 @@ public class SmartClimb{
 
 	if (robot.getRoll() > rollTrim){
 	    robot.setClimbVerticalPortPower(rollCorrection);
-	    robot.setClimbVerticalStarboardPower(-correctionPort);  
+	    robot.setClimbVerticalStarboardPower(-correctionStarboard);
 	}
 	else if (robot.getRoll() < rollTrim){
 	    robot.setClimbVerticalStarboardPower(-rollCorrection);
