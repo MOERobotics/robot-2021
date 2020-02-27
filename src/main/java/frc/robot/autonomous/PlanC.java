@@ -45,6 +45,7 @@ public class PlanC extends GenericAutonomous {
             double yawError;
             switch (autonomousStep) {
                   case -1: //resets and waits
+                        robot.collectorIn(1);
                         defaultSpeed = 0.1;
                         ballCount = 0;
                         shooting = false;
@@ -58,6 +59,7 @@ public class PlanC extends GenericAutonomous {
                         break;
 
                   case 0: //turns on LEDs
+                        robot.collectorIn(0);
                         robot.limelight.table.getEntry("ledMode").setNumber(3);
                         robot.limelight.table.getEntry("pipeline").setNumber(0);
 
