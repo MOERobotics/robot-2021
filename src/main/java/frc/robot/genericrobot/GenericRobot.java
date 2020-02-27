@@ -20,7 +20,8 @@ public abstract class GenericRobot {
     private double angleAdjusterPower     = 0;
     private double climbBalancePower = 0;
     private double escalatorPower = 0;
-    private double climbVerticalPower     = 0;
+    private double climbVerticalPortPower     = 0;
+    private double climbVerticalStarboardPower     = 0;
     private double collectorPower         = 0;
     private double indexerPower           = 0;
     private ShifterState gear             = ShifterState.UNKNOWN;
@@ -48,14 +49,24 @@ public abstract class GenericRobot {
         SmartDashboard.putString  ("Shooter State"        , shooterState.toString()                  );
         SmartDashboard.putNumber  ("Upper Shooter Power"  , shooterUpperPower                        );
         SmartDashboard.putNumber  ("Lower Shooter Power"  , shooterLowerPower                        );
+        SmartDashboard.putNumber  ("Upper Shooter Target Velocity"  , shooterUpperRPM                        );
+        SmartDashboard.putNumber  ("Lower Shooter Target Velocity"  , shooterLowerRPM                        );
         SmartDashboard.putNumber  ("Upper Shooter Velocity",getShooterVelocityRPMUpper()             );
         SmartDashboard.putNumber  ("Lower Shooter Velocity",getShooterVelocityRPMLower()             );
+        SmartDashboard.putString  ("Shooter Speed Setting" ,shooterSpeedPresetName.name());
         SmartDashboard.putBoolean ("Ready To Shoot"       , readyToShoot()                           );
 
         SmartDashboard.putNumber  ("Angle Adjust Power"   , angleAdjusterPower                       );
 
-        SmartDashboard.putNumber  ("Climber Vert Power"   , climbVerticalPower                       );
-        SmartDashboard.putNumber  ("Climber Horiz Power"  , climbBalancePower                        );
+        SmartDashboard.putNumber  ("Climber Vert Port Power"   , climbVerticalPortPower                       );
+        SmartDashboard.putNumber  ("Climber Vert Stb Power"   , climbVerticalStarboardPower                       );
+        SmartDashboard.putNumber  ("Climber Horiz Power"  , climbBalancePower);
+        SmartDashboard.putNumber("Climber Port Ticks", getClimberPortTicks());
+        SmartDashboard.putNumber("Climber Starboard Ticks", getClimberStarboardTicks());
+        SmartDashboard.putNumber("Climber Port Current", getClimberVerticalPortCurrent());
+        SmartDashboard.putNumber("Climber Starboard Current", getClimberVerticalStarboardCurrent());
+
+
 
         SmartDashboard.putNumber  ("Control Panel Power"  , spinPower                                );
 
@@ -88,8 +99,21 @@ public abstract class GenericRobot {
             angleAdjusterPower = 0;
         }
 
+        if ((getClimberPortTicks() < getClimberVerticalPortPositionMin()) && (climbVerticalPortPower < 0)){
+            climbVerticalPortPower = 0;
+        }
 
+        if ((getClimberStarboardTicks() < getClimberVerticalStarboardPositionMin()) && (climbVerticalStarboardPower < 0)){
+            climbVerticalStarboardPower = 0;
+        }
 
+        if ((getClimberPortTicks() > getClimberVerticalPortPositionMax()) && (climbVerticalPortPower > 0)){
+            climbVerticalPortPower = 0;
+        }
+
+        if ((getClimberStarboardTicks() > getClimberVerticalStarboardPositionMax()) && (climbVerticalStarboardPower > 0)){
+            climbVerticalStarboardPower = 0;
+        }
 
         setMotorPowerPercentageInternal(leftPower, rightPower);
         spinControlPanelInternal(spinPower);
@@ -97,7 +121,8 @@ public abstract class GenericRobot {
         setCollectorPowerInternal(collectorPower);
         setAngleAdjusterPowerInternal(angleAdjusterPower);
         setEscalatorPowerInternal(escalatorPower);
-        climbVerticalInternal(climbVerticalPower);
+        setClimbVerticalPortInternal(climbVerticalPortPower);
+        setClimbVerticalStarboardInternal(climbVerticalStarboardPower);
         setBalancePowerInternal(climbBalancePower);
 
         if (shooterState == POWER)
@@ -105,11 +130,6 @@ public abstract class GenericRobot {
         if (shooterState == VELOCITY)
             setShooterRPMInternal(shooterUpperRPM, shooterLowerRPM);
     }
-
-
-
-
-
 
     //***********************************************************************//
 
@@ -183,7 +203,6 @@ public abstract class GenericRobot {
         System.out.println("I don't have a shifter ;(");
     }
 
-
     public ShifterState getShifterState() {
         return gear;
     }
@@ -219,6 +238,23 @@ public abstract class GenericRobot {
         System.out.println("I don't have an encoder :'(");
         return 0;
     }
+
+    public double getClimberVerticalPortCurrent() {
+        System.out.println("I don't have any current data for the port climber :'(");
+        return 0;
+    }
+
+    public double getClimberVerticalStarboardCurrent() {
+        System.out.println("I don't have any current data for the starboard side climber :'(");
+        return 0;
+    }
+
+    public double getClimberVerticalPortPositionMin(){return 1.0;}
+    public double getClimberVerticalStarboardPositionMin(){return 1.0;}
+
+    public double getClimberVerticalPortPositionMax(){return 1.0e6;}
+    public double getClimberVerticalStarboardPositionMax(){return 1.0e6;}
+
 
     public void resetEncoders() {
         resetEncoderLeft();
@@ -262,6 +298,24 @@ public abstract class GenericRobot {
         POWER,VELOCITY,UNKNOWN;
     }
 
+    public enum ShooterSpeedPresetName {
+        UNKOWN, SHORT_RANGE, MID_RANGE, LONG_RANGE, YEET;
+    }
+
+    public static class ShooterSpeedPreset{
+        public final int
+            upperRPM,
+            lowerRPM;
+        public ShooterSpeedPreset(
+            int upperRPM,
+            int lowerRPM
+        ){
+            this.upperRPM = upperRPM;
+            this.lowerRPM = lowerRPM;
+
+        }
+    }
+
     public final void setShooterPowerPercentage(
         double upperPower,
         double lowerPower
@@ -273,9 +327,14 @@ public abstract class GenericRobot {
 
     public final void setShooterPowerPercentage(
         double power
+
     ) {
         setShooterPowerPercentage(power, power);
     }
+
+    public ShooterSpeedPresetName shooterSpeedPresetName //?
+                = ShooterSpeedPresetName.UNKOWN;
+
 
 
     public void setShooterRPM(double upperRPM, double lowerRPM) {
@@ -341,6 +400,42 @@ public abstract class GenericRobot {
     public ShooterState getShooterState() {
         return shooterState;
     }
+
+    public final ShooterSpeedPresetName getShooterSpeedConstant() {
+        return shooterSpeedPresetName;
+    }
+
+    public final void setShooterSpeedPresetName(ShooterSpeedPresetName speedPresetName){
+        this.shooterSpeedPresetName = speedPresetName;
+    }
+
+    public final void setShooterRPMFromSpeedConst(){
+        setShooterRPMFromSpeedConstInternal(shooterSpeedPresetName);
+    }
+
+    public final void setShooterRPMFromSpeedConst(ShooterSpeedPresetName speedPresetName){
+        this.shooterSpeedPresetName = speedPresetName;
+        setShooterRPMFromSpeedConstInternal(speedPresetName);
+    }
+
+    public final void setShooterRPMFromSpeedConstInternal(ShooterSpeedPresetName speedPresetName) {
+        ShooterSpeedPreset speed = getShooterSpeedPreset(speedPresetName);
+        setShooterRPM(
+                speed.upperRPM,
+                speed.lowerRPM
+        );
+    }
+
+    private static final ShooterSpeedPreset
+            SHOOTER_SPEED_OFF = new ShooterSpeedPreset(0,0);
+
+    public ShooterSpeedPreset getShooterSpeedPreset(
+            ShooterSpeedPresetName speedType
+    ){
+        return SHOOTER_SPEED_OFF;
+    }
+
+
 
     //***********************************************************************//
 
@@ -412,21 +507,39 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
-    public final void climbUp(double power){
-        climbVertical(power) ;
+    public final void lowerClimberArms(double power){
+        setClimbVerticalPower(-power) ;
     }
 
-    public final void climbDown(double power){
-        climbVertical(-power);
+    public final void raiseClimberArms(double power){
+        setClimbVerticalPower(power);
     }
 
     public final void stopClimb() {
-        climbVertical(0.0);
+        setClimbVerticalPower(0.0);
     }
 
-    public final void climbVertical(double power){
-        climbVerticalPower = power;
+    public final void setClimbVerticalPortPower(double power){
+        climbVerticalPortPower = power;
+    }
 
+    public final void setClimbVerticalStarboardPower(double power){
+        climbVerticalStarboardPower = power;
+    }
+
+    protected void setClimbVerticalPortInternal(double power) {
+        System.out.println("I don't have a portside climber :'(");
+    }
+
+    protected void setClimbVerticalStarboardInternal(double power) {
+        System.out.println("I don't have a starboard side climber :'(");
+    }
+
+    public final void setClimbVerticalPower(double power){
+        climbVerticalPortPower = power;
+        climbVerticalStarboardPower = power;
+        setClimbVerticalPortPower(power);
+        setClimbVerticalStarboardPower(power);
     }
 
     protected void climbVerticalInternal (
@@ -434,6 +547,33 @@ public abstract class GenericRobot {
     ){
         System.out.println("I don't have a climber ; (");
     }
+
+    public final double getClimberPortTicks(){
+        return getClimberPortTicksInternal();
+
+    }
+    protected double getClimberPortTicksInternal(){
+        System.out.println("I don't have a climber port ;(");
+        return 0; //?
+    }
+
+    public final double getClimberStarboardTicks(){
+        return getClimberStarboardTicksInternal();
+
+    }
+    protected double getClimberStarboardTicksInternal(){
+        System.out.println("I don't have a climber starboard ;(");
+        return 0; //?
+    }
+
+    public void resetClimberTicks(){
+        resetClimberTicksInternal();
+    }
+
+    public void resetClimberTicksInternal() {
+        System.out.println("No Climber Encoders to reset");
+    }
+
 
     //***********************************************************************//
 
