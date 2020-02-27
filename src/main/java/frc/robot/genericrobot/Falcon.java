@@ -34,7 +34,7 @@ public class Falcon extends GenericRobot{
     CANPIDController shooterAPIDController = new CANPIDController(shooterA);
     CANSparkMax shooterB                   = new CANSparkMax( 4, MotorType.kBrushless);
     CANPIDController shooterBPIDController = new CANPIDController(shooterB);
-    CANSparkMax indexer         = new CANSparkMax( 6, MotorType.kBrushed);
+    CANSparkMax indexer         = new CANSparkMax( 6, MotorType.kBrushless);
     CANSparkMax escalator       = new CANSparkMax( 7, MotorType.kBrushless);
     CANSparkMax angleAdj        = new CANSparkMax( 8, MotorType.kBrushless);
 
