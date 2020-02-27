@@ -18,7 +18,7 @@ public class PlanC extends GenericAutonomous {
       double outerArcLength = 50;
       double innerArc = 35.45;
       double innerRadius = 30;
-      double outerRadius = 50;
+      double outerRadius = 65;
       double yawDifference = 0;
       double prevStartingDistance = 0;
       long startingTime = System.currentTimeMillis();
@@ -26,17 +26,14 @@ public class PlanC extends GenericAutonomous {
       boolean shooting = false;
       double escalatorPower;
       double indexerPower;
-      double shooterUpperRPMNear = 2210;
-      double shooterLowerRPMNear = 2210;
-      double shooterUpperRPMFar = 2430;
-      double shooterLowerRPMFar = 2430;
+      long alignWait = 2000;
       GenericCommand activeCommand = new LimelightAlign( 0, .8, .0185); //planA set setPoint to -2
       CollectPowerCells getCells = new CollectPowerCells();
 
       @Override
       public void autonomousInit(GenericRobot robot) {
             startingTime = System.currentTimeMillis();
-            autonomousStep = 0;
+            autonomousStep = -1;
             getCells.begin(robot);
       }
 
@@ -48,9 +45,11 @@ public class PlanC extends GenericAutonomous {
             double yawError;
             switch (autonomousStep) {
                   case -1: //resets and waits
+                        defaultSpeed = 0.1;
                         ballCount = 0;
                         shooting = false;
-                        robot.setShooterRPM(shooterUpperRPMNear, shooterLowerRPMNear);
+                        robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
+                        robot.setShooterRPMFromSpeedConst();
                         robot.resetAttitude();
                         robot.resetEncoders();
                         if (System.currentTimeMillis() >= startingTime + 100) {
@@ -64,11 +63,12 @@ public class PlanC extends GenericAutonomous {
 
                         activeCommand.begin(robot);
                         activeCommand.setEnabled(true);
+                        startingTime = System.currentTimeMillis();
                         autonomousStep += 1;
                         break;
 
                   case 1: //auto aligns
-                        if (activeCommand.isEnabled()) {
+                        if (activeCommand.isEnabled() && ((System.currentTimeMillis() - startingTime) < alignWait)) {
                               activeCommand.step(robot);
 
                         } else {
@@ -77,7 +77,7 @@ public class PlanC extends GenericAutonomous {
                         }
                         break;
 
-                  case 2:
+                  case 2: //you may fire when ready
                         if (robot.readyToShoot()) {
                               escalatorPower = 0.5;
                               indexerPower = 1.0;
@@ -102,6 +102,7 @@ public class PlanC extends GenericAutonomous {
                         break;
 
                   case 3: //PID reset for straightaway
+                        getCells.run(robot);
                         startingDistance = robot.getDistanceInchesLeft();
                         PIDSteering.reset();
                         PIDSteering.enableContinuousInput(-180, 180);
@@ -115,7 +116,7 @@ public class PlanC extends GenericAutonomous {
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 80) { //maybe change depending on how far we need to go
+                        if (currentDistance - startingDistance > 98) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
                               autonomousStep += 1;
                         }
@@ -140,7 +141,7 @@ public class PlanC extends GenericAutonomous {
                         SmartDashboard.putNumber("startDistance", startingDistance);
                         SmartDashboard.putNumber("currentDistance", currentDistance);
                         SmartDashboard.putNumber("distanceDifference", currentDistance - startingDistance);
-                        if (currentDistance - startingDistance < -40) { //maybe change depending on how far we need to go
+                        if (currentDistance - startingDistance < -58) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
                               autonomousStep += 1;
                         }
@@ -199,7 +200,7 @@ public class PlanC extends GenericAutonomous {
                   case 12: // continue collecting for 2 seconds
                         getCells.run(robot);
                         long currentTime = System.currentTimeMillis();
-                        if ((currentTime - startingTime) > 2000) {
+                        if ((currentTime - startingTime) > 0) {
                               autonomousStep += 1;
                               break;
                         }
@@ -214,12 +215,25 @@ public class PlanC extends GenericAutonomous {
                   case 14: // align
                         robot.limelight.table.getEntry("ledMode").setNumber(3);
                         robot.limelight.table.getEntry("pipeline").setNumber(1);
+                        activeCommand = new LimelightAlign(-3, .8, .0185); //fix dem bois
+                        activeCommand.begin(robot);
                         activeCommand.setEnabled(true);
                         ballCount = 0;
+                        startingTime = System.currentTimeMillis();
                         autonomousStep += 1;
                         break;
 
-                  case 15: // you may fire when ready
+                  case 15:
+                        if (activeCommand.isEnabled() && ((System.currentTimeMillis() - startingTime) < alignWait)) {
+                              activeCommand.step(robot);
+
+                        } else {
+                              robot.limelight.table.getEntry("ledMode").setNumber(1);
+                              autonomousStep += 1;
+                        }
+                        break;
+
+                  case 16: // you may fire when ready
                         if (robot.readyToShoot()) {
                               escalatorPower = 0.5;
                               indexerPower = 1.0;
@@ -243,7 +257,7 @@ public class PlanC extends GenericAutonomous {
                         robot.indexerLoad(indexerPower);
                         break;
 
-                  case 16: //cease your autonomous
+                  case 17: //cease your autonomous
                         robot.setShooterPowerPercentage(0);
                         if (activeCommand.isEnabled()) {
                               activeCommand.step(robot);
