@@ -14,7 +14,7 @@ public class PlanE extends GenericAutonomous {
     static double startingDistance = 0.0;
     double correction;
     static double currentYaw = 0;
-    double outerArcLength = 39;
+    double outerArcLength = 42;
     double innerArc = 35.45;
     double outerRadius = 32;
     double yawDifference = 0;
@@ -27,7 +27,7 @@ public class PlanE extends GenericAutonomous {
     boolean shooting = false;
     int ballCount = 0;
     long alignWait = 2000;
-    GenericCommand activeCommand = new LimelightAlign(-0.5, 0.8, 0.0185); //needs to be tested
+    GenericCommand activeCommand = new LimelightAlign(4.0, 0.8, 0.0185); //needs to be tested
     CollectPowerCells getCells = new CollectPowerCells();
 
     @Override
@@ -179,7 +179,7 @@ public class PlanE extends GenericAutonomous {
                 robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
 
-                if (currentDistance - startingDistance > 60) {
+                if (currentDistance - startingDistance > 102) {
                     autonomousStep += 1;
                 }
                 break;
@@ -187,11 +187,11 @@ public class PlanE extends GenericAutonomous {
             case 10: //decrement power
                 getCells.run(robot);
                 currentDistance = robot.getDistanceInchesLeft();
-                double slowToStop = (defaultSpeed - (defaultSpeed / 25) * ((currentDistance - startingDistance) - 60)) + .05; //?
+                double slowToStop = (defaultSpeed - (defaultSpeed / 25) * ((currentDistance - startingDistance) - 102)) + .05; //?
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage(slowToStop * (1 + correction), slowToStop * (1 - correction)); // div by 2 to debug
 
-                if (currentDistance - startingDistance > 85) {
+                if (currentDistance - startingDistance > 127) {
                     autonomousStep += 1;
 
                 }
