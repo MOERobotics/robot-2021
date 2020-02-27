@@ -114,11 +114,13 @@ class Lidar extends Thread {
                 int id       = Integer.parseInt(lidarBlob.group(      "id"));
                 int distance = Integer.parseInt(lidarBlob.group("distance"));
 
-                System.out.printf(
+                /*
+                    System.out.printf(
                     "Found lidar %d with distance %d\n",
                     id,
                     distance
                 );
+                 */
 
                 this.writeDistance(id, distance);
 
