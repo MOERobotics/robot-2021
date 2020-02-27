@@ -27,7 +27,7 @@ public class PlanE extends GenericAutonomous {
     boolean shooting = false;
     int ballCount = 0;
     long alignWait = 2000;
-    GenericCommand activeCommand = new LimelightAlign(4.0, 0.8, 0.0185); //needs to be tested
+    GenericCommand activeCommand = new LimelightAlign(4.0, 0.8); //needs to be tested
     CollectPowerCells getCells = new CollectPowerCells();
 
     @Override
@@ -221,7 +221,7 @@ public class PlanE extends GenericAutonomous {
             case 14: // align
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
-                activeCommand = new LimelightAlign(-3,.8,.0185);
+                activeCommand = new LimelightAlign(-3,.8);
                 activeCommand.begin(robot);
                 activeCommand.setEnabled(true);
                 ballCount = 0;

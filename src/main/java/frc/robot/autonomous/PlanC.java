@@ -27,7 +27,7 @@ public class PlanC extends GenericAutonomous {
       double escalatorPower;
       double indexerPower;
       long alignWait = 2000;
-      GenericCommand activeCommand = new LimelightAlign( 0, .8, .0185); //planA set setPoint to -2
+      GenericCommand activeCommand = new LimelightAlign( 0, .8); //planA set setPoint to -2
       CollectPowerCells getCells = new CollectPowerCells();
 
       @Override
@@ -215,7 +215,7 @@ public class PlanC extends GenericAutonomous {
                   case 14: // align
                         robot.limelight.table.getEntry("ledMode").setNumber(3);
                         robot.limelight.table.getEntry("pipeline").setNumber(1);
-                        activeCommand = new LimelightAlign(-3, .8, .0185); //fix dem bois
+                        activeCommand = new LimelightAlign(-3, .8); //fix dem bois
                         activeCommand.begin(robot);
                         activeCommand.setEnabled(true);
                         ballCount = 0;
