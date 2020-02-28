@@ -26,7 +26,7 @@ public class PlanA extends GenericAutonomous {
     double escalatorPower;
     double indexerPower;
     long alignWait = 2000;
-    GenericCommand activeCommand = new LimelightAlign( -0.5, .8, .0185); //planA set setPoint to -2
+    GenericCommand activeCommand = new LimelightAlign( -0.5, .8); //planA set setPoint to -2
     CollectPowerCells getCells = new CollectPowerCells();
 
     @Override
@@ -184,6 +184,7 @@ public class PlanA extends GenericAutonomous {
                 startingTime = System.currentTimeMillis();
                 autonomousStep += 1;
                 break;
+
             case 11:
                 getCells.run(robot);
                 long currentTime = System.currentTimeMillis();
@@ -203,7 +204,7 @@ public class PlanA extends GenericAutonomous {
             case 13:
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
-                activeCommand = new LimelightAlign(-3,.8,.0185);
+                activeCommand = new LimelightAlign(-3,.8);
                 activeCommand.begin(robot);
                 activeCommand.setEnabled(true);
                 ballCount = 0;

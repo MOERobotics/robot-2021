@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
-    GenericCommand activeCommand = new LimelightAlign( -0.5, .8, .0185);
+    GenericCommand activeCommand = new LimelightAlign( -0.5, .8);
     SmartClimb getOutaDodge = new SmartClimb();
     GenericRobot robot = new Falcon();
     Joystick leftJoystick = new Joystick(0);
@@ -123,6 +123,15 @@ public class Robot extends TimedRobot {
             activeCommand.setEnabled(false);
         }
 
+        if(leftJoystick.getRawButtonPressed(12)){ //long range filtering
+            robot.limelight.table.getEntry("pipeline").setNumber(1);
+
+        }
+
+        if (leftJoystick.getRawButtonPressed(15)){ //short range filtering
+            robot.limelight.table.getEntry("pipeline").setNumber(0);
+
+        }
 
         if (activeCommand.isEnabled()) {
             activeCommand.step(robot);
@@ -206,18 +215,22 @@ public class Robot extends TimedRobot {
         switch (xboxDPadDirection) {
             case NORTH: //high velocity (long range)
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.LONG_RANGE);
+                robot.limelight.table.getEntry("pipeline").setNumber(1);
                 break;
 
             case SOUTH: //low velocity (short range)
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
+                robot.limelight.table.getEntry("pipeline").setNumber(0);
                 break;
 
             case EAST: //medium velocity (mid range)
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.MID_RANGE);
+                robot.limelight.table.getEntry("pipeline").setNumber(1);
                 break;
 
             case WEST: //YEET
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
+                robot.limelight.table.getEntry("pipeline").setNumber(1);
                 break;
 
         }

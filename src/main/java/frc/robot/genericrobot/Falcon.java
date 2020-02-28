@@ -34,7 +34,7 @@ public class Falcon extends GenericRobot{
     CANPIDController shooterAPIDController = new CANPIDController(shooterA);
     CANSparkMax shooterB                   = new CANSparkMax( 4, MotorType.kBrushless);
     CANPIDController shooterBPIDController = new CANPIDController(shooterB);
-    CANSparkMax indexer         = new CANSparkMax( 6, MotorType.kBrushed);
+    CANSparkMax indexer         = new CANSparkMax( 6, MotorType.kBrushless);
     CANSparkMax escalator       = new CANSparkMax( 7, MotorType.kBrushless);
     CANSparkMax angleAdj        = new CANSparkMax( 8, MotorType.kBrushless);
 
@@ -391,8 +391,18 @@ public class Falcon extends GenericRobot{
     public double getShooterAngleMin(){return 114.0;} //orig 113
 
     @Override
-    public double getLimelightMinpower() {
-        return .045;
+    public double getPIDpivotP() {
+        return 4.0e-2;
+    }
+
+    @Override
+    public double getPIDpivotI() {
+        return 1.0e-2;
+    }
+
+    @Override
+    public double getPIDpivotD() {
+        return 1.0e-4;
     }
 
     @Override

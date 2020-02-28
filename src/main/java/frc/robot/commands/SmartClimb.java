@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 
 public class SmartClimb{
@@ -101,7 +102,7 @@ public class SmartClimb{
 	double rollCorrection = PIDRollHold.calculate(robot.getRoll()-rollTrim);
 
 	/*
-	  rollTrim, encoderPort and encoderStarboard represent the state that we are trying to hold.  
+	  rollTrim, encoderPort and encoderStarboard represent the state that we are trying to hold.
 	  It's possible the bar will shift after we start to hold.
 
 	  If you are listing to starboard, lower the port side and hold the starboard side.
@@ -110,11 +111,19 @@ public class SmartClimb{
 
 	if (robot.getRoll() > rollTrim){
 	    robot.setClimbVerticalPortPower(rollCorrection);
-	    robot.setClimbVerticalStarboardPower(-correctionStarboard);
+	    robot.setClimbVerticalStarboardPower(correctionStarboard);
 	}
 	else if (robot.getRoll() < rollTrim){
 	    robot.setClimbVerticalStarboardPower(-rollCorrection);
-	    robot.setClimbVerticalPortPower(-correctionPort);
+	    robot.setClimbVerticalPortPower(correctionPort);
 	}
      }
+        SmartDashboard.putNumber("errorPort", robot.getClimberPortTicks() - encoderPort);
+        SmartDashboard.putNumber("correctionPort", correctionPort);
+        SmartDashboard.putNumber("errorStarboard", robot.getClimberStarboardTicks() - encoderStarboard);
+        SmartDashboard.putNumber("correctionStarboard", correctionStarboard);
+
+        robot.setClimbVerticalPortPower(correctionPort);
+        robot.setClimbVerticalStarboardPower(correctionStarboard);
+    }
 }
