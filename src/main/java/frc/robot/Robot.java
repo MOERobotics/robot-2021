@@ -283,6 +283,9 @@ public class Robot extends TimedRobot {
 
 
         //below is code for keeping track of number of balls on robot
+        if(leftJoystick.getRawButtonPressed(12)){ // resets ball count to zero
+            ballCount = 0;
+        }
         if(robot.getEscalatorSensorLow()){
             if (!ballCollectCounted) { //add ball
                 ballCount++;
