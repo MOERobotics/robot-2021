@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
@@ -29,6 +30,8 @@ public class Robot extends TimedRobot {
     XboxController xboxJoystick = new XboxController(1);
     double            deadZone      = 0.1;
     TrenchRun trenchRun = new TrenchRun(0);
+    ControlPanelRotation rotationControl = new ControlPanelRotation();
+    ControlPanelPosition positionControl = new ControlPanelPosition();
 
     long timeStart;
     //boolean escalatorSpaceCounting =false;
@@ -102,6 +105,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        SmartDashboard.putNumber("Red", WheelOfFortune.colorSensor.getRed());
+        SmartDashboard.putNumber("Green", WheelOfFortune.colorSensor.getBlue());
+        SmartDashboard.putNumber("Blue", WheelOfFortune.colorSensor.getGreen());
+        SmartDashboard.putNumber("Control Panel Encoder", ControlPanelRotation.spinner.get());
         double escalatorPower = 0.0;
 
         if (leftJoystick.getRawButtonPressed(11)) {
@@ -189,6 +196,21 @@ public class Robot extends TimedRobot {
             robot.indexerUnload(1.0);
         } else {
             robot.setIndexerPower(0);
+        }
+
+        // Control Panel
+        if(leftJoystick.getRawButtonPressed(6)){
+            rotationControl.begin(robot);
+        }
+        if(leftJoystick.getRawButton(6)){
+            rotationControl.step(robot);
+        }
+
+        if(leftJoystick.getRawButtonPressed(9)){
+            positionControl.begin(robot);
+        }
+        if(leftJoystick.getRawButton(9)){
+            positionControl.step(robot);
         }
     }
 

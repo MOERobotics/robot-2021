@@ -22,7 +22,7 @@ public class WheelOfFortune {
     }
 
 
-    public ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+    public static ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
     public static final Color kBlueTarget   = new GoodColor(0.214, 0.521, 0.239, "Blue"  );
     public static final Color kGreenTarget  = new GoodColor(0.250, 0.543, 0.178, "Green" );
     public static final Color kRedTarget    = new GoodColor(0.437, 0.444, 0.125, "Red"   );

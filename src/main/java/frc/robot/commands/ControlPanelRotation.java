@@ -9,10 +9,14 @@ import frc.robot.genericrobot.WheelOfFortune;
 
 public class ControlPanelRotation extends GenericCommand{
 
-    CANSparkMax spinner = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static CANSparkMax spinner = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
     int[] colorFreq = new int[]{0, 0, 0, 0}; // R, G, B, Y
     WheelOfFortune controlPanel = new WheelOfFortune();
     Color endColor = new WheelOfFortune.GoodColor(0, 0, 0, "Default");
+    boolean lookingForRed = true;
+    boolean lookingForGreen = true;
+    boolean lookingForBlue = true;
+    boolean lookingForYellow = true;
 
     @Override
     public void begin(GenericRobot robot){
@@ -22,16 +26,32 @@ public class ControlPanelRotation extends GenericCommand{
     @Override
     public void step(GenericRobot robot){
         spinner.set(0.3);
-        if(controlPanel.getInferredColor() == WheelOfFortune.kRedTarget){
+        if(controlPanel.getInferredColor() == WheelOfFortune.kRedTarget && lookingForRed){
+            lookingForRed = false;
+            lookingForBlue = false;
+            lookingForGreen = true;
+            lookingForYellow = false;
             colorFreq[0]++;
         }
-        if(controlPanel.getInferredColor() == WheelOfFortune.kGreenTarget){
+        if(controlPanel.getInferredColor() == WheelOfFortune.kGreenTarget && lookingForGreen){
+            lookingForRed = false;
+            lookingForBlue = true;
+            lookingForGreen = false;
+            lookingForYellow = false;
             colorFreq[1]++;
         }
-        if(controlPanel.getInferredColor() == WheelOfFortune.kBlueTarget){
+        if(controlPanel.getInferredColor() == WheelOfFortune.kBlueTarget && lookingForBlue){
+            lookingForRed = false;
+            lookingForBlue = false;
+            lookingForGreen = false;
+            lookingForYellow = true;
             colorFreq[2]++;
         }
-        if(controlPanel.getInferredColor() == WheelOfFortune.kYellowTarget){
+        if(controlPanel.getInferredColor() == WheelOfFortune.kYellowTarget && lookingForYellow){
+            lookingForRed = true;
+            lookingForBlue = false;
+            lookingForGreen = false;
+            lookingForYellow = false;
             colorFreq[3]++;
         }
 
