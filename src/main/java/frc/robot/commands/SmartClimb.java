@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 
 public class SmartClimb{
@@ -94,7 +95,12 @@ public class SmartClimb{
 
         double correctionStarboard = PIDStarboardHold.calculate(robot.getClimberStarboardTicks() - encoderStarboard);
 
-        robot.setClimbVerticalPortPower(-correctionPort);
-        robot.setClimbVerticalStarboardPower(-correctionStarboard);
+        SmartDashboard.putNumber("errorPort", robot.getClimberPortTicks() - encoderPort);
+        SmartDashboard.putNumber("correctionPort", correctionPort);
+        SmartDashboard.putNumber("errorStarboard", robot.getClimberStarboardTicks() - encoderStarboard);
+        SmartDashboard.putNumber("correctionStarboard", correctionStarboard);
+
+        robot.setClimbVerticalPortPower(correctionPort);
+        robot.setClimbVerticalStarboardPower(correctionStarboard);
     }
 }
