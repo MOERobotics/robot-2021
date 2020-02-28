@@ -128,11 +128,6 @@ public class Robot extends TimedRobot {
             activeCommand.setEnabled(false);
         }
 
-        if(leftJoystick.getRawButtonPressed(12)){ //long range filtering
-            robot.limelight.table.getEntry("pipeline").setNumber(1);
-
-        }
-
         if (leftJoystick.getRawButtonPressed(15)){ //short range filtering
             robot.limelight.table.getEntry("pipeline").setNumber(0);
 
