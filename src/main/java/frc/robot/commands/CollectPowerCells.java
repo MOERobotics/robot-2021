@@ -7,7 +7,6 @@ public class CollectPowerCells{
     double escalatorPower = 0.0;
     long timeStart;
     long escalatorSpacing = 1000;
-
     public CollectPowerCells(){
 
     }
@@ -41,7 +40,6 @@ public class CollectPowerCells{
 
         robot.collectorIn(collectorPower);
         robot.escalatorUp(escalatorPower);
-
     }
 
     public void stop(GenericRobot robot) {
