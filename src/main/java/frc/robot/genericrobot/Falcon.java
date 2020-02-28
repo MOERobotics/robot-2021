@@ -8,11 +8,7 @@ import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Falcon extends GenericRobot{
@@ -53,6 +49,11 @@ public class Falcon extends GenericRobot{
     Lidar lidar = new Lidar();
 
     PowerDistributionPanel powerPanel = new PowerDistributionPanel();
+
+    Solenoid starboardShooter = new Solenoid(7);
+    Solenoid portShooter = new Solenoid(0);
+    Solenoid starboardEscalator = new Solenoid(6);
+    Solenoid portEscalator = new Solenoid(1);
 
 
     private CANDigitalInput angleAdjusterDigitalInputForward;
@@ -420,6 +421,18 @@ public class Falcon extends GenericRobot{
     @Override
     public boolean getEscalatorSensorHighInternal(){
         return escalatorSensorHigh.get();
+    }
+
+    @Override
+    public void setShooterLights(boolean onOff){
+        portShooter.set(onOff);
+        starboardShooter.set(onOff);
+    }
+
+    @Override
+    public void setEscalatorLights(boolean onOff){
+        portEscalator.set(onOff);
+        starboardEscalator.set(onOff);
     }
 
 

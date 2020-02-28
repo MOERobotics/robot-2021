@@ -98,6 +98,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        robot.limelight.table.getEntry("ledMode").setNumber(3);
         autoProgram.autonomousInit(robot);
     }
 
@@ -109,7 +110,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         LiveWindow.setEnabled(false);
-        robot.limelight.table.getEntry("ledMode").setNumber(3);
+        robot.limelight.table.getEntry("ledMode").setNumber(0);
         robot.limelight.table.getEntry("pipeline").setNumber(0);
         activeCommand.begin(robot);
 
@@ -125,6 +126,7 @@ public class Robot extends TimedRobot {
         }
 
         if (leftJoystick.getRawButtonReleased(2)){
+            robot.limelight.table.getEntry("ledMode").setNumber(0);
             activeCommand.setEnabled(false);
         }
 
@@ -166,6 +168,7 @@ public class Robot extends TimedRobot {
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
         if (leftJoystick.getRawButtonPressed(2)) {
+            robot.limelight.table.getEntry("ledMode").setNumber(3);
             activeCommand.setEnabled(true);
         }
 
@@ -195,10 +198,13 @@ public class Robot extends TimedRobot {
         //Escalator
         if (xboxJoystick.getXButton()) {
             robot.escalatorUp(.5);
+            robot.setEscalatorLights(true);
         } else if (xboxJoystick.getAButton()) {
             robot.escalatorDown(.5);
+            robot.setEscalatorLights(true);
         } else if (!(xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0)) {
             robot.setEscalatorPower(0);
+            robot.setEscalatorLights(false);
         }
 
 
@@ -255,8 +261,10 @@ public class Robot extends TimedRobot {
 
         if (shooterOn) {
             robot.setShooterRPMFromSpeedConst();
+            robot.setShooterLights(true);
         } else {
             robot.setShooterPowerPercentage(0);
+            robot.setShooterLights(false);
         }
 
         //Climb vert

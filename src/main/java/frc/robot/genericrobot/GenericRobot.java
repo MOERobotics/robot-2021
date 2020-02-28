@@ -736,6 +736,13 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
+    public void setShooterLights(boolean onOff){
+        System.out.println("I don't have shooter lights");
+    }
+
+    public void setEscalatorLights(boolean onOff){
+        System.out.println("I don't have escalator lights");
+    }
 
 
 }
