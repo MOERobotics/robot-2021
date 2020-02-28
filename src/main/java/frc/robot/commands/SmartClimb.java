@@ -73,21 +73,21 @@ public class SmartClimb{
             climbPowerPort = 0.6;
             climbPowerStarboard = 0.6;
 
-            if (robot.getRoll()> rollTolerance)
+            if (-robot.getPitch()> rollTolerance)
             {
                 climbPowerStarboard += 0.2;
             }
-            if (robot.getRoll() < -rollTolerance)
+            if (-robot.getPitch() < -rollTolerance)
             {
                 climbPowerPort += 0.2;
             }
 
             encoderPort = robot.getClimberPortTicks();
             encoderStarboard = robot.getClimberStarboardTicks();
-	    rollTrim = robot.getRoll();
+	        rollTrim = -robot.getPitch();
             PIDPortHold.reset();
             PIDStarboardHold.reset();
-	    PIDRollHold.reset();
+	        PIDRollHold.reset();
         }
 
         robot.setClimbVerticalPortPower     (-climbPowerPort);
@@ -95,11 +95,20 @@ public class SmartClimb{
     }
 
     public void hold(GenericRobot robot){
+        rollTrim = 0;
+
         double correctionPort = PIDPortHold.calculate(robot.getClimberPortTicks() - encoderPort);
 
         double correctionStarboard = PIDStarboardHold.calculate(robot.getClimberStarboardTicks() - encoderStarboard);
 
-	double rollCorrection = PIDRollHold.calculate(robot.getRoll()-rollTrim);
+        double rollCorrection = PIDRollHold.calculate((-robot.getPitch()) - rollTrim);
+
+        SmartDashboard.putNumber("errorPort", robot.getClimberPortTicks() - encoderPort);
+        SmartDashboard.putNumber("correctionPort", correctionPort);
+        SmartDashboard.putNumber("errorStarboard", robot.getClimberStarboardTicks() - encoderStarboard);
+        SmartDashboard.putNumber("correctionStarboard", correctionStarboard);
+        SmartDashboard.putNumber("errorRoll", -robot.getPitch() - rollTrim);
+        SmartDashboard.putNumber("rollCorrection", rollCorrection);
 
 	/*
 	  rollTrim, encoderPort and encoderStarboard represent the state that we are trying to hold.
@@ -109,21 +118,19 @@ public class SmartClimb{
 	  If you are listing to port, lower the stb side and hold the port side.
 	 */
 
-	if (robot.getRoll() > rollTrim){
-	    robot.setClimbVerticalPortPower(rollCorrection);
-	    robot.setClimbVerticalStarboardPower(correctionStarboard);
-	}
-	else if (robot.getRoll() < rollTrim){
-	    robot.setClimbVerticalStarboardPower(-rollCorrection);
-	    robot.setClimbVerticalPortPower(correctionPort);
-	}
-     }
-        SmartDashboard.putNumber("errorPort", robot.getClimberPortTicks() - encoderPort);
-        SmartDashboard.putNumber("correctionPort", correctionPort);
-        SmartDashboard.putNumber("errorStarboard", robot.getClimberStarboardTicks() - encoderStarboard);
-        SmartDashboard.putNumber("correctionStarboard", correctionStarboard);
+        if (Math.abs(-robot.getPitch() - rollTrim)>rollTolerance) {
+            if (-robot.getPitch() > rollTrim) {
+                robot.setClimbVerticalPortPower(-rollCorrection);
+                robot.setClimbVerticalStarboardPower(correctionStarboard);
+            } else if (-robot.getPitch() < rollTrim) {
+                robot.setClimbVerticalStarboardPower(rollCorrection);
+                robot.setClimbVerticalPortPower(correctionPort);
+            }
+        } else {
+            robot.setClimbVerticalStarboardPower(correctionStarboard);
+            robot.setClimbVerticalPortPower(correctionPort);
+        }
 
-        robot.setClimbVerticalPortPower(correctionPort);
-        robot.setClimbVerticalStarboardPower(correctionStarboard);
     }
 }
+
