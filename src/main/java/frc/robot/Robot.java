@@ -94,6 +94,17 @@ public class Robot extends TimedRobot {
         }
 
         robot.limelight.table.getEntry("ledMode").setNumber(0);
+
+        if (leftJoystick.getRawButton(5)){
+            //coast mode
+            robot.setClimberBrake(false);
+        }
+
+        if (leftJoystick.getRawButtonReleased(5)){
+            //brake mode
+            robot.setClimberBrake(true);
+        }
+
     }
 
     @Override
@@ -109,7 +120,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         LiveWindow.setEnabled(false);
-        robot.limelight.table.getEntry("ledMode").setNumber(3);
+        robot.limelight.table.getEntry("ledMode").setNumber(0);
         robot.limelight.table.getEntry("pipeline").setNumber(0);
         activeCommand.begin(robot);
 
@@ -439,6 +450,8 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButton(4)) {
             robot.setClimbVerticalPortPower(0);
         }
+
+
 
     }
 

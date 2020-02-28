@@ -422,6 +422,17 @@ public class Falcon extends GenericRobot{
         return escalatorSensorHigh.get();
     }
 
+    @Override
+    public void setClimberBrake(boolean yesNo){
+        if(yesNo){
+            climberPort.setIdleMode(IdleMode.kBrake);
+            climberStarboard.setIdleMode(IdleMode.kBrake);
+        } else {
+            climberPort.setIdleMode(IdleMode.kCoast);
+            climberStarboard.setIdleMode(IdleMode.kCoast);
+        }
+    }
+
 
 }
 

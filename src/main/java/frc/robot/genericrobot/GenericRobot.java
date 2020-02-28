@@ -736,6 +736,9 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
+    public void setClimberBrake(boolean yesNo){
+        System.out.println("I don't have a climber");
+    }
 
 
 }
