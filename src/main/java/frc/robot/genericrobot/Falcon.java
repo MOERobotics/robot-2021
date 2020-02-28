@@ -110,6 +110,8 @@ public class Falcon extends GenericRobot{
 
         climberPort.setIdleMode     (IdleMode.kBrake);
         climberStarboard.setIdleMode(IdleMode.kBrake);
+
+        indexer.setInverted(true);
     }
 
     @Override

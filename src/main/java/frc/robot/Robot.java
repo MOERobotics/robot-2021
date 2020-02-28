@@ -211,6 +211,15 @@ public class Robot extends TimedRobot {
             robot.setIndexerPower(0);
         }
 
+        //Elevation Adjuster
+        if (xboxJoystick.getY(GenericHID.Hand.kLeft) < -0.5){
+            robot.aimUp(0.4);
+        } else if (xboxJoystick.getY(GenericHID.Hand.kLeft) > 0.5){
+            robot.aimDown(0.4);
+        } else {
+            robot.aimUp(0);
+        }
+
 
         POVDirection xboxDPadDirection = POVDirection.getDirection(xboxJoystick.getPOV());
 
