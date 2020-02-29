@@ -124,6 +124,7 @@ public class Robot extends TimedRobot {
         robot.limelight.table.getEntry("pipeline").setNumber(0);
         activeCommand.begin(robot);
         robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
+        robot.setCameraTilt(125);
 
     }
 
