@@ -63,6 +63,9 @@ public class Robot extends TimedRobot {
     }
 
     @Override
+    public void disabledInit(){}
+
+    @Override
     public void disabledPeriodic() {
         if (leftJoystick.getTriggerPressed()) {
             System.out.println("AAAAAAAA");
@@ -79,6 +82,7 @@ public class Robot extends TimedRobot {
         robot.spinControlPanel(0);
         robot.setClimbVerticalPower(0);
         robot.setBalancePower(0);
+        robot.setCameraTilt(0);
 
         if (leftJoystick.getRawButtonPressed(5)) {
             autoProgram = new PlanA();
