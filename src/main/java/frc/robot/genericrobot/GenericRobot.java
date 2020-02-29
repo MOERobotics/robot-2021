@@ -457,6 +457,7 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
+
     public final void spinControlPanel(
         double power
     ) {
@@ -469,7 +470,7 @@ public abstract class GenericRobot {
     protected void spinControlPanelInternal(
         double power
     ) {
-        System.out.println("I can't spin the control panel :'(");
+        //System.out.println("I can't spin the control panel :'("); //this is clogging our network
     }
 
     public final double getControlPanelSpinnerPower() {
@@ -653,7 +654,7 @@ public abstract class GenericRobot {
     protected void setBalancePowerInternal(
             double shiftPower
     ){
-        System.out.println("I don't have a generator shifter ; (");
+        //System.out.println("I don't have a generator shifter ; ("); //this is clogging our network
     }
 
     //***********************************************************************//
