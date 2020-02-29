@@ -130,6 +130,7 @@ public class PlanC extends GenericAutonomous {
                         PIDSteering.enableContinuousInput(-180, 180);
                         currentYaw = 0;
                         autonomousStep += 1;
+                        defaultSpeed = 0.3;
                         break;
 
                   case 6: //backward straight-away

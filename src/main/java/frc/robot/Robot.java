@@ -168,6 +168,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putString("Color", color);
         SmartDashboard.putNumber("Control Panel Encoder", ControlPanelRotation.spinnerEncoder.getPosition()
         );
+
         double escalatorPower = 0.0;
         double collectorPower = 0.0;
 

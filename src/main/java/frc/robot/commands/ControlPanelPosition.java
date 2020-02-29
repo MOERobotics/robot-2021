@@ -12,6 +12,9 @@ public class ControlPanelPosition extends GenericCommand{
     CANSparkMax spinner = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
     WheelOfFortune controlPanel = new WheelOfFortune();
     Color endColor = new WheelOfFortune.GoodColor(0, 0, 0, "Default");
+    //setters and getters for motors and encoders in controlPanelPosition + Rotation
+    //genericRobot, define
+    //generic+Falcon method: threeRotations (return boolean when rotated three times) code is currently in robot.java
 
     @Override
     public void begin(GenericRobot robot){
@@ -51,3 +54,5 @@ public class ControlPanelPosition extends GenericCommand{
         }
     }
 }
+
+
