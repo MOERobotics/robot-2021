@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
-    GenericCommand activeCommand = new LimelightAlign( -0.5, .8, .0185);
+    GenericCommand activeCommand = new LimelightAlign( -0.5, .8);
     SmartClimb getOutaDodge = new SmartClimb();
     GenericRobot robot = new Falcon();
     Joystick leftJoystick = new Joystick(0);
@@ -44,6 +44,9 @@ public class Robot extends TimedRobot {
     long timeStart;
     //boolean escalatorSpaceCounting =false;
     long escalatorSpacing = 0;
+    int ballCount = 0;
+    boolean ballCollectCounted = false;
+    boolean ballShootCounted = false;
 
     @Override
     public void robotInit() {
@@ -117,6 +120,7 @@ public class Robot extends TimedRobot {
         robot.limelight.table.getEntry("ledMode").setNumber(3);
         robot.limelight.table.getEntry("pipeline").setNumber(0);
         activeCommand.begin(robot);
+
     }
 
     @Override
@@ -126,6 +130,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Blue", WheelOfFortune.colorSensor.getGreen());
         SmartDashboard.putNumber("Control Panel Encoder", ControlPanelRotation.spinner.get());
         double escalatorPower = 0.0;
+        double collectorPower = 0.0;
 
         if (leftJoystick.getRawButtonPressed(8)) { //INFORM 3 and 4 to jerk sideways
             activeCommand.setEnabled(false);
@@ -135,6 +140,10 @@ public class Robot extends TimedRobot {
             activeCommand.setEnabled(false);
         }
 
+        if (leftJoystick.getRawButtonPressed(15)){ //short range filtering
+            robot.limelight.table.getEntry("pipeline").setNumber(0);
+
+        }
 
         if (activeCommand.isEnabled()) {
             activeCommand.step(robot);
@@ -175,17 +184,19 @@ public class Robot extends TimedRobot {
         //Collector
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             escalatorPower = 0.0;
-            if (robot.getEscalatorSensorMedium()) {
+            if (robot.getEscalatorSensorMedium() && (ballCount<=3)) {
                 timeStart = System.currentTimeMillis();
                 escalatorPower = 0.5;
             } else {
                 if ((System.currentTimeMillis() >= timeStart + escalatorSpacing)) {
                     escalatorPower = 0.0;
                 } else {
-                    if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0.8){ escalatorPower = 0.5;}
+                    escalatorPower = 0.5;
                 }
             }
-            robot.collectorIn(1.0);
+            if (ballCount<=4){collectorPower = 1.0;}
+            if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
+            robot.collectorIn(collectorPower);
             robot.escalatorUp(escalatorPower);
         } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
             robot.collectorOut(1.0);
@@ -221,24 +232,37 @@ public class Robot extends TimedRobot {
             robot.setIndexerPower(0);
         }
 
+        //Elevation Adjuster
+        if (xboxJoystick.getY(GenericHID.Hand.kLeft) < -0.5){
+            robot.aimUp(0.4);
+        } else if (xboxJoystick.getY(GenericHID.Hand.kLeft) > 0.5){
+            robot.aimDown(0.4);
+        } else {
+            robot.aimUp(0);
+        }
+
 
         POVDirection xboxDPadDirection = POVDirection.getDirection(xboxJoystick.getPOV());
 
         switch (xboxDPadDirection) {
             case NORTH: //high velocity (long range)
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.LONG_RANGE);
+                robot.limelight.table.getEntry("pipeline").setNumber(1);
                 break;
 
             case SOUTH: //low velocity (short range)
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
+                robot.limelight.table.getEntry("pipeline").setNumber(0);
                 break;
 
             case EAST: //medium velocity (mid range)
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.MID_RANGE);
+                robot.limelight.table.getEntry("pipeline").setNumber(1);
                 break;
 
             case WEST: //YEET
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
+                robot.limelight.table.getEntry("pipeline").setNumber(1);
                 break;
 
         }
@@ -296,6 +320,30 @@ public class Robot extends TimedRobot {
         }
 
 
+        //below is code for keeping track of number of balls on robot
+        if(leftJoystick.getRawButtonPressed(12)){ // resets ball count to zero
+            ballCount = 0;
+        }
+        if(robot.getEscalatorSensorLow()){
+            if (!ballCollectCounted) { //add ball
+                ballCount++;
+                ballCollectCounted = true;
+            }
+        }
+        else {
+            ballCollectCounted = false;
+        }
+
+        if(robot.getEscalatorSensorHigh()){
+            ballShootCounted = true;
+        }
+        else {
+            if (ballShootCounted){
+                ballCount--;              // subtract ball
+            }
+            ballShootCounted = false;
+        }
+        SmartDashboard.putNumber("Ball Count", ballCount);
         // Control Panel
         if(leftJoystick.getRawButtonPressed(6)){
             rotationControl.begin(robot);
@@ -463,4 +511,5 @@ public class Robot extends TimedRobot {
             return directionMap.getOrDefault(angle, POVDirection.NULL);
         }
     }
+
 }

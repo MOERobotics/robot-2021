@@ -110,6 +110,8 @@ public class Falcon extends GenericRobot{
 
         climberPort.setIdleMode     (IdleMode.kBrake);
         climberStarboard.setIdleMode(IdleMode.kBrake);
+
+        indexer.setInverted(true);
     }
 
     @Override
@@ -391,8 +393,18 @@ public class Falcon extends GenericRobot{
     public double getShooterAngleMin(){return 114.0;} //orig 113
 
     @Override
-    public double getLimelightMinpower() {
-        return .045;
+    public double getPIDpivotP() {
+        return 4.0e-2;
+    }
+
+    @Override
+    public double getPIDpivotI() {
+        return 1.0e-2;
+    }
+
+    @Override
+    public double getPIDpivotD() {
+        return 1.0e-4;
     }
 
     @Override
