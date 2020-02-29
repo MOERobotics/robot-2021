@@ -211,13 +211,10 @@ public class Robot extends TimedRobot {
         //Escalator
         if (xboxJoystick.getXButton()) {
             robot.escalatorUp(.5);
-            robot.setEscalatorLights(true);
         } else if (xboxJoystick.getAButton()) {
             robot.escalatorDown(.5);
-            robot.setEscalatorLights(true);
         } else if (!(xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0)) {
             robot.setEscalatorPower(0);
-            robot.setEscalatorLights(false);
         }
 
 
@@ -268,10 +265,8 @@ public class Robot extends TimedRobot {
         //Shooter
         if (xboxJoystick.getYButtonPressed()) {
             shooterOn = true;
-            robot.setShooterLights(true);
         } else if (xboxJoystick.getBButtonPressed()) {
             shooterOn = false;
-            robot.setShooterLights(false);
         }
 
         if (shooterOn) {

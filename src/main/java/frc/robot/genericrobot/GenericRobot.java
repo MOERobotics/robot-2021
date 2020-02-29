@@ -91,6 +91,12 @@ public abstract class GenericRobot {
 
     public final void updateMotorPowers(){
 
+        if (Math.abs(escalatorPower) < 1.0e-6){
+            setEscalatorLights(false);
+        } else {
+            setEscalatorLights(true);
+        }
+
         if ((getElevationInternal() > getShooterAngleMax()) && (angleAdjusterPower > 0)){
             angleAdjusterPower = 0;
         }
@@ -125,10 +131,22 @@ public abstract class GenericRobot {
         setClimbVerticalStarboardInternal(climbVerticalStarboardPower);
         setBalancePowerInternal(climbBalancePower);
 
-        if (shooterState == POWER)
+        if (shooterState == POWER) {
             setShooterPowerPercentageInternal(shooterUpperPower, shooterLowerPower);
-        if (shooterState == VELOCITY)
+            if ((Math.abs(shooterUpperPower) < 1.0e-6) && (Math.abs(shooterLowerPower) < 1.0e-6)){
+                setShooterLights(false);
+            } else {
+                setShooterLights(true);
+            }
+        }
+        if (shooterState == VELOCITY) {
             setShooterRPMInternal(shooterUpperRPM, shooterLowerRPM);
+            if ((Math.abs(shooterUpperRPM) < 1.0e-6) && (Math.abs(shooterLowerRPM) < 1.0e-6)){
+                setShooterLights(false);
+            } else {
+                setShooterLights(true);
+            }
+        }
     }
 
     //***********************************************************************//
