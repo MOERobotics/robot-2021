@@ -34,7 +34,7 @@ public class Falcon extends GenericRobot{
     CANSparkMax escalator       = new CANSparkMax( 7, MotorType.kBrushless);
     CANSparkMax angleAdj        = new CANSparkMax( 8, MotorType.kBrushless);
 
-    CANSparkMax controlPanel    = null;//= new CANSparkMax( 9, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax controlPanel    = new CANSparkMax( 9, MotorType.kBrushless);
 
     CANSparkMax collector       = new CANSparkMax(10, MotorType.kBrushless);
 

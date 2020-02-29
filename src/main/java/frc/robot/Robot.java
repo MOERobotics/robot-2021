@@ -124,6 +124,7 @@ public class Robot extends TimedRobot {
         robot.limelight.table.getEntry("ledMode").setNumber(0);
         robot.limelight.table.getEntry("pipeline").setNumber(0);
         activeCommand.begin(robot);
+        robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
 
     }
 
@@ -186,7 +187,7 @@ public class Robot extends TimedRobot {
         //Collector
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             escalatorPower = 0.0;
-            if (robot.getEscalatorSensorMedium() && (ballCount<=3)) {
+            if (robot.getEscalatorSensorMedium()) { //&& (ballCount<=3)
                 timeStart = System.currentTimeMillis();
                 escalatorPower = 0.5;
             } else {
@@ -196,8 +197,9 @@ public class Robot extends TimedRobot {
                     escalatorPower = 0.5;
                 }
             }
-            if (ballCount<=4){collectorPower = 1.0;}
-            if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
+            //if (ballCount<=4){collectorPower = 1.0;}
+            //if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
+            collectorPower = 1.0;
             robot.collectorIn(collectorPower);
             robot.escalatorUp(escalatorPower);
         } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
@@ -266,16 +268,16 @@ public class Robot extends TimedRobot {
         //Shooter
         if (xboxJoystick.getYButtonPressed()) {
             shooterOn = true;
+            robot.setShooterLights(true);
         } else if (xboxJoystick.getBButtonPressed()) {
             shooterOn = false;
+            robot.setShooterLights(false);
         }
 
         if (shooterOn) {
             robot.setShooterRPMFromSpeedConst();
-            robot.setShooterLights(true);
         } else {
             robot.setShooterPowerPercentage(0);
-            robot.setShooterLights(false);
         }
 
         //Climb vert
