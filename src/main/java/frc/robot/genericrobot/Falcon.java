@@ -452,13 +452,13 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    public void setCameraTilt(double travel){
-        cameraTilt.set(travel);
+    public void setCameraTilt(double angle){
+        cameraTilt.setAngle(angle);
     }
 
     @Override
     public double getCameraTilt(){
-        return cameraTilt.get();
+        return cameraTilt.getAngle();
     }
 
 

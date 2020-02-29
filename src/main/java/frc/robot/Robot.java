@@ -353,7 +353,7 @@ public class Robot extends TimedRobot {
         }
         SmartDashboard.putNumber("Ball Count", ballCount);
 
-        robot.setCameraTilt(Math.abs(xboxJoystick.getY(GenericHID.Hand.kRight)));
+        robot.setCameraTilt(Math.abs(xboxJoystick.getY(GenericHID.Hand.kRight)) * 90);
     }
 
     @Override
