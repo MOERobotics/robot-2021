@@ -125,6 +125,7 @@ public class Robot extends TimedRobot {
         robot.limelight.table.getEntry("pipeline").setNumber(0);
         activeCommand.begin(robot);
         robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
+        robot.setCameraTilt(125);
 
     }
 
@@ -353,7 +354,7 @@ public class Robot extends TimedRobot {
         }
         SmartDashboard.putNumber("Ball Count", ballCount);
 
-        robot.setCameraTilt(Math.abs(xboxJoystick.getY(GenericHID.Hand.kRight)) * 90);
+        //robot.setCameraTilt(Math.abs(xboxJoystick.getY(GenericHID.Hand.kRight)) * 150);
     }
 
     @Override
