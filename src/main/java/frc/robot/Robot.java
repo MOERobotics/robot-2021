@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
-    GenericCommand activeCommand = new LimelightAlign( 3, .8);
+    GenericCommand activeCommand = new LimelightAlign( -2, .8);
     SmartClimb getOutaDodge = new SmartClimb();
     GenericRobot robot = new Falcon();
     Joystick leftJoystick = new Joystick(0);
@@ -249,8 +249,11 @@ public class Robot extends TimedRobot {
 
         switch (xboxDPadDirection) {
             case NORTH: //high velocity (long range)
-                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.LONG_RANGE);
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
+                shooterController.begin(robot);
+                shooterController.setEnabled(true);
+                shooterController.setSetPoint(125);
                 break;
 
             case SOUTH: //low velocity (short range)
@@ -268,6 +271,7 @@ public class Robot extends TimedRobot {
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
+                shooterController.setSetPoint(127);
                 break;
 
         }

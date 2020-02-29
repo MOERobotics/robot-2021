@@ -6,7 +6,7 @@ import frc.robot.genericrobot.GenericRobot;
 
 public class ElevationControl {
     private boolean enabled = false;
-    double setPoint = 130;
+    double setPoint = 127; //yeet
     PIDController PIDElevation = new PIDController(1.0e-1, 1.0e-2, 1.0e-3);
 
     public ElevationControl(){
@@ -32,6 +32,10 @@ public class ElevationControl {
 
     public boolean getEnabled(){
         return this.enabled;
+    }
+
+    public void setSetPoint(double setPointValue){
+        this.setPoint = setPointValue;
     }
 
 
