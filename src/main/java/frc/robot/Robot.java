@@ -72,6 +72,10 @@ public class Robot extends TimedRobot {
             robot.resetClimberTicks();
         }
 
+        SmartDashboard.putNumber("Red", WheelOfFortune.colorSensor.getRed());
+        SmartDashboard.putNumber("Green", WheelOfFortune.colorSensor.getGreen());
+        SmartDashboard.putNumber("Blue", WheelOfFortune.colorSensor.getBlue());
+
         robot.setShooterPowerPercentage(0);
         robot.setCollectorPower(0);
         robot.setEscalatorPower(0);
@@ -458,7 +462,5 @@ public class Robot extends TimedRobot {
         public static POVDirection getDirection(int angle) {
             return directionMap.getOrDefault(angle, POVDirection.NULL);
         }
-    }
-
     }
 }
