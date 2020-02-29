@@ -15,8 +15,9 @@ public class ControlPanelPosition extends GenericCommand{
 
     @Override
     public void begin(GenericRobot robot){
+        spinner.setIdleMode(CANSparkMax.IdleMode.kBrake);
         String gameData;
-        gameData = DriverStation.getInstance().getGameSpecificMessage();
+        gameData = "Green";
         if(gameData.length() > 0)
         {
             switch (gameData.charAt(0))

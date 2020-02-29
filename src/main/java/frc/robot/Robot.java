@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class Robot extends TimedRobot {
 
-    //WheelOfFortune    colorWheel   = new WheelOfFortune();
+    WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
     GenericCommand activeCommand = new LimelightAlign( -2, .8);
     SmartClimb getOutaDodge = new SmartClimb();
@@ -48,6 +49,8 @@ public class Robot extends TimedRobot {
     int ballCount = 0;
     boolean ballCollectCounted = false;
     boolean ballShootCounted = false;
+    boolean startSpinning = false;
+    double spinStart = 0;
 
     @Override
     public void robotInit() {
@@ -138,10 +141,29 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+
+        String color = "";
+        Color inferredColor = colorWheel.getInferredColor();
+
+        if(inferredColor == WheelOfFortune.kRedTarget){
+            color = "Red";
+        }
+        if(inferredColor == WheelOfFortune.kGreenTarget){
+            color = "Green";
+        }
+        if(inferredColor == WheelOfFortune.kBlueTarget){
+            color = "Blue";
+        }
+        if(inferredColor == WheelOfFortune.kYellowTarget){
+            color = "Yellow";
+        }
+
         SmartDashboard.putNumber("Red", WheelOfFortune.colorSensor.getRed());
         SmartDashboard.putNumber("Green", WheelOfFortune.colorSensor.getBlue());
         SmartDashboard.putNumber("Blue", WheelOfFortune.colorSensor.getGreen());
-        SmartDashboard.putNumber("Control Panel Encoder", ControlPanelRotation.spinner.get());
+        SmartDashboard.putString("Color", color);
+        SmartDashboard.putNumber("Control Panel Encoder", ControlPanelRotation.spinnerEncoder.getPosition()
+        );
         double escalatorPower = 0.0;
         double collectorPower = 0.0;
 
@@ -374,17 +396,21 @@ public class Robot extends TimedRobot {
         }
         SmartDashboard.putNumber("Ball Count", ballCount);
         // Control Panel
-        if(leftJoystick.getRawButtonPressed(6)){
+        if(xboxJoystick.getStickButtonPressed(GenericHID.Hand.kRight)){
             rotationControl.begin(robot);
+            spinStart = ControlPanelRotation.spinnerEncoder.getPosition();
         }
-        if(leftJoystick.getRawButton(6)){
+        if(xboxJoystick.getStickButton(GenericHID.Hand.kRight) && (ControlPanelRotation.spinnerEncoder.getPosition() - spinStart) < 850){
             rotationControl.step(robot);
         }
+        if((ControlPanelRotation.spinnerEncoder.getPosition() - spinStart) > 850){
+            ControlPanelRotation.spinner.set(0.0);
+        }
 
-        if(leftJoystick.getRawButtonPressed(9)){
+        if(xboxJoystick.getStartButtonPressed()){
             positionControl.begin(robot);
         }
-        if(leftJoystick.getRawButton(9)){
+        if(xboxJoystick.getStartButton()){
             positionControl.step(robot);
         }
     }
