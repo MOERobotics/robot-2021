@@ -40,6 +40,9 @@ public class Robot extends TimedRobot {
     long timeStart;
     //boolean escalatorSpaceCounting =false;
     long escalatorSpacing = 0;
+    int ballCount = 0;
+    boolean ballCollectCounted = false;
+    boolean ballShootCounted = false;
 
     @Override
     public void robotInit() {
@@ -91,10 +94,22 @@ public class Robot extends TimedRobot {
         }
 
         robot.limelight.table.getEntry("ledMode").setNumber(0);
+
+        if (leftJoystick.getRawButton(5)){
+            //coast mode
+            robot.setClimberBrake(false);
+        }
+
+        if (leftJoystick.getRawButtonReleased(5)){
+            //brake mode
+            robot.setClimberBrake(true);
+        }
+
     }
 
     @Override
     public void autonomousInit() {
+        robot.limelight.table.getEntry("ledMode").setNumber(3);
         autoProgram.autonomousInit(robot);
     }
 
@@ -106,26 +121,25 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         LiveWindow.setEnabled(false);
-        robot.limelight.table.getEntry("ledMode").setNumber(3);
+        robot.limelight.table.getEntry("ledMode").setNumber(0);
         robot.limelight.table.getEntry("pipeline").setNumber(0);
         activeCommand.begin(robot);
+        robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
+
     }
 
     @Override
     public void teleopPeriodic() {
         double escalatorPower = 0.0;
+        double collectorPower = 0.0;
 
         if (leftJoystick.getRawButtonPressed(8)) { //INFORM 3 and 4 to jerk sideways
             activeCommand.setEnabled(false);
         }
 
         if (leftJoystick.getRawButtonReleased(2)){
+            robot.limelight.table.getEntry("ledMode").setNumber(0);
             activeCommand.setEnabled(false);
-        }
-
-        if(leftJoystick.getRawButtonPressed(12)){ //long range filtering
-            robot.limelight.table.getEntry("pipeline").setNumber(1);
-
         }
 
         if (leftJoystick.getRawButtonPressed(15)){ //short range filtering
@@ -166,23 +180,27 @@ public class Robot extends TimedRobot {
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
         if (leftJoystick.getRawButtonPressed(2)) {
+            robot.limelight.table.getEntry("ledMode").setNumber(3);
             activeCommand.setEnabled(true);
         }
 
         //Collector
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             escalatorPower = 0.0;
-            if (robot.getEscalatorSensorMedium()) {
+            if (robot.getEscalatorSensorMedium()) { //&& (ballCount<=3)
                 timeStart = System.currentTimeMillis();
                 escalatorPower = 0.5;
             } else {
                 if ((System.currentTimeMillis() >= timeStart + escalatorSpacing)) {
                     escalatorPower = 0.0;
                 } else {
-                    if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0.8){ escalatorPower = 0.5;}
+                    escalatorPower = 0.5;
                 }
             }
-            robot.collectorIn(1.0);
+            //if (ballCount<=4){collectorPower = 1.0;}
+            //if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
+            collectorPower = 1.0;
+            robot.collectorIn(collectorPower);
             robot.escalatorUp(escalatorPower);
         } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
             robot.collectorOut(1.0);
@@ -193,10 +211,13 @@ public class Robot extends TimedRobot {
         //Escalator
         if (xboxJoystick.getXButton()) {
             robot.escalatorUp(.5);
+            robot.setEscalatorLights(true);
         } else if (xboxJoystick.getAButton()) {
             robot.escalatorDown(.5);
+            robot.setEscalatorLights(true);
         } else if (!(xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0)) {
             robot.setEscalatorPower(0);
+            robot.setEscalatorLights(false);
         }
 
 
@@ -207,6 +228,15 @@ public class Robot extends TimedRobot {
             robot.indexerUnload(1.0);
         } else {
             robot.setIndexerPower(0);
+        }
+
+        //Elevation Adjuster
+        if (xboxJoystick.getY(GenericHID.Hand.kLeft) < -0.5){
+            robot.aimUp(0.4);
+        } else if (xboxJoystick.getY(GenericHID.Hand.kLeft) > 0.5){
+            robot.aimDown(0.4);
+        } else {
+            robot.aimUp(0);
         }
 
 
@@ -238,8 +268,10 @@ public class Robot extends TimedRobot {
         //Shooter
         if (xboxJoystick.getYButtonPressed()) {
             shooterOn = true;
+            robot.setShooterLights(true);
         } else if (xboxJoystick.getBButtonPressed()) {
             shooterOn = false;
+            robot.setShooterLights(false);
         }
 
         if (shooterOn) {
@@ -287,6 +319,31 @@ public class Robot extends TimedRobot {
             robot.setClimbVerticalStarboardPower(-.2);
         }
 
+
+        //below is code for keeping track of number of balls on robot
+        if(leftJoystick.getRawButtonPressed(12)){ // resets ball count to zero
+            ballCount = 0;
+        }
+        if(robot.getEscalatorSensorLow()){
+            if (!ballCollectCounted) { //add ball
+                ballCount++;
+                ballCollectCounted = true;
+            }
+        }
+        else {
+            ballCollectCounted = false;
+        }
+
+        if(robot.getEscalatorSensorHigh()){
+            ballShootCounted = true;
+        }
+        else {
+            if (ballShootCounted){
+                ballCount--;              // subtract ball
+            }
+            ballShootCounted = false;
+        }
+        SmartDashboard.putNumber("Ball Count", ballCount);
     }
 
     @Override
@@ -403,6 +460,8 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButton(4)) {
             robot.setClimbVerticalPortPower(0);
         }
+
+
 
     }
 

@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 
 public class LimelightAlign extends GenericCommand{
@@ -75,6 +76,7 @@ public class LimelightAlign extends GenericCommand{
 
         }
 
+        SmartDashboard.putBoolean("targeted", !aligning);
         if(!aligning){
             setEnabled(false);
         }
