@@ -122,9 +122,11 @@ public class SmartClimb{
             if (-robot.getPitch() > rollTrim) {
                 robot.setClimbVerticalPortPower(-rollCorrection);
                 robot.setClimbVerticalStarboardPower(correctionStarboard);
+                encoderPort = robot.getClimberPortTicks();
             } else if (-robot.getPitch() < rollTrim) {
                 robot.setClimbVerticalStarboardPower(rollCorrection);
                 robot.setClimbVerticalPortPower(correctionPort);
+                encoderStarboard = robot.getClimberStarboardTicks();
             }
         } else {
             robot.setClimbVerticalStarboardPower(correctionStarboard);

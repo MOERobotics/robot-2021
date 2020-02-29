@@ -91,6 +91,12 @@ public abstract class GenericRobot {
 
     public final void updateMotorPowers(){
 
+        if (Math.abs(escalatorPower) < 1.0e-6){
+            setEscalatorLights(false);
+        } else {
+            setEscalatorLights(true);
+        }
+
         if ((getElevationInternal() > getShooterAngleMax()) && (angleAdjusterPower > 0)){
             angleAdjusterPower = 0;
         }
@@ -125,10 +131,22 @@ public abstract class GenericRobot {
         setClimbVerticalStarboardInternal(climbVerticalStarboardPower);
         setBalancePowerInternal(climbBalancePower);
 
-        if (shooterState == POWER)
+        if (shooterState == POWER) {
             setShooterPowerPercentageInternal(shooterUpperPower, shooterLowerPower);
-        if (shooterState == VELOCITY)
+            if ((Math.abs(shooterUpperPower) < 1.0e-6) && (Math.abs(shooterLowerPower) < 1.0e-6)){
+                setShooterLights(false);
+            } else {
+                setShooterLights(true);
+            }
+        }
+        if (shooterState == VELOCITY) {
             setShooterRPMInternal(shooterUpperRPM, shooterLowerRPM);
+            if ((Math.abs(shooterUpperRPM) < 1.0e-6) && (Math.abs(shooterLowerRPM) < 1.0e-6)){
+                setShooterLights(false);
+            } else {
+                setShooterLights(true);
+            }
+        }
     }
 
     //***********************************************************************//
@@ -439,6 +457,7 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
+
     public final void spinControlPanel(
         double power
     ) {
@@ -451,7 +470,7 @@ public abstract class GenericRobot {
     protected void spinControlPanelInternal(
         double power
     ) {
-        System.out.println("I can't spin the control panel :'(");
+        //System.out.println("I can't spin the control panel :'("); //this is clogging our network
     }
 
     public final double getControlPanelSpinnerPower() {
@@ -635,7 +654,7 @@ public abstract class GenericRobot {
     protected void setBalancePowerInternal(
             double shiftPower
     ){
-        System.out.println("I don't have a generator shifter ; (");
+        //System.out.println("I don't have a generator shifter ; ("); //this is clogging our network
     }
 
     //***********************************************************************//
@@ -736,6 +755,16 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
+    public void setClimberBrake(boolean yesNo){
+        System.out.println("I don't have a climber");
+    }
+    public void setShooterLights(boolean onOff){
+        System.out.println("I don't have shooter lights");
+    }
+
+    public void setEscalatorLights(boolean onOff){
+        System.out.println("I don't have escalator lights");
+    }
 
 
 }

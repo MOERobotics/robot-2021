@@ -30,11 +30,12 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
-    GenericCommand activeCommand = new LimelightAlign( -0.5, .8);
+    GenericCommand activeCommand = new LimelightAlign( -2, .8);
     SmartClimb getOutaDodge = new SmartClimb();
     GenericRobot robot = new Falcon();
     Joystick leftJoystick = new Joystick(0);
     XboxController xboxJoystick = new XboxController(1);
+    ElevationControl shooterController = new ElevationControl();
     boolean shooterOn = false;
     double            deadZone      = 0.1;
     TrenchRun trenchRun = new TrenchRun(0);
@@ -102,10 +103,22 @@ public class Robot extends TimedRobot {
         }
 
         robot.limelight.table.getEntry("ledMode").setNumber(0);
+
+        if (leftJoystick.getRawButton(5)){
+            //coast mode
+            robot.setClimberBrake(false);
+        }
+
+        if (leftJoystick.getRawButtonReleased(5)){
+            //brake mode
+            robot.setClimberBrake(true);
+        }
+
     }
 
     @Override
     public void autonomousInit() {
+        robot.limelight.table.getEntry("ledMode").setNumber(3);
         autoProgram.autonomousInit(robot);
     }
 
@@ -116,10 +129,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        LiveWindow.setEnabled(false);
-        robot.limelight.table.getEntry("ledMode").setNumber(3);
+        robot.limelight.table.getEntry("ledMode").setNumber(0);
         robot.limelight.table.getEntry("pipeline").setNumber(0);
         activeCommand.begin(robot);
+        robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
 
     }
 
@@ -132,11 +145,17 @@ public class Robot extends TimedRobot {
         double escalatorPower = 0.0;
         double collectorPower = 0.0;
 
+        SmartDashboard.putBoolean("shooterController enable", shooterController.getEnabled());
+        if(shooterController.getEnabled()){
+            shooterController.run(robot);
+        }
+
         if (leftJoystick.getRawButtonPressed(8)) { //INFORM 3 and 4 to jerk sideways
             activeCommand.setEnabled(false);
         }
 
         if (leftJoystick.getRawButtonReleased(2)){
+            robot.limelight.table.getEntry("ledMode").setNumber(0);
             activeCommand.setEnabled(false);
         }
 
@@ -178,13 +197,14 @@ public class Robot extends TimedRobot {
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
         if (leftJoystick.getRawButtonPressed(2)) {
+            robot.limelight.table.getEntry("ledMode").setNumber(3);
             activeCommand.setEnabled(true);
         }
 
         //Collector
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             escalatorPower = 0.0;
-            if (robot.getEscalatorSensorMedium() && (ballCount<=3)) {
+            if (robot.getEscalatorSensorMedium()) { //&& (ballCount<=3)
                 timeStart = System.currentTimeMillis();
                 escalatorPower = 0.5;
             } else {
@@ -194,8 +214,9 @@ public class Robot extends TimedRobot {
                     escalatorPower = 0.5;
                 }
             }
-            if (ballCount<=4){collectorPower = 1.0;}
-            if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
+            //if (ballCount<=4){collectorPower = 1.0;}
+            //if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
+            collectorPower = 1.0;
             robot.collectorIn(collectorPower);
             robot.escalatorUp(escalatorPower);
         } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
@@ -234,10 +255,12 @@ public class Robot extends TimedRobot {
 
         //Elevation Adjuster
         if (xboxJoystick.getY(GenericHID.Hand.kLeft) < -0.5){
-            robot.aimUp(0.4);
+            robot.aimUp(0.6);
+            shooterController.setEnabled(false);
         } else if (xboxJoystick.getY(GenericHID.Hand.kLeft) > 0.5){
-            robot.aimDown(0.4);
-        } else {
+            robot.aimDown(0.6);
+            shooterController.setEnabled(false);
+        } else if (!shooterController.getEnabled()){
             robot.aimUp(0);
         }
 
@@ -246,8 +269,11 @@ public class Robot extends TimedRobot {
 
         switch (xboxDPadDirection) {
             case NORTH: //high velocity (long range)
-                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.LONG_RANGE);
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
+                shooterController.begin(robot);
+                shooterController.setEnabled(true);
+                shooterController.setSetPoint(125);
                 break;
 
             case SOUTH: //low velocity (short range)
@@ -263,6 +289,9 @@ public class Robot extends TimedRobot {
             case WEST: //YEET
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
+                shooterController.begin(robot);
+                shooterController.setEnabled(true);
+                shooterController.setSetPoint(127);
                 break;
 
         }
@@ -474,6 +503,8 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButton(4)) {
             robot.setClimbVerticalPortPower(0);
         }
+
+
 
     }
 
