@@ -29,11 +29,12 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
-    GenericCommand activeCommand = new LimelightAlign( -0.5, .8);
+    GenericCommand activeCommand = new LimelightAlign( 3, .8);
     SmartClimb getOutaDodge = new SmartClimb();
     GenericRobot robot = new Falcon();
     Joystick leftJoystick = new Joystick(0);
     XboxController xboxJoystick = new XboxController(1);
+    ElevationControl shooterController = new ElevationControl();
     boolean shooterOn = false;
 
     double deadZone = 0.10;
@@ -133,6 +134,11 @@ public class Robot extends TimedRobot {
         double escalatorPower = 0.0;
         double collectorPower = 0.0;
 
+        SmartDashboard.putBoolean("shooterController enable", shooterController.getEnabled());
+        if(shooterController.getEnabled()){
+            shooterController.run(robot);
+        }
+
         if (leftJoystick.getRawButtonPressed(8)) { //INFORM 3 and 4 to jerk sideways
             activeCommand.setEnabled(false);
         }
@@ -229,10 +235,12 @@ public class Robot extends TimedRobot {
 
         //Elevation Adjuster
         if (xboxJoystick.getY(GenericHID.Hand.kLeft) < -0.5){
-            robot.aimUp(0.4);
+            robot.aimUp(0.6);
+            shooterController.setEnabled(false);
         } else if (xboxJoystick.getY(GenericHID.Hand.kLeft) > 0.5){
-            robot.aimDown(0.4);
-        } else {
+            robot.aimDown(0.6);
+            shooterController.setEnabled(false);
+        } else if (!shooterController.getEnabled()){
             robot.aimUp(0);
         }
 
@@ -258,6 +266,8 @@ public class Robot extends TimedRobot {
             case WEST: //YEET
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
+                shooterController.begin(robot);
+                shooterController.setEnabled(true);
                 break;
 
         }
