@@ -84,6 +84,8 @@ public abstract class GenericRobot {
         SmartDashboard.putBoolean("Shooter Over Limit", (getElevation() > getShooterAngleMax()));
         SmartDashboard.putBoolean("Shooter Under Limit", (getElevation() < getShooterAngleMin()));
 
+        SmartDashboard.putNumber("Camera Tilt", getCameraTilt());
+
         printSmartDashboardInternal();
     }
 
@@ -764,6 +766,14 @@ public abstract class GenericRobot {
 
     public void setEscalatorLights(boolean onOff){
         System.out.println("I don't have escalator lights");
+    }
+
+    public void setCameraTilt(double angle){
+
+    }
+
+    public double getCameraTilt(){
+        return 0.0;
     }
 
 

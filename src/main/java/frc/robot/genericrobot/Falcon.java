@@ -1,5 +1,6 @@
 package frc.robot.genericrobot;
 
+import com.ctre.phoenix.CANifier;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
@@ -65,6 +66,9 @@ public class Falcon extends GenericRobot{
     DigitalInput escalatorSensorMedium = new DigitalInput(2);
     DigitalInput escalatorSensorHigh = new DigitalInput(3);
 
+    Servo cameraTilt = new Servo(0);
+
+
     long startTime= 0;
 
     public Falcon() {
@@ -113,6 +117,7 @@ public class Falcon extends GenericRobot{
         climberStarboard.setIdleMode(IdleMode.kBrake);
 
         indexer.setInverted(true);
+
     }
 
     @Override
@@ -444,6 +449,16 @@ public class Falcon extends GenericRobot{
     public void setEscalatorLights(boolean onOff){
         portEscalator.set(onOff);
         starboardEscalator.set(onOff);
+    }
+
+    @Override
+    public void setCameraTilt(double travel){
+        cameraTilt.set(travel);
+    }
+
+    @Override
+    public double getCameraTilt(){
+        return cameraTilt.get();
     }
 
 
