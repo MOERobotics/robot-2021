@@ -56,7 +56,6 @@ public class Robot extends TimedRobot {
         robot.printSmartDashboard();
         autoProgram.printSmartDashboard();
         activeCommand.printSmartDashboard();
-        SmartDashboard.putBoolean("Is Shooter On", shooterOn);
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
@@ -133,7 +132,6 @@ public class Robot extends TimedRobot {
         double escalatorPower = 0.0;
         double collectorPower = 0.0;
 
-        SmartDashboard.putBoolean("shooterController enable", shooterController.getEnabled());
         if(shooterController.getEnabled()){
             shooterController.run(robot);
         }
@@ -351,7 +349,6 @@ public class Robot extends TimedRobot {
             }
             ballShootCounted = false;
         }
-        SmartDashboard.putNumber("Ball Count", ballCount);
     }
 
     @Override

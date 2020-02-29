@@ -103,13 +103,6 @@ public class SmartClimb{
 
         double rollCorrection = PIDRollHold.calculate((-robot.getPitch()) - rollTrim);
 
-        SmartDashboard.putNumber("errorPort", robot.getClimberPortTicks() - encoderPort);
-        SmartDashboard.putNumber("correctionPort", correctionPort);
-        SmartDashboard.putNumber("errorStarboard", robot.getClimberStarboardTicks() - encoderStarboard);
-        SmartDashboard.putNumber("correctionStarboard", correctionStarboard);
-        SmartDashboard.putNumber("errorRoll", -robot.getPitch() - rollTrim);
-        SmartDashboard.putNumber("rollCorrection", rollCorrection);
-
 	/*
 	  rollTrim, encoderPort and encoderStarboard represent the state that we are trying to hold.
 	  It's possible the bar will shift after we start to hold.

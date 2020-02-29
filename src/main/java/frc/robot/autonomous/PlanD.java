@@ -137,9 +137,6 @@ public class PlanD extends GenericAutonomous {
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(-1 * defaultSpeed * (1 - correction), -1 * defaultSpeed * (1 + correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        SmartDashboard.putNumber("startDistance", startingDistance);
-                        SmartDashboard.putNumber("currentDistance", currentDistance);
-                        SmartDashboard.putNumber("distanceDifference", currentDistance - startingDistance);
                         if (currentDistance - startingDistance < -40) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
                               autonomousStep += 1;

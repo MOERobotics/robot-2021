@@ -216,8 +216,6 @@ public class Falcon extends GenericRobot{
         boolean readyToShoot = false;
         double errorUpper = Math.abs((getShooterVelocityRPMUpper() + targetUpper) / targetUpper); //upperRPM is negative for shooting operation, think about this later
         double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
-        SmartDashboard.putNumber("errorUpper", (errorUpper * 100));
-        SmartDashboard.putNumber("errorLower", (errorLower * 100));
         if((errorUpper < 2.0e-2) && (errorLower < 2.0e-2)) {
                 if (System.currentTimeMillis() - startTime > 100) {
                     readyToShoot = true;

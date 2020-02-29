@@ -22,7 +22,6 @@ public class ElevationControl {
         double correction = PIDElevation.calculate(robot.getElevation() - setPoint);
         correction = Math.max(correction, -0.5);
         correction = Math.min(correction, 0.5);
-        SmartDashboard.putNumber("elevationCorrection", correction);
         robot.setAngleAdjusterPower(correction);
     }
 
