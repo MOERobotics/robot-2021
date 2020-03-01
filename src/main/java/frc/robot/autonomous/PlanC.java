@@ -111,7 +111,7 @@ public class PlanC extends GenericAutonomous {
                         break;
 
                   case 4: //straightaway
-                        double speedScale = 1.5 - (0.5/104) * robot.getDistanceInchesLeft();
+                        double speedScale = 1.2 - (0.2/104) * robot.getDistanceInchesLeft();
                         getCells.run(robot);
 
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
