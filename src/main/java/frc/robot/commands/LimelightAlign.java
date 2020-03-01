@@ -85,5 +85,13 @@ public class LimelightAlign extends GenericCommand{
 
     }
 
+    public void setSetPoint(double setPoint){
+        this.setPoint = setPoint;
+    }
+
+    public double getSetPoint(){
+        return setPoint;
+    }
+
 
 }

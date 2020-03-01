@@ -111,10 +111,12 @@ public class PlanC extends GenericAutonomous {
                         break;
 
                   case 4: //straightaway
+                        double speedScale = 1.5 - (0.5/104) * robot.getDistanceInchesLeft();
                         getCells.run(robot);
 
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                        robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
+                        robot.setMotorPowerPercentage(speedScale * defaultSpeed * (1 + correction),
+                                speedScale * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > 104) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
@@ -136,7 +138,8 @@ public class PlanC extends GenericAutonomous {
                         getCells.run(robot);
 
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                        robot.setMotorPowerPercentage(-1 * defaultSpeed * (1 - correction), -1 * defaultSpeed * (1 + correction));
+                        robot.setMotorPowerPercentage(-1.3 * defaultSpeed * (1 - correction),
+                                -1.3 * defaultSpeed * (1 + correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance < -64) { //maybe change depending on how far we need to go
                               robot.driveForward(0);

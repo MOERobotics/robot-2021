@@ -253,6 +253,7 @@ public class Robot extends TimedRobot {
             case NORTH: //high velocity (long range)
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
+                activeCommand = new LimelightAlign(-2, 0.8);
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
                 shooterController.setSetPoint(125);
@@ -261,16 +262,23 @@ public class Robot extends TimedRobot {
             case SOUTH: //low velocity (short range)
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
                 robot.limelight.table.getEntry("pipeline").setNumber(0);
+                activeCommand = new LimelightAlign(-2, 0.8);
                 break;
 
             case EAST: //medium velocity (mid range)
-                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.MID_RANGE);
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
+                activeCommand = new LimelightAlign(-3, 0.8);
+                shooterController.begin(robot);
+                shooterController.setEnabled(true);
+                shooterController.setSetPoint(131);
+
                 break;
 
             case WEST: //YEET
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
+                activeCommand = new LimelightAlign(-3, 0.8);
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
                 shooterController.setSetPoint(127);

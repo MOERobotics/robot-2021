@@ -66,7 +66,7 @@ public class Falcon extends GenericRobot{
     DigitalInput escalatorSensorMedium = new DigitalInput(2);
     DigitalInput escalatorSensorHigh = new DigitalInput(3);
 
-    Servo cameraTilt = new Servo(0);
+    //Servo cameraTilt = new Servo(0);
 
 
     long startTime= 0;
@@ -449,7 +449,7 @@ public class Falcon extends GenericRobot{
         starboardEscalator.set(onOff);
     }
 
-    @Override
+    /*@Override
     public void setCameraTilt(double angle){
         cameraTilt.setAngle(angle);
     }
@@ -458,6 +458,8 @@ public class Falcon extends GenericRobot{
     public double getCameraTilt(){
         return cameraTilt.getAngle();
     }
+
+     */
 
 
 }
