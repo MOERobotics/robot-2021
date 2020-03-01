@@ -111,20 +111,31 @@ public class PlanC extends GenericAutonomous {
                         break;
 
                   case 4: //straightaway
-                        double speedScale = 1.5 - (0.5/104) * robot.getDistanceInchesLeft();
+                        double speedScale = 1.5 - (0.5/86) * robot.getDistanceInchesLeft();
                         getCells.run(robot);
 
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(speedScale * defaultSpeed * (1 + correction),
                                 speedScale * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 104) { //maybe change depending on how far we need to go
-                              robot.driveForward(0);
+                        if (currentDistance - startingDistance > 86) { //maybe change depending on how far we need to go
                               autonomousStep += 1;
                         }
                         break;
 
-                  case 5: //reset for backward straight-away
+                case 5:
+                    getCells.run(robot);
+                    correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
+                    robot.setMotorPowerPercentage(defaultSpeed * (1 + correction),
+                            defaultSpeed * (1 - correction));
+                    currentDistance = robot.getDistanceInchesLeft();
+                    if (currentDistance - startingDistance > 18) { //maybe change depending on how far we need to go
+                        robot.driveForward(0);
+                        autonomousStep += 1;
+                    }
+                    break;
+
+                  case 6: //reset for backward straight-away
                         getCells.run(robot);
 
                         startingDistance = robot.getDistanceInchesLeft();
@@ -134,7 +145,7 @@ public class PlanC extends GenericAutonomous {
                         autonomousStep += 1;
                         break;
 
-                  case 6: //backward straight-away
+                  case 7: //backward straight-away
                         getCells.run(robot);
 
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
@@ -143,11 +154,11 @@ public class PlanC extends GenericAutonomous {
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance < -64) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
-                              autonomousStep = 13;
+                              autonomousStep = 14;
                         }
                         break;
 
-                  case 7: //reset for arc
+                  case 8: //reset for arc
                         getCells.run(robot);
 
                         startingDistance = robot.getDistanceInchesRight();
@@ -157,7 +168,7 @@ public class PlanC extends GenericAutonomous {
                         autonomousStep += 1;
                         break;
 
-                  case 8: //left arc to pick up third ball
+                  case 9: //left arc to pick up third ball
                         getCells.run(robot);
 
                         yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
@@ -169,7 +180,7 @@ public class PlanC extends GenericAutonomous {
                         }
                         break;
 
-                  case 9: //reset for inverse arc (not resetting starting distance)
+                  case 10: //reset for inverse arc (not resetting starting distance)
                         getCells.run(robot);
 
                         PIDSteering.reset();
@@ -180,7 +191,7 @@ public class PlanC extends GenericAutonomous {
                         autonomousStep += 1;
                         break;
 
-                  case 10: //backwards arc to previous position
+                  case 11: //backwards arc to previous position
                         getCells.run(robot);
 
                         yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
@@ -191,13 +202,13 @@ public class PlanC extends GenericAutonomous {
                               autonomousStep += 1;
                         }
                         break;
-                  case 11: // continue collecting and start timer
+                  case 12: // continue collecting and start timer
                         getCells.run(robot);
                         startingTime = System.currentTimeMillis();
                         autonomousStep += 1;
                         break;
 
-                  case 12: // continue collecting for 2 seconds
+                  case 13: // continue collecting for 2 seconds
                         getCells.run(robot);
                         long currentTime = System.currentTimeMillis();
                         if ((currentTime - startingTime) > 0) {
@@ -205,14 +216,14 @@ public class PlanC extends GenericAutonomous {
                               break;
                         }
 
-                  case 13: // stop collecting
+                  case 14: // stop collecting
                         getCells.stop(robot);
                         robot.driveForward(0);
                         ballCount = 0;
                         autonomousStep += 1;
                         break;
 
-                  case 14: // align
+                  case 15: // align
                         robot.limelight.table.getEntry("ledMode").setNumber(3);
                         robot.limelight.table.getEntry("pipeline").setNumber(0);
                         activeCommand = new LimelightAlign(-3, .8); //fix dem bois
@@ -223,7 +234,7 @@ public class PlanC extends GenericAutonomous {
                         autonomousStep += 1;
                         break;
 
-                  case 15:
+                  case 16:
                         if (activeCommand.isEnabled() && ((System.currentTimeMillis() - startingTime) < alignWait)) {
                               activeCommand.step(robot);
 
@@ -233,7 +244,7 @@ public class PlanC extends GenericAutonomous {
                         }
                         break;
 
-                  case 16: // you may fire when ready
+                  case 17: // you may fire when ready
                         if (robot.readyToShoot()) {
                               escalatorPower = 0.5;
                               indexerPower = 1.0;
@@ -257,7 +268,7 @@ public class PlanC extends GenericAutonomous {
                         robot.indexerLoad(indexerPower);
                         break;
 
-                  case 17: //cease your autonomous
+                  case 18: //cease your autonomous
                         robot.setShooterPowerPercentage(0);
                         if (activeCommand.isEnabled()) {
                               activeCommand.step(robot);
