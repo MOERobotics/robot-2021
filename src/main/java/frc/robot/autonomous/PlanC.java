@@ -27,7 +27,7 @@ public class PlanC extends GenericAutonomous {
       double escalatorPower;
       double indexerPower;
       long alignWait = 2000;
-      GenericCommand activeCommand = new LimelightAlign( 0, .8); //planA set setPoint to -2
+      GenericCommand activeCommand = new LimelightAlign( -0.5, .8); //planA set setPoint to -2
       CollectPowerCells getCells = new CollectPowerCells();
 
       @Override
