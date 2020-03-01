@@ -1,16 +1,12 @@
 package frc.robot.genericrobot;
 
-import com.ctre.phoenix.CANifier;
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANPIDController;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANDigitalInput;
+import com.revrobotics.*;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.ControlPanelRotation;
 
 public class Falcon extends GenericRobot{
 
@@ -35,7 +31,7 @@ public class Falcon extends GenericRobot{
     CANSparkMax escalator       = new CANSparkMax( 7, MotorType.kBrushless);
     CANSparkMax angleAdj        = new CANSparkMax( 8, MotorType.kBrushless);
 
-    CANSparkMax controlPanel    = new CANSparkMax( 9, MotorType.kBrushless);
+    CANSparkMax spinner = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     CANSparkMax collector       = new CANSparkMax(10, MotorType.kBrushless);
 
@@ -46,6 +42,8 @@ public class Falcon extends GenericRobot{
 
     CANEncoder encoderClimbPort = new CANEncoder(climberPort);
     CANEncoder encoderClimbStarboard = new CANEncoder(climberStarboard);
+
+    CANEncoder encoderSpinner = new CANEncoder(spinner);
 
     Lidar lidar = new Lidar();
 
@@ -117,6 +115,8 @@ public class Falcon extends GenericRobot{
         climberStarboard.setIdleMode(IdleMode.kBrake);
 
         indexer.setInverted(true);
+
+        spinner.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
     }
 
@@ -269,16 +269,28 @@ public class Falcon extends GenericRobot{
         }
     }
 
-
-
-
-
-
-
-   /* @Override
+   @Override
     protected void spinControlPanelInternal(double power) {
-        controlPanel.set(power);
+        spinner.set(power);
     }
+
+    @Override
+    protected boolean threeRotationsInternal(double spinStart){
+        boolean finishedRotating = false;
+
+        if((getSpinnerTicks() - spinStart) > 850){
+            finishedRotating = true;
+        }
+        SmartDashboard.putBoolean("threeRotations", finishedRotating);
+        return finishedRotating;
+    }
+
+    @Override
+    public double getSpinnerTicks(){
+        return encoderSpinner.getPosition();
+    }
+
+    /*
 
     @Override
     public char getCurrentControlPanelColor() {

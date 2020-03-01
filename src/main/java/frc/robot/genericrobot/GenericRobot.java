@@ -484,6 +484,20 @@ public abstract class GenericRobot {
         return '?';
     }
 
+    public boolean threeRotations(double spinStart){
+        return threeRotationsInternal(spinStart);
+    }
+
+    protected boolean threeRotationsInternal(double spinStart){
+        return false;
+    }
+
+    public double getSpinnerTicks(){
+        return 0.0;
+    }
+
+
+
     //***********************************************************************//
 
     public final void indexerLoad(double indexerPower){

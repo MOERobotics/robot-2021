@@ -10,8 +10,6 @@ import frc.robot.genericrobot.WheelOfFortune;
 
 public class ControlPanelRotation extends GenericCommand{
 
-    public static CANSparkMax spinner = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANEncoder spinnerEncoder = new CANEncoder(spinner);
     int[] colorFreq = new int[]{0, 0, 0, 0}; // R, G, B, Y
     WheelOfFortune controlPanel = new WheelOfFortune();
     Color endColor = new WheelOfFortune.GoodColor(0, 0, 0, "Default");
@@ -23,12 +21,11 @@ public class ControlPanelRotation extends GenericCommand{
     @Override
     public void begin(GenericRobot robot){
         endColor = controlPanel.getInferredColor();
-        spinner.setIdleMode(CANSparkMax.IdleMode.kBrake);
     }
 
     @Override
     public void step(GenericRobot robot){
-        spinner.set(0.6);
+        robot.spinControlPanel(0.6);
         if(controlPanel.getInferredColor() == WheelOfFortune.kRedTarget && lookingForRed){
             lookingForRed = false;
             lookingForBlue = false;
@@ -59,7 +56,7 @@ public class ControlPanelRotation extends GenericCommand{
         }
 
         if(colorFreq[0] >= 6 && colorFreq[1] >= 6 && colorFreq[2] >= 6 && colorFreq[3] >= 6 && controlPanel.getInferredColor() == endColor){
-            spinner.set(0.0);
+            robot.spinControlPanel(0.0);
         }
     }
 }

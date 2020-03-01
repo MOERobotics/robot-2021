@@ -166,8 +166,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Green", WheelOfFortune.colorSensor.getBlue());
         SmartDashboard.putNumber("Blue", WheelOfFortune.colorSensor.getGreen());
         SmartDashboard.putString("Color", color);
-        SmartDashboard.putNumber("Control Panel Encoder", ControlPanelRotation.spinnerEncoder.getPosition()
-        );
+        SmartDashboard.putNumber("Control Panel Encoder", robot.getSpinnerTicks());
 
         double escalatorPower = 0.0;
         double collectorPower = 0.0;
@@ -396,13 +395,13 @@ public class Robot extends TimedRobot {
         // Control Panel
         if(xboxJoystick.getStickButtonPressed(GenericHID.Hand.kRight)){
             rotationControl.begin(robot);
-            spinStart = ControlPanelRotation.spinnerEncoder.getPosition();
+            spinStart = robot.getSpinnerTicks();
         }
-        if(xboxJoystick.getStickButton(GenericHID.Hand.kRight) && (ControlPanelRotation.spinnerEncoder.getPosition() - spinStart) < 850){
+        if(xboxJoystick.getStickButton(GenericHID.Hand.kRight) && (!robot.threeRotations(spinStart))){
             rotationControl.step(robot);
         }
-        if((ControlPanelRotation.spinnerEncoder.getPosition() - spinStart) > 850){
-            ControlPanelRotation.spinner.set(0.0);
+        if(robot.threeRotations(spinStart)){
+            robot.spinControlPanel(0.0);
         }
 
         if(xboxJoystick.getStartButtonPressed()){

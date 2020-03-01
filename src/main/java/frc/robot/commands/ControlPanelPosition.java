@@ -9,16 +9,12 @@ import frc.robot.genericrobot.WheelOfFortune;
 
 public class ControlPanelPosition extends GenericCommand{
 
-    CANSparkMax spinner = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
     WheelOfFortune controlPanel = new WheelOfFortune();
     Color endColor = new WheelOfFortune.GoodColor(0, 0, 0, "Default");
-    //setters and getters for motors and encoders in controlPanelPosition + Rotation
-    //genericRobot, define
-    //generic+Falcon method: threeRotations (return boolean when rotated three times) code is currently in robot.java
 
     @Override
     public void begin(GenericRobot robot){
-        spinner.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
         String gameData;
         gameData = "Green";
         if(gameData.length() > 0)
@@ -48,9 +44,9 @@ public class ControlPanelPosition extends GenericCommand{
 
     @Override
     public void step(GenericRobot robot){
-        spinner.set(0.1);
+        robot.spinControlPanel(0.1);
         if(controlPanel.getInferredColor() == endColor){
-            spinner.set(0.0);
+            robot.spinControlPanel(0.0);
         }
     }
 }
