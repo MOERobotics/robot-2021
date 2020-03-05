@@ -26,6 +26,7 @@ public abstract class GenericRobot {
     private double indexerPower           = 0;
     private ShifterState gear             = ShifterState.UNKNOWN;
     private ShooterState shooterState     = UNKNOWN;
+    public long escalatorSpacing = 40;
 
     public final void printSmartDashboard() {
         SmartDashboard.putNumber  ("Left  Encoder Ticks"  , getDistanceTicksLeft()                   );
