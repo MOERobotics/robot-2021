@@ -16,12 +16,9 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
-
 import static frc.robot.Util.*;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
