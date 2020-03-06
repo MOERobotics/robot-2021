@@ -10,7 +10,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
@@ -29,13 +28,16 @@ public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
-    GenericCommand activeCommand = new LimelightAlign( -2, .8);
     SmartClimb getOutaDodge = new SmartClimb();
     GenericRobot robot = new Falcon();
     Joystick leftJoystick = new Joystick(0);
     XboxController xboxJoystick = new XboxController(1);
     ElevationControl shooterController = new ElevationControl();
     boolean shooterOn = false;
+
+    GenericCommand autoAlign = new LimelightAlign( -2, .8);
+    ElevationControl shooterElevation = new ElevationControl();
+    TrenchRun wallFollow = new TrenchRun(.3); //.3 is an arbitrary value
 
     double deadZone = 0.10;
     long timeStart;
@@ -55,7 +57,7 @@ public class Robot extends TimedRobot {
         robot.updateMotorPowers();
         robot.printSmartDashboard();
         autoProgram.printSmartDashboard();
-        activeCommand.printSmartDashboard();
+        autoAlign.printSmartDashboard();
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
@@ -126,7 +128,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         robot.limelight.table.getEntry("ledMode").setNumber(0);
         robot.limelight.table.getEntry("pipeline").setNumber(0);
-        activeCommand.begin(robot);
+        autoAlign.begin(robot);
         robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
         robot.setCameraTilt(125);
 
@@ -142,22 +144,49 @@ public class Robot extends TimedRobot {
         }
 
         if (leftJoystick.getRawButtonPressed(8)) { //INFORM 3 and 4 to jerk sideways
-            activeCommand.setEnabled(false);
+            autoAlign.setEnabled(false);
+            shooterElevation.setEnabled(false);
+            wallFollow.setEnabled(false);
         }
 
         if (leftJoystick.getRawButtonReleased(2)){
             robot.limelight.table.getEntry("ledMode").setNumber(0);
-            activeCommand.setEnabled(false);
+            autoAlign.setEnabled(false);
+        }
+
+        /* needs to be implemented with the correct buttons
+
+        if(leftJoystick.getRawButtonPressed(0)){
+            shooterElevation.begin(robot);
+            shooterElevation.setEnabled(true);
+        }
+        if(leftJoystick.getRawButtonReleased(0)){
+            shooterElevation.setEnabled(false);
+        }
+
+        if(leftJoystick.getRawButtonPressed(0)){
+            wallFollow.begin(robot);
+            wallFollow.setEnabled(true);
+        }
+        if(leftJoystick.getRawButtonReleased(0)){
+            wallFollow.setEnabled(false);
+        }
+        */
+
+        if (autoAlign.isEnabled()) {
+            autoAlign.step(robot);
+            if (autoAlign.locksControls()) return;
+        }
+        if (wallFollow.getEnabled()) {
+            wallFollow.run(robot, 0.3); //.3 is an arbitrary value
+        }
+        if (shooterElevation.getEnabled()) {
+            shooterElevation.run(robot);
         }
 
         if (leftJoystick.getRawButtonPressed(15)){ //short range filtering
             robot.limelight.table.getEntry("pipeline").setNumber(0);
 
-        }
-
-        if (activeCommand.isEnabled()) {
-            activeCommand.step(robot);
-            if (activeCommand.locksControls()) return;
         }
 
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
@@ -189,7 +218,7 @@ public class Robot extends TimedRobot {
 
         if (leftJoystick.getRawButtonPressed(2)) {
             robot.limelight.table.getEntry("ledMode").setNumber(3);
-            activeCommand.setEnabled(true);
+            autoAlign.setEnabled(true);
         }
 
         //Collector
@@ -253,7 +282,7 @@ public class Robot extends TimedRobot {
             case NORTH: //high velocity (long range)
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
-                activeCommand = new LimelightAlign(-2, 0.8);
+                autoAlign = new LimelightAlign(-2, 0.8);
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
                 shooterController.setSetPoint(125);
@@ -262,13 +291,13 @@ public class Robot extends TimedRobot {
             case SOUTH: //low velocity (short range)
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
                 robot.limelight.table.getEntry("pipeline").setNumber(0);
-                activeCommand = new LimelightAlign(-2, 0.8);
+                autoAlign = new LimelightAlign(-2, 0.8);
                 break;
 
             case EAST: //medium velocity (mid range)
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
-                activeCommand = new LimelightAlign(-3, 0.8);
+                autoAlign = new LimelightAlign(-3, 0.8);
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
                 shooterController.setSetPoint(131);
@@ -278,7 +307,7 @@ public class Robot extends TimedRobot {
             case WEST: //YEET
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
-                activeCommand = new LimelightAlign(-3, 0.8);
+                autoAlign = new LimelightAlign(-3, 0.8);
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
                 shooterController.setSetPoint(127);
