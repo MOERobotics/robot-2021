@@ -76,9 +76,13 @@ public class Robot extends TimedRobot {
             robot.resetClimberTicks();
         }
 
-        SmartDashboard.putNumber("Red", WheelOfFortune.colorSensor.getRed());
-        SmartDashboard.putNumber("Green", WheelOfFortune.colorSensor.getGreen());
-        SmartDashboard.putNumber("Blue", WheelOfFortune.colorSensor.getBlue());
+        double redVal = WheelOfFortune.colorSensor.getRed();
+        double greenVal = WheelOfFortune.colorSensor.getGreen();
+        double blueVal = WheelOfFortune.colorSensor.getBlue();
+
+        SmartDashboard.putNumber("Red", redVal / (redVal + blueVal + greenVal));
+        SmartDashboard.putNumber("Green", greenVal / (redVal + blueVal + greenVal));
+        SmartDashboard.putNumber("Blue", blueVal / (redVal + blueVal + greenVal));
 
         robot.setShooterPowerPercentage(0);
         robot.setCollectorPower(0);
