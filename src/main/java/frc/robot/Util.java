@@ -49,5 +49,11 @@ public interface Util {
             return Date.from(Instant.EPOCH);
         }
     }
+    public static double speedScale(double startDistance, double endDistance, double startSpeed, double endSpeed, double currentDistance){
+        //y = mx + b (math == fun)
+        double slope = (endSpeed - startSpeed) / (endDistance - startDistance);
+        double currentSpeed = slope * e(currentDistance - startDistance) + startSpeed;
 
+        return currentSpeed;
+    }
 }

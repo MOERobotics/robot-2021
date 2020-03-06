@@ -5,6 +5,8 @@ import frc.robot.commands.GenericCommand;
 import frc.robot.commands.LimelightAlign;
 import frc.robot.genericrobot.GenericRobot;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import static frc.robot.Util.*;
+
 
 public class PlanE extends GenericAutonomous {
 
@@ -183,10 +185,13 @@ public class PlanE extends GenericAutonomous {
 
             case 10: //decrement power
                 getCells.run(robot);
+
                 currentDistance = robot.getDistanceInchesLeft();
+                double speedScale = speedScale(102,127, 1,0, currentDistance);
                 double slowToStop = (defaultSpeed - (defaultSpeed / 25) * ((currentDistance - startingDistance) - 102)) + .05; //?
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                robot.setMotorPowerPercentage(slowToStop * (1 + correction), slowToStop * (1 - correction)); // div by 2 to debug
+                robot.setMotorPowerPercentage((speedScale * defaultSpeed + .05) * (1 + correction), (speedScale * defaultSpeed + .05) * (1 - correction)); // div by 2 to debug
+
 
                 if (currentDistance - startingDistance > 127) {
                     autonomousStep += 1;

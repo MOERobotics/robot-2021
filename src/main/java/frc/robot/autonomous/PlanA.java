@@ -5,6 +5,7 @@ import frc.robot.commands.GenericCommand;
 import frc.robot.commands.LimelightAlign;
 import frc.robot.genericrobot.GenericRobot;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import static frc.robot.Util.*;
 
 public class PlanA extends GenericAutonomous {
 
@@ -43,6 +44,7 @@ public class PlanA extends GenericAutonomous {
         double yawError;
         switch (autonomousStep) {
             case -1: //resets and waits
+                robot.collectorIn(1);
                 defaultSpeed = 0.1;
                 ballCount = 0;
                 shooting = false;
@@ -56,6 +58,7 @@ public class PlanA extends GenericAutonomous {
                 break;
 
             case 0: //turns on LEDs
+                robot.collectorIn(0);
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(0);
 
@@ -168,9 +171,9 @@ public class PlanA extends GenericAutonomous {
             case 9: //decrement power
                 getCells.run(robot);
                 currentDistance = robot.getDistanceInchesLeft();
-                double slowToStop = (defaultSpeed - (defaultSpeed / 25) * ((currentDistance - startingDistance) - 65)) + .05; //?
+                double speedScale = speedScale(65,90, 1,0, currentDistance);
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                robot.setMotorPowerPercentage(slowToStop * (1 + correction), slowToStop * (1 - correction)); // div by 2 to debug
+                robot.setMotorPowerPercentage((speedScale * defaultSpeed + .05) * (1 + correction), (speedScale * defaultSpeed + .05) * (1 - correction)); // div by 2 to debug
 
                 if (currentDistance - startingDistance > 90) {
                     autonomousStep += 1;
