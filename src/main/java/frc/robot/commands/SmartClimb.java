@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 
 public class SmartClimb{
@@ -50,10 +49,10 @@ public class SmartClimb{
         currentTime = System.currentTimeMillis();
 
         if (currentTime-startTime > 500) {
-            if (Math.abs(robot.getClimberVerticalPortCurrent()) > currentTolerance) {
+            if (Math.abs(robot.getClimberVerticalPortAmperage()) > currentTolerance) {
                 engagedPort = true;
             }
-            if (Math.abs(robot.getClimberVerticalStarboardCurrent()) > currentTolerance) {
+            if (Math.abs(robot.getClimberVerticalStarboardAmperage()) > currentTolerance) {
                 engagedStarboard = true;
             }
         }

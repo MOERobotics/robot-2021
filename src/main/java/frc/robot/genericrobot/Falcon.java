@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Util;
 
 public class Falcon extends GenericRobot{
 
@@ -69,7 +70,6 @@ public class Falcon extends GenericRobot{
     //Servo cameraTilt = new Servo(0);
 
 
-    long startTime= 0;
 
     public Falcon() {
 
@@ -89,20 +89,19 @@ public class Falcon extends GenericRobot{
 
         escalator.setIdleMode(IdleMode.kBrake);
 
-        // REMOVE BEFORE FLIGHT... Just for testing.
         shooterA.setIdleMode(IdleMode.kCoast);
         shooterB.setIdleMode(IdleMode.kCoast);
 
-        shooterAPIDController.setP(7.5e-5);
-        shooterAPIDController.setI(1.0e-6);
-        shooterAPIDController.setD(2.0e-2);
-        shooterAPIDController.setFF(1.67e-4);
+        shooterAPIDController.setP (7.50e-5);
+        shooterAPIDController.setI (1.00e-6);
+        shooterAPIDController.setD (2.00e-2);
+        shooterAPIDController.setFF(1.67e-4); //feed forward
         shooterAPIDController.setIZone(500);
         shooterAPIDController.setDFilter(0);
 
-        shooterBPIDController.setP(7.5e-5);
-        shooterBPIDController.setI(1.0e-6);
-        shooterBPIDController.setD(2.0e-2);
+        shooterBPIDController.setP (7.50e-5);
+        shooterBPIDController.setI (1.00e-6);
+        shooterBPIDController.setD (2.00e-2);
         shooterBPIDController.setFF(1.67e-4);
         shooterBPIDController.setIZone(500);
         shooterBPIDController.setDFilter(0);
@@ -212,34 +211,13 @@ public class Falcon extends GenericRobot{
         shooterB.set(lowerPower);
     }
 
-    @Override
-    protected boolean readyToShootInternal(){
-        double targetUpper = getShooterTargetRPMUpper();
-        double targetLower = getShooterTargetRPMLower();
-        boolean readyToShoot = false;
-        double errorUpper = Math.abs((getShooterVelocityRPMUpper() + targetUpper) / targetUpper); //upperRPM is negative for shooting operation, think about this later
-        double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
-        if((errorUpper < 2.0e-2) && (errorLower < 2.0e-2)) {
-                if (System.currentTimeMillis() - startTime > 100) {
-                    readyToShoot = true;
-                } else {
-                    readyToShoot = false;
-                }
-        }
-        else {
-                startTime = System.currentTimeMillis();
-                readyToShoot = false;
-                }
-        return readyToShoot;
-    }
-
 
     private static final ShooterSpeedPreset
-            SHOOTER_SPEED_OFF = new ShooterSpeedPreset(0,0),
+            SHOOTER_SPEED_OFF   = new ShooterSpeedPreset(   0,    0),
             SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2285, 2285),
-            SHOOTER_SPEED_MID = new ShooterSpeedPreset(2620, 2620),
-            SHOOTER_SPEED_LONG = new ShooterSpeedPreset(4000, 3000), //not final
-            SHOOTER_SPEED_YEET = new ShooterSpeedPreset(5000, 5000);
+            SHOOTER_SPEED_MID   = new ShooterSpeedPreset(2620, 2620),
+            SHOOTER_SPEED_LONG  = new ShooterSpeedPreset(4000, 3000), //not final
+            SHOOTER_SPEED_YEET  = new ShooterSpeedPreset(5000, 5000);
 
 
 
@@ -249,20 +227,11 @@ public class Falcon extends GenericRobot{
             ShooterSpeedPresetName speedType
     ){
         switch (speedType){
-            case SHORT_RANGE:
-                return SHOOTER_SPEED_SHORT;
-
-            case MID_RANGE:
-                return SHOOTER_SPEED_MID;
-
-            case LONG_RANGE:
-                return SHOOTER_SPEED_LONG;
-
-            case YEET:
-                return SHOOTER_SPEED_YEET;
-
-            default:
-                return SHOOTER_SPEED_OFF;
+            case SHORT_RANGE : return SHOOTER_SPEED_SHORT;
+            case MID_RANGE   : return SHOOTER_SPEED_MID;
+            case LONG_RANGE  : return SHOOTER_SPEED_LONG;
+            case YEET        : return SHOOTER_SPEED_YEET;
+            default          : return SHOOTER_SPEED_OFF;
 
         }
     }
@@ -318,13 +287,6 @@ public class Falcon extends GenericRobot{
         collector.set(-collectorPower);
     }
 
-    /*@Override
-    protected void climbVerticalInternal(double climberPower) {
-        climberA.set( climberPower);
-        climberB.set(-climberPower);
-    }
-     */
-
     @Override
     protected void setClimbVerticalStarboardInternal(double power) {
         climberStarboard.set(-power);
@@ -349,20 +311,20 @@ public class Falcon extends GenericRobot{
 
     @Override
     //public double getClimberVerticalStarboardCurrent() {return powerPanel.getCurrent(3);}
-    public double getClimberVerticalStarboardCurrent() {return climberStarboard.getOutputCurrent();}
+    public double getClimberVerticalStarboardAmperage() {return climberStarboard.getOutputCurrent();}
 
     @Override
     //public double getClimberVerticalPortCurrent() {return powerPanel.getCurrent(12);}
-    public double getClimberVerticalPortCurrent() {return climberPort.getOutputCurrent();}
+    public double getClimberVerticalPortAmperage() {return climberPort.getOutputCurrent();}
 
     @Override
-    protected double getClimberPortTicksInternal() {return Math.abs(encoderClimbPort.getPosition());}
+    public double getClimberPortTicks() {return Math.abs(encoderClimbPort.getPosition());}
 
     @Override
-    protected double getClimberStarboardTicksInternal() {return Math.abs(encoderClimbStarboard.getPosition());}
+    public double getClimberStarboardTicks() {return Math.abs(encoderClimbStarboard.getPosition());}
 
     @Override
-    public void resetClimberTicksInternal() {
+    public void resetClimberTicks() {
         encoderClimbPort.setPosition(0.0);
         encoderClimbStarboard.setPosition(0.0);
     }
@@ -380,13 +342,13 @@ public class Falcon extends GenericRobot{
     */
 
     @Override
-    protected void setAngleAdjusterPowerInternal(double aimPower) {
+    protected void setAimAdjusterPowerInternal(double aimPower) {
 
         angleAdj.set(-aimPower);
 }
 
     @Override
-    protected double getElevationInternal(){return elevation.get();}
+    protected double getAimElevationInternal(){return elevation.get();}
 
     @Override
     public double getShooterAngleMax(){return 153.0;} //orig 155
@@ -425,13 +387,16 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    public void setClimberBrake(boolean yesNo){
-        if(yesNo){
-            climberPort.setIdleMode(IdleMode.kBrake);
-            climberStarboard.setIdleMode(IdleMode.kBrake);
-        } else {
-            climberPort.setIdleMode(IdleMode.kCoast);
-            climberStarboard.setIdleMode(IdleMode.kCoast);
+    protected void setClimberBrakeInternal(Util.BrakeModeState state){
+        switch (state) {
+            case BRAKE:
+                climberPort     .setIdleMode(IdleMode.kBrake);
+                climberStarboard.setIdleMode(IdleMode.kBrake);
+                break;
+            case COAST:
+                climberPort     .setIdleMode(IdleMode.kCoast);
+                climberStarboard.setIdleMode(IdleMode.kCoast);
+                break;
         }
     }
 
