@@ -187,10 +187,10 @@ public class PlanE extends GenericAutonomous {
                 getCells.run(robot);
 
                 currentDistance = robot.getDistanceInchesLeft();
-                double speedScale = speedScale(102,127, 1,0, currentDistance);
+                double scaleDown = speedScale(102,127, 1,0, currentDistance-startingDistance);
                 double slowToStop = (defaultSpeed - (defaultSpeed / 25) * ((currentDistance - startingDistance) - 102)) + .05; //?
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                robot.setMotorPowerPercentage((speedScale * defaultSpeed + .05) * (1 + correction), (speedScale * defaultSpeed + .05) * (1 - correction)); // div by 2 to debug
+                robot.setMotorPowerPercentage((scaleDown * defaultSpeed + .05) * (1 + correction), (scaleDown * defaultSpeed + .05) * (1 - correction)); // div by 2 to debug
 
 
                 if (currentDistance - startingDistance > 127) {

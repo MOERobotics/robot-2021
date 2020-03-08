@@ -49,11 +49,13 @@ public interface Util {
             return Date.from(Instant.EPOCH);
         }
     }
-    public static double speedScale(double startDistance, double endDistance, double startSpeed, double endSpeed, double currentDistance){
+    public static double speedScale(double x1, double x2, double startSpeed, double endSpeed, double x){
         //y = mx + b (math == fun)
-        double slope = (endSpeed - startSpeed) / (endDistance - startDistance);
-        double currentSpeed = slope * e(currentDistance - startDistance) + startSpeed;
+        double slope = (endSpeed - startSpeed) / (x2 - x1);
+        double currentSpeed = slope * (x - x1) + startSpeed;
 
+        System.out.println("rampdown...");
+        System.out.println(currentSpeed);
         return currentSpeed;
     }
 }

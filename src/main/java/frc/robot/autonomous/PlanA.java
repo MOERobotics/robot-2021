@@ -10,7 +10,7 @@ import static frc.robot.Util.*;
 public class PlanA extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-    double defaultSpeed = 0.1;
+    double defaultSpeed = 0.15;
 
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
@@ -171,9 +171,9 @@ public class PlanA extends GenericAutonomous {
             case 9: //decrement power
                 getCells.run(robot);
                 currentDistance = robot.getDistanceInchesLeft();
-                double speedScale = speedScale(65,90, 1,0, currentDistance);
+                double scaleDown = speedScale(65,90, 1,0, currentDistance-startingDistance);
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                robot.setMotorPowerPercentage((speedScale * defaultSpeed + .05) * (1 + correction), (speedScale * defaultSpeed + .05) * (1 - correction)); // div by 2 to debug
+                robot.setMotorPowerPercentage((scaleDown * defaultSpeed + .05) * (1 + correction), (scaleDown * defaultSpeed + .05) * (1 - correction)); // div by 2 to debug
 
                 if (currentDistance - startingDistance > 90) {
                     autonomousStep += 1;

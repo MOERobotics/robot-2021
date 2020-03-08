@@ -114,9 +114,9 @@ public class PlanC extends GenericAutonomous {
                   case 4: //straightaway linear deceleration
                         getCells.run(robot);
 
-                        double speedScale = speedScale(0, 86, 1.2, 1, robot.getDistanceInchesLeft());
+                        double scaleDown = speedScale(0, 86, 1.2, 1, currentDistance-startingDistance);
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                        robot.setMotorPowerPercentage(speedScale * defaultSpeed * (1 + correction), speedScale * defaultSpeed * (1 - correction));
+                        robot.setMotorPowerPercentage(scaleDown * defaultSpeed * (1 + correction), scaleDown * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance > 86) { //maybe change depending on how far we need to go
                               autonomousStep += 1;

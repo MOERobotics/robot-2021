@@ -93,19 +93,19 @@ public class Falcon extends GenericRobot{
         shooterA.setIdleMode(IdleMode.kCoast);
         shooterB.setIdleMode(IdleMode.kCoast);
 
-        shooterAPIDController.setP(7.5e-5);
+        shooterAPIDController.setP(3.0e-4);
         shooterAPIDController.setI(1.0e-6);
-        shooterAPIDController.setD(2.0e-2);
+        shooterAPIDController.setD(1.6e-2);
         shooterAPIDController.setFF(1.67e-4);
-        shooterAPIDController.setIZone(500);
+        shooterAPIDController.setIZone(200);
         shooterAPIDController.setDFilter(0);
 
-        shooterBPIDController.setP(7.5e-5);
-        shooterBPIDController.setI(1.0e-6);
-        shooterBPIDController.setD(2.0e-2);
-        shooterBPIDController.setFF(1.67e-4);
-        shooterBPIDController.setIZone(500);
-        shooterBPIDController.setDFilter(0);
+        shooterAPIDController.setP(3.0e-4);
+        shooterAPIDController.setI(1.0e-6);
+        shooterAPIDController.setD(1.6e-2);
+        shooterAPIDController.setFF(1.67e-4);
+        shooterAPIDController.setIZone(200);
+        shooterAPIDController.setDFilter(0);
 
         angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
         angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
