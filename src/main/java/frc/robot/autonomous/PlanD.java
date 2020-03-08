@@ -1,125 +1,255 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.GenericCommand;
+import frc.robot.commands.LimelightAlign;
 import frc.robot.genericrobot.GenericRobot;
 import edu.wpi.first.wpilibj.controller.PIDController;
 
 public class PlanD extends GenericAutonomous {
 
       //change speed depending on robot!! (CaMOElot = .4, TestBot = .2)
-      double defaultSpeed = 0.2;
+      double defaultSpeed = 0.25;
 
       static double startingYaw = 0.0; //start at an angle, figure out later
       static double startingDistance = 0.0;
-      PIDController PIDSteering = new PIDController(4.0e-2, 0.0e-3, 1.0e-4);
       double correction;
       static double currentYaw = 0;
       double outerArcLength = 80;
       double innerArc = 35.45;
       double innerRadius = 30;
-      double outerRadius = 48; //changed from 52
+      double outerRadius = 48;
       double yawDifference = 0;
-      long startingTime = System.currentTimeMillis();
       double prevStartingDistance = 0;
+      long startingTime = System.currentTimeMillis();
+      int ballCount = 0;
+      boolean shooting = false;
+      double escalatorPower;
+      double indexerPower;
+      double shooterUpperRPMNear = 2210;
+      double shooterLowerRPMNear = 2210;
+      double shooterUpperRPMFar = 2430;
+      double shooterLowerRPMFar = 2430;
+      GenericCommand activeCommand = new LimelightAlign( 0, .8); //planA set setPoint to -2
+      CollectPowerCells getCells = new CollectPowerCells();
 
       @Override
       public void autonomousInit(GenericRobot robot) {
             startingTime = System.currentTimeMillis();
             autonomousStep = -1;
+            getCells.begin(robot);
       }
 
       @Override
       public void autonomousPeriodic(GenericRobot robot) {
+            PIDController PIDSteering = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
             double currentDistance = 0;
             double yawError;
             switch (autonomousStep) {
 
-                  case -1: //resets everything and waits
+                  case -1: //resets and waits
+                        ballCount = 0;
+                        shooting = false;
+                        robot.setShooterRPM(shooterUpperRPMNear, shooterLowerRPMNear);
                         robot.resetAttitude();
                         robot.resetEncoders();
                         if (System.currentTimeMillis() >= startingTime + 100) {
-                              autonomousStep = 0;
+                              autonomousStep += 1;
                         }
                         break;
 
-                  case 0: //PID reset for straightaway
-                        startingDistance = robot.getDistanceInchesLeft();
-                        PIDSteering.reset();
-                        PIDSteering.enableContinuousInput(-180,180);
-                        currentYaw = 0;
-                        autonomousStep = 1;
+                  case 0: //turns on LEDs
+                        robot.limelight.table.getEntry("ledMode").setNumber(3);
+                        robot.limelight.table.getEntry("pipeline").setNumber(0);
+
+                        activeCommand.begin(robot);
+                        activeCommand.setEnabled(true);
+                        autonomousStep += 1;
                         break;
 
-                  case 1: //straightaway
+                  case 1: //auto aligns
+                        if (activeCommand.isEnabled()) {
+                              activeCommand.step(robot);
+
+                        } else {
+                              robot.limelight.table.getEntry("ledMode").setNumber(1);
+                              autonomousStep += 1;
+                        }
+                        break;
+
+                  case 2:
+                        if (robot.readyToShoot()) {
+                              escalatorPower = 0.5;
+                              indexerPower = 1.0;
+                        } else {
+                              escalatorPower = 0.0;
+                              indexerPower = 0.0;
+                        }
+                        if (robot.getEscalatorSensorHigh() == true) {
+                              shooting = true;
+                        }
+                        if ((shooting) && (robot.getEscalatorSensorHigh() == false)) {
+                              shooting = false;
+                              ballCount++;
+                        }
+                        if (ballCount == 3) {
+                              escalatorPower = 0;
+                              indexerPower = 0;
+                              autonomousStep += 1;
+                        }
+                        robot.escalatorUp(escalatorPower);
+                        robot.indexerLoad(indexerPower);
+                        break;
+
+                  case 3: //PID reset for straightaway
+                        startingDistance = robot.getDistanceInchesLeft();
+                        PIDSteering.reset();
+                        PIDSteering.enableContinuousInput(-180, 180);
+                        currentYaw = 0;
+                        autonomousStep += 1;
+                        break;
+
+                  case 4: //straightaway
+                        getCells.run(robot);
+
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 86) { //possibly extend
+                        if (currentDistance - startingDistance > 80) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
-                              autonomousStep = 2;
+                              autonomousStep += 1;
                         }
                         break;
 
-                  case 2: //reset for backward straight-away
+                  case 5: //reset for backward straight-away
+                        getCells.run(robot);
+
                         startingDistance = robot.getDistanceInchesLeft();
                         PIDSteering.reset();
-                        PIDSteering.enableContinuousInput(-180,180);
+                        PIDSteering.enableContinuousInput(-180, 180);
                         currentYaw = 0;
-                        autonomousStep = 3;
+                        autonomousStep += 1;
                         break;
 
-                  case 3: //backward straight-away
+                  case 6: //backward straight-away
+                        getCells.run(robot);
+
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                        robot.setMotorPowerPercentage(-1 * defaultSpeed * (1 - correction), (-1 * defaultSpeed) * (1 + correction));
+                        robot.setMotorPowerPercentage(-1 * defaultSpeed * (1 - correction), -1 * defaultSpeed * (1 + correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        SmartDashboard.putNumber("startDistance", startingDistance);
-                        SmartDashboard.putNumber("currentDistance", currentDistance);
-                        SmartDashboard.putNumber("distanceDifference", currentDistance - startingDistance);
-                        if (currentDistance - startingDistance < -30) { //maybe change depending on how far we need to go
+                        if (currentDistance - startingDistance < -40) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
-                              autonomousStep = 4;
+                              autonomousStep += 1;
                         }
                         break;
+                  case 7: //reset for arc
+                        getCells.run(robot);
 
-                  case 4: //reset for arc
                         startingDistance = robot.getDistanceInchesRight();
                         PIDSteering.reset();
                         PIDSteering.disableContinuousInput();
                         startingYaw = robot.getYaw();
-                        autonomousStep = 5;
+                        autonomousStep += 1;
                         break;
 
-                  case 5: //left arc to pick up third ball and two on other side
+                  case 8: //left arc to pick up third ball and two balls on other side
+                        getCells.run(robot);
+
                         yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                         correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                         currentDistance = robot.getDistanceInchesRight();
                         if (currentDistance - startingDistance > outerArcLength) {
-                              autonomousStep = 6;
+                              autonomousStep += 1;
                         }
                         break;
 
-                  case 6: //reset for reverse arc
+                  case 9: //reset for inverse arc (not resetting starting distance)
+                        getCells.run(robot);
+
                         PIDSteering.reset();
                         PIDSteering.disableContinuousInput();
-                        autonomousStep = 7;
+                        startingYaw = robot.getYaw();
+                        prevStartingDistance = startingDistance;
+                        startingDistance = robot.getDistanceInchesRight();
+                        autonomousStep += 1;
                         break;
 
-                  case 7: //inverse arc
+                  case 10: //backwards arc to previous position
+                        getCells.run(robot);
+
                         yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                         correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                         robot.setMotorPowerPercentage((defaultSpeed * -.75) * (1 - correction), (defaultSpeed * -1.5) * (1 + correction));
                         currentDistance = robot.getDistanceInchesRight();
-                        if (currentDistance - startingDistance <= 0) {
-                              autonomousStep = 8;
+                        if (currentDistance - prevStartingDistance <= 0) {
+                              autonomousStep += 1;
                         }
                         break;
 
-                  case 8: //cease your autnomous
-                        robot.driveForward(0);
-                        //                               ¯\_(ツ)_/¯
+                  case 11: // continue collecting and start timer
+                        getCells.run(robot);
+                        startingTime = System.currentTimeMillis();
+                        autonomousStep += 1;
                         break;
 
+                  case 12: // continue collecting for 2 seconds
+                        getCells.run(robot);
+                        long currentTime = System.currentTimeMillis();
+                        if ((currentTime - startingTime) > 2000) {
+                              autonomousStep += 1;
+                              break;
+                        }
+
+                  case 13: // stop collecting
+                        getCells.stop(robot);
+                        robot.driveForward(0);
+                        ballCount = 0;
+                        autonomousStep += 1;
+                        break;
+
+                  case 14: // align
+                        robot.limelight.table.getEntry("ledMode").setNumber(3);
+                        robot.limelight.table.getEntry("pipeline").setNumber(1);
+                        activeCommand.setEnabled(true);
+                        ballCount = 0;
+                        autonomousStep += 1;
+                        break;
+
+                  case 15: // you may fire when ready
+                        if (robot.readyToShoot()) {
+                              escalatorPower = 0.5;
+                              indexerPower = 1.0;
+                        } else {
+                              escalatorPower = 0.0;
+                              indexerPower = 0.0;
+                        }
+                        if (robot.getEscalatorSensorHigh() == true) {
+                              shooting = true;
+                        }
+                        if ((shooting) && (robot.getEscalatorSensorHigh() == false)) {
+                              shooting = false;
+                              ballCount++;
+                        }
+                        if (ballCount == 3) {
+                              escalatorPower = 0;
+                              indexerPower = 0;
+                              autonomousStep += 1;
+                        }
+                        robot.escalatorUp(escalatorPower);
+                        robot.indexerLoad(indexerPower);
+                        break;
+
+                  case 16: //cease your autonomous
+                        robot.setShooterPowerPercentage(0);
+                        if (activeCommand.isEnabled()) {
+                              activeCommand.step(robot);
+
+                        } else {
+                              robot.limelight.table.getEntry("ledMode").setNumber(1);
+                              robot.driveForward(0);
+                        }
+                        break;
             }
       }
 }

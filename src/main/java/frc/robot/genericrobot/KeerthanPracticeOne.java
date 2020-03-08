@@ -4,9 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -36,7 +33,42 @@ public class KeerthanPracticeOne extends GenericRobot {
         driveLeftB .setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         driveRightA.setInverted(true);
+
+
     }
+    private static final ShooterSpeedPreset
+            SHOOTER_SPEED_OFF = new ShooterSpeedPreset(0,0),
+            SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2210, 2210),
+            SHOOTER_SPEED_MID = new ShooterSpeedPreset(2430, 2430),
+            SHOOTER_SPEED_LONG = new ShooterSpeedPreset(4000, 3000), //not final
+            SHOOTER_SPEED_YEET = new ShooterSpeedPreset(5000, 5000);
+
+
+
+
+    @Override
+    public ShooterSpeedPreset getShooterSpeedPreset(
+            ShooterSpeedPresetName speedType
+    ){
+        switch (speedType){
+            case SHORT_RANGE:
+                return SHOOTER_SPEED_SHORT;
+
+            case MID_RANGE:
+                return SHOOTER_SPEED_MID;
+
+            case LONG_RANGE:
+                return SHOOTER_SPEED_LONG;
+
+            case YEET:
+                return SHOOTER_SPEED_YEET;
+
+            default:
+                return SHOOTER_SPEED_OFF;
+
+        }
+    }
+
 
     @Override
     public double getDistanceTicksLeft() {
@@ -46,8 +78,8 @@ public class KeerthanPracticeOne extends GenericRobot {
     @Override
     public double getDistanceRatioLeft() {
         switch (getShifterState()) {
-            case HIGH: return 0.380635;
-            case LOW : return 0.77782;
+            case HIGH_GEAR: return 0.380635;
+            case LOW_GEAR: return 0.77782;
             default  : return 1;
         }
     }
@@ -55,8 +87,8 @@ public class KeerthanPracticeOne extends GenericRobot {
     @Override
     public double getDistanceRatioRight() {
         switch (getShifterState()) {
-            case HIGH: return 0.380635;
-            case LOW : return 0.77782;
+            case HIGH_GEAR: return 0.380635;
+            case LOW_GEAR: return 0.77782;
             default  : return 1;
         }
     }
@@ -65,6 +97,15 @@ public class KeerthanPracticeOne extends GenericRobot {
     public double getDistanceTicksRight() {
         return encoderRight.getPosition();
     }
+
+    @Override
+    public double getPIDmaneuverP(){return 4.0e-2;}
+
+    @Override
+    public double getPIDmaneuverI(){return 0.0e-2;}
+
+    @Override
+    public double getPIDmaneuverD(){return 1.0e-4;}
 
     @Override
     public double getYaw() {
@@ -143,4 +184,5 @@ public class KeerthanPracticeOne extends GenericRobot {
     public Double getLidarDistanceInchesRight() {
         return lidar.getDistanceInches(1);
     }
+
 }

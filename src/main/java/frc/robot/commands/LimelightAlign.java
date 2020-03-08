@@ -1,77 +1,97 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 
 public class LimelightAlign extends GenericCommand{
     double leftPower;
     double rightPower;
     private boolean aligning;
-    double currentDistance = 0;
     double setPoint;
     double setPointDeadzone;
-    double constant;
+    boolean targetCentered;
+    long startingTime = 0;
+    long startTime;
+    long timeoutTime = 4000;
+    double correction;
+    double defaultSpeed = 0.35;
+    PIDController PIDPivot = new PIDController(6.0e-2, 1.0e-2, 1.0e-3);
 
-    public LimelightAlign(double setPoint, double setPointDeadzone, double constant){
+    public LimelightAlign(double setPoint, double setPointDeadzone){
 
-        this.setPoint = setPoint;
+        this.setPoint = -setPoint;
         this.setPointDeadzone = setPointDeadzone;
-        this.constant = constant;
+        PIDPivot.reset();
 
     }
     @Override
     public void begin(GenericRobot robot) {
-
+        targetCentered = false;
+        startTime = System.currentTimeMillis();
+        PIDPivot.reset();
+        robot.limelight.table.getEntry("ledMode").setNumber(3);
     }
 
     @Override
     public void step(GenericRobot robot) {
-        double minPower = .04;
+
+        long currentTime = System.currentTimeMillis();
 
         aligning = true;
 
-        if (robot.limelight.getLimelightX() < -setPointDeadzone + -setPoint) {
+        /*
+        if((currentTime - startTime) > timeoutTime) {
+            System.out.println("Limelight timed out.");
+            aligning = false;
+        }
+        */
+
+        if (robot.limelight.getLimelightX() < -setPointDeadzone + setPoint) {
             //Pivots to the left
-            currentDistance = Math.abs(robot.limelight.getLimelightX() + setPoint);
-            leftPower = -(constant * currentDistance);
-            rightPower = constant * currentDistance;
-            if (rightPower <= minPower) {
-                leftPower = -minPower;
-                rightPower = minPower;
-            }
+            targetCentered = false;
+
+            correction = PIDPivot.calculate(setPoint - robot.limelight.getLimelightX());
+            leftPower = defaultSpeed * correction;
+            rightPower = -defaultSpeed * correction;
+
 
         } else if (robot.limelight.getLimelightX() > setPointDeadzone + setPoint) {
             //Pivots to the right
-            currentDistance = Math.abs(robot.limelight.getLimelightX() - setPoint);
-            leftPower = constant * currentDistance;
-            rightPower = -(constant * currentDistance);
-            if (leftPower <= minPower) {
-                leftPower = minPower;
-                rightPower = -minPower;
-            }
+            targetCentered = false;
+            correction = PIDPivot.calculate(robot.limelight.getLimelightX() - setPoint);
+            leftPower = -defaultSpeed * correction;
+            rightPower = defaultSpeed * correction;
 
         } else {
-
             leftPower = 0;
             rightPower = 0;
+            if (!targetCentered) {
+                startingTime = System.currentTimeMillis();
+                targetCentered = true;
+            }
 
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            aligning = false;
-                        }
-                    },
-                    600
-            );
+            if(targetCentered && currentTime - startingTime > 500){
+                aligning = false;
+            }
 
         }
 
+        SmartDashboard.putBoolean("targeted", !aligning);
         if(!aligning){
             setEnabled(false);
         }
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
+    }
+
+    public void setSetPoint(double setPoint){
+        this.setPoint = setPoint;
+    }
+
+    public double getSetPoint(){
+        return setPoint;
     }
 
 

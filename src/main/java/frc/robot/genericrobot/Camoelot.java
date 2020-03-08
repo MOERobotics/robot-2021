@@ -85,4 +85,5 @@ public class Camoelot extends GenericRobot {
       @Override public void resetAttitude() {
             navx.reset();
       }
+
 }
