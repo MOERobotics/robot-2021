@@ -137,40 +137,9 @@ public abstract class GenericRobot {
         Logger.logTTL("LIMELIGHTX", "The limelight X axis is" + limelight.getLimelightX(), 1000);
         Logger.logTTL("LIMELIGHTY", "The limelight Y axis is" + limelight.getLimelightY(), 1000);
         Logger.logTTL("LIMELIGHTA", "The limelight area is" + limelight.getLimelightArea(), 1000);
-        Logger.logTTL("ELEVATION", "The elevation is" + getElevation(), 1000);
-        Logger.logTTL("SHOOTEROVER", "The shooter over limit is" + (getElevation() > getShooterAngleMax()), 1000);
-        Logger.logTTL("SHOOTERUNDER", "The shooter under limit is" + (getElevation() < getShooterAngleMin()), 1000);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        Logger.logTTL("ELEVATION", "The elevation is" + getAimElevation(), 1000);
+        Logger.logTTL("SHOOTEROVER", "The shooter over limit is" + (getAimElevation() > getShooterAngleMax()), 1000);
+        Logger.logTTL("SHOOTERUNDER", "The shooter under limit is" + (getAimElevation() < getShooterAngleMin()), 1000);
     }
 
     protected void printSmartDashboardInternal() { }
@@ -207,7 +176,7 @@ public abstract class GenericRobot {
         spinControlPanelInternal(spinPower);
         setIndexerPowerInternal(indexerPower);
         setCollectorPowerInternal(collectorPower);
-        setAimAdjusterPowerInternal(angleAdjusterPower);
+        setAngleAdjusterPowerInternal(angleAdjusterPower);
         setEscalatorPowerInternal(escalatorPower);
         setClimbVerticalPortInternal(climbVerticalPortPower);
         setClimbVerticalStarboardInternal(climbVerticalStarboardPower);
@@ -534,7 +503,7 @@ public abstract class GenericRobot {
     }
 
     public void setShooterLights(boolean onOff){
-        System.out.println("I don't have shooter lights");
+        Logger.log("SHOOTERLIGHTS","I don't have shooter lights");
     }
 
 
@@ -643,17 +612,17 @@ public abstract class GenericRobot {
     }
 
     public double getClimberPortTicks(){
-        System.out.println("I don't have a climber starboard ;(");
+        Logger.log("CLIMBPORTTICKS","I don't have a climber starboard ;(");
         return 0; //?
     }
 
     public double getClimberStarboardTicks(){
-        System.out.println("I don't have a climber starboard ;(");
+        Logger.log("CLIMBSTARTICKS","I don't have a climber starboard ;(");
         return 0; //?
     }
 
     public void resetClimberTicks(){
-        System.out.println("No Climber Encoders to reset");
+        Logger.log("CLIMBTICKS","No Climber Encoders to reset");
     }
 
 
@@ -661,7 +630,7 @@ public abstract class GenericRobot {
         climberBrakeModeState = state;
     }
     protected void setClimberBrakeInternal(BrakeModeState state) {
-        System.out.println("I don't have a climber that can enable brake mode :(");
+        Logger.log("CLIMBRAKEINT","I don't have a climber that can enable brake mode :(");
     }
 
     //***********************************************************************//
@@ -707,7 +676,7 @@ public abstract class GenericRobot {
 
 
     public void setEscalatorLights(boolean onOff){
-        System.out.println("I don't have escalator lights");
+        Logger.log("ESCALIGHTS","I don't have escalator lights");
     }
 
     //***********************************************************************//
@@ -797,7 +766,7 @@ public abstract class GenericRobot {
     }
 
     protected void setCameraTiltDegreesInternal(double angle) {
-        System.out.println("I don't have a camera servo :'(");
+        Logger.log("CAMTILTDEGINT","I don't have a camera servo :'(");
     }
 
     public double getCameraTilt(){
