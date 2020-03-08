@@ -143,7 +143,7 @@ public class PlanC extends GenericAutonomous {
                         currentDistance = robot.getDistanceInchesLeft();
                         if (currentDistance - startingDistance < -64) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
-                              autonomousStep = 13;
+                              autonomousStep += 1;
                         }
                         break;
 
