@@ -5,6 +5,8 @@ import java.util.Date;
 
 //Robot independent functions that could be useful any year
 public interface Util {
+
+    public static final double ALMOST_ZERO = 1.0e-10;
     public static double deadzoneValue(double input, double deadZone) {
 
         if (input < -deadZone) {
@@ -56,5 +58,9 @@ public interface Util {
 
     enum BrakeModeState {
         BRAKE, COAST,UNKNOWN;
+    }
+
+    enum MotorControlMethod {
+        POWER,VELOCITY,UNKNOWN;
     }
 }

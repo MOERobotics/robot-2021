@@ -4,32 +4,32 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Util;
 import frc.robot.Util.*;
 
+import static frc.robot.Util.ALMOST_ZERO;
 import static frc.robot.Util.coalesce;
-import static frc.robot.genericrobot.GenericRobot.ShooterState.*;
+import static frc.robot.Util.MotorControlMethod.*;
 
 public abstract class GenericRobot {
 
-    private double         leftPower                   = 0;
-    private double         rightPower                  = 0;
-    private double         spinPower                   = 0;
-    private double         shooterUpperPower           = 0;
-    private double         shooterLowerPower           = 0;
-    private double         shooterUpperRPM             = 0;
-    private double         shooterLowerRPM             = 0;
-    private double         angleAdjusterPower          = 0;
-    private double         climbBalancePower           = 0;
-    private double         escalatorPower              = 0;
-    private double         climbVerticalPortPower      = 0;
-    private double         climbVerticalStarboardPower = 0;
-    private double         collectorPower              = 0;
-    private double         indexerPower                = 0;
-    private GearShiftState gear                        = GearShiftState.UNKNOWN;
-    private ShooterState   shooterState                = UNKNOWN;
-    private BrakeModeState climberBrakeModeState       = BrakeModeState.UNKNOWN;
-    public  long           escalatorSpacing            = 40;
+    private double             leftPower                   = 0;
+    private double             rightPower                  = 0;
+    private double             spinPower                   = 0;
+    private double             shooterUpperPower           = 0;
+    private double             shooterLowerPower           = 0;
+    private double             shooterUpperRPM             = 0;
+    private double             shooterLowerRPM             = 0;
+    private double             angleAdjusterPower          = 0;
+    private double             climbBalancePower           = 0;
+    private double             escalatorPower              = 0;
+    private double             climbVerticalPortPower      = 0;
+    private double             climbVerticalStarboardPower = 0;
+    private double             collectorPower              = 0;
+    private double             indexerPower                = 0;
+    private GearShiftState     gear                        = GearShiftState.UNKNOWN;
+    private MotorControlMethod shooterControlMethod = UNKNOWN;
+    private BrakeModeState     climberBrakeModeState       = BrakeModeState.UNKNOWN;
+    public  long               escalatorSpacing            = 40;
 
     public final void printSmartDashboard() {
         SmartDashboard.putString  ("Robot name"                    , getClass().getSimpleName()                        );
@@ -53,7 +53,7 @@ public abstract class GenericRobot {
         SmartDashboard.putBoolean ("Escalator Sensor High"         , getEscalatorSensorHigh()                          );
         SmartDashboard.putNumber  ("Escalator Power"               , escalatorPower                                    );
         SmartDashboard.putNumber  ("Indexer Power"                 , indexerPower                                      );
-        SmartDashboard.putString  ("Shooter State"                 , shooterState.toString()                           );
+        SmartDashboard.putString  ("Shooter Control Method"        , shooterControlMethod.toString()                   );
         SmartDashboard.putNumber  ("Upper Shooter Power"           , shooterUpperPower                                 );
         SmartDashboard.putNumber  ("Lower Shooter Power"           , shooterLowerPower                                 );
         SmartDashboard.putNumber  ("Upper Shooter Target Velocity" , shooterUpperRPM                                   );
@@ -124,7 +124,7 @@ public abstract class GenericRobot {
             climbVerticalStarboardPower = 0;
         }
 
-        setEscalatorLights(Math.abs(escalatorPower) > 1.0e-6);
+        setEscalatorLights(Math.abs(escalatorPower) > ALMOST_ZERO);
         setMotorPowerPercentageInternal(leftPower, rightPower);
         spinControlPanelInternal(spinPower);
         setIndexerPowerInternal(indexerPower);
@@ -137,13 +137,15 @@ public abstract class GenericRobot {
         setCameraTiltDegreesInternal(cameraTiltAngle);
         setClimberBrakeInternal(climberBrakeModeState);
 
-        if (shooterState == POWER) {
-            setShooterPowerPercentageInternal(shooterUpperPower, shooterLowerPower);
-            setShooterLights((Math.abs(shooterUpperPower) > 1.0e-6) || (Math.abs(shooterLowerPower) > 1.0e-6));
-        }
-        if (shooterState == VELOCITY) {
-            setShooterRPMInternal(shooterUpperRPM, shooterLowerRPM);
-            setShooterLights((Math.abs(shooterUpperRPM) > 1.0e-6) || (Math.abs(shooterLowerRPM) > 1.0e-6));
+        switch (shooterControlMethod) {
+            case POWER:
+                setShooterPowerPercentageInternal(shooterUpperPower, shooterLowerPower);
+                setShooterLights((Math.abs(shooterUpperPower) > ALMOST_ZERO) || (Math.abs(shooterLowerPower) > ALMOST_ZERO));
+                break;
+            case VELOCITY:
+                setShooterRPMInternal(shooterUpperRPM, shooterLowerRPM);
+                setShooterLights((Math.abs(shooterUpperRPM) > ALMOST_ZERO) || (Math.abs(shooterLowerRPM) > ALMOST_ZERO));
+                break;
         }
     }
 
@@ -310,10 +312,6 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
-    public enum ShooterState {
-        POWER,VELOCITY,UNKNOWN;
-    }
-
     public enum ShooterSpeedPresetName {
         UNKOWN, SHORT_RANGE, MID_RANGE, LONG_RANGE, YEET;
     }
@@ -338,7 +336,7 @@ public abstract class GenericRobot {
     ) {
         this.shooterUpperPower = upperPower;
         this.shooterLowerPower = lowerPower;
-        this.shooterState = POWER;
+        this.shooterControlMethod = POWER;
     }
 
     public final void setShooterPowerPercentage(
@@ -348,20 +346,20 @@ public abstract class GenericRobot {
         setShooterPowerPercentage(power, power);
     }
 
-    public ShooterSpeedPresetName shooterSpeedPresetName //?
-                = ShooterSpeedPresetName.UNKOWN;
+    public ShooterSpeedPresetName shooterSpeedPresetName
+        = ShooterSpeedPresetName.UNKOWN;
 
 
 
     public void setShooterRPM(double upperRPM, double lowerRPM) {
         this.shooterUpperRPM = upperRPM;
         this.shooterLowerRPM = lowerRPM;
-        this.shooterState = VELOCITY;
+        this.shooterControlMethod = VELOCITY;
     }
 
     public void setShooterRPM(double RPM) {setShooterRPM(RPM,RPM); }
 
-        protected void setShooterPowerPercentageInternal(
+    protected void setShooterPowerPercentageInternal(
         double upperPower,
         double lowerPower
     ) {
@@ -369,8 +367,8 @@ public abstract class GenericRobot {
     }
 
     protected void setShooterRPMInternal(
-            double upperRPM,
-            double lowerRPM
+        double upperRPM,
+        double lowerRPM
     ) {
         System.out.println("I don't have a shooter :'(");
     }
@@ -417,8 +415,8 @@ public abstract class GenericRobot {
         return false;
     }
 
-    public ShooterState getShooterState() {
-        return shooterState;
+    public MotorControlMethod getShooterControlMethod() {
+        return shooterControlMethod;
     }
 
     public final ShooterSpeedPresetName getShooterSpeedConstant() {
@@ -447,10 +445,10 @@ public abstract class GenericRobot {
     }
 
     private static final ShooterSpeedPreset
-            SHOOTER_SPEED_OFF = new ShooterSpeedPreset(0,0);
+        SHOOTER_SPEED_OFF = new ShooterSpeedPreset(0,0);
 
     public ShooterSpeedPreset getShooterSpeedPreset(
-            ShooterSpeedPresetName speedType
+        ShooterSpeedPresetName speedType
     ){
         return SHOOTER_SPEED_OFF;
     }
