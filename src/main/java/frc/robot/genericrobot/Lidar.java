@@ -2,6 +2,7 @@ package frc.robot.genericrobot;
 
 import edu.wpi.first.hal.util.UncleanStatusException;
 import edu.wpi.first.wpilibj.SerialPort;
+import frc.robot.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,27 +71,29 @@ class Lidar extends Thread {
                 );
             } catch (Exception e) {
                 e.printStackTrace(System.out);
-                System.out.println("We couldn't make the serial port. Will try again in a few seconds.");
+                Logger.log("PRINTEXCEPTION", "Exception 'e'");
+                Logger.log("EXCEPTION", "We couldn't make the serial port. Will try again in a few seconds.");
                 try {Thread.sleep(2000);}
                 catch (Exception ignored) {}
             }
         }
 
         StringBuilder readText = new StringBuilder();
-        System.out.println("Lidar started");
+        Logger.log("STRINGBUILD","Lidar started");
 
         while(true) {
             byte[] newByteArr = null;
             try {newByteArr = lidarSerialPort.read(1);}
             catch (UncleanStatusException e) {
                 e.printStackTrace(System.out);
+                Logger.log("PRINTSTACKTRACE", "Unclean Status Exception 'e'");
                 try {Thread.sleep(1000);}
                 catch (Exception ignored) {}
                 continue;
             }
             if (newByteArr.length == 0) {
-                System.out.println("Serial Port says we are at end of file. Nothing we can read.");
-                System.out.println("Resetting.");
+                Logger.log("SERIALEND","Serial Port says we are at end of file. Nothing we can read.");
+                Logger.log("SERIALRESET","Resetting.");
                 lidarSerialPort.reset();
                 continue;
             }

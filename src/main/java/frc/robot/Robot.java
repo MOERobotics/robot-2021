@@ -61,12 +61,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        System.out.println("Klaatu barada nikto");
-
-
-    @Override public void robotInit() {
-        Logger.log( "STARTUP","Klaatu barada nikto");
+        Logger.log("ROBOTINIT", "Klaatu barada nikto");
     }
+
+
 
     @Override
     public void robotPeriodic() {
@@ -79,6 +77,7 @@ public class Robot extends TimedRobot {
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
 
     }
+
 
     @Override
     public void disabledInit(){}
