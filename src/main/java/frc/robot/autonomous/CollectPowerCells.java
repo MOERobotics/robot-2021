@@ -6,7 +6,6 @@ public class CollectPowerCells {
     double collectorPower = 0.0;
     double escalatorPower = 0.0;
     long timeStart;
-    long escalatorSpacing = 1000;
 
     public CollectPowerCells(){
 
@@ -24,7 +23,7 @@ public class CollectPowerCells {
             timeStart = System.currentTimeMillis();
             escalatorPower = 0.5;
         } else {
-            if ((System.currentTimeMillis() >= timeStart + escalatorSpacing)) {
+            if ((System.currentTimeMillis() >= timeStart + robot.escalatorSpacing)) {
                 escalatorPower = 0.0;
             }
             else {
