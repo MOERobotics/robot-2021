@@ -95,7 +95,7 @@ public class Robot extends TimedRobot {
         robot.setCollectorPower(0);
         robot.setEscalatorPower(0);
         robot.setIndexerPower(0);
-        robot.setAngleAdjusterPower(0);
+        robot.setAimAdjusterPower(0);
         robot.spinControlPanel(0);
         robot.setClimbVerticalPower(0);
         robot.setCameraTiltDegrees(0);
@@ -117,12 +117,12 @@ public class Robot extends TimedRobot {
 
         if (leftJoystick.getRawButton(5)){
             //coast mode
-            robot.setClimberBrake(false);
+            robot.setClimberBrake(BrakeModeState.COAST);
         }
 
         if (leftJoystick.getRawButtonReleased(5)){
             //brake mode
-            robot.setClimberBrake(true);
+            robot.setClimberBrake(BrakeModeState.BRAKE);
         }
 
     }
@@ -424,7 +424,7 @@ public class Robot extends TimedRobot {
         } else if (leftJoystick.getRawButton(9)) {
             robot.aimDown(.4);
         } else {
-            robot.setAngleAdjusterPower(0);
+            robot.setAimAdjusterPower(0);
         }
 
         //CP

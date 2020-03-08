@@ -4,9 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -81,8 +78,8 @@ public class KeerthanPracticeOne extends GenericRobot {
     @Override
     public double getDistanceRatioLeft() {
         switch (getShifterState()) {
-            case HIGH: return 0.380635;
-            case LOW : return 0.77782;
+            case HIGH_GEAR: return 0.380635;
+            case LOW_GEAR: return 0.77782;
             default  : return 1;
         }
     }
@@ -90,8 +87,8 @@ public class KeerthanPracticeOne extends GenericRobot {
     @Override
     public double getDistanceRatioRight() {
         switch (getShifterState()) {
-            case HIGH: return 0.380635;
-            case LOW : return 0.77782;
+            case HIGH_GEAR: return 0.380635;
+            case LOW_GEAR: return 0.77782;
             default  : return 1;
         }
     }
