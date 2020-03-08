@@ -73,18 +73,18 @@ public class SmartClimb{
             climbPowerPort = 0.6;
             climbPowerStarboard = 0.6;
 
-            if (-robot.getPitch()> rollTolerance)
+            if (robot.getRoll()> rollTolerance)
             {
                 climbPowerStarboard += 0.2;
             }
-            if (-robot.getPitch() < -rollTolerance)
+            if (robot.getRoll() < -rollTolerance)
             {
                 climbPowerPort += 0.2;
             }
 
             encoderPort = robot.getClimberPortTicks();
             encoderStarboard = robot.getClimberStarboardTicks();
-	        rollTrim = -robot.getPitch();
+	        rollTrim = robot.getRoll();
             PIDPortHold.reset();
             PIDStarboardHold.reset();
 	        PIDRollHold.reset();
@@ -101,7 +101,7 @@ public class SmartClimb{
 
         double correctionStarboard = PIDStarboardHold.calculate(robot.getClimberStarboardTicks() - encoderStarboard);
 
-        double rollCorrection = PIDRollHold.calculate((-robot.getPitch()) - rollTrim);
+        double rollCorrection = PIDRollHold.calculate((robot.getRoll()) - rollTrim);
 
 	/*
 	  rollTrim, encoderPort and encoderStarboard represent the state that we are trying to hold.
@@ -111,12 +111,12 @@ public class SmartClimb{
 	  If you are listing to port, lower the stb side and hold the port side.
 	 */
 
-        if (Math.abs(-robot.getPitch() - rollTrim)>rollTolerance) {
-            if (-robot.getPitch() > rollTrim) {
+        if (Math.abs(robot.getRoll() - rollTrim)>rollTolerance) {
+            if (robot.getRoll() > rollTrim) {
                 robot.setClimbVerticalPortPower(-rollCorrection);
                 robot.setClimbVerticalStarboardPower(correctionStarboard);
                 encoderPort = robot.getClimberPortTicks();
-            } else if (-robot.getPitch() < rollTrim) {
+            } else if (robot.getRoll() < rollTrim) {
                 robot.setClimbVerticalStarboardPower(rollCorrection);
                 robot.setClimbVerticalPortPower(correctionPort);
                 encoderStarboard = robot.getClimberStarboardTicks();
