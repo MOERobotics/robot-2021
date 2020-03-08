@@ -50,4 +50,11 @@ public interface Util {
         }
     }
 
+    enum GearShiftState {
+        HIGH_GEAR, LOW_GEAR,UNKNOWN;
+    }
+
+    enum BrakeModeState {
+        BRAKE, COAST,UNKNOWN;
+    }
 }

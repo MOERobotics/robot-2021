@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Util;
 
 public class Falcon extends GenericRobot{
 
@@ -88,7 +89,6 @@ public class Falcon extends GenericRobot{
 
         escalator.setIdleMode(IdleMode.kBrake);
 
-        // REMOVE BEFORE FLIGHT... Just for testing.
         shooterA.setIdleMode(IdleMode.kCoast);
         shooterB.setIdleMode(IdleMode.kCoast);
 
@@ -229,20 +229,11 @@ public class Falcon extends GenericRobot{
             ShooterSpeedPresetName speedType
     ){
         switch (speedType){
-            case SHORT_RANGE:
-                return SHOOTER_SPEED_SHORT;
-
-            case MID_RANGE:
-                return SHOOTER_SPEED_MID;
-
-            case LONG_RANGE:
-                return SHOOTER_SPEED_LONG;
-
-            case YEET:
-                return SHOOTER_SPEED_YEET;
-
-            default:
-                return SHOOTER_SPEED_OFF;
+            case SHORT_RANGE : return SHOOTER_SPEED_SHORT;
+            case MID_RANGE   : return SHOOTER_SPEED_MID;
+            case LONG_RANGE  : return SHOOTER_SPEED_LONG;
+            case YEET        : return SHOOTER_SPEED_YEET;
+            default          : return SHOOTER_SPEED_OFF;
 
         }
     }
@@ -298,13 +289,6 @@ public class Falcon extends GenericRobot{
         collector.set(-collectorPower);
     }
 
-    /*@Override
-    protected void climbVerticalInternal(double climberPower) {
-        climberA.set( climberPower);
-        climberB.set(-climberPower);
-    }
-     */
-
     @Override
     protected void setClimbVerticalStarboardInternal(double power) {
         climberStarboard.set(-power);
@@ -336,13 +320,13 @@ public class Falcon extends GenericRobot{
     public double getClimberVerticalPortAmperage() {return climberPort.getOutputCurrent();}
 
     @Override
-    protected double getClimberPortTicksInternal() {return Math.abs(encoderClimbPort.getPosition());}
+    public double getClimberPortTicks() {return Math.abs(encoderClimbPort.getPosition());}
 
     @Override
-    protected double getClimberStarboardTicksInternal() {return Math.abs(encoderClimbStarboard.getPosition());}
+    public double getClimberStarboardTicks() {return Math.abs(encoderClimbStarboard.getPosition());}
 
     @Override
-    public void resetClimberTicksInternal() {
+    public void resetClimberTicks() {
         encoderClimbPort.setPosition(0.0);
         encoderClimbStarboard.setPosition(0.0);
     }
@@ -360,13 +344,13 @@ public class Falcon extends GenericRobot{
     */
 
     @Override
-    protected void setAngleAdjusterPowerInternal(double aimPower) {
+    protected void setAimAdjusterPowerInternal(double aimPower) {
 
         angleAdj.set(-aimPower);
 }
 
     @Override
-    protected double getElevationInternal(){return elevation.get();}
+    protected double getAimElevationInternal(){return elevation.get();}
 
     @Override
     public double getShooterAngleMax(){return 153.0;} //orig 155
@@ -405,13 +389,16 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    public void setClimberBrake(boolean yesNo){
-        if(yesNo){
-            climberPort.setIdleMode(IdleMode.kBrake);
-            climberStarboard.setIdleMode(IdleMode.kBrake);
-        } else {
-            climberPort.setIdleMode(IdleMode.kCoast);
-            climberStarboard.setIdleMode(IdleMode.kCoast);
+    protected void setClimberBrakeInternal(Util.BrakeModeState state){
+        switch (state) {
+            case BRAKE:
+                climberPort     .setIdleMode(IdleMode.kBrake);
+                climberStarboard.setIdleMode(IdleMode.kBrake);
+                break;
+            case COAST:
+                climberPort     .setIdleMode(IdleMode.kCoast);
+                climberStarboard.setIdleMode(IdleMode.kCoast);
+                break;
         }
     }
 
