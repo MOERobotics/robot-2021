@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 
 public class ElevationControl {
@@ -19,10 +18,10 @@ public class ElevationControl {
     }
 
     public void run(GenericRobot robot){
-        double correction = PIDElevation.calculate(robot.getElevation() - setPoint);
+        double correction = PIDElevation.calculate(robot.getAimElevation() - setPoint);
         correction = Math.max(correction, -0.5);
         correction = Math.min(correction, 0.5);
-        robot.setAngleAdjusterPower(correction);
+        robot.setAimAdjusterPower(correction);
     }
 
     public void setEnabled(boolean yesNo){
