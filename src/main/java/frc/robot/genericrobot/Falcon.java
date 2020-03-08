@@ -69,7 +69,6 @@ public class Falcon extends GenericRobot{
     //Servo cameraTilt = new Servo(0);
 
 
-    long startTime= 0;
 
     public Falcon() {
 
@@ -93,16 +92,16 @@ public class Falcon extends GenericRobot{
         shooterA.setIdleMode(IdleMode.kCoast);
         shooterB.setIdleMode(IdleMode.kCoast);
 
-        shooterAPIDController.setP(7.5e-5);
-        shooterAPIDController.setI(1.0e-6);
-        shooterAPIDController.setD(2.0e-2);
-        shooterAPIDController.setFF(1.67e-4);
+        shooterAPIDController.setP (7.50e-5);
+        shooterAPIDController.setI (1.00e-6);
+        shooterAPIDController.setD (2.00e-2);
+        shooterAPIDController.setFF(1.67e-4); //feed forward
         shooterAPIDController.setIZone(500);
         shooterAPIDController.setDFilter(0);
 
-        shooterBPIDController.setP(7.5e-5);
-        shooterBPIDController.setI(1.0e-6);
-        shooterBPIDController.setD(2.0e-2);
+        shooterBPIDController.setP (7.50e-5);
+        shooterBPIDController.setI (1.00e-6);
+        shooterBPIDController.setD (2.00e-2);
         shooterBPIDController.setFF(1.67e-4);
         shooterBPIDController.setIZone(500);
         shooterBPIDController.setDFilter(0);
@@ -214,34 +213,13 @@ public class Falcon extends GenericRobot{
         shooterB.set(lowerPower);
     }
 
-    @Override
-    protected boolean readyToShootInternal(){
-        double targetUpper = getShooterTargetRPMUpper();
-        double targetLower = getShooterTargetRPMLower();
-        boolean readyToShoot = false;
-        double errorUpper = Math.abs((getShooterVelocityRPMUpper() + targetUpper) / targetUpper); //upperRPM is negative for shooting operation, think about this later
-        double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
-        if((errorUpper < 2.0e-2) && (errorLower < 2.0e-2)) {
-                if (System.currentTimeMillis() - startTime > 100) {
-                    readyToShoot = true;
-                } else {
-                    readyToShoot = false;
-                }
-        }
-        else {
-                startTime = System.currentTimeMillis();
-                readyToShoot = false;
-                }
-        return readyToShoot;
-    }
-
 
     private static final ShooterSpeedPreset
-            SHOOTER_SPEED_OFF = new ShooterSpeedPreset(0,0),
+            SHOOTER_SPEED_OFF   = new ShooterSpeedPreset(   0,    0),
             SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2285, 2285),
-            SHOOTER_SPEED_MID = new ShooterSpeedPreset(2620, 2620),
-            SHOOTER_SPEED_LONG = new ShooterSpeedPreset(4000, 3000), //not final
-            SHOOTER_SPEED_YEET = new ShooterSpeedPreset(5000, 5000);
+            SHOOTER_SPEED_MID   = new ShooterSpeedPreset(2620, 2620),
+            SHOOTER_SPEED_LONG  = new ShooterSpeedPreset(4000, 3000), //not final
+            SHOOTER_SPEED_YEET  = new ShooterSpeedPreset(5000, 5000);
 
 
 
@@ -351,11 +329,11 @@ public class Falcon extends GenericRobot{
 
     @Override
     //public double getClimberVerticalStarboardCurrent() {return powerPanel.getCurrent(3);}
-    public double getClimberVerticalStarboardCurrent() {return climberStarboard.getOutputCurrent();}
+    public double getClimberVerticalStarboardAmperage() {return climberStarboard.getOutputCurrent();}
 
     @Override
     //public double getClimberVerticalPortCurrent() {return powerPanel.getCurrent(12);}
-    public double getClimberVerticalPortCurrent() {return climberPort.getOutputCurrent();}
+    public double getClimberVerticalPortAmperage() {return climberPort.getOutputCurrent();}
 
     @Override
     protected double getClimberPortTicksInternal() {return Math.abs(encoderClimbPort.getPosition());}
