@@ -239,7 +239,7 @@ public class Robot extends TimedRobot {
                 waitingForMediumHigh = true;
             }
             if (waitingForMediumHigh || waitingForChange){
-                escalatorPower = 0.6;
+                escalatorPower = 0.7;
             }
             if (waitingForMediumHigh && robot.getEscalatorSensorMediumHigh()){
                 waitingForMediumHigh = false;
