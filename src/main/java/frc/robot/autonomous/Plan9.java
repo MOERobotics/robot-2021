@@ -78,7 +78,7 @@ public class Plan9 extends GenericAutonomous {
                 robot.setMotorPowerPercentage( defaultSpeed * (1 + correction),
                         defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance > 130) {
+                if (currentDistance - startingDistance > 100) {
                     robot.driveForward(0);
                     autonomousStep += 1;
                 }
