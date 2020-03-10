@@ -10,13 +10,13 @@ import static frc.robot.Util.*;
 public class PlanA extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-    double defaultSpeed = 0.15;
+    double defaultSpeed = 0.18;
 
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
     double correction;
     static double currentYaw = 0;
-    double outerArcLength = 80; //89.2
+    double outerArcLength = 84; //89.2
     double innerArc = 35.45;
     double outerRadius = 50;
     double yawDifference = 0;
@@ -45,7 +45,6 @@ public class PlanA extends GenericAutonomous {
         switch (autonomousStep) {
             case -1: //resets and waits
                 robot.collectorIn(1);
-                defaultSpeed = 0.1;
                 ballCount = 0;
                 shooting = false;
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
@@ -145,7 +144,6 @@ public class PlanA extends GenericAutonomous {
                 break;
 
             case 7: //PID reset for straightaway
-                defaultSpeed = 0.09;
                 getCells.run(robot);
                 startingDistance = robot.getDistanceInchesLeft();
                 PIDSteering.reset();

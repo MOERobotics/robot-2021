@@ -93,16 +93,16 @@ public class Falcon extends GenericRobot{
         shooterA.setIdleMode(IdleMode.kCoast);
         shooterB.setIdleMode(IdleMode.kCoast);
 
-        shooterAPIDController.setP (7.50e-5);
-        shooterAPIDController.setI (1.00e-6);
-        shooterAPIDController.setD (2.00e-2);
+        shooterAPIDController.setP (3.0e-4);
+        shooterAPIDController.setI (1.0e-6);
+        shooterAPIDController.setD (1.6e-2);
         shooterAPIDController.setFF(1.67e-4); //feed forward
         shooterAPIDController.setIZone(500);
         shooterAPIDController.setDFilter(0);
 
-        shooterBPIDController.setP (7.50e-5);
-        shooterBPIDController.setI (1.00e-6);
-        shooterBPIDController.setD (2.00e-2);
+        shooterBPIDController.setP (3.0e-4);
+        shooterBPIDController.setI (1.0e-6);
+        shooterBPIDController.setD (1.6e-2);
         shooterBPIDController.setFF(1.67e-4);
         shooterBPIDController.setIZone(500);
         shooterBPIDController.setDFilter(0);
@@ -221,7 +221,7 @@ public class Falcon extends GenericRobot{
         boolean readyToShoot = false;
         double errorUpper = Math.abs((getShooterVelocityRPMUpper() + targetUpper) / targetUpper); //upperRPM is negative for shooting operation, think about this later
         double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
-        if((errorUpper < 2.0e-2) && (errorLower < 2.0e-2)) {
+        if((errorUpper < 3.0e-2) && (errorLower < 3.0e-2)) {
                 if (System.currentTimeMillis() - startTime > 100) {
                     readyToShoot = true;
                 } else {
