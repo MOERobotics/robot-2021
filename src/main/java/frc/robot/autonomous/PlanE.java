@@ -32,9 +32,6 @@ public class PlanE extends GenericAutonomous {
 
     @Override
     protected void printSmartDashboardInternal() {
-        SmartDashboard.putNumber("Current Distance", currentDistance);
-        SmartDashboard.putNumber("Starting Distance", startingDistance);
-        SmartDashboard.putNumber("distanceDifference", currentDistance - startingDistance);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class PlanC extends GenericAutonomous {
       double escalatorPower;
       double indexerPower;
       long alignWait = 2000;
-      GenericCommand activeCommand = new LimelightAlign( 0, .8); //planA set setPoint to -2
+      GenericCommand activeCommand = new LimelightAlign( -0.5, .8); //planA set setPoint to -2
       CollectPowerCells getCells = new CollectPowerCells();
 
       @Override
@@ -111,12 +111,14 @@ public class PlanC extends GenericAutonomous {
                         break;
 
                   case 4: //straightaway
+                        double speedScale = 1.2 - (0.2/104) * robot.getDistanceInchesLeft();
                         getCells.run(robot);
 
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                        robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
+                        robot.setMotorPowerPercentage(speedScale * defaultSpeed * (1 + correction),
+                                speedScale * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 98) { //maybe change depending on how far we need to go
+                        if (currentDistance - startingDistance > 104) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
                               autonomousStep += 1;
                         }
@@ -136,14 +138,12 @@ public class PlanC extends GenericAutonomous {
                         getCells.run(robot);
 
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                        robot.setMotorPowerPercentage(-1 * defaultSpeed * (1 - correction), -1 * defaultSpeed * (1 + correction));
+                        robot.setMotorPowerPercentage(-1.3 * defaultSpeed * (1 - correction),
+                                -1.3 * defaultSpeed * (1 + correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        SmartDashboard.putNumber("startDistance", startingDistance);
-                        SmartDashboard.putNumber("currentDistance", currentDistance);
-                        SmartDashboard.putNumber("distanceDifference", currentDistance - startingDistance);
-                        if (currentDistance - startingDistance < -58) { //maybe change depending on how far we need to go
+                        if (currentDistance - startingDistance < -64) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
-                              autonomousStep += 1;
+                              autonomousStep = 13;
                         }
                         break;
 
@@ -214,7 +214,7 @@ public class PlanC extends GenericAutonomous {
 
                   case 14: // align
                         robot.limelight.table.getEntry("ledMode").setNumber(3);
-                        robot.limelight.table.getEntry("pipeline").setNumber(1);
+                        robot.limelight.table.getEntry("pipeline").setNumber(0);
                         activeCommand = new LimelightAlign(-3, .8); //fix dem bois
                         activeCommand.begin(robot);
                         activeCommand.setEnabled(true);
@@ -248,7 +248,7 @@ public class PlanC extends GenericAutonomous {
                               shooting = false;
                               ballCount++;
                         }
-                        if (ballCount == 3) {
+                        if (ballCount == 2) {
                               escalatorPower = 0;
                               indexerPower = 0;
                               autonomousStep += 1;

@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 
 public class SmartClimb{
@@ -50,10 +49,10 @@ public class SmartClimb{
         currentTime = System.currentTimeMillis();
 
         if (currentTime-startTime > 500) {
-            if (Math.abs(robot.getClimberVerticalPortCurrent()) > currentTolerance) {
+            if (Math.abs(robot.getClimberVerticalPortAmperage()) > currentTolerance) {
                 engagedPort = true;
             }
-            if (Math.abs(robot.getClimberVerticalStarboardCurrent()) > currentTolerance) {
+            if (Math.abs(robot.getClimberVerticalStarboardAmperage()) > currentTolerance) {
                 engagedStarboard = true;
             }
         }
@@ -102,13 +101,6 @@ public class SmartClimb{
         double correctionStarboard = PIDStarboardHold.calculate(robot.getClimberStarboardTicks() - encoderStarboard);
 
         double rollCorrection = PIDRollHold.calculate((-robot.getPitch()) - rollTrim);
-
-        SmartDashboard.putNumber("errorPort", robot.getClimberPortTicks() - encoderPort);
-        SmartDashboard.putNumber("correctionPort", correctionPort);
-        SmartDashboard.putNumber("errorStarboard", robot.getClimberStarboardTicks() - encoderStarboard);
-        SmartDashboard.putNumber("correctionStarboard", correctionStarboard);
-        SmartDashboard.putNumber("errorRoll", -robot.getPitch() - rollTrim);
-        SmartDashboard.putNumber("rollCorrection", rollCorrection);
 
 	/*
 	  rollTrim, encoderPort and encoderStarboard represent the state that we are trying to hold.

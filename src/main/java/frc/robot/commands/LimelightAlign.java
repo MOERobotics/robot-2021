@@ -30,6 +30,7 @@ public class LimelightAlign extends GenericCommand{
         targetCentered = false;
         startTime = System.currentTimeMillis();
         PIDPivot.reset();
+        robot.limelight.table.getEntry("ledMode").setNumber(3);
     }
 
     @Override
@@ -83,6 +84,14 @@ public class LimelightAlign extends GenericCommand{
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
+    }
+
+    public void setSetPoint(double setPoint){
+        this.setPoint = setPoint;
+    }
+
+    public double getSetPoint(){
+        return setPoint;
     }
 
 

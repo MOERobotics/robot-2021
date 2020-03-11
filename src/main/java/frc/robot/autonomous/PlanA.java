@@ -114,7 +114,6 @@ public class PlanA extends GenericAutonomous {
                 getCells.run(robot);
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                 correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
-                SmartDashboard.putNumber("Pid heading", (robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
                 robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                 currentDistance = robot.getDistanceInchesRight();
                 if (currentDistance - startingDistance > outerArcLength) {
