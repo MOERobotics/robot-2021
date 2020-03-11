@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Util;
 
 public class Falcon extends GenericRobot{
 
@@ -69,7 +70,6 @@ public class Falcon extends GenericRobot{
     //Servo cameraTilt = new Servo(0);
 
 
-    long startTime= 0;
 
     public Falcon() {
 
@@ -221,7 +221,7 @@ public class Falcon extends GenericRobot{
         boolean readyToShoot = false;
         double errorUpper = Math.abs((getShooterVelocityRPMUpper() + targetUpper) / targetUpper); //upperRPM is negative for shooting operation, think about this later
         double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
-        if((errorUpper < 3.0e-2) && (errorLower < 3.0e-2)) {
+        if((errorUpper < 2.0e-2) && (errorLower < 2.0e-2)) {
                 if (System.currentTimeMillis() - startTime > 100) {
                     readyToShoot = true;
                 } else {
@@ -251,20 +251,11 @@ public class Falcon extends GenericRobot{
             ShooterSpeedPresetName speedType
     ){
         switch (speedType){
-            case SHORT_RANGE:
-                return SHOOTER_SPEED_SHORT;
-
-            case MID_RANGE:
-                return SHOOTER_SPEED_MID;
-
-            case LONG_RANGE:
-                return SHOOTER_SPEED_LONG;
-
-            case YEET:
-                return SHOOTER_SPEED_YEET;
-
-            default:
-                return SHOOTER_SPEED_OFF;
+            case SHORT_RANGE : return SHOOTER_SPEED_SHORT;
+            case MID_RANGE   : return SHOOTER_SPEED_MID;
+            case LONG_RANGE  : return SHOOTER_SPEED_LONG;
+            case YEET        : return SHOOTER_SPEED_YEET;
+            default          : return SHOOTER_SPEED_OFF;
 
         }
     }
@@ -351,20 +342,20 @@ public class Falcon extends GenericRobot{
 
     @Override
     //public double getClimberVerticalStarboardCurrent() {return powerPanel.getCurrent(3);}
-    public double getClimberVerticalStarboardCurrent() {return climberStarboard.getOutputCurrent();}
+    public double getClimberVerticalStarboardAmperage() {return climberStarboard.getOutputCurrent();}
 
     @Override
     //public double getClimberVerticalPortCurrent() {return powerPanel.getCurrent(12);}
-    public double getClimberVerticalPortCurrent() {return climberPort.getOutputCurrent();}
+    public double getClimberVerticalPortAmperage() {return climberPort.getOutputCurrent();}
 
     @Override
-    protected double getClimberPortTicksInternal() {return Math.abs(encoderClimbPort.getPosition());}
+    public double getClimberPortTicks() {return Math.abs(encoderClimbPort.getPosition());}
 
     @Override
-    protected double getClimberStarboardTicksInternal() {return Math.abs(encoderClimbStarboard.getPosition());}
+    public double getClimberStarboardTicks() {return Math.abs(encoderClimbStarboard.getPosition());}
 
     @Override
-    public void resetClimberTicksInternal() {
+    public void resetClimberTicks() {
         encoderClimbPort.setPosition(0.0);
         encoderClimbStarboard.setPosition(0.0);
     }
@@ -382,13 +373,13 @@ public class Falcon extends GenericRobot{
     */
 
     @Override
-    protected void setAngleAdjusterPowerInternal(double aimPower) {
+    protected void setAimAdjusterPowerInternal(double aimPower) {
 
         angleAdj.set(-aimPower);
 }
 
     @Override
-    protected double getElevationInternal(){return elevation.get();}
+    protected double getAimElevationInternal(){return elevation.get();}
 
     @Override
     public double getShooterAngleMax(){return 153.0;} //orig 155
@@ -427,13 +418,16 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    public void setClimberBrake(boolean yesNo){
-        if(yesNo){
-            climberPort.setIdleMode(IdleMode.kBrake);
-            climberStarboard.setIdleMode(IdleMode.kBrake);
-        } else {
-            climberPort.setIdleMode(IdleMode.kCoast);
-            climberStarboard.setIdleMode(IdleMode.kCoast);
+    protected void setClimberBrakeInternal(Util.BrakeModeState state){
+        switch (state) {
+            case BRAKE:
+                climberPort     .setIdleMode(IdleMode.kBrake);
+                climberStarboard.setIdleMode(IdleMode.kBrake);
+                break;
+            case COAST:
+                climberPort     .setIdleMode(IdleMode.kCoast);
+                climberStarboard.setIdleMode(IdleMode.kCoast);
+                break;
         }
     }
 

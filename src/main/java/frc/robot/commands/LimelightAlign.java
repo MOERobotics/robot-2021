@@ -30,6 +30,7 @@ public class LimelightAlign extends GenericCommand{
         targetCentered = false;
         startTime = System.currentTimeMillis();
         PIDPivot.reset();
+        robot.limelight.table.getEntry("ledMode").setNumber(3);
     }
 
     @Override

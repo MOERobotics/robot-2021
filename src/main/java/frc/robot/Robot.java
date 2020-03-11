@@ -10,17 +10,18 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
 
 import static frc.robot.Util.*;
+import static frc.robot.genericrobot.GenericRobot.*;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,26 +29,41 @@ import java.util.stream.Collectors;
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram = new PlanA(); //Auto routine to be used?
-    GenericCommand activeCommand = new LimelightAlign( -2, .8);
-    SmartClimb getOutaDodge = new SmartClimb();
-    GenericRobot robot = new Falcon();
-    Joystick leftJoystick = new Joystick(0);
-    XboxController xboxJoystick = new XboxController(1);
-    ElevationControl shooterController = new ElevationControl();
+    GenericAutonomous autoProgram       = new PlanA(); //Auto routine to be used?
+    GenericCommand    activeCommand     = new LimelightAlign(-2,.8);
+    SmartClimb        smartClimb        = new SmartClimb();
+    GenericRobot      robot             = new Falcon();
+    Joystick          leftJoystick      = new Joystick(0);
+    XboxController    xboxJoystick      = new XboxController(1);
+    ElevationControl  shooterController = new ElevationControl();
     boolean shooterOn = false;
 
     double deadZone = 0.10;
-    long timeStart;
+    long timeEscalatorStarted = 0;
     //boolean escalatorSpaceCounting =false;
-    long escalatorSpacing = 0;
     int ballCount = 0;
     boolean ballCollectCounted = false;
     boolean ballShootCounted = false;
 
+    public static final Map<String, GenericAutonomous> autonomousMap
+        = new HashMap<String, GenericAutonomous> () {{
+            put(PlanA.class.getName(), new PlanA());
+            put(PlanC.class.getName(), new PlanC());
+            put(PlanD.class.getName(), new PlanD());
+            put(PlanE.class.getName(), new PlanE());
+    }};
+
+    public static final LimelightAlign
+        limeLightAlignCloseDistance = new LimelightAlign(-2, 0.8),
+        limelightAlignFarDistance   = new LimelightAlign(-3, 0.8);
+    public static       LimelightAlign
+        limelightAlignChosen        = limeLightAlignCloseDistance;
+
     @Override
     public void robotInit() {
         System.out.println("Klaatu barada nikto");
+
+
     }
 
     @Override
@@ -68,7 +84,6 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         if (leftJoystick.getTriggerPressed()) {
-            System.out.println("AAAAAAAA");
             robot.resetAttitude();
             robot.resetEncoders();
             robot.resetClimberTicks();
@@ -78,38 +93,38 @@ public class Robot extends TimedRobot {
         robot.setCollectorPower(0);
         robot.setEscalatorPower(0);
         robot.setIndexerPower(0);
-        robot.setAngleAdjusterPower(0);
+        robot.setAimAdjusterPower(0);
         robot.spinControlPanel(0);
         robot.setClimbVerticalPower(0);
-        robot.setBalancePower(0);
-        robot.setCameraTilt(0);
+        robot.setCameraTiltDegrees(0);
 
         if (leftJoystick.getRawButtonPressed(5)) {
-            autoProgram = new PlanA();
+            autoProgram = autonomousMap.get(PlanA.class.getName());
         }
         if (leftJoystick.getRawButtonPressed(6)) {
-            autoProgram = new PlanC();
+            autoProgram = autonomousMap.get(PlanC.class.getName());
         }
         if (leftJoystick.getRawButtonPressed(7)) {
-            autoProgram = new PlanD();
+            autoProgram = autonomousMap.get(PlanD.class.getName());
         }
         if (leftJoystick.getRawButtonPressed(8)) {
-            autoProgram = new PlanE();
+            autoProgram = autonomousMap.get(PlanE.class.getName());
         }
 
         robot.limelight.table.getEntry("ledMode").setNumber(0);
 
         if (leftJoystick.getRawButton(5)){
             //coast mode
-            robot.setClimberBrake(false);
+            robot.setClimberBrake(BrakeModeState.COAST);
         }
 
         if (leftJoystick.getRawButtonReleased(5)){
             //brake mode
-            robot.setClimberBrake(true);
+            robot.setClimberBrake(BrakeModeState.BRAKE);
         }
 
     }
+
 
     @Override
     public void autonomousInit() {
@@ -127,8 +142,8 @@ public class Robot extends TimedRobot {
         robot.limelight.table.getEntry("ledMode").setNumber(0);
         robot.limelight.table.getEntry("pipeline").setNumber(0);
         activeCommand.begin(robot);
-        robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
-        robot.setCameraTilt(125);
+        robot.setShooterSpeedPresetName(ShooterSpeedPresetName.SHORT_RANGE);
+        robot.setCameraTiltDegrees(125);
 
     }
 
@@ -141,7 +156,7 @@ public class Robot extends TimedRobot {
             shooterController.run(robot);
         }
 
-        if (leftJoystick.getRawButtonPressed(8)) { //INFORM 3 and 4 to jerk sideways
+        if (leftJoystick.getRawButtonPressed(8)) {
             activeCommand.setEnabled(false);
         }
 
@@ -150,9 +165,8 @@ public class Robot extends TimedRobot {
             activeCommand.setEnabled(false);
         }
 
-        if (leftJoystick.getRawButtonPressed(15)){ //short range filtering
+        if (leftJoystick.getRawButtonPressed(15)) {
             robot.limelight.table.getEntry("pipeline").setNumber(0);
-
         }
 
         if (activeCommand.isEnabled()) {
@@ -160,55 +174,41 @@ public class Robot extends TimedRobot {
             if (activeCommand.locksControls()) return;
         }
 
-        double leftPower = -leftJoystick.getY() + leftJoystick.getX();
+        double  leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
 
         double driverRestriction = 0.75;
 
-        leftPower = driverRestriction * deadzoneValue(leftPower, deadZone);
+         leftPower = driverRestriction * deadzoneValue( leftPower, deadZone);
         rightPower = driverRestriction * deadzoneValue(rightPower, deadZone);
 
         if (leftJoystick.getRawButton(3)) { //nudge left
-            leftPower = -0.2;
-            rightPower = 0.2;
-        } else if (leftJoystick.getRawButtonReleased(3)) { //nudge left release
-            leftPower = 0.0;
-            rightPower = 0.0;
+             leftPower = -0.2;
+            rightPower =  0.2;
         }
 
         if (leftJoystick.getRawButton(4)) { //nudge right
-            leftPower = 0.2;
+             leftPower =  0.2;
             rightPower = -0.2;
-        } else if (leftJoystick.getRawButtonReleased(4)) { //nudge right release
-            leftPower = 0.0;
-            rightPower = 0.0;
         }
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
         if (leftJoystick.getRawButtonPressed(2)) {
-            robot.limelight.table.getEntry("ledMode").setNumber(3);
+            activeCommand = limelightAlignChosen;
+            activeCommand.begin(robot);
             activeCommand.setEnabled(true);
         }
 
         //Collector
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
-            escalatorPower = 0.0;
             if (robot.getEscalatorSensorMedium()) { //&& (ballCount<=3)
-                timeStart = System.currentTimeMillis();
                 escalatorPower = 0.5;
-            } else {
-                if ((System.currentTimeMillis() >= timeStart + escalatorSpacing)) {
-                    escalatorPower = 0.0;
-                } else {
-                    escalatorPower = 0.5;
-                }
             }
             //if (ballCount<=4){collectorPower = 1.0;}
             //if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
-            collectorPower = 1.0;
-            robot.collectorIn(collectorPower);
+            robot.collectorIn(1.0);
             robot.escalatorUp(escalatorPower);
         } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
             robot.collectorOut(1.0);
@@ -251,24 +251,24 @@ public class Robot extends TimedRobot {
 
         switch (xboxDPadDirection) {
             case NORTH: //high velocity (long range)
-                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
+                robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
-                activeCommand = new LimelightAlign(-2, 0.8);
+                limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
                 shooterController.setSetPoint(125);
                 break;
 
             case SOUTH: //low velocity (short range)
-                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
+                robot.setShooterSpeedPresetName(ShooterSpeedPresetName.SHORT_RANGE);
                 robot.limelight.table.getEntry("pipeline").setNumber(0);
-                activeCommand = new LimelightAlign(-2, 0.8);
+                limelightAlignChosen = limeLightAlignCloseDistance;
                 break;
 
             case EAST: //medium velocity (mid range)
-                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
+                robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
-                activeCommand = new LimelightAlign(-3, 0.8);
+                limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
                 shooterController.setSetPoint(131);
@@ -276,9 +276,9 @@ public class Robot extends TimedRobot {
                 break;
 
             case WEST: //YEET
-                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
+                robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
-                activeCommand = new LimelightAlign(-3, 0.8);
+                limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
                 shooterController.setSetPoint(127);
@@ -300,63 +300,61 @@ public class Robot extends TimedRobot {
         }
 
         //Climb vert
-        if (getOutaDodge.getHolding()) {
-            getOutaDodge.hold(robot);
+        if (smartClimb.getHolding()) {
+            smartClimb.hold(robot);
         } else {
             robot.setClimbVerticalPower(0);
         }
 
         if (leftJoystick.getRawButtonPressed(7)) {
-            getOutaDodge.begin(robot);
+            smartClimb.begin(robot);
         }
         if (leftJoystick.getRawButtonReleased(7)) {
-            getOutaDodge.setHolding(true);
+            smartClimb.setHolding(true);
         }
         if (leftJoystick.getRawButton(7)) {
-            getOutaDodge.step(robot);
+            smartClimb.step(robot);
         }
         if (leftJoystick.getRawButton(13)) {
             robot.raiseClimberArms(.2);
-            getOutaDodge.setHolding(false);
+            smartClimb.setHolding(false);
         }
 
         //Left individual control
         if (leftJoystick.getRawButton(5)) {
-            getOutaDodge.setHolding(false);
+            smartClimb.setHolding(false);
             robot.setClimbVerticalPortPower(.6);
         } else if (leftJoystick.getRawButton(10)) {
-            getOutaDodge.setHolding(false);
+            smartClimb.setHolding(false);
             robot.setClimbVerticalPortPower(-.2);
         }
 
         //Right individual control
         if (leftJoystick.getRawButton(11)) {
-            getOutaDodge.setHolding(false);
+            smartClimb.setHolding(false);
             robot.setClimbVerticalStarboardPower(.6);
         } else if (leftJoystick.getRawButton(16)) {
-            getOutaDodge.setHolding(false);
+            smartClimb.setHolding(false);
             robot.setClimbVerticalStarboardPower(-.2);
         }
 
 
         //below is code for keeping track of number of balls on robot
-        if(leftJoystick.getRawButtonPressed(12)){ // resets ball count to zero
+        if (leftJoystick.getRawButtonPressed(12)) { // resets ball count to zero
             ballCount = 0;
         }
-        if(robot.getEscalatorSensorLow()){
+        if (robot.getEscalatorSensorLow()){
             if (!ballCollectCounted) { //add ball
                 ballCount++;
                 ballCollectCounted = true;
             }
-        }
-        else {
+        } else {
             ballCollectCounted = false;
         }
 
-        if(robot.getEscalatorSensorHigh()){
+        if (robot.getEscalatorSensorHigh()){
             ballShootCounted = true;
-        }
-        else {
+        } else {
             if (ballShootCounted){
                 ballCount--;              // subtract ball
             }
@@ -367,14 +365,12 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         LiveWindow.setEnabled(false);
-        getOutaDodge.setHolding(false);
+        smartClimb.setHolding(false);
     }
 
 
     @Override
     public void testPeriodic() {
-        double escalatorPower;
-        double collectorPower;
 
         LiveWindow.setEnabled(false);
 
@@ -397,19 +393,7 @@ public class Robot extends TimedRobot {
 
         //Escalator
         if (leftJoystick.getRawButton(12)) {
-            //do not do anything unless the medium sensor is tripped
-            escalatorPower = 0.0;
-            if (robot.getEscalatorSensorMedium()) {
-                timeStart = System.currentTimeMillis();
-                escalatorPower = 0.5;
-            } else {
-                if ((System.currentTimeMillis() >= timeStart + escalatorSpacing)) {
-                    escalatorPower = 0.0;
-                } else {
-                    escalatorPower = 0.5;
-                }
-            }
-            robot.escalatorUp(escalatorPower);
+            robot.escalatorUp(.5);
         } else if (leftJoystick.getRawButton(15)) {
             robot.escalatorDown(.5);
         } else {
@@ -424,7 +408,7 @@ public class Robot extends TimedRobot {
         }
 
         //Indexer
-        if (leftJoystick.getRawButton(7) && robot.readyToShoot()) {
+        if (leftJoystick.getRawButton(7)) {
             robot.indexerLoad(1.0);
         } else if (leftJoystick.getRawButton(8)) {
             robot.indexerUnload(1.0);
@@ -438,7 +422,7 @@ public class Robot extends TimedRobot {
         } else if (leftJoystick.getRawButton(9)) {
             robot.aimDown(.4);
         } else {
-            robot.setAngleAdjusterPower(0);
+            robot.setAimAdjusterPower(0);
         }
 
         //CP
@@ -458,17 +442,6 @@ public class Robot extends TimedRobot {
         } else {
             robot.setClimbVerticalPower(0.0);
         }
-
-        /* conflicting buttons
-        //climb horiz
-        if (leftJoystick.getRawButton( 3)) {
-            robot.climberBalanceLeft(-.2);
-        } else if (leftJoystick.getRawButton( 4)) {
-            robot.climberBalanceRight(.2);
-        } else {
-            robot.setBalancePower(0);
-        }
-         */
 
         //Left individual control
         if (leftJoystick.getRawButton(3)) {
@@ -506,12 +479,12 @@ public class Robot extends TimedRobot {
 
         //Kevin voodoo to turn ints into directions
         public static final Map<Integer, POVDirection> directionMap =
-                Arrays.stream(POVDirection.values()).collect(
-                        Collectors.toMap(
-                                POVDirection::getAngle,
-                                Function.identity()
-                        )
-                );
+            Arrays.stream(POVDirection.values()).collect(
+                Collectors.toMap(
+                    POVDirection::getAngle,
+                    Function.identity()
+                )
+            );
 
         public static POVDirection getDirection(int angle) {
             return directionMap.getOrDefault(angle, POVDirection.NULL);
