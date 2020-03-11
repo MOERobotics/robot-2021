@@ -214,26 +214,6 @@ public class Falcon extends GenericRobot{
         shooterB.set(lowerPower);
     }
 
-    @Override
-    protected boolean readyToShootInternal(){
-        double targetUpper = getShooterTargetRPMUpper();
-        double targetLower = getShooterTargetRPMLower();
-        boolean readyToShoot = false;
-        double errorUpper = Math.abs((getShooterVelocityRPMUpper() + targetUpper) / targetUpper); //upperRPM is negative for shooting operation, think about this later
-        double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
-        if((errorUpper < 2.0e-2) && (errorLower < 2.0e-2)) {
-                if (System.currentTimeMillis() - startTime > 100) {
-                    readyToShoot = true;
-                } else {
-                    readyToShoot = false;
-                }
-        }
-        else {
-                startTime = System.currentTimeMillis();
-                readyToShoot = false;
-                }
-        return readyToShoot;
-    }
 
 
     private static final ShooterSpeedPreset
@@ -389,7 +369,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getPIDpivotP() {
-        return 4.0e-2;
+        return 5.0e-2;
     }
 
     @Override
@@ -399,7 +379,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getPIDpivotD() {
-        return 1.0e-4;
+        return 1.0e-2;
     }
 
     @Override

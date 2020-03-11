@@ -51,10 +51,12 @@ public interface Util {
             return Date.from(Instant.EPOCH);
         }
     }
-    public static double speedScale(double x1, double x2, double startSpeed, double endSpeed, double x){
+    public static double speedScale(double x1, double x2, double startSpeed, double endSpeed, double x) {
         //y = mx + b (math == fun)
         double slope = (endSpeed - startSpeed) / (x2 - x1);
         double currentSpeed = slope * (x - x1) + startSpeed;
+        return currentSpeed;
+    }
 
     enum GearShiftState {
         HIGH_GEAR, LOW_GEAR,UNKNOWN;
