@@ -181,7 +181,7 @@ public class Falcon extends GenericRobot{
     public double getPIDmaneuverI(){return 1.0e-2;}
 
     @Override
-    public double getPIDmaneuverD(){return 2.0e-4;}
+    public double getPIDmaneuverD(){return 1.0e-3;}
 
     @Override
     public double getYaw() {
@@ -370,7 +370,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getPIDpivotP() {
-        return 5.0e-2;
+        return 4.0e-2;
     }
 
     @Override
@@ -380,7 +380,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getPIDpivotD() {
-        return 1.0e-2;
+        return 1.0e-4;
     }
 
     @Override
