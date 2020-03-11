@@ -66,6 +66,7 @@ public class Falcon extends GenericRobot{
     DigitalInput escalatorSensorLow = new DigitalInput(1);
     DigitalInput escalatorSensorMedium = new DigitalInput(2);
     DigitalInput escalatorSensorHigh = new DigitalInput(3);
+    DigitalInput escalatorSensorMediumHigh = new DigitalInput(4);
 
     //Servo cameraTilt = new Servo(0);
 
@@ -396,6 +397,9 @@ public class Falcon extends GenericRobot{
     public boolean getEscalatorSensorHighInternal(){
         return escalatorSensorHigh.get();
     }
+
+    @Override
+    public boolean getEscalatorSensorMediumHighInternal(){ return escalatorSensorMediumHigh.get();}
 
     @Override
     protected void setClimberBrakeInternal(Util.BrakeModeState state){
