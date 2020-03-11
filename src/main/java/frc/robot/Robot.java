@@ -163,8 +163,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Green", WheelOfFortune.colorSensor.getBlue());
         SmartDashboard.putNumber("Blue", WheelOfFortune.colorSensor.getGreen());
         SmartDashboard.putString("Color", color);
-        SmartDashboard.putNumber("Control Panel Encoder", ControlPanelRotation.spinnerEncoder.getPosition()
-        );
+        SmartDashboard.putNumber("Control Panel Encoder", ControlPanelRotation.spinnerEncoder.getPosition());
         double escalatorPower = 0.0;
         double collectorPower = 0.0;
 
