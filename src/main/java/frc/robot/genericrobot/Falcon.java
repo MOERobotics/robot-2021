@@ -66,6 +66,7 @@ public class Falcon extends GenericRobot{
     DigitalInput escalatorSensorLow = new DigitalInput(1);
     DigitalInput escalatorSensorMedium = new DigitalInput(2);
     DigitalInput escalatorSensorHigh = new DigitalInput(3);
+    DigitalInput escalatorSensorMediumHigh = new DigitalInput(4);
 
     //Servo cameraTilt = new Servo(0);
 
@@ -89,19 +90,20 @@ public class Falcon extends GenericRobot{
 
         escalator.setIdleMode(IdleMode.kBrake);
 
+        // REMOVE BEFORE FLIGHT... Just for testing.
         shooterA.setIdleMode(IdleMode.kCoast);
         shooterB.setIdleMode(IdleMode.kCoast);
 
-        shooterAPIDController.setP (7.50e-5);
-        shooterAPIDController.setI (1.00e-6);
-        shooterAPIDController.setD (2.00e-2);
+        shooterAPIDController.setP (3.0e-4);
+        shooterAPIDController.setI (1.0e-6);
+        shooterAPIDController.setD (1.6e-2);
         shooterAPIDController.setFF(1.67e-4); //feed forward
         shooterAPIDController.setIZone(500);
         shooterAPIDController.setDFilter(0);
 
-        shooterBPIDController.setP (7.50e-5);
-        shooterBPIDController.setI (1.00e-6);
-        shooterBPIDController.setD (2.00e-2);
+        shooterBPIDController.setP (3.0e-4);
+        shooterBPIDController.setI (1.0e-6);
+        shooterBPIDController.setD (1.6e-2);
         shooterBPIDController.setFF(1.67e-4);
         shooterBPIDController.setIZone(500);
         shooterBPIDController.setDFilter(0);
@@ -173,13 +175,13 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    public double getPIDmaneuverP(){return 1.0e-1;}
+    public double getPIDmaneuverP(){return 1.0e-2;}
 
     @Override
     public double getPIDmaneuverI(){return 1.0e-2;}
 
     @Override
-    public double getPIDmaneuverD(){return 2.0e-4;}
+    public double getPIDmaneuverD(){return 2.0e-3;}
 
     @Override
     public double getYaw() {
@@ -214,12 +216,13 @@ public class Falcon extends GenericRobot{
     }
 
 
+
     private static final ShooterSpeedPreset
-            SHOOTER_SPEED_OFF   = new ShooterSpeedPreset(   0,    0),
+            SHOOTER_SPEED_OFF = new ShooterSpeedPreset(0,0),
             SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2285, 2285),
-            SHOOTER_SPEED_MID   = new ShooterSpeedPreset(2620, 2620),
-            SHOOTER_SPEED_LONG  = new ShooterSpeedPreset(4000, 3000), //not final
-            SHOOTER_SPEED_YEET  = new ShooterSpeedPreset(5000, 5000);
+            SHOOTER_SPEED_MID = new ShooterSpeedPreset(2620, 2620),
+            SHOOTER_SPEED_LONG = new ShooterSpeedPreset(4000, 3000), //not final
+            SHOOTER_SPEED_YEET = new ShooterSpeedPreset(5000, 5000);
 
 
 
@@ -288,6 +291,13 @@ public class Falcon extends GenericRobot{
     protected void setCollectorPowerInternal(double collectorPower) {
         collector.set(-collectorPower);
     }
+
+    /*@Override
+    protected void climbVerticalInternal(double climberPower) {
+        climberA.set( climberPower);
+        climberB.set(-climberPower);
+    }
+     */
 
     @Override
     protected void setClimbVerticalStarboardInternal(double power) {
@@ -387,6 +397,9 @@ public class Falcon extends GenericRobot{
     public boolean getEscalatorSensorHighInternal(){
         return escalatorSensorHigh.get();
     }
+
+    @Override
+    public boolean getEscalatorSensorMediumHighInternal(){ return escalatorSensorMediumHigh.get();}
 
     @Override
     protected void setClimberBrakeInternal(Util.BrakeModeState state){
