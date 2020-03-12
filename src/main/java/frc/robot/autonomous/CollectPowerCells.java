@@ -19,7 +19,7 @@ public class CollectPowerCells {
 
     public void run(GenericRobot robot) {
         escalatorPower = 0.0;
-        collectorPower = 0.75;
+        collectorPower = 0.9;
 
         //two power cells
         if (robot.getEscalatorSensorLow() && robot.getEscalatorSensorMedium() && !robot.getEscalatorSensorMediumHigh()){

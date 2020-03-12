@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram       = new PlanA(); //Auto routine to be used?
+    GenericAutonomous autoProgram       = new PlanE(); //Auto routine to be used?
     GenericCommand    activeCommand     = new LimelightAlign(-2,.8);
     SmartClimb        smartClimb        = new SmartClimb();
     GenericRobot      robot             = new Falcon();

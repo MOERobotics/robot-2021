@@ -11,12 +11,12 @@ import static frc.robot.Util.*;
 public class PlanE extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-    double defaultSpeed = 0.1; //need to test, orig: 0.075 //dont forget to change default speeds below
+    double defaultSpeed = 0.18; //need to test, orig: 0.075 //dont forget to change default speeds below
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
     double correction;
     static double currentYaw = 0;
-    double outerArcLength = 42;
+    double outerArcLength = 44;
     double innerArc = 35.45;
     double outerRadius = 32;
     double yawDifference = 0;
@@ -29,7 +29,7 @@ public class PlanE extends GenericAutonomous {
     boolean shooting = false;
     int ballCount = 0;
     long alignWait = 2000;
-    GenericCommand activeCommand = new LimelightAlign(4.0, 0.8); //needs to be tested
+    GenericCommand activeCommand = new LimelightAlign(0.0, 0.8); //needs to be tested
     CollectPowerCells getCells = new CollectPowerCells();
 
     @Override
@@ -50,7 +50,6 @@ public class PlanE extends GenericAutonomous {
         double yawError;
         switch (autonomousStep) {
             case -1: // resets and waits
-                defaultSpeed = 0.1;
                 ballCount = 0;
                 shooting = false;
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
@@ -163,7 +162,6 @@ public class PlanE extends GenericAutonomous {
                 break;
 
             case 8: //PID reset for straightaway
-                defaultSpeed = 0.09;
                 getCells.run(robot);
                 startingDistance = robot.getDistanceInchesLeft();
                 PIDSteering.reset();
@@ -214,13 +212,14 @@ public class PlanE extends GenericAutonomous {
                 }
 
             case 13: // stops collection and stop robot motion
-                getCells.stop(robot);
+                getCells.run(robot);
                 robot.driveForward(0);
                 ballCount = 0;
                 autonomousStep += 1;
                 break;
 
             case 14: // align
+                getCells.run(robot);
                 robot.limelight.table.getEntry("ledMode").setNumber(3);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
                 activeCommand = new LimelightAlign(-3,.8);
@@ -232,12 +231,14 @@ public class PlanE extends GenericAutonomous {
                 break;
 
             case 15:
+                getCells.run(robot);
                 if (activeCommand.isEnabled() && ((System.currentTimeMillis() - startingTime) < alignWait)) {
                     activeCommand.step(robot);
 
                 } else {
                     robot.limelight.table.getEntry("ledMode").setNumber(1);
                     autonomousStep += 1;
+                    getCells.stop(robot);
                 }
                 break;
 
