@@ -178,7 +178,7 @@ public class Logger {
 		if (
 				oldMsg.hash != null &&
 						newMsg.hash != null &&
-						oldMsg.hash.intValue() == newMsg.hash.intValue()
+						oldMsg.hash.intValue() != newMsg.hash.intValue()
 		) return true;
 		//Datetime expired case
 		if (
