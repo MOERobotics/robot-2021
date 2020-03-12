@@ -50,7 +50,7 @@ public class Falcon extends GenericRobot{
 
     Lidar lidar = new Lidar();
 
-    PowerDistributionPanel powerPanel = new PowerDistributionPanel();
+    // PowerDistributionPanel powerPanel = new PowerDistributionPanel();
 
     Solenoid starboardShooter = new Solenoid(7);
     Solenoid portShooter = new Solenoid(0);

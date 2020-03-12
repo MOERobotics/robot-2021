@@ -717,7 +717,7 @@ public abstract class GenericRobot {
     }
 
     protected void setCameraTiltDegreesInternal(double angle) {
-        System.out.println("I don't have a camera servo :'(");
+        //System.out.println("I don't have a camera servo :'(");
     }
 
     public double getCameraTilt(){

@@ -45,7 +45,7 @@ public class ControlPanelPosition extends GenericCommand{
 
     @Override
     public void step(GenericRobot robot){
-        spinner.set(0.1);
+        spinner.set(0.6);
         if(controlPanel.getInferredColor() == endColor){
             spinner.set(0.0);
         }

@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 public class Robot extends TimedRobot {
 
-    //WheelOfFortune    colorWheel   = new WheelOfFortune();
+    WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram       = new PlanA(); //Auto routine to be used?
     GenericCommand    activeCommand     = new LimelightAlign(-2,.8);
     SmartClimb        smartClimb        = new SmartClimb();
@@ -447,6 +447,28 @@ public class Robot extends TimedRobot {
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
 
+        String color = "";
+        Color inferredColor = colorWheel.getInferredColor();
+
+        if(inferredColor.equals(WheelOfFortune.kRedTarget)){
+            color = "Red";
+        }
+        if(inferredColor.equals(WheelOfFortune.kGreenTarget)){
+            color = "Green";
+        }
+        if(inferredColor.equals(WheelOfFortune.kBlueTarget)){
+            color = "Blue";
+        }
+        if(inferredColor.equals(WheelOfFortune.kYellowTarget)){
+            color = "Yellow";
+        }
+
+        SmartDashboard.putNumber("Red", WheelOfFortune.colorSensor.getRed() / WheelOfFortune.colorSensor.getRed() + WheelOfFortune.colorSensor.getBlue() + WheelOfFortune.colorSensor.getGreen());
+        SmartDashboard.putNumber("Green", WheelOfFortune.colorSensor.getBlue() / WheelOfFortune.colorSensor.getRed() + WheelOfFortune.colorSensor.getBlue() + WheelOfFortune.colorSensor.getGreen());
+        SmartDashboard.putNumber("Blue", WheelOfFortune.colorSensor.getGreen() / WheelOfFortune.colorSensor.getRed() + WheelOfFortune.colorSensor.getBlue() + WheelOfFortune.colorSensor.getGreen());
+        SmartDashboard.putString("Color", color);
+        SmartDashboard.putNumber("Control Panel Encoder", ControlPanelRotation.spinnerEncoder.getPosition());
+
         //Collector
         if (leftJoystick.getRawButton(11)) {
             robot.collectorIn(1.0);
@@ -517,7 +539,12 @@ public class Robot extends TimedRobot {
             robot.setClimbVerticalPortPower(0);
         }
 
-
+        if(xboxJoystick.getBButtonPressed()){
+            positionControl.begin(robot);
+        }
+        if(xboxJoystick.getBButton()){
+            positionControl.step(robot);
+        }
 
     }
 
