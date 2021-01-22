@@ -29,10 +29,10 @@ import java.util.stream.Collectors;
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram       = new PlanE(); //Auto routine to be used?
+    GenericAutonomous autoProgram       = new DriveStraightFourFeet(); //Auto routine to be used?
     GenericCommand    activeCommand     = new LimelightAlign(-2,.8);
     SmartClimb        smartClimb        = new SmartClimb();
-    GenericRobot      robot             = new Falcon();
+    GenericRobot      robot             = new SiMOElator(m_ds);
     Joystick          leftJoystick      = new Joystick(0);
     XboxController    xboxJoystick      = new XboxController(1);
     ElevationControl  shooterController = new ElevationControl();
@@ -99,6 +99,7 @@ public class Robot extends TimedRobot {
         robot.spinControlPanel(0);
         robot.setClimbVerticalPower(0);
         robot.setCameraTiltDegrees(0);
+        robot.resetRobotSimulation();
 
         if (leftJoystick.getRawButtonPressed(5)) {
             autoProgram = autonomousMap.get(PlanA.class.getName());

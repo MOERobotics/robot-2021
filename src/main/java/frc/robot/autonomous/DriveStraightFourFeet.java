@@ -1,9 +1,16 @@
 package frc.robot.autonomous;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 
 public class DriveStraightFourFeet extends GenericAutonomous {
       double startingDistance;
+
+      @Override
+      protected void printSmartDashboardInternal() {
+            SmartDashboard.putNumber("StartingDistance", startingDistance);
+      }
+
       @Override public void autonomousPeriodic(GenericRobot robot) {
             switch (autonomousStep) {
                   case 0:
@@ -12,7 +19,7 @@ public class DriveStraightFourFeet extends GenericAutonomous {
                   case 1:
                         robot.driveForward(0.3);
                         double currentDistance = robot.getDistanceInchesLeft();
-                        if (startingDistance - currentDistance > 12) {
+                        if (currentDistance - startingDistance  > 48) {
                               autonomousStep = 2;
                         }
                         break;
