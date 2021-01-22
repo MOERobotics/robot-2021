@@ -10,7 +10,7 @@ import static frc.robot.Util.speedScale;
 public class AutonavLoop extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-    double defaultSpeed = 0.18;
+    double defaultSpeed = 0.25;
 
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
