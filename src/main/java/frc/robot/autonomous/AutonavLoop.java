@@ -21,21 +21,24 @@ public class AutonavLoop extends GenericAutonomous {
     double yawDifference = 0;
     long startingTime;
     double powerDecrement;
+    PIDController PIDSteering;
+
 
     GenericCommand activeCommand = new LimelightAlign(-1.5, .8); //planA set setPoint to -2
     CollectPowerCells getCells = new CollectPowerCells();
 
+
     @Override
     public void autonomousInit(GenericRobot robot) {
         startingTime = System.currentTimeMillis();
+        PIDSteering = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
         startingDistance = 0;
         autonomousStep = -1;
-        getCells.begin(robot);
     }
 
     @Override
     public void autonomousPeriodic(GenericRobot robot) {
-        PIDController PIDSteering = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
+
         double currentDistance = 0;
         double yawError;
         switch (autonomousStep) {
