@@ -1,6 +1,7 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.GenericCommand;
 import frc.robot.commands.LimelightAlign;
 import frc.robot.genericrobot.GenericRobot;
@@ -16,7 +17,7 @@ public class AutonavLoop extends GenericAutonomous {
     static double startingDistance = 0.0;
     double correction;
     static double currentYaw = 0;
-    double innerRadius = 0;
+    double innerRadius = 60;
     double circumference;
     double yawDifference = 0;
     long startingTime;
@@ -38,6 +39,7 @@ public class AutonavLoop extends GenericAutonomous {
 
     @Override
     public void autonomousPeriodic(GenericRobot robot) {
+        SmartDashboard.putNumber("Autostep", autonomousStep);
 
         double currentDistance = 0;
         double yawError;
@@ -65,7 +67,7 @@ public class AutonavLoop extends GenericAutonomous {
 
                 //decelerate as approach 5ft?
 
-                if (currentDistance - startingDistance > 60) { //**NOTE: NEED TICKS TO INCH
+                if (currentDistance - startingDistance > 30) { //**NOTE: NEED TICKS TO INCH
                     autonomousStep += 1;
                 }
                 break;
@@ -113,7 +115,7 @@ public class AutonavLoop extends GenericAutonomous {
                 //decelerate as approach 5ft?
 
 
-                if (currentDistance - startingDistance > 60) {
+                if (currentDistance - startingDistance > 30) {
                     autonomousStep += 1;
                 }
                 break;
