@@ -35,6 +35,7 @@ public class GalacticA extends GenericAutonomous {
             inches_traveled = (robot.getDistanceInchesLeft() - start_ticks); // subtract start distance to get distance travelled, divide by 116 to get distance in inches
 
             if (inches_traveled >= desired_distance) {
+                robot.setMotorPowerPercentage(0,0);
                 // check if power cell is there
                 if (cellThere()){
                     red = true;
@@ -50,10 +51,16 @@ public class GalacticA extends GenericAutonomous {
             }
         }
         if (red){
+            inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
+            if (inches_traveled >= desired_distance) {
+                robot.setMotorPowerPercentage(0,0);
+                start_ticks = robot.getDistanceInchesLeft();
+                Dist = 0;
+                Turn += 1;
+            }
             switch (Turn){
                 case 0:
-
-                        Dist = 1;
+                    Dist = 1;
 
                 case 1:
                     Dist = 2;
@@ -62,68 +69,38 @@ public class GalacticA extends GenericAutonomous {
             }
 
             switch (Dist){
+
                 case 1:
-                    inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
-                    if (inches_traveled >= desired_distance) {
-                        start_ticks = robot.getDistanceInchesLeft();
-                        Dist = 0;
-                        Turn = 1;
-                        desired_distance = 5*Math.sqrt(10)/2*12;
-                    }
+                    robot.setMotorPowerPercentage(default_speed,default_speed);
                 case 2:
-                    inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
-                    if (inches_traveled >= desired_distance) {
-                        start_ticks = robot.getDistanceInchesLeft();
-                        Dist = 0;
-                        Turn = 2;
-                        desired_distance = 25*6;
-                    }
+                    robot.setMotorPowerPercentage(default_speed,default_speed);
+                    desired_distance = 5*Math.sqrt(10)/2*12;
                 case 3:
-                    inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
-                    if (inches_traveled >= desired_distance) {
-                        start_ticks = robot.getDistanceInchesLeft();
-                        Dist = 0;
-                        Turn = 3;
-                        break;
-                    }
+                    robot.setMotorPowerPercentage(default_speed,default_speed);
+                    desired_distance = 25*6;
             }
 
 
         }
         if (blue){
+            inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
+            if (inches_traveled >= desired_distance) {
+                start_ticks = robot.getDistanceInchesLeft();
+                Dist = 4;
+                Turn += 1;
+            }
             switch (Dist){
                 case 0:
-                    inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
-                    if (inches_traveled >= desired_distance) {
-                        start_ticks = robot.getDistanceInchesLeft();
-                        Dist = 4;
-                        Turn = 1;
-                        desired_distance = 5 * Math.sqrt(10) / 2 * 12;
-                    }
+                    robot.setMotorPowerPercentage(default_speed,default_speed);
                 case 1:
-                    inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
-                    if (inches_traveled >= desired_distance) {
-                        start_ticks = robot.getDistanceInchesLeft();
-                        Dist = 4;
-                        Turn = 2;
-                        desired_distance = 5 * Math.sqrt(5) / 2 * 12;
-                    }
+                    robot.setMotorPowerPercentage(default_speed,default_speed);
+                    desired_distance = 5 * Math.sqrt(10) / 2 * 12;
                 case 2:
-                    inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
-                    if (inches_traveled >= desired_distance) {
-                        start_ticks = robot.getDistanceInchesLeft();
-                        Dist = 4;
-                        Turn = 3;
-                        desired_distance = 5 * 12;
-                    }
+                    robot.setMotorPowerPercentage(default_speed,default_speed);
+                    desired_distance = 5 * Math.sqrt(5) / 2 * 12;
                 case 3:
-                    inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
-                    if (inches_traveled >= desired_distance) {
-                        start_ticks = robot.getDistanceInchesLeft();
-                        Dist = 4;
-                        Turn = 4;
-                        break;
-                    }
+                    robot.setMotorPowerPercentage(default_speed,default_speed);
+                    desired_distance = 5 * 12;
             }
 
             switch (Turn){
