@@ -15,7 +15,7 @@ public class AutonavLoop extends GenericAutonomous {
     static double startingDistance = 0.0;
     double correction;
     static double currentYaw = 0;
-    double outerRadius = 88; //turning radius + wheelbase
+    double outerRadius = 64; //turning radius + wheelbase
     double circumference;
     double yawDifference;
     long startingTime;
