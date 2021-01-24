@@ -15,11 +15,14 @@ public class AutonavLoop extends GenericAutonomous {
     static double startingDistance = 0.0;
     double correction;
     static double currentYaw = 0;
-    double outerRadius = 88;
+    double outerRadius = 88; //turning radius + wheelbase
     double circumference;
-    double yawDifference = 0;
+    double yawDifference;
     long startingTime;
     double powerDecrement;
+    double circumferenceThird;
+    double localStartDistance; //how far overshot on loop thirds
+
     PIDController PIDSteering;
 
 
@@ -70,7 +73,7 @@ public class AutonavLoop extends GenericAutonomous {
                 }
                 break;
 
-            case 1: //PID reset for loop
+            case 1: //PID reset for loop (1/3)
                 PIDSteering.reset();
                 PIDSteering.disableContinuousInput();
 
@@ -78,15 +81,56 @@ public class AutonavLoop extends GenericAutonomous {
                 startingYaw = robot.getYaw();
 
                 circumference = 2 * Math.PI * outerRadius; //calculate circumference 2pir (inner or outer radius)
+
+                autonomousStep += 1; //**NOTE: INCREMENT BY 2 FOR TESTING BY THIRDS
+                break;
+
+            case 2: //loop 1/3
+                circumferenceThird = circumference / 3; //first third
+                yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                currentDistance = robot.getDistanceInchesLeft();
+                correction = PIDSteering.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
+                robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
+
+                if (currentDistance - startingDistance > circumferenceThird) { //loop complete
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 3: //reset for loop 2/3
+                localStartDistance = robot.getDistanceInchesLeft();
+                startingYaw = robot.getYaw();
                 autonomousStep += 1;
                 break;
 
-            case 2: //loop
+
+            case 4: //loop 2/3
+                circumferenceThird = 2 * circumference / 3; //second third
 
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                 currentDistance = robot.getDistanceInchesLeft();
 
-                correction = PIDSteering.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
+                correction = PIDSteering.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - localStartDistance));
+                robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
+
+                if (currentDistance - startingDistance > circumferenceThird) { //loop complete
+                    autonomousStep += 1; //NOTE: SET TO STOP
+                }
+                break;
+
+            case 5: //reset for loop 3/3
+                localStartDistance = robot.getDistanceInchesLeft();
+                startingYaw = robot.getYaw();
+                autonomousStep += 1;
+                break;
+
+            case 6: //loop 3/3
+                circumferenceThird = 2 * circumference / 3; //final third
+
+                yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                currentDistance = robot.getDistanceInchesLeft();
+
+                correction = PIDSteering.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - localStartDistance));
                 robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
 
                 if (currentDistance - startingDistance > circumference) { //loop complete
@@ -94,7 +138,7 @@ public class AutonavLoop extends GenericAutonomous {
                 }
                 break;
 
-            case 3: //after loop, PID reset for final 5ft
+            case 7: //after loop, PID reset for final 5ft
                 PIDSteering.reset();
                 PIDSteering.enableContinuousInput(-180, 180);
                 startingDistance = robot.getDistanceInchesLeft();
@@ -102,7 +146,7 @@ public class AutonavLoop extends GenericAutonomous {
                 autonomousStep += 1;
                 break;
 
-            case 4: //final 5ft straightaway
+            case 8: //final 5ft straightaway
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
 
                 //accelerate?
@@ -118,13 +162,21 @@ public class AutonavLoop extends GenericAutonomous {
                 }
                 break;
 
-            case 5: //cease thy autonomous
+            case 9: //cease thy autonomous
                 robot.setMotorPowerPercentage(0, 0);
                 break;
 
         }
 
 
+    }
+    public double rightArcDiff(double deltaTheta){
+        if(deltaTheta < 360){
+            deltaTheta += 360;
+        }
+        deltaTheta = (deltaTheta * Math.PI) / 180;
+
+        return deltaTheta;
     }
 }
 
