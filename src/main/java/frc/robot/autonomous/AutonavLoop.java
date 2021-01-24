@@ -6,8 +6,6 @@ import frc.robot.commands.GenericCommand;
 import frc.robot.commands.LimelightAlign;
 import frc.robot.genericrobot.GenericRobot;
 
-import static frc.robot.Util.speedScale;
-
 public class AutonavLoop extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
@@ -17,7 +15,7 @@ public class AutonavLoop extends GenericAutonomous {
     static double startingDistance = 0.0;
     double correction;
     static double currentYaw = 0;
-    double innerRadius = 60;
+    double outerRadius = 88;
     double circumference;
     double yawDifference = 0;
     long startingTime;
@@ -67,7 +65,7 @@ public class AutonavLoop extends GenericAutonomous {
 
                 //decelerate as approach 5ft?
 
-                if (currentDistance - startingDistance > 30) { //**NOTE: NEED TICKS TO INCH
+                if (currentDistance - startingDistance > 60) { //**NOTE: NEED TICKS TO INCH
                     autonomousStep += 1;
                 }
                 break;
@@ -79,7 +77,7 @@ public class AutonavLoop extends GenericAutonomous {
                 startingDistance = robot.getDistanceInchesLeft(); //set starting distance prior to circumference path
                 startingYaw = robot.getYaw();
 
-                circumference = 2 * Math.PI * innerRadius; //calculate circumference 2pir (inner or outer radius)
+                circumference = 2 * Math.PI * outerRadius; //calculate circumference 2pir (inner or outer radius)
                 autonomousStep += 1;
                 break;
 
@@ -88,7 +86,7 @@ public class AutonavLoop extends GenericAutonomous {
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                 currentDistance = robot.getDistanceInchesLeft();
 
-                correction = PIDSteering.calculate(innerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
+                correction = PIDSteering.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
                 robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
 
                 if (currentDistance - startingDistance > circumference) { //loop complete
@@ -115,7 +113,7 @@ public class AutonavLoop extends GenericAutonomous {
                 //decelerate as approach 5ft?
 
 
-                if (currentDistance - startingDistance > 30) {
+                if (currentDistance - startingDistance > 60) {
                     autonomousStep += 1;
                 }
                 break;
