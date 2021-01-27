@@ -20,11 +20,15 @@ import static frc.robot.genericrobot.GenericRobot.*;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+// New Code
+import java.io.*;
 
 public class Robot extends TimedRobot {
 
@@ -46,6 +50,10 @@ public class Robot extends TimedRobot {
     boolean ballShootCounted = false;
     boolean waitingForMediumHigh = false;
     boolean waitingForChange = false;
+
+    // New Code
+    boolean isCollectingData = false;
+    FileWriter output;
 
     public static final Map<String, GenericAutonomous> autonomousMap
         = new HashMap<String, GenericAutonomous> () {{
@@ -148,10 +156,36 @@ public class Robot extends TimedRobot {
         robot.setShooterSpeedPresetName(ShooterSpeedPresetName.SHORT_RANGE);
         robot.setCameraTiltDegrees(125);
 
+        isCollectingData = false;
     }
 
     @Override
     public void teleopPeriodic() {
+
+        // New Code
+        // Record Motor Powers For Repeating Path
+        if(leftJoystick.getRawButtonPressed(7)){
+            if (!isCollectingData){
+                isCollectingData = true;
+                try {
+                    new File("Autonomous1.txt").delete();
+                    output = new FileWriter("Autonomous1.txt");
+                }
+                catch (IOException e) {
+                    //I don't know how to display the exception.
+                }
+            }
+            else {
+                isCollectingData = false;
+                try {
+                    output.close();
+                }
+                catch (IOException e) {
+                    // I don't know how to display the exception.
+                }
+            }
+        }
+
         double escalatorPower = 0.0;
         double collectorPower = 0.0;
 
@@ -194,6 +228,18 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButton(4)) { //nudge right
              leftPower =  0.2;
             rightPower = -0.2;
+        }
+
+        // New Code
+        // Record Motor Powers For Repeating Path
+        if (isCollectingData) {
+            try {
+                output.write(Double.toString(leftPower) + System.lineSeparator());
+                output.write(Double.toString(rightPower) + System.lineSeparator());
+            }
+            catch (IOException e) {
+                // I don't know how to display the exception.
+            }
         }
 
         robot.setMotorPowerPercentage(leftPower, rightPower);
