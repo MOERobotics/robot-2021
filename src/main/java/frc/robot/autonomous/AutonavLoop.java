@@ -15,20 +15,16 @@ public class AutonavLoop extends GenericAutonomous {
     static double startingDistance = 0.0;
     double correction;
     static double currentYaw = 0;
-    double outerRadius = 64; //turning radius + wheelbase
+    double outerRadius = 64; //turning radius + wheelbase (28")
     double circumference;
     double yawDifference;
     long startingTime;
-    double powerDecrement;
     double circumferenceThird;
     double localStartDistance; //how far overshot on loop thirds
+    double smartSpeedCoeff;
+    double deltaDistance;
 
     PIDController PIDSteering;
-
-
-    GenericCommand activeCommand = new LimelightAlign(-1.5, .8); //planA set setPoint to -2
-    CollectPowerCells getCells = new CollectPowerCells();
-
 
     @Override
     public void autonomousInit(GenericRobot robot) {
@@ -170,13 +166,48 @@ public class AutonavLoop extends GenericAutonomous {
 
 
     }
-    public double rightArcDiff(double deltaTheta){
-        if(deltaTheta < 360){
+
+    public double rightArcDiff(double deltaTheta) {
+        if (deltaTheta < 360) {
             deltaTheta += 360;
         }
         deltaTheta = (deltaTheta * Math.PI) / 180;
 
         return deltaTheta;
+    }
+
+    public double getSmartSpeedCoeff(double startingDistance, double currentDistance, double finalDistance) { //implement acceleration & deceleration
+
+        deltaDistance = currentDistance - startingDistance;
+        /*
+
+        (% of default speed)  33   | 66    | 100   | 66    | 33
+        (% of final distance) 0-20 | 20-35 | 35-80 | 80-90 | 90-100
+
+         */
+
+        if (deltaDistance < (finalDistance * .2)) { //0-20
+            smartSpeedCoeff = 0.33;
+        }
+
+        if (deltaDistance >= (finalDistance * .2) && (deltaDistance < (finalDistance * .35))) { //20-35
+            smartSpeedCoeff = 0.66;
+        }
+
+        if (deltaDistance >= (finalDistance * .35) && (deltaDistance < (finalDistance * .8))) { //35-80
+            smartSpeedCoeff = 1.00;
+        }
+
+        if (deltaDistance >= (finalDistance * .8) && (deltaDistance < (finalDistance * .9))) { //80-90
+            smartSpeedCoeff = 0.66;
+        }
+
+        if (deltaDistance >= (finalDistance * .9) && (deltaDistance < finalDistance)) { //90-100
+            smartSpeedCoeff = 0.33;
+        }
+
+
+        return smartSpeedCoeff; //defaultSpeed * smartSpeed(startingDistance, currentDistance), finalDistance)j
     }
 }
 
