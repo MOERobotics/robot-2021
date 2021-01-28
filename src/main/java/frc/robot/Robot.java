@@ -33,7 +33,7 @@ import java.io.*;
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram       = new DriveStraightFourFeet(); //Auto routine to be used?
+    GenericAutonomous autoProgram       = new RepeatRecordedPath("Autonomous1.txt"); //Auto routine to be used?
     GenericCommand    activeCommand     = new LimelightAlign(-2,.8);
     SmartClimb        smartClimb        = new SmartClimb();
     GenericRobot      robot             = new SiMOElator(m_ds);
