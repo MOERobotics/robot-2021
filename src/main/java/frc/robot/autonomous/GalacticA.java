@@ -1,19 +1,18 @@
-package frc.robot;
+package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.autonomous.GenericAutonomous;
 import frc.robot.genericrobot.GenericRobot;
 import java.lang.Math;
 
 
 public class GalacticA extends GenericAutonomous {
 
+    PIDController myPID = new PIDController(0,0,0);
 
     double inches_traveled = 0;
     double desired_distance = 72;
     double desired_yaw = 0;
-    boolean begin = true;
     boolean cell_check = false;
     boolean red = false;
     boolean blue = false;
@@ -22,41 +21,51 @@ public class GalacticA extends GenericAutonomous {
     double startingYaw = 0;
     double yawChange = 0;
     int Case = 0;
-    double placeholderForNow = 0;
+    double correction = 0;
 
 
     @Override
     protected void printSmartDashboardInternal(){
-        SmartDashboard.putNumber("Turn", Case);
+        SmartDashboard.putNumber("Case", Case);
 
         SmartDashboard.putBoolean("red", red);
         SmartDashboard.putBoolean("blue", blue);
-        SmartDashboard.putBoolean("begin", begin);
         SmartDashboard.putBoolean("cell check", cell_check);
 
-        SmartDashboard.putNumber("inches_traveled", inches_traveled);
+        SmartDashboard.putNumber("inches traveled", inches_traveled);
         SmartDashboard.putNumber("start ticks", start_ticks);
         SmartDashboard.putNumber("desired distance", desired_distance);
+
+    }
+    @Override
+    public void autonomousInit(GenericRobot robot){
+        start_ticks = robot.getDistanceInchesLeft();
+        startingYaw = robot.getYaw();
+        Case = 0;
+        red = false;
+        blue = false;
+        desired_distance = 20*Math.sqrt(13);
+        PIDController myPID = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
+        myPID.reset();
+        myPID.enableContinuousInput(-180,180);
 
     }
 
     @Override
     public void autonomousPeriodic(GenericRobot robot) {
-        if (begin){
 
-            start_ticks = robot.getDistanceTicksLeft();
-            begin = false;
-            cell_check = true;
-        }
         if (cell_check){
-            robot.setMotorPowerPercentage(default_speed,default_speed);
+            correction = myPID.calculate(robot.getYaw() - startingYaw);
+            robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
             inches_traveled = (robot.getDistanceInchesLeft() - start_ticks); // subtract start distance to get distance travelled, divide by 116 to get distance in inches
 
             if (inches_traveled >= desired_distance) {
                 robot.setMotorPowerPercentage(0,0);
                 // check if power cell is there
-                start_ticks = robot.getDistanceTicksLeft();
+                start_ticks = robot.getDistanceInchesLeft();
                 startingYaw = robot.getYaw();
+                myPID.reset();
+                myPID.enableContinuousInput(-180,180);
 
                 if (cellThere()){
                     red = true;
@@ -67,12 +76,15 @@ public class GalacticA extends GenericAutonomous {
                 else{
                     blue = true;
                     desired_distance = 5*Math.sqrt(13)/2*12;
-                    desired_yaw = placeholderForNow;
+                    desired_yaw = 105.255;
                 }
+                cell_check = false;
 
 
             }
         }
+
+
         if (red){
             inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
             if (inches_traveled >= desired_distance) {
@@ -87,36 +99,44 @@ public class GalacticA extends GenericAutonomous {
             }
             yawChange = Math.min(yawChange, 360-yawChange);
             if (yawChange >= desired_yaw){
-                collectBall();
                 robot.setMotorPowerPercentage(0,0);
                 startingYaw = robot.getYaw();
                 start_ticks = robot.getDistanceInchesLeft();
+                myPID.reset();
+                myPID.enableContinuousInput(-180,180);
                 Case += 1;
             }
 
             switch (Case){
                 case 0:
                     robot.setMotorPowerPercentage(-.2,.2);
+                case 1:
+                    correction = myPID.calculate(robot.getYaw() - startingYaw);
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                 case 2:
-                    robot.setMotorPowerPercentage(default_speed,default_speed);
-                case 3:
                     robot.setMotorPowerPercentage(-.2,-.2);
-                    desired_yaw = 81.87;
-                case 4:
-                    robot.setMotorPowerPercentage(default_speed,default_speed);
+                    desired_yaw = 98.13;
+                case 3:
+                    correction = myPID.calculate(robot.getYaw() - startingYaw);
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                     desired_distance = 5*Math.sqrt(10)/2*12;
-                case 5:
+                case 4:
                     robot.setMotorPowerPercentage(.2,-.2);
-                    desired_yaw = placeholderForNow;
-                case 6:
-                    robot.setMotorPowerPercentage(default_speed,default_speed);
+                    desired_yaw = 71.565;
+                case 5:
+                    correction = myPID.calculate(robot.getYaw() - startingYaw);
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                     desired_distance = 25*6;
             }
 
         }
+
+
+
         if (blue){
             inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
             if (inches_traveled >= desired_distance) {
+                robot.setMotorPowerPercentage(0,0);
                 start_ticks = robot.getDistanceInchesLeft();
                 startingYaw = robot.getYaw();
                 Case += 1;
@@ -127,42 +147,46 @@ public class GalacticA extends GenericAutonomous {
             }
             yawChange = Math.min(yawChange, 360-yawChange);
             if (yawChange >= desired_yaw){
-                collectBall();
                 robot.setMotorPowerPercentage(0,0);
                 start_ticks = robot.getDistanceInchesLeft();
                 startingYaw = robot.getYaw();
+                myPID.reset();
+                myPID.enableContinuousInput(-180,180);
                 Case += 1;
             }
             switch (Case){
                 case 0:
-                    robot.setMotorPowerPercentage(default_speed,default_speed);
+                    correction = myPID.calculate(robot.getYaw() - startingYaw);
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                 case 1:
                     robot.setMotorPowerPercentage(-.2,.2);
                 case 2:
-                    robot.setMotorPowerPercentage(default_speed,default_speed);
+                    correction = myPID.calculate(robot.getYaw() - startingYaw);
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                     desired_distance = 5 * Math.sqrt(10) / 2 * 12;
                 case 3:
                     robot.setMotorPowerPercentage(.2,-.2);
-                    desired_yaw = placeholderForNow;
+                    desired_yaw = 98.13;
                 case 4:
-                    robot.setMotorPowerPercentage(default_speed,default_speed);
+                    correction = myPID.calculate(robot.getYaw() - startingYaw);
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                     desired_distance = 5 * Math.sqrt(5) / 2 * 12;
                 case 5:
                     robot.setMotorPowerPercentage(-.2,.2);
-                    desired_yaw = placeholderForNow;
+                    desired_yaw = 26.565;
                 case 6:
-                    robot.setMotorPowerPercentage(default_speed,default_speed);
+                    correction = myPID.calculate(robot.getYaw() - startingYaw);
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                     desired_distance = 5 * 12;
             }
 
         }
+
+
 
     }
     public boolean cellThere(){
         return Math.random() < 0.5;
     }
 
-    public void collectBall(){
-        //do something
-    }
 }
