@@ -19,6 +19,7 @@ public abstract class GenericRobot {
     private double             shooterLowerPower           = 0;
     private double             shooterUpperRPM             = 0;
     private double             shooterLowerRPM             = 0;
+    private double             turretPower                 = 0;
     private double             angleAdjusterPower          = 0;
     private double             climbBalancePower           = 0;
     private double             escalatorPower              = 0;
@@ -127,6 +128,7 @@ public abstract class GenericRobot {
 
         setEscalatorLights(Math.abs(escalatorPower) > ALMOST_ZERO);
         setMotorPowerPercentageInternal(leftPower, rightPower);
+        setTurretPowerPercentageInternal(turretPower);
         spinControlPanelInternal(spinPower);
         setIndexerPowerInternal(indexerPower);
         setCollectorPowerInternal(collectorPower);
@@ -458,6 +460,22 @@ public abstract class GenericRobot {
         System.out.println("I don't have shooter lights");
     }
 
+
+    //***********************************************************************//
+
+    // New Stuff - 1/28/21 - Turret
+
+    public final void setTurretPowerPercentage(
+            double power
+    ) {
+        this.turretPower = power;
+    }
+
+    protected void setTurretPowerPercentageInternal(
+            double power
+    ) {
+        System.out.println("I don't have a turret...");
+    }
 
     //***********************************************************************//
 

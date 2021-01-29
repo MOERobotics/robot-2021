@@ -16,6 +16,11 @@ public class KeerthanPracticeOne extends GenericRobot {
     CANSparkMax driveLeftA  = new CANSparkMax(14, CANSparkMaxLowLevel.MotorType.kBrushless);
     CANSparkMax driveLeftB  = new CANSparkMax(15, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+    CANSparkMax indexer                 = new CANSparkMax(40, CANSparkMaxLowLevel.MotorType.kBrushed);
+    CANSparkMax turret                  = new CANSparkMax(41, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax shooterLeader           = new CANSparkMax(42, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax shooterInverseFollower  = new CANSparkMax(49, CANSparkMaxLowLevel.MotorType.kBrushless);
+
     CANEncoder encoderRight = new CANEncoder(driveRightA);
     CANEncoder encoderLeft  = new CANEncoder(driveLeftA);
 
@@ -128,6 +133,11 @@ public class KeerthanPracticeOne extends GenericRobot {
         driveRightB.set (rightPower );
         driveLeftA.set  (leftPower  );
         driveLeftB.set  (leftPower  );
+    }
+
+    @Override
+    public void setTurretPowerPercentageInternal(double power) {
+        turret.set(power);
     }
 
     @Override
