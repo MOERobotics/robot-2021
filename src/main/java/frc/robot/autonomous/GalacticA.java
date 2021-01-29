@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 import java.lang.Math;
 
-
+// robot starts in 33.7 degree angle to the x-axis, facing SE. Robot breaks plane of A1B1 in start zone
 public class GalacticA extends GenericAutonomous {
 
     PIDController myPID = new PIDController(0,0,0);
