@@ -137,15 +137,37 @@ public class AutoNavBarrel extends GenericAutonomous {
                 startingDistance = robot.getDistanceInchesLeft();
                 currentYaw = 0;
                 autonomousStep += 1;
-
                 break;
 
-            case 8: //from first loop to second loop (set heading to -45 to go to second loop??)
-                goalYaw = -45; //double check heading...
+            case 8: //straightaway from first loop to second loop (88.8 inches)
+                //TODO: check distance
 
-                
+                correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
+                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
+
+                currentDistance = robot.getDistanceInchesLeft();
+
+                if (currentDistance - startingDistance > 88.8) {
+                    autonomousStep += 1;
+                }
                 break;
+            case 9: //second loop (1/3) (three quarters loop)
+
+                PIDSteering.reset();
+                PIDSteering.disableContinuousInput();
+
+                startingDistance = robot.getDistanceInchesRight(); //set starting distance prior to circumference path
+                startingYaw = robot.getYaw();
+
+                circumference = 2 * Math.PI * secondLoopOuterRadius * 0.875 ; //(7/8 of a loop)
+
+                autonomousStep += 1;
+                break;
+
+
+
         }
+
 
     }
 
