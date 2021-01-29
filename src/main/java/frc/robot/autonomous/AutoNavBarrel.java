@@ -1,0 +1,196 @@
+package frc.robot.autonomous;
+
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.genericrobot.GenericRobot;
+
+public class AutoNavBarrel extends GenericAutonomous {
+
+    //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
+    double defaultSpeed = 0.25;
+
+    static double startingYaw = 0.0;
+    static double startingDistance = 0.0;
+    double correction;
+    static double currentYaw = 0;
+    double circumference;
+    double yawDifference;
+    long startingTime;
+    double circumferenceThird;
+    double localStartDistance; //how far overshot on loop thirds
+    double smartSpeedCoeff;
+    double deltaDistance;
+    double goalYaw;
+
+    double firstLoopOuterRadius = 0; //turning radius + wheelbase (28")
+    double secondLoopOuterRadius = 0;
+
+    PIDController PIDSteering;
+
+    @Override
+    public void autonomousInit(GenericRobot robot) {
+        startingTime = System.currentTimeMillis();
+        PIDSteering = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
+        startingDistance = 0;
+        autonomousStep = -1;
+    }
+
+    @Override
+    public void autonomousPeriodic(GenericRobot robot) {
+        SmartDashboard.putNumber("Autostep", autonomousStep); //7.5' to second loop
+
+        double currentDistance = 0;
+        double yawError;
+        switch (autonomousStep) {
+            case -1: //resets navx, encoders, PID and waits
+
+                PIDSteering.reset();
+                PIDSteering.enableContinuousInput(-180, 180);
+                robot.resetAttitude();
+                robot.resetEncoders();
+
+                currentYaw = 0;
+                if (System.currentTimeMillis() >= startingTime + 100) {
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 0: //straight to first loop (150in)
+                correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
+
+                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
+                currentDistance = robot.getDistanceInchesLeft();
+
+                if (currentDistance - startingDistance > 150) {
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 1: //first loop reset (1/3)
+                PIDSteering.reset();
+                PIDSteering.disableContinuousInput();
+
+                startingDistance = robot.getDistanceInchesLeft(); //set starting distance prior to circumference path
+                startingYaw = robot.getYaw();
+
+                circumference = 2 * Math.PI * firstLoopOuterRadius; //calculate circumference 2pir (inner or outer radius)
+
+                autonomousStep += 1;
+
+                break;
+
+            case 2: //first loop (1/3)
+                circumferenceThird = circumference / 3; //first third
+                yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                currentDistance = robot.getDistanceInchesLeft();
+                correction = PIDSteering.calculate(firstLoopOuterRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
+                robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
+
+                if (currentDistance - startingDistance > circumferenceThird) { //loop complete
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 3: //first loop reset (2/3)
+                localStartDistance = robot.getDistanceInchesLeft();
+                startingYaw = robot.getYaw();
+                autonomousStep += 1;
+                break;
+
+            case 4: //first loop (2/3)
+                circumferenceThird = 2 * circumference / 3; //second third
+
+                yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                currentDistance = robot.getDistanceInchesLeft();
+
+                correction = PIDSteering.calculate(firstLoopOuterRadius * yawDifference - (robot.getDistanceInchesLeft() - localStartDistance));
+                robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
+
+                if (currentDistance - startingDistance > circumferenceThird) { //loop complete
+                    autonomousStep += 1; //NOTE: SET TO STOP
+                }
+                break;
+
+            case 5: //first loop reset (3/3)
+                localStartDistance = robot.getDistanceInchesLeft();
+                startingYaw = robot.getYaw();
+                autonomousStep += 1;
+                break;
+
+            case 6: //first loop (3/3)
+                circumferenceThird = 2 * circumference / 3; //final third
+
+                yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                currentDistance = robot.getDistanceInchesLeft();
+
+                correction = PIDSteering.calculate(firstLoopOuterRadius * yawDifference - (robot.getDistanceInchesLeft() - localStartDistance));
+                robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
+
+                if (currentDistance - startingDistance > circumference) { //loop complete
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 7: //post first loop PID reset
+                PIDSteering.reset();
+                PIDSteering.enableContinuousInput(-180, 180);
+                startingDistance = robot.getDistanceInchesLeft();
+                currentYaw = 0;
+                autonomousStep += 1;
+
+                break;
+
+            case 8: //from first loop to second loop (set heading to -45 to go to second loop??)
+                goalYaw = -45; //double check heading...
+
+                
+                break;
+        }
+
+    }
+
+    public double rightArcDiff(double deltaTheta) {
+        if (deltaTheta < 360) {
+            deltaTheta += 360;
+        }
+        deltaTheta = (deltaTheta * Math.PI) / 180;
+
+        return deltaTheta;
+    }
+
+    public double getSmartSpeedCoeff(double startingDistance, double currentDistance, double finalDistance) { //implement acceleration & deceleration
+
+        deltaDistance = currentDistance - startingDistance;
+        /*
+
+        (% of default speed)  33   | 66    | 100   | 66    | 33
+        (% of final distance) 0-20 | 20-35 | 35-80 | 80-90 | 90-100
+
+         */
+
+        if (deltaDistance < (finalDistance * .2)) { //0-20
+            smartSpeedCoeff = 0.33;
+        }
+
+        if (deltaDistance >= (finalDistance * .2) && (deltaDistance < (finalDistance * .35))) { //20-35
+            smartSpeedCoeff = 0.66;
+        }
+
+        if (deltaDistance >= (finalDistance * .35) && (deltaDistance < (finalDistance * .8))) { //35-80
+            smartSpeedCoeff = 1.00;
+        }
+
+        if (deltaDistance >= (finalDistance * .8) && (deltaDistance < (finalDistance * .9))) { //80-90
+            smartSpeedCoeff = 0.66;
+        }
+
+        if (deltaDistance >= (finalDistance * .9) && (deltaDistance < finalDistance)) { //90-100
+            smartSpeedCoeff = 0.33;
+        }
+
+
+        return smartSpeedCoeff; //defaultSpeed * smartSpeed(startingDistance, currentDistance), finalDistance)j
+    }
+}
+
+
