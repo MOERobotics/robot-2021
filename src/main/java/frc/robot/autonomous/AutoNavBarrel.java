@@ -22,8 +22,8 @@ public class AutoNavBarrel extends GenericAutonomous {
     double deltaDistance;
     double goalYaw;
 
-    double firstLoopOuterRadius = 0; //turning radius + wheelbase (28")
-    double secondLoopOuterRadius = 0;
+    double firstLoopOuterRadius = 58; //turning radius + wheelbase (28")
+    double secondLoopOuterRadius = 58;
 
     PIDController PIDSteering;
 
@@ -151,7 +151,7 @@ public class AutoNavBarrel extends GenericAutonomous {
                     autonomousStep += 1;
                 }
                 break;
-            case 9: //second loop (1/3) (three quarters loop)
+            case 9: //second loop reset (1/?) (7/8th of a loop)
 
                 PIDSteering.reset();
                 PIDSteering.disableContinuousInput();
@@ -159,11 +159,14 @@ public class AutoNavBarrel extends GenericAutonomous {
                 startingDistance = robot.getDistanceInchesRight(); //set starting distance prior to circumference path
                 startingYaw = robot.getYaw();
 
-                circumference = 2 * Math.PI * secondLoopOuterRadius * 0.875 ; //(7/8 of a loop)
+                circumference = 2 * Math.PI * secondLoopOuterRadius * 0.875; //(7/8 of a loop)
 
                 autonomousStep += 1;
                 break;
 
+            case 10: //temporary stop (for testing purposes only)
+                robot.setMotorPowerPercentage(0, 0);
+                break;
 
 
         }
@@ -180,7 +183,7 @@ public class AutoNavBarrel extends GenericAutonomous {
         return deltaTheta;
     }
 
-    public double getSmartSpeedCoeff(double startingDistance, double currentDistance, double finalDistance) { //implement acceleration & deceleration
+    public double getSmartSpeedCoeff(double startingDistance, double currentDistance, double finalDistance) { //implement acceleration & deceleration (not yet implemented)
 
         deltaDistance = currentDistance - startingDistance;
         /*

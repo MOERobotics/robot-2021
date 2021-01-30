@@ -31,12 +31,12 @@ public class Robot extends TimedRobot {
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
     GenericAutonomous autoProgram = new AutoNavBarrel(); //Auto routine to be used?
     GenericCommand activeCommand = new LimelightAlign(-2, .8);
-    SmartClimb        smartClimb        = new SmartClimb();
-//    GenericRobot      robot             = new SiMOElator(m_ds);
-    GenericRobot      robot             = new Falcon();
-    Joystick          leftJoystick      = new Joystick(0);
-    XboxController    xboxJoystick      = new XboxController(1);
-    ElevationControl  shooterController = new ElevationControl();
+    SmartClimb smartClimb = new SmartClimb();
+    GenericRobot robot = new SiMOElator(m_ds);
+    //GenericRobot      robot             = new Falcon();
+    Joystick leftJoystick = new Joystick(0);
+    XboxController xboxJoystick = new XboxController(1);
+    ElevationControl shooterController = new ElevationControl();
     boolean shooterOn = false;
 
     double deadZone = 0.10;

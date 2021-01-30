@@ -143,7 +143,6 @@ public class AutonavLoop extends GenericAutonomous {
                 break;
 
             case 8: //final 5ft straightaway
-                correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
 
                 //accelerate?
 
