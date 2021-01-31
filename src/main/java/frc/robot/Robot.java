@@ -90,7 +90,9 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void disabledInit(){}
+    public void disabledInit(){
+        isCollectingData = false;
+    }
 
     @Override
     public void disabledPeriodic() {
@@ -169,7 +171,7 @@ public class Robot extends TimedRobot {
             if (!isCollectingData){
                 isCollectingData = true;
                 try {
-                    new File("Autonomous1.txt").delete();
+                    //new File("Autonomous1.txt").delete();
                     output = new FileWriter("Autonomous1.txt");
                 }
                 catch (IOException e) {

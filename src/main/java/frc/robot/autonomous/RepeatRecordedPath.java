@@ -53,7 +53,9 @@ public class RepeatRecordedPath extends GenericAutonomous {
                 input.close();
             } catch (IOException e) {
                 // I don't know how to display the exception.
+
             }
+            robot.setMotorPowerPercentage(0, 0);
         }
     }
 }
