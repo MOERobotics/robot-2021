@@ -146,7 +146,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getDistanceRatioLeft() {
-        return 0.306;
+        return 0.319;
     }
 
     @Override
@@ -156,7 +156,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getDistanceRatioRight() {
-        return 0.306;
+        return 0.319;
         }
 
     @Override
