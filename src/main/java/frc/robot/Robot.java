@@ -36,7 +36,8 @@ public class Robot extends TimedRobot {
     GenericAutonomous autoProgram       = new RepeatRecordedPath("Autonomous1.txt"); //Auto routine to be used?
     GenericCommand    activeCommand     = new LimelightAlign(-2,.8);
     SmartClimb        smartClimb        = new SmartClimb();
-    GenericRobot      robot             = new SiMOElator(m_ds);
+    //GenericRobot      robot             = new SiMOElator(m_ds);
+    GenericRobot      robot             = new Falcon();
     Joystick          leftJoystick      = new Joystick(0);
     XboxController    xboxJoystick      = new XboxController(1);
     ElevationControl  shooterController = new ElevationControl();

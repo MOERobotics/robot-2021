@@ -17,7 +17,7 @@ public class RepeatRecordedPath extends GenericAutonomous {
     {
         try {
             input = new BufferedReader(new FileReader(FileName));
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             // I don't know how to display the exception.
         }
     }
@@ -26,7 +26,16 @@ public class RepeatRecordedPath extends GenericAutonomous {
     String rightPowerString;
     double leftPower = 0;
     double rightPower = 0;
-
+    @Override
+    public void autonomousInit(GenericRobot robot) {
+        {
+            try {
+                input = new BufferedReader(new FileReader(FileName));
+            } catch (Exception e) {
+                // I don't know how to display the exception.
+            }
+        }
+    }
     @Override
     public void autonomousPeriodic(GenericRobot robot) {
         try {
