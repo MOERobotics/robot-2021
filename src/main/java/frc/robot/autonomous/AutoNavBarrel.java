@@ -231,7 +231,91 @@ public class AutoNavBarrel extends GenericAutonomous {
                     autonomousStep += 1;
                 }
                 break;
-            case 17: //temporary stop (for testing purposes only)
+            case 17: //third loop reset (1/?) (5/8th of a loop)
+                // THIRD LOOP UNTESTED AND UNREVIEWED
+
+                PIDSteering.reset();
+                PIDSteering.disableContinuousInput();
+
+                startingDistance = robot.getDistanceInchesRight(); //set starting distance prior to circumference path
+                startingYaw = robot.getYaw();
+
+                circumference = 2 * Math.PI * secondLoopOuterRadius * 0.625; //(5/8 of a loop)
+
+                autonomousStep += 1;
+                break;
+            case 18: //third loop (1/3)
+                circumferenceThird = circumference / 3; //first third
+                yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                currentDistance = robot.getDistanceInchesRight();
+                correction = PIDSteering.calculate(firstLoopOuterRadius * yawDifference + (robot.getDistanceInchesRight() - startingDistance));
+                robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
+
+                if (currentDistance - startingDistance > circumferenceThird) { //loop complete
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 19: //third loop reset (2/3)
+                localStartDistance = robot.getDistanceInchesRight();
+                startingYaw = robot.getYaw();
+                autonomousStep += 1;
+                break;
+
+            case 20: //third loop (2/3)
+                circumferenceThird = 2 * circumference / 3; //second third
+
+                yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                currentDistance = robot.getDistanceInchesRight();
+
+                correction = PIDSteering.calculate(firstLoopOuterRadius * yawDifference + (robot.getDistanceInchesRight() - localStartDistance));
+                robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
+
+                if (currentDistance - startingDistance > circumferenceThird) { //loop complete
+                    autonomousStep += 1; //NOTE: SET TO STOP
+                }
+                break;
+
+            case 21: //third loop reset (3/3)
+                localStartDistance = robot.getDistanceInchesRight();
+                startingYaw = robot.getYaw();
+                autonomousStep += 1;
+                break;
+
+            case 22: //third loop (3/3)
+                circumferenceThird = 2 * circumference / 3; //final third
+
+                yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                currentDistance = robot.getDistanceInchesRight();
+
+                correction = PIDSteering.calculate(firstLoopOuterRadius * yawDifference + (robot.getDistanceInchesRight() - localStartDistance));
+                robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
+
+                if (currentDistance - startingDistance > circumference) { //loop complete
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 23: //post third loop PID reset
+                PIDSteering.reset();
+                PIDSteering.enableContinuousInput(-180, 180);
+                startingDistance = robot.getDistanceInchesRight();
+                currentYaw = 0;
+                autonomousStep += 1;
+                break;
+
+            case 24: //straight to end (240in)
+                // **UNTESTED**
+                correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
+
+                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
+                currentDistance = robot.getDistanceInchesRight();
+
+                if (currentDistance - startingDistance > 240) {
+                    autonomousStep += 1;
+                }
+                break;
+            case 25: //temporary stop (for testing purposes only)
                 robot.setMotorPowerPercentage(0, 0);
                 break;
 
