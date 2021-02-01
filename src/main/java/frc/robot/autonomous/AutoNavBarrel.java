@@ -213,7 +213,7 @@ public class AutoNavBarrel extends GenericAutonomous {
                 }
                 break;
 
-            case 15: //post first loop PID reset
+            case 15: //post second loop PID reset
                 PIDSteering.reset();
                 PIDSteering.enableContinuousInput(-180, 180);
                 startingDistance = robot.getDistanceInchesRight();
@@ -300,7 +300,7 @@ public class AutoNavBarrel extends GenericAutonomous {
                 PIDSteering.reset();
                 PIDSteering.enableContinuousInput(-180, 180);
                 startingDistance = robot.getDistanceInchesRight();
-                currentYaw = 0;
+                currentYaw = 180;
                 autonomousStep += 1;
                 break;
 
