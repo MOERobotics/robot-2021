@@ -71,7 +71,7 @@ public class A3toA6Bounce extends GenericAutonomous{
                 break;
             case 4: //Bounce backwards right arc
                 correction = PIDBounce.calculate(outerRadius * yawDifference + (robot.getDistanceInchesLeft() - startingDistance));
-                robot.setMotorPowerPercentage(-(defaultSpeed * 1.5) * (1 + correction), -(defaultSpeed * 0.75) * (1 - correction));
+                robot.setMotorPowerPercentage(-(defaultSpeed * 1.2) * (1 + correction), -(defaultSpeed * 0.85) * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
                 if (currentDistance - startingDistance > -11.25) { //Test
                     robot.driveForward(0);
