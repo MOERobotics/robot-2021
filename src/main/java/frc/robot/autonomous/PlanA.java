@@ -243,7 +243,7 @@ public class PlanA extends GenericAutonomous {
                     ballCount++;
                 }
                 if (ballCount == 3) {
-                    escalatorPower = 0;
+                    escalatorPower = 0.0;
                     indexerPower = 0;
                     autonomousStep += 1;
                 }

@@ -95,10 +95,10 @@ public class SiMOElator extends GenericRobot {
 		double linearComponent = (leftPower + rightPower) / 2.0;
 		double angularComponent = linearComponent - rightPower;
 
-		 linearComponent = coolDeadzone( linearComponent, 0.15);
-		angularComponent = coolDeadzone(angularComponent, 0.10);
+		//linearComponent = coolDeadzone( linearComponent, 0.15);
+		//angularComponent = coolDeadzone(angularComponent, 0.10);
 
-		 linearVelocity =  linearComponent;
+		linearVelocity = linearComponent;
 		angularVelocity = angularComponent;
 	}
 
