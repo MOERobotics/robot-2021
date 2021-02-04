@@ -91,7 +91,7 @@ public class GalacticA extends GenericAutonomous {
 
 
         if (red){
-            if (autonomousStep==1 || autonomousStep==3 || autonomousStep==5) {
+            if (autonomousStep==1 || autonomousStep==3 || autonomousStep==5) { // only when not turning
                 inches_traveled = (robot.getDistanceInchesLeft() - start_ticks);
                 if (inches_traveled >= desired_distance) {
                     robot.setMotorPowerPercentage(0, 0);
