@@ -16,7 +16,7 @@ public class RepeatRecordedPath extends GenericAutonomous {
 
     {
         try {
-            input = new BufferedReader(new FileReader(FileName));
+            input = new BufferedReader(new FileReader(System.getProperty("user.home")+"/"+FileName));
         } catch (FileNotFoundException e) {
             // I don't know how to display the exception.
         }

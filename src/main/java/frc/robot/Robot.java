@@ -168,8 +168,8 @@ public class Robot extends TimedRobot {
             if (!isCollectingData){
                 isCollectingData = true;
                 try {
-                    new File("Autonomous1.txt").delete();
-                    output = new FileWriter("Autonomous1.txt");
+                    new File(System.getProperty("user.home")+"/Autonomous1.txt").delete();
+                    output = new FileWriter(System.getProperty("user.home")+"/Autonomous1.txt");
                 }
                 catch (IOException e) {
                     //I don't know how to display the exception.
