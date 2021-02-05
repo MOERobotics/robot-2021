@@ -92,7 +92,7 @@ public class AutoNavSlalom extends GenericAutonomous {
                 startingDistance = robot.getDistanceInchesLeft(); //set starting distance prior to circumference path
                 startingYaw = robot.getYaw();
 
-                circumference = (2 * Math.PI * semiCircleOuterRadius) / 2; //1/2 of a loop
+                circumference = (2 * Math.PI * semiCircleOuterRadius); //1/2 of a loop
 
                 autonomousStep += 1;
                 break;
