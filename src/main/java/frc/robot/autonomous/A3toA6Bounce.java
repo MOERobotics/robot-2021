@@ -33,6 +33,7 @@ public class A3toA6Bounce extends GenericAutonomous{
                 startingYaw = 0;
                 startingDistance = robot.getDistanceInchesLeft();
                 outerArcLength = 41.25; // Needs to be tested
+                outerRadius = (2 * Math.PI * outerArcLength)/4;
                 if (System.currentTimeMillis() >= startingTime + 100) {
                     autonomousStep += 1;
                 }
@@ -67,13 +68,15 @@ public class A3toA6Bounce extends GenericAutonomous{
                 startingDistance = robot.getDistanceInchesLeft();
                 PIDBounce.reset();
                 PIDBounce.enableContinuousInput(-180, 180);
+                outerArcLength = 11.25;
+                outerRadius = (Math.PI * outerArcLength)/6; //Test
                 autonomousStep += 1;
                 break;
             case 4: //Bounce backwards right arc
                 correction = PIDBounce.calculate(outerRadius * yawDifference + (robot.getDistanceInchesLeft() - startingDistance));
                 robot.setMotorPowerPercentage(-(defaultSpeed * 1.2) * (1 + correction), -(defaultSpeed * 0.85) * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance > -11.25) { //Test
+                if (currentDistance - startingDistance > -outerArcLength) { //Test
                     robot.driveForward(0);
                     autonomousStep += 1;
                 }
@@ -98,6 +101,7 @@ public class A3toA6Bounce extends GenericAutonomous{
                 PIDBounce.reset();
                 PIDBounce.enableContinuousInput(-180, 180);
                 outerArcLength = 68.75; // Needs to be tested
+                outerRadius = (5 * Math.PI * outerArcLength)/6; //Test
                 autonomousStep += 1;
                 break;
             case 8: //150 degree arc to A6
