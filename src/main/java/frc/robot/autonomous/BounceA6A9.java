@@ -9,7 +9,7 @@ public class BounceA6A9 extends GenericAutonomous{
     static double startingYaw = 0;
     double correction;
     static double currentYaw = 0;
-    double yawDifference = 0;
+    double yawDifference =  0;
     double startingDistance = 0;
     double yawTarget = 0;
     double outerRadius = 0;
