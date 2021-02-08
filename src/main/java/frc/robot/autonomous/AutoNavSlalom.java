@@ -182,11 +182,12 @@ public class AutoNavSlalom extends GenericAutonomous {
                 robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
 
                 if (currentDistance - startingDistance > circumference) {
-                    //autonomousStep += 1;
+                    autonomousStep += 1;
                 }
                 break;
 
                 //semicircle complete...end of first half----------------
+                //NOTE: setting x_meters = 4 & y_meters = 2 in SiMOElator will change make viewing easier
 
             case 13: //reset for left arc
                 PIDSteering.reset();
@@ -202,10 +203,30 @@ public class AutoNavSlalom extends GenericAutonomous {
                 robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
                 currentDistance = robot.getDistanceInchesRight();
                 if (currentDistance - startingDistance > outerArcLength) {
-                    //autonomousStep += 1;
-                    robot.driveForward(0);
-
+                    autonomousStep += 1;
                 }
+                break;
+
+            case 15: //reset for left arc
+                PIDSteering.reset();
+                PIDSteering.disableContinuousInput();
+                startingDistance = robot.getDistanceInchesLeft();
+                startingYaw = robot.getYaw();
+                autonomousStep += 1;
+                break;
+
+            case 16: //right arc
+                yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
+                robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
+                currentDistance = robot.getDistanceInchesRight();
+                if (currentDistance - startingDistance > outerArcLength) {
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 17: //stop (for testing purposes)
+                robot.driveForward(0);
                 break;
 
 
