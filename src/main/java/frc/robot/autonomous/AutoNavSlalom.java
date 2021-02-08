@@ -151,7 +151,7 @@ public class AutoNavSlalom extends GenericAutonomous {
                 startingDistance = robot.getDistanceInchesLeft(); //set starting distance prior to circumference path
                 startingYaw = robot.getYaw();
 
-                circumference = (2 * Math.PI * semiCircleOuterRadius) / 2; //calculate circumference 2pir (inner or outer radius)
+                circumference = (2 * Math.PI * semiCircleOuterRadius); //calculate circumference 2pir (inner or outer radius)
 
                 autonomousStep += 1;
                 break;
@@ -182,13 +182,33 @@ public class AutoNavSlalom extends GenericAutonomous {
                 robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
 
                 if (currentDistance - startingDistance > circumference) {
-                    autonomousStep += 1;
+                    //autonomousStep += 1;
                 }
                 break;
 
-            case 13: //temporary stop (for testing purposes only)
-                robot.setMotorPowerPercentage(0, 0);
+                //semicircle complete...end of first half----------------
+
+            case 13: //reset for left arc
+                PIDSteering.reset();
+                PIDSteering.disableContinuousInput();
+                startingDistance = robot.getDistanceInchesLeft();
+                startingYaw = robot.getYaw();
+                autonomousStep += 1;
                 break;
+
+            case 14: //left arc
+                yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+                correction = PIDSteering.calculate((robot.getDistanceInchesRight() - startingDistance) + outerRadius * yawDifference);
+                robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
+                currentDistance = robot.getDistanceInchesRight();
+                if (currentDistance - startingDistance > outerArcLength) {
+                    //autonomousStep += 1;
+                    robot.driveForward(0);
+
+                }
+                break;
+
+
         }
     }
 
