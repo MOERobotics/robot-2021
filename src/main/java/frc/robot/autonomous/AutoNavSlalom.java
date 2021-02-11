@@ -228,8 +228,8 @@ public class AutoNavSlalom extends GenericAutonomous {
                 PIDSteering.reset();
                 PIDSteering.enableContinuousInput(-180, 180);
 
-                currentYaw = 180;
-                startingDistance = robot.getDistanceInchesLeft();
+                currentYaw = 180; //since straightaway is now facing 180deg
+                startingDistance = robot.getDistanceInchesRight();
                 startingYaw = robot.getYaw();
 
                 autonomousStep += 1;
@@ -239,7 +239,7 @@ public class AutoNavSlalom extends GenericAutonomous {
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
 
-                currentDistance = robot.getDistanceInchesLeft();
+                currentDistance = robot.getDistanceInchesRight();
 
                 if (currentDistance - startingDistance > 120) {
                     autonomousStep += 1;
