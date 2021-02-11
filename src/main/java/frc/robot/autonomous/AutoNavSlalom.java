@@ -224,11 +224,68 @@ public class AutoNavSlalom extends GenericAutonomous {
                 }
                 break;
 
-            case 17: //stop (for testing purposes)
-                robot.driveForward(0);
+            case 17: //reset for straightaway
+                PIDSteering.reset();
+                PIDSteering.enableContinuousInput(-180, 180);
+
+                currentYaw = 180;
+                startingDistance = robot.getDistanceInchesLeft();
+                startingYaw = robot.getYaw();
+
+                autonomousStep += 1;
                 break;
 
+            case 18: //second straightaway
+                correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
+                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
 
+                currentDistance = robot.getDistanceInchesLeft();
+
+                if (currentDistance - startingDistance > 120) {
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 19: //reset for right arc
+                PIDSteering.reset();
+                PIDSteering.disableContinuousInput();
+                startingDistance = robot.getDistanceInchesLeft();
+                startingYaw = robot.getYaw();
+                autonomousStep += 1;
+                break;
+
+            case 20: //right arc
+                yawDifference = continuousAngleDiff((180 - startingYaw) / 180 * Math.PI);
+                currentDistance = robot.getDistanceInchesLeft();
+                correction = PIDSteering.calculate((currentDistance - startingDistance) + outerRadius * yawDifference);
+                robot.setMotorPowerPercentage((defaultSpeed * 1.5) * (1 + correction), (defaultSpeed * .75) * (1 - correction));
+                if (currentDistance - startingDistance > outerArcLength) {
+                    autonomousStep += 1;
+
+                }
+                break;
+
+            case 21: //reset for left arc
+                PIDSteering.reset();
+                PIDSteering.disableContinuousInput();
+                startingDistance = robot.getDistanceInchesRight();
+                startingYaw = robot.getYaw();
+                autonomousStep += 1;
+                break;
+
+            case 22: //left arc
+                yawDifference = continuousAngleDiff((180 - startingYaw) / 180 * Math.PI);
+                currentDistance = robot.getDistanceInchesRight();
+                correction = PIDSteering.calculate((currentDistance - startingDistance) + outerRadius * yawDifference);
+                robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
+                if (currentDistance - startingDistance > outerArcLength) {
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 23: //cease thine auto routine
+                robot.driveForward(0);
+                break;
         }
     }
 
