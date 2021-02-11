@@ -45,8 +45,8 @@ public class SiMOElator extends GenericRobot {
 		double new_y     = current_y + delta_y;
 		double new_theta = Util.normalizeAngleRadians(current_theta+delta_theta);;
 
-		 leftDistance += current_linearVelocity + current_angularVelocity;
-		rightDistance += current_linearVelocity - current_angularVelocity;
+		 leftDistance += (current_linearVelocity + current_angularVelocity)*0.06;
+		rightDistance += (current_linearVelocity - current_angularVelocity)*0.06;
 
 		x_meters = new_x;
 		y_meters = new_y;
@@ -66,8 +66,8 @@ public class SiMOElator extends GenericRobot {
 
 	@Override public void resetRobotSimulation() {
 		//Center of field
-		x_meters  = 8;
-		y_meters  = 4;
+		x_meters  = 1;
+		y_meters  = 1;
 		theta_rad = EAST;
 
 		 linearVelocity=0;
@@ -93,7 +93,7 @@ public class SiMOElator extends GenericRobot {
 	@Override
 	protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
 		double linearComponent = (leftPower + rightPower) / 2.0;
-		double angularComponent = linearComponent - rightPower;
+		double angularComponent = (linearComponent - rightPower)*2*12/28;
 
 		//linearComponent = coolDeadzone( linearComponent, 0.15);
 		//angularComponent = coolDeadzone(angularComponent, 0.10);
@@ -108,12 +108,10 @@ public class SiMOElator extends GenericRobot {
 
 	@Override
 	public double getDistanceRatioLeft() {
-		return .33;
+		return 1.0/12.0;
 	}
 	@Override
-	public double getDistanceRatioRight() {
-		return .33;
-	}
+	public double getDistanceRatioRight() { return 1.0/12.0; }
 
 	@Override
 	public double getDistanceTicksLeft() {

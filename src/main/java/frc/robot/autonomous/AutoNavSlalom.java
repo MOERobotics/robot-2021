@@ -169,7 +169,7 @@ public class AutoNavSlalom extends GenericAutonomous {
                 break;
 
             case 11: //reset for semicircle (2/2)
-                localStartDistance = robot.getDistanceInchesLeft();
+                localStartDistance = robot.getDistanceInchesRight();
                 startingYaw = robot.getYaw();
                 autonomousStep += 1;
                 break;
@@ -181,7 +181,7 @@ public class AutoNavSlalom extends GenericAutonomous {
                 correction = PIDSteering.calculate(semiCircleOuterRadius * yawDifference - (currentDistance - localStartDistance));
                 robot.setMotorPowerPercentage((defaultSpeed * .75) * (1 + correction), (defaultSpeed * 1.5) * (1 - correction));
 
-                if (currentDistance - startingDistance > circumference) {
+                if (currentDistance - localStartDistance > circumferenceQuarter) {
                     autonomousStep += 1;
                 }
                 break;
