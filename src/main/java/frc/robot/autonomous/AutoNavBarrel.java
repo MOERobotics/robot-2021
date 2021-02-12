@@ -55,13 +55,13 @@ public class AutoNavBarrel extends GenericAutonomous {
                 }
                 break;
 
-            case 0: //straight to first loop (100in)
+            case 0: //straight to first loop (94in)
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
 
                 robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
 
-                if (currentDistance - startingDistance > 100) {
+                if (currentDistance - startingDistance > 94) {
                     autonomousStep += 1;
                 }
                 break;
@@ -139,13 +139,13 @@ public class AutoNavBarrel extends GenericAutonomous {
                 autonomousStep += 1;
                 break;
 
-            case 8: //straightaway from first loop to second loop (96.8 inches)
+            case 8: //straightaway from first loop to second loop (80 inches)
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
 
                 currentDistance = robot.getDistanceInchesLeft();
 
-                if (currentDistance - startingDistance > 96.8) {
+                if (currentDistance - startingDistance > 80) {
                     autonomousStep += 1;
                 }
                 break;
@@ -221,13 +221,13 @@ public class AutoNavBarrel extends GenericAutonomous {
                 autonomousStep += 1;
                 break;
 
-            case 16: //straight to third loop (90in)
+            case 16: //straight to third loop (82in)
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
 
                 robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesRight();
 
-                if (currentDistance - startingDistance > 90) {
+                if (currentDistance - startingDistance > 82) {
                     autonomousStep += 1;
                 }
                 break;
@@ -304,14 +304,13 @@ public class AutoNavBarrel extends GenericAutonomous {
                 autonomousStep += 1;
                 break;
 
-            case 24: //straight to end (240in)
-                // **UNTESTED**
+            case 24: //straight to end (272in)
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
 
                 robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesRight();
 
-                if (currentDistance - startingDistance > 240) {
+                if (currentDistance - startingDistance > 272) {
                     autonomousStep += 1;
                 }
                 break;
