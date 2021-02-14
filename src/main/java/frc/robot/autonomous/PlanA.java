@@ -25,7 +25,7 @@ public class PlanA extends GenericAutonomous {
     boolean shooting = false;
     double escalatorPower;
     double indexerPower;
-    long alignWait = 2000;
+    long alignWait = 1000;
     GenericCommand activeCommand = new LimelightAlign( -0.5, .8); //planA set setPoint to -2
     CollectPowerCells getCells = new CollectPowerCells();
 
