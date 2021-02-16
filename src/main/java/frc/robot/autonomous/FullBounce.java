@@ -70,13 +70,13 @@ public class FullBounce extends GenericAutonomous{
                 startingDistance = robot.getDistanceInchesLeft();
                 PIDBounce.reset();
                 outerRadius = 26;
-                outerArcLength = (Math.PI)/6; //Needs to be tested
+                outerArcLength = (Math.PI * outerRadius)/6; //Needs to be tested
                 PIDBounce.disableContinuousInput();
                 autonomousStep += 1;
                 break;
             case 4: //Bounce backwards right arc
                 correction = PIDBounce.calculate(outerRadius * yawDifference + (robot.getDistanceInchesLeft() - startingDistance));
-                robot.setMotorPowerPercentage(-(defaultSpeed * 1.2) * (1 + correction), -(defaultSpeed * 0.85) * (1 - correction));
+                robot.setMotorPowerPercentage(-(defaultSpeed * 1.5) * (1 + correction), -(defaultSpeed * 0.75) * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
                 if (currentDistance - startingDistance > -outerArcLength) { //Test
                     robot.driveForward(0);
@@ -102,8 +102,8 @@ public class FullBounce extends GenericAutonomous{
                 startingDistance = robot.getDistanceInchesLeft();
                 PIDBounce.reset();
                 PIDBounce.disableContinuousInput();
-                outerRadius = 70; //Test
-                outerArcLength = (5 * Math.PI)/6; // Needs to be tested
+                outerRadius = 46; //Test
+                outerArcLength = (5 * Math.PI * outerRadius)/6; // Needs to be tested
                 autonomousStep += 1;
                 break;
             case 8: //150 degree arc to A6
@@ -135,7 +135,7 @@ public class FullBounce extends GenericAutonomous{
                 PIDBounce.disableContinuousInput();
                 currentYaw = 0;
                 outerRadius = 26;
-                outerArcLength = (Math.PI)/6; //Needs to be tested
+                outerArcLength = (Math.PI * outerRadius)/6; //Needs to be tested
                 autonomousStep += 1;
                 break;
             case 12: //A6 bounce
@@ -169,7 +169,7 @@ public class FullBounce extends GenericAutonomous{
                 PIDBounce.disableContinuousInput();
                 currentYaw = 0;
                 outerRadius = 24;
-                outerArcLength = (2 * Math.PI)/4; //Needs to be tested
+                outerArcLength = (2 * Math.PI * outerRadius)/4; //Needs to be tested
                 autonomousStep += 1;
                 break;
             case 16: //D7 arc
@@ -203,7 +203,7 @@ public class FullBounce extends GenericAutonomous{
                 PIDBounce.disableContinuousInput();
                 currentYaw = 0;
                 outerRadius = 24;
-                outerArcLength = (4 * Math.PI)/9; //Needs to be tested
+                outerArcLength = (4 * Math.PI * outerRadius)/9; //Needs to be tested
                 autonomousStep += 1;
                 break;
             case 20: //D8 arc
@@ -237,7 +237,7 @@ public class FullBounce extends GenericAutonomous{
                 PIDBounce.disableContinuousInput();
                 currentYaw = 0;
                 outerRadius = 36;
-                outerArcLength = (11 * Math.PI)/18; //Needs to be tested
+                outerArcLength = (11 * Math.PI * outerRadius)/18; //Needs to be tested
                 autonomousStep += 1;
                 break;
             case 24: //Final arc
