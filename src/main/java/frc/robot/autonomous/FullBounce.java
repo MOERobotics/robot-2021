@@ -5,7 +5,7 @@ import frc.robot.genericrobot.GenericRobot;
 
 public class FullBounce extends GenericAutonomous{
 
-    double defaultSpeed = 0.25;
+    double defaultSpeed = 0.15;
     static double startingYaw = 0.0;
     double correction;
     static double currentYaw = 0.0;
@@ -32,6 +32,7 @@ public class FullBounce extends GenericAutonomous{
                 PIDBounce.reset();
                 PIDBounce.disableContinuousInput();
                 robot.resetEncoders();
+                robot.resetAttitude();
                 startingYaw = 0;
                 startingDistance = robot.getDistanceInchesRight();
                 outerRadius = 44;
