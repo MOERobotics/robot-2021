@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 import java.lang.Math;
 
-// robot starts in 33.7 degree angle to the x-axis, facing SE. Robot breaks plane of A1B1 in start zone\
+// robot starts on start zone on the d1 line
 public class GalacticB extends GenericAutonomous {
 
     PIDController myPID = new PIDController(0,0,0);
 
     double inches_traveled = 0;
-    double desired_distance = 72;
+    double desired_distance = 60;
     double desired_yaw = 0;
     boolean cellPathCheck = true;
     boolean PathARed = false;
@@ -26,6 +26,7 @@ public class GalacticB extends GenericAutonomous {
     int autonomousStep = 0;
     double correction = 0;
     boolean drive = false;
+    double startingTime = 0;
 
     double dist1 = 0;
     double dist2 = 0;
@@ -72,13 +73,14 @@ public class GalacticB extends GenericAutonomous {
     }
     @Override
     public void autonomousInit(GenericRobot robot){
+        startingTime = System.currentTimeMillis();
         start_inches = robot.getDistanceInchesLeft();
         startingYaw = robot.getYaw();
-        autonomousStep = 0;
+        autonomousStep = -1;
         PathARed = false;
         PathABlue = false;
         cellPathCheck = true;
-        desired_distance = 20*Math.sqrt(13);
+        desired_distance = 60;
         desired_yaw = 90;
         myPID = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
         myPID.reset();
@@ -104,6 +106,13 @@ public class GalacticB extends GenericAutonomous {
             }
 
             switch (autonomousStep){
+                case -1:
+                    robot.resetAttitude();
+                    robot.resetEncoders();
+                    if (System.currentTimeMillis() >= startingTime + 100) {
+                        autonomousStep += 1;
+                    }
+                    break;
                 case 0:
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
                     robot.setMotorPowerPercentage(default_speed*(1+correction), default_speed*(1-correction));
