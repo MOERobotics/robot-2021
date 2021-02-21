@@ -120,7 +120,7 @@ public class GalacticB extends GenericAutonomous {
 
                         ang1 = 90;
                         ang2 = 180-Math.toDegrees(Math.atan(2));
-                        ang3 = Math.toDegrees(Math.atan(3)+Math.atan(1/2));
+                        ang3 = Math.toDegrees(Math.atan(3)+Math.atan(1.0/2.0));
                         ang4 = Math.toDegrees(Math.atan(3));
 
                         // robot turns left/right/left/right
@@ -208,8 +208,8 @@ public class GalacticB extends GenericAutonomous {
 
                         ang1 = 90;
                         ang2 = 90+Math.toDegrees(Math.atan(3));
-                        ang3 = 180-(Math.toDegrees(Math.atan(1/3)+Math.atan(2)));
-                        ang4 = Math.toDegrees(Math.atan(1/2));
+                        ang3 = 180-(Math.toDegrees(Math.atan(1.0/3.0)+Math.atan(2)));
+                        ang4 = Math.toDegrees(Math.atan(1.0/2.0));
 
                         // robot turns right/left/right/left
 
