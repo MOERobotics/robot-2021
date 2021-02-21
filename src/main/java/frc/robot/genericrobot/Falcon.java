@@ -216,11 +216,11 @@ public class Falcon extends GenericRobot{
 
     private static final ShooterSpeedPreset
             SHOOTER_SPEED_OFF   = new ShooterSpeedPreset(   0,    0),
-            SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2350, 2350),
+            SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2400, 2400),
             //SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2285, 2285),
             SHOOTER_SPEED_MID   = new ShooterSpeedPreset(2620, 2620),
             SHOOTER_SPEED_LONG  = new ShooterSpeedPreset(4000, 3000), //not final
-            SHOOTER_SPEED_YEET  = new ShooterSpeedPreset(2265, 2265);
+            SHOOTER_SPEED_YEET  = new ShooterSpeedPreset(2525, 2525);
             //SHOOTER_SPEED_YEET  = new ShooterSpeedPreset(5000, 5000);
 
 
