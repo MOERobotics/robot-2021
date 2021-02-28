@@ -142,7 +142,7 @@ public class PlanA extends GenericAutonomous {
                 break;
 
             case 7: //PID reset for straightaway
-                defaultSpeed = 0.15; //.12
+                defaultSpeed = 0.13; //.12
                 getCells.run(robot);
                 startingDistance = robot.getDistanceInchesLeft();
                 PIDSteering.reset();
