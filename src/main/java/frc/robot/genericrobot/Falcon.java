@@ -112,6 +112,10 @@ public class Falcon extends GenericRobot{
         angleAdjusterDigitalInputForward = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
         angleAdjusterDigitalInputReverse = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
 
+        // REMOVE THESE TWO LINES AFTER LUCAS FIXES THE HARDWARD LIMIT SWITCHES
+        angleAdjusterDigitalInputReverse.enableLimitSwitch(false);
+        angleAdjusterDigitalInputForward.enableLimitSwitch(false);
+
         climberPort.setIdleMode     (IdleMode.kBrake);
         climberStarboard.setIdleMode(IdleMode.kBrake);
 
