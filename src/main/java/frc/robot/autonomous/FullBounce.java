@@ -35,7 +35,7 @@ public class FullBounce extends GenericAutonomous{
                 robot.resetAttitude();
                 startingYaw = 0;
                 startingDistance = robot.getDistanceInchesRight();
-                outerRadius = 44;
+                outerRadius = 37;
                 outerArcLength = (2 * Math.PI * outerRadius)/4; // Needs to be tested
                 if (System.currentTimeMillis() >= startingTime + 100) {
                     autonomousStep += 1;
@@ -61,9 +61,9 @@ public class FullBounce extends GenericAutonomous{
                 correction = PIDBounce.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance > 24) { // Needs to travel 2 feet
+                if (currentDistance - startingDistance > 48) { // Needs to travel 2 feet (24)
                     robot.driveForward(0);
-                    autonomousStep = 25;
+                    autonomousStep += 1;
                 }
                 break;
             case 3: //PID reset for bounce
@@ -78,7 +78,8 @@ public class FullBounce extends GenericAutonomous{
                 correction = PIDBounce.calculate(outerRadius * yawDifference + (robot.getDistanceInchesLeft() - startingDistance));
                 robot.setMotorPowerPercentage(-(defaultSpeed * 1.5) * (1 + correction), -(defaultSpeed * 0.75) * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance > -outerArcLength) { //Test
+                if (currentDistance - startingDistance < -outerArcLength) { //Test
+                    currentYaw = robot.getYaw();
                     robot.driveForward(0);
                     autonomousStep += 1;
                 }
@@ -93,7 +94,7 @@ public class FullBounce extends GenericAutonomous{
                 correction = PIDBounce.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage(-defaultSpeed * (1 + correction), -defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance > -30) { // Needs to travel ~2.5 feet
+                if (currentDistance - startingDistance < -60) { // Needs to travel ~2.5 feet (30)
                     robot.driveForward(0);
                     autonomousStep += 1;
                 }
@@ -104,7 +105,7 @@ public class FullBounce extends GenericAutonomous{
                 PIDBounce.disableContinuousInput();
                 outerRadius = 46; //Test
                 outerArcLength = (5 * Math.PI * outerRadius)/6; // Needs to be tested
-                autonomousStep += 1;
+                autonomousStep = 25;
                 break;
             case 8: //150 degree arc to A6
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / (180 * Math.PI));
@@ -125,7 +126,7 @@ public class FullBounce extends GenericAutonomous{
                 correction = PIDBounce.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage(-defaultSpeed * (1 + correction), -defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance > -54) { // Needs to travel ~4.5 feet
+                if (currentDistance - startingDistance < -108) { // Needs to travel ~4.5 feet (54)
                     robot.driveForward(0);
                     autonomousStep += 1;
                 }
@@ -158,7 +159,7 @@ public class FullBounce extends GenericAutonomous{
                 correction = PIDBounce.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage((defaultSpeed * 1) * (1 + correction), (defaultSpeed * 1) * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if(currentDistance - startingDistance > 12) { //Needs to be tested
+                if(currentDistance - startingDistance > 24) { //Needs to be tested (12)
                     robot.driveForward(0);
                     autonomousStep += 1;
                 }
@@ -192,7 +193,7 @@ public class FullBounce extends GenericAutonomous{
                 correction = PIDBounce.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage((defaultSpeed * 1) * (1 + correction), (defaultSpeed * 1) * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if(currentDistance - startingDistance > 18) { //Needs to be tested
+                if(currentDistance - startingDistance > 36) { //Needs to be tested (36)
                     robot.driveForward(0);
                     autonomousStep += 1;
                 }
@@ -226,7 +227,7 @@ public class FullBounce extends GenericAutonomous{
                 correction = PIDBounce.calculate(robot.getYaw() - currentYaw);
                 robot.setMotorPowerPercentage((defaultSpeed * 1) * (1 + correction), (defaultSpeed * 1) * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if(currentDistance - startingDistance > 92.5) { //Needs to be tested
+                if(currentDistance - startingDistance > 185) { //Needs to be tested (92.5)
                     robot.driveForward(0);
                     autonomousStep += 1;
                 }
@@ -245,7 +246,7 @@ public class FullBounce extends GenericAutonomous{
                 correction = PIDBounce.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
                 robot.setMotorPowerPercentage((-defaultSpeed * 1.5) * (1 + correction), (-defaultSpeed * 0.75) * (1 - correction));
                 currentDistance = robot.getDistanceInchesRight();
-                if(currentDistance - startingDistance > -outerArcLength){
+                if(currentDistance - startingDistance < -outerArcLength){
                     autonomousStep += 1;
                 }
                 break;
