@@ -7,9 +7,11 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
@@ -20,6 +22,11 @@ import static frc.robot.genericrobot.GenericRobot.*;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +44,8 @@ public class Robot extends TimedRobot {
     XboxController    xboxJoystick      = new XboxController(1);
     ElevationControl  shooterController = new ElevationControl();
     boolean shooterOn = false;
+
+    FileOutputStream outputStream = null;
 
     double deadZone = 0.10;
     long timeEscalatorStarted = 0;
@@ -63,7 +72,14 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         System.out.println("Klaatu barada nikto");
 
-
+        try {
+            String filePath = System.getProperty("user.home")+ File.separator+"out.txt";
+            SmartDashboard.putString("outfile",filePath);
+            outputStream = new FileOutputStream(filePath);
+            SmartDashboard.putString("outstream", outputStream.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -360,6 +376,10 @@ public class Robot extends TimedRobot {
             }
             ballShootCounted = false;
         }
+
+        if (leftJoystick.getRawButtonPressed(14) && outputStream != null) try {
+            new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue(outputStream, robot);
+        } catch (Exception e) {e.printStackTrace();}
     }
 
     @Override

@@ -44,6 +44,7 @@ def includeDesktopSupport = false
 // Also defines JUnit 4.
 dependencies {
     implementation wpi.deps.wpilib()
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.1'
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
 
