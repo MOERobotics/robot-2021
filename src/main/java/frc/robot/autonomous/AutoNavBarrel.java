@@ -7,7 +7,7 @@ import frc.robot.genericrobot.GenericRobot;
 public class AutoNavBarrel extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-    double defaultSpeed = 0.25;
+    double defaultSpeed = .25;
 
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
