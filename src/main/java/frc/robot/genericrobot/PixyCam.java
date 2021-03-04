@@ -6,90 +6,143 @@ import io.github.pseudoresonance.pixy2api.Pixy2Line;
 import io.github.pseudoresonance.pixy2api.links.SPILink;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class PixyCam implements Runnable{
+public class PixyCam implements Runnable {
     public volatile boolean isRunning = false;
     private SPILink pixySPI = new SPILink();
     private Pixy2 pixyCam = Pixy2.createInstance(pixySPI);
     private Thread pixyThread;
 
-    public Pixy2Line.Vector[] vec;
+    PixyCam.Block[] blockList = null;
 
-    private Pixy2Line.Vector[] sillyNullVector = new Pixy2Line.Vector[0];
-
-    public void init(){
+    public void init() {
         //Init pixycam
         pixyCam.init();
     }
-    public void start(){
+
+    public void start() {
         pixyThread = new Thread(this);
         this.isRunning = true;
         pixyThread.start();
     }
-    public void stop(){
-        if(this.isRunning){
+
+    public void stop() {
+        if (this.isRunning) {
             this.isRunning = false;
             pixyThread.interrupt();
         }
     }
-    public void run(){
-        while(this.isRunning){
-            try{
-                int ballsFound = pixyCam.getCCC().getBlocks();
-                if (ballsFound > 0){
-                    ArrayList<Pixy2CCC.Block> blocksList = pixyCam.getCCC().getBlockCache();
-                    for (Pixy2CCC.Block block: blocksList){
 
+    public void run() {
+        while (this.isRunning) {
+            try {
+                int ballsFound = pixyCam.getCCC().getBlocks();
+                if (ballsFound > 0) {
+                    ArrayList<Pixy2CCC.Block> blocksList = pixyCam.getCCC().getBlockCache();
+                    int i = 0;
+                    PixyCam.Block[] ourBlockList = new PixyCam.Block[ballsFound];
+                    for (Pixy2CCC.Block theirBlock : blocksList) {
+                        PixyCam.Block ourBlock = new Block(
+                                theirBlock.getSignature(),
+                                theirBlock.getX(),
+                                theirBlock.getY(),
+                                theirBlock.getWidth(),
+                                theirBlock.getHeight(),
+                                theirBlock.getAngle(),
+                                theirBlock.getIndex(),
+                                theirBlock.getAge()
+                                );
+                        ourBlockList[i] = ourBlock;
                     }
+                    this.blockList = ourBlockList;
                 }
                 pixyCam.getLine().getAllFeatures();
-                Pixy2Line.Vector[] tmp = pixyCam.getLine().getVectorCache();
-                if (tmp == null) tmp = sillyNullVector;
-                vec = tmp;
+
                 Thread.sleep(100);
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-    public Pixy2Line.Vector[] getLastVector(){
-        synchronized (this) {
-            return vec;
-        }
-    }
 
-    public Object getPowerCellLocations(){
+
+    public PixyCam.Block[] getPowerCellLocations() {
 
         return null;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder pixyOutput = new StringBuilder();
+    public static class Block {
 
-        pixyOutput.append("[");
-        boolean first = true;
-        //copy ptr
-        Pixy2Line.Vector[] vectors = this.vec;
-        for (Pixy2Line.Vector vec : vectors) {
-            if (!first) pixyOutput.append(",");
-            pixyOutput.append(String.format(
-                    "{"+
-                            "X0: %d, "+
-                            "Y0: %d, "+
-                            "X1: %d, "+
-                            "Y1: %d"+
-                            "}",
-                    vec.getX0(),
-                    vec.getY0(),
-                    vec.getX1(),
-                    vec.getY1()
-            ));
-            first=false;
+        public final int signature, x, y, width, height, angle, index, age;
+
+        /**
+         * Constructs signature block instance
+         *
+         * @param signature Block signature
+         * @param x         X value
+         * @param y         Y value
+         * @param width     Block width
+         * @param height    Block height
+         * @param angle     Angle from camera
+         * @param index     Block index
+         * @param age       Block age
+         */
+
+        private Block(int signature, int x, int y, int width, int height, int angle, int index, int age) {
+            this.signature = signature;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.angle = angle;
+            this.index = index;
+            this.age = age;
         }
-        pixyOutput.append("]");
 
-        return pixyOutput.toString();
+        public void print() {
+            System.out.println(toString());
+        }
+
+        public String toString() {
+            String out = "";
+            out = "sig: " + signature + " x: " + x + " y: " + y + " width: " + width + " height: " + height
+                    + " index: " + index + " age: " + age;
+            return out;
+        }
+
+
+        public int getSignature() {
+            return signature;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        public int getAngle() {
+            return angle;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public int getAge() {
+            return age;
+        }
 
     }
 }
