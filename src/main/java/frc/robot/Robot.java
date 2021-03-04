@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram       = new PlanA(); //Auto routine to be used?
+    GenericAutonomous autoProgram       = new FullBounce(); //Auto routine to be used?
     GenericCommand    activeCommand     = new LimelightAlign(-2,.8);
     SmartClimb        smartClimb        = new SmartClimb();
     GenericRobot      robot             = new Falcon();
@@ -44,6 +44,8 @@ public class Robot extends TimedRobot {
     int ballCount = 0;
     boolean ballCollectCounted = false;
     boolean ballShootCounted = false;
+    boolean waitingForMediumHigh = false;
+    boolean waitingForChange = false;
 
     public static final Map<String, GenericAutonomous> autonomousMap
         = new HashMap<String, GenericAutonomous> () {{
@@ -97,6 +99,7 @@ public class Robot extends TimedRobot {
         robot.spinControlPanel(0);
         robot.setClimbVerticalPower(0);
         robot.setCameraTiltDegrees(0);
+        robot.resetRobotSimulation();
 
         if (leftJoystick.getRawButtonPressed(5)) {
             autoProgram = autonomousMap.get(PlanA.class.getName());
@@ -202,6 +205,7 @@ public class Robot extends TimedRobot {
         }
 
         //Collector
+        /*
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             if (robot.getEscalatorSensorMedium()) { //&& (ballCount<=3)
                 escalatorPower = 0.5;
@@ -209,6 +213,60 @@ public class Robot extends TimedRobot {
             //if (ballCount<=4){collectorPower = 1.0;}
             //if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
             robot.collectorIn(1.0);
+            robot.escalatorUp(escalatorPower);
+        } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
+            robot.collectorOut(1.0);
+        } else {
+            robot.setCollectorPower(0);
+        }
+
+         */
+        if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
+            escalatorPower = 0.0;
+            collectorPower = 0.75;
+
+            //two power cells
+            if (robot.getEscalatorSensorLow() && robot.getEscalatorSensorMedium() && !robot.getEscalatorSensorMediumHigh()){
+                waitingForMediumHigh = true;
+            }
+
+            //three and four power cells
+            if (robot.getEscalatorSensorLow() && robot.getEscalatorSensorMedium() && robot.getEscalatorSensorMediumHigh() && !robot.getEscalatorSensorHigh()){
+                waitingForChange = true;
+                waitingForMediumHigh = false;
+            }
+            if (waitingForChange && !robot.getEscalatorSensorMediumHigh()){
+                waitingForChange = false;
+                waitingForMediumHigh = true;
+            }
+            if (waitingForMediumHigh || waitingForChange){
+                escalatorPower = 0.7;
+            }
+            if (waitingForMediumHigh && robot.getEscalatorSensorMediumHigh()){
+                waitingForMediumHigh = false;
+            }
+
+            /*if(waitingForMediumHigh && !robot.getEscalatorSensorMediumHigh()){
+                escalatorPower = 0.75;
+                waitToChange = true;
+            }
+            if (waitToChange && robot.getEscalatorSensorMediumHigh()){
+                escalatorPower = 0.0;
+                waitingForMediumHigh = false;
+                waitToChange = false;
+            }
+
+             */
+
+
+            if (robot.getEscalatorSensorLow() && robot.getEscalatorSensorMedium() && robot.getEscalatorSensorMediumHigh() && robot.getEscalatorSensorHigh()){
+                collectorPower = 0.0;
+                escalatorPower = 0.0;
+            }
+
+            //if (ballCount<=4){collectorPower = 1.0;}
+            //if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
+            robot.collectorIn(collectorPower);
             robot.escalatorUp(escalatorPower);
         } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
             robot.collectorOut(1.0);
