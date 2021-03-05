@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -20,11 +22,15 @@ import static frc.robot.genericrobot.GenericRobot.*;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import java.io.OutputStream;
 
 public class Robot extends TimedRobot {
 
@@ -37,6 +43,8 @@ public class Robot extends TimedRobot {
     XboxController    xboxJoystick      = new XboxController(1);
     ElevationControl  shooterController = new ElevationControl();
     boolean shooterOn = false;
+
+    OutputStream outstream = null;
 
     double deadZone = 0.10;
     long timeEscalatorStarted = 0;
@@ -65,7 +73,15 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         System.out.println("Klaatu barada nikto");
 
-
+        try{
+            outstream = new FileOutputStream(
+                    System.getProperty("user.home") + File.separatorChar + "pixycamData.txt"
+            );
+        } catch (Exception e){
+            System.err.println(
+                    "Unable to open pixycamData.txt forw writing."
+            );
+        }
     }
 
     @Override
@@ -417,6 +433,20 @@ public class Robot extends TimedRobot {
             }
             ballShootCounted = false;
         }
+
+        if (leftJoystick.getRawButtonPressed(1) && outstream != null){
+            PixyCam.Block[] pixycamData = robot.getPixyCamBlocks();
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+            try{
+                mapper.writerFor(PixyCam.Block[].class);
+                mapper.writeValue(outstream, pixycamData);
+                outstream.write('\n');
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @Override
@@ -492,13 +522,13 @@ public class Robot extends TimedRobot {
         }
 
         //Climber
-        if (leftJoystick.getRawButton(2)) {
-            robot.setClimbVerticalPower(.6);
-        } else if (leftJoystick.getRawButton(1)) {
-            robot.setClimbVerticalPower(-.2);
-        } else {
-            robot.setClimbVerticalPower(0.0);
-        }
+        //if (leftJoystick.getRawButton(2)) {
+        //    robot.setClimbVerticalPower(.6);
+        //} else if (leftJoystick.getRawButton(1)) {
+        //    robot.setClimbVerticalPower(-.2);
+        //} else {
+        //    robot.setClimbVerticalPower(0.0);
+        //}
 
         //Left individual control
         if (leftJoystick.getRawButton(3)) {

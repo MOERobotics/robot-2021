@@ -765,6 +765,10 @@ public abstract class GenericRobot {
 
     //***********************************************************************//
 
-
+    // Not started by generic robot
+    protected final PixyCam pixyCam = new PixyCam();
+    public final PixyCam.Block[] getPixyCamBlocks(){
+        return pixyCam.getPowerCellLocations();
+    }
 
 }

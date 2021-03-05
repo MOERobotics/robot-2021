@@ -119,6 +119,8 @@ public class Falcon extends GenericRobot{
 
         indexer.setInverted(true);
 
+        pixyCam.start();
+
     }
 
     @Override
