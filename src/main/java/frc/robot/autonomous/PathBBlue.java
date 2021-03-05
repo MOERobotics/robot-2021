@@ -29,13 +29,11 @@ public class PathBBlue extends GenericAutonomous {
 
     double dist1 = 30*Math.sqrt(26);
     double dist2 = 60*Math.sqrt(2);
-    double dist3 = 60*Math.sqrt(2);
-    double dist4 = 30;
+    double dist3 = 90*Math.sqrt(2);
 
     double ang1 = Math.toDegrees(Math.atan(1.0/5.0));
-    double ang2 = 45 + Math.toDegrees(Math.atan(1.0/5.0));
-    double ang3 = 90;
-    double ang4 = 45;
+    double ang2 = -45;
+    double ang3 = 45;
 
     double dir1Left = .2;
     double dir1Right = -.2;
@@ -46,8 +44,6 @@ public class PathBBlue extends GenericAutonomous {
     double dir3Left = .2;
     double dir3Right = -.2;
 
-    double dir4Left = -.2;
-    double dir4Right = .2;
 
 
     @Override
@@ -97,13 +93,14 @@ public class PathBBlue extends GenericAutonomous {
                     }
                     autonomousStep += 1;
                 }
+                robot.collectorIn(1);
                 break;
             case 0:
                 //turn
                 leftPower = dir1Left;
                 rightPower = dir1Right;
 
-                desired_yaw = ang1;
+                desired_yaw = Math.abs(ang1);
 
                 currYaw = robot.getYaw();
                 if (currYaw < 0) {
@@ -117,9 +114,9 @@ public class PathBBlue extends GenericAutonomous {
                     rightPower = 0;
 
                     start_inches = robot.getDistanceInchesLeft();
-                    startingYaw = robot.getYaw();
-                    if (startingYaw < 0){
-                        startingYaw += 360;
+                    startingYaw = ang1;
+                    if (startingYaw< 0){
+                        startingYaw+= 360;
                     }
                     myPID.reset();
                     myPID.enableContinuousInput(-180, 180);
@@ -158,7 +155,7 @@ public class PathBBlue extends GenericAutonomous {
                 leftPower = dir2Left;
                 rightPower = dir2Right;
 
-                desired_yaw = ang2;
+                desired_yaw = Math.abs(ang1) + Math.abs(ang2);
 
                 currYaw = robot.getYaw();
                 if (currYaw < 0) {
@@ -172,7 +169,7 @@ public class PathBBlue extends GenericAutonomous {
                     rightPower = 0;
 
                     start_inches = robot.getDistanceInchesLeft();
-                    startingYaw = robot.getYaw();
+                    startingYaw = ang2;
                     if (startingYaw < 0){
                         startingYaw += 360;
                     }
@@ -213,7 +210,7 @@ public class PathBBlue extends GenericAutonomous {
                 leftPower = dir3Left;
                 rightPower = dir3Right;
 
-                desired_yaw = ang3;
+                desired_yaw = Math.abs(ang3)+Math.abs(ang2);
 
                 currYaw = robot.getYaw();
                 if (currYaw < 0) {
@@ -227,7 +224,7 @@ public class PathBBlue extends GenericAutonomous {
                     rightPower = 0;
 
                     start_inches = robot.getDistanceInchesLeft();
-                    startingYaw = robot.getYaw();
+                    startingYaw = ang3;
                     if (startingYaw < 0){
                         startingYaw += 360;
                     }
@@ -263,61 +260,7 @@ public class PathBBlue extends GenericAutonomous {
                 }
 
                 break;
-            case 6:
-                //turn
-                leftPower = dir4Left;
-                rightPower = dir4Right;
 
-                desired_yaw = ang4;
-
-                currYaw = robot.getYaw();
-                if (currYaw < 0) {
-                    currYaw += 360;
-                }
-                yawChange = Math.abs(currYaw-startingYaw);
-                yawChange = Math.min(yawChange, 360 - yawChange);
-                if (yawChange >= desired_yaw) {
-
-                    leftPower = 0;
-                    rightPower = 0;
-
-                    start_inches = robot.getDistanceInchesLeft();
-                    startingYaw = robot.getYaw();
-                    if (startingYaw < 0){
-                        startingYaw += 360;
-                    }
-                    myPID.reset();
-                    myPID.enableContinuousInput(-180, 180);
-                    autonomousStep += 1;
-                }
-
-                break;
-            case 7:
-                //drive
-                correction = myPID.calculate(robot.getYaw() - startingYaw);
-
-                leftPower = default_speed*(1+correction);
-                rightPower = default_speed*(1-correction);
-
-                desired_distance = dist4;
-
-                inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
-                if (inches_traveled >= desired_distance) {
-
-                    leftPower = 0;
-                    rightPower = 0;
-
-                    start_inches = robot.getDistanceInchesLeft();
-                    startingYaw = robot.getYaw();
-                    if (startingYaw < 0){
-                        startingYaw += 360;
-                    }
-                    myPID.reset();
-                    myPID.enableContinuousInput(-180, 180);
-                    autonomousStep += 1;
-                }
-
-                break;
 
         }
 

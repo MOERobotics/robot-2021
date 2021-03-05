@@ -34,8 +34,8 @@ public class PathARed extends GenericAutonomous {
 
     double ang1 = 0;
     double ang2 = Math.toDegrees(Math.atan(1.0/2.0));
-    double ang3 = Math.toDegrees(Math.atan(2)+Math.atan(1.0/3.0));
-    double ang4 = Math.toDegrees(Math.atan(3));
+    double ang3 = -1*Math.toDegrees(Math.atan(3.0));
+    double ang4 = 0;
 
     double dir1Left = 0;
     double dir1Right = 0;
@@ -97,13 +97,14 @@ public class PathARed extends GenericAutonomous {
                     }
                     autonomousStep += 1;
                 }
+                robot.collectorIn(1);
                 break;
             case 0:
                 //turn
                 leftPower = dir1Left;
                 rightPower = dir1Right;
 
-                desired_yaw = ang1;
+                desired_yaw = Math.abs(ang1);
 
                 currYaw = robot.getYaw();
                 if (currYaw < 0) {
@@ -117,9 +118,9 @@ public class PathARed extends GenericAutonomous {
                     rightPower = 0;
 
                     start_inches = robot.getDistanceInchesLeft();
-                    startingYaw = robot.getYaw();
-                    if (startingYaw < 0){
-                        startingYaw += 360;
+                    startingYaw = ang1;
+                    if (startingYaw< 0){
+                        startingYaw+= 360;
                     }
                     myPID.reset();
                     myPID.enableContinuousInput(-180, 180);
@@ -158,7 +159,7 @@ public class PathARed extends GenericAutonomous {
                 leftPower = dir2Left;
                 rightPower = dir2Right;
 
-                desired_yaw = ang2;
+                desired_yaw = Math.abs(ang1) + Math.abs(ang2);
 
                 currYaw = robot.getYaw();
                 if (currYaw < 0) {
@@ -172,7 +173,7 @@ public class PathARed extends GenericAutonomous {
                     rightPower = 0;
 
                     start_inches = robot.getDistanceInchesLeft();
-                    startingYaw = robot.getYaw();
+                    startingYaw = ang2;
                     if (startingYaw < 0){
                         startingYaw += 360;
                     }
@@ -213,7 +214,7 @@ public class PathARed extends GenericAutonomous {
                 leftPower = dir3Left;
                 rightPower = dir3Right;
 
-                desired_yaw = ang3;
+                desired_yaw = Math.abs(ang3)+Math.abs(ang2);
 
                 currYaw = robot.getYaw();
                 if (currYaw < 0) {
@@ -227,7 +228,7 @@ public class PathARed extends GenericAutonomous {
                     rightPower = 0;
 
                     start_inches = robot.getDistanceInchesLeft();
-                    startingYaw = robot.getYaw();
+                    startingYaw = ang3;
                     if (startingYaw < 0){
                         startingYaw += 360;
                     }
@@ -268,7 +269,7 @@ public class PathARed extends GenericAutonomous {
                 leftPower = dir4Left;
                 rightPower = dir4Right;
 
-                desired_yaw = ang4;
+                desired_yaw = Math.abs(ang3)+Math.abs(ang4);
 
                 currYaw = robot.getYaw();
                 if (currYaw < 0) {
@@ -282,7 +283,7 @@ public class PathARed extends GenericAutonomous {
                     rightPower = 0;
 
                     start_inches = robot.getDistanceInchesLeft();
-                    startingYaw = robot.getYaw();
+                    startingYaw = ang4;
                     if (startingYaw < 0){
                         startingYaw += 360;
                     }
