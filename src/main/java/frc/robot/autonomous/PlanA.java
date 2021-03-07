@@ -15,7 +15,7 @@ public class PlanA extends GenericAutonomous {
     static double startingDistance = 0.0;
     double correction;
     static double currentYaw = 0;
-    double outerArcLength = 80; //89.2
+    double outerArcLength = 60; //80 //89.2
     double innerArc = 35.45;
     double outerRadius = 50;
     double yawDifference = 0;
@@ -43,7 +43,7 @@ public class PlanA extends GenericAutonomous {
         double yawError;
         switch (autonomousStep) {
             case -1: //resets and waits
-                defaultSpeed = 0.1;
+                defaultSpeed = 0.13; //.12
                 ballCount = 0;
                 shooting = false;
                 robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.SHORT_RANGE);
@@ -142,7 +142,7 @@ public class PlanA extends GenericAutonomous {
                 break;
 
             case 7: //PID reset for straightaway
-                defaultSpeed = 0.09;
+                defaultSpeed = 0.13; //.12
                 getCells.run(robot);
                 startingDistance = robot.getDistanceInchesLeft();
                 PIDSteering.reset();
@@ -196,6 +196,8 @@ public class PlanA extends GenericAutonomous {
             case 12:
                 getCells.stop(robot);
                 robot.driveForward(0);
+                robot.setShooterSpeedPresetName(GenericRobot.ShooterSpeedPresetName.YEET);
+                robot.setShooterRPMFromSpeedConst();
                 ballCount = 0;
                 autonomousStep += 1;
                 break;
@@ -249,13 +251,12 @@ public class PlanA extends GenericAutonomous {
 
             case 16: //cease your autonomous
                 robot.setShooterPowerPercentage(0);
-                if (activeCommand.isEnabled()) {
-                    activeCommand.step(robot);
+                // if (activeCommand.isEnabled()) {
+                    // activeCommand.step(robot);
 
-                } else {
-                    robot.limelight.table.getEntry("ledMode").setNumber(1);
-                    robot.driveForward(0);
-                }
+                // else {
+                    // robot.limelight.table.getEntry("ledMode").setNumber(1);
+                    // robot.driveForward(0);
 
                 break;
 
