@@ -11,6 +11,7 @@ import java.lang.Math;
 public class PathABlue extends GenericAutonomous {
 
     PIDController myPID = new PIDController(0,0,0);
+    CollectPowerCells getCells = new CollectPowerCells();
 
     double inches_traveled = 0;
     double desired_distance = 60;
@@ -92,10 +93,11 @@ public class PathABlue extends GenericAutonomous {
                     }
                     autonomousStep += 1;
                 }
-                robot.collectorIn(1);
+                getCells.run(robot);
                 break;
             case 0:
                 //turn
+                getCells.run(robot);
                 leftPower = dir1Left;
                 rightPower = dir1Right;
 
@@ -125,6 +127,7 @@ public class PathABlue extends GenericAutonomous {
                 break;
             case 1:
                 //drive
+                getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
                 leftPower = default_speed*(1+correction);
@@ -151,6 +154,7 @@ public class PathABlue extends GenericAutonomous {
                 break;
             case 2:
                 //turn
+                getCells.run(robot);
                 leftPower = dir2Left;
                 rightPower = dir2Right;
 
@@ -180,6 +184,7 @@ public class PathABlue extends GenericAutonomous {
                 break;
             case 3:
                 //drive
+                getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
                 desired_distance = dist2;
@@ -206,6 +211,7 @@ public class PathABlue extends GenericAutonomous {
                 break;
             case 4:
                 //turn
+                getCells.run(robot);
                 leftPower = dir3Left;
                 rightPower = dir3Right;
 
@@ -235,6 +241,7 @@ public class PathABlue extends GenericAutonomous {
                 break;
             case 5:
                 //drive
+                getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
                 leftPower = default_speed*(1+correction);
@@ -247,6 +254,7 @@ public class PathABlue extends GenericAutonomous {
 
                     leftPower = 0;
                     rightPower = 0;
+                    getCells.stop(robot);
 
                     start_inches = robot.getDistanceInchesLeft();
                     startingYaw = robot.getYaw();

@@ -11,6 +11,7 @@ import java.lang.Math;
 public class PathARed extends GenericAutonomous {
 
     PIDController myPID = new PIDController(0,0,0);
+    CollectPowerCells getCells = new CollectPowerCells();
 
     double inches_traveled = 0;
     double desired_distance = 60;
@@ -27,7 +28,7 @@ public class PathARed extends GenericAutonomous {
     double leftPower = 0;
     double rightPower = 0;
 
-    double dist1 = 60;
+    double dist1 = 54;
     double dist2 = 30*Math.sqrt(5);
     double dist3 = 30*Math.sqrt(10);
     double dist4 = 150;
@@ -97,10 +98,11 @@ public class PathARed extends GenericAutonomous {
                     }
                     autonomousStep += 1;
                 }
-                robot.collectorIn(1);
+                getCells.run(robot);
                 break;
             case 0:
                 //turn
+                getCells.run(robot);
                 leftPower = dir1Left;
                 rightPower = dir1Right;
 
@@ -130,6 +132,7 @@ public class PathARed extends GenericAutonomous {
                 break;
             case 1:
                 //drive
+                getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
                 leftPower = default_speed*(1+correction);
@@ -156,6 +159,7 @@ public class PathARed extends GenericAutonomous {
                 break;
             case 2:
                 //turn
+                getCells.run(robot);
                 leftPower = dir2Left;
                 rightPower = dir2Right;
 
@@ -185,6 +189,7 @@ public class PathARed extends GenericAutonomous {
                 break;
             case 3:
                 //drive
+                getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
                 desired_distance = dist2;
@@ -211,6 +216,7 @@ public class PathARed extends GenericAutonomous {
                 break;
             case 4:
                 //turn
+                getCells.run(robot);
                 leftPower = dir3Left;
                 rightPower = dir3Right;
 
@@ -240,6 +246,7 @@ public class PathARed extends GenericAutonomous {
                 break;
             case 5:
                 //drive
+                getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
                 leftPower = default_speed*(1+correction);
@@ -266,6 +273,7 @@ public class PathARed extends GenericAutonomous {
                 break;
             case 6:
                 //turn
+                getCells.run(robot);
                 leftPower = dir4Left;
                 rightPower = dir4Right;
 
@@ -295,6 +303,7 @@ public class PathARed extends GenericAutonomous {
                 break;
             case 7:
                 //drive
+                getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
                 leftPower = default_speed*(1+correction);
@@ -307,6 +316,7 @@ public class PathARed extends GenericAutonomous {
 
                     leftPower = 0;
                     rightPower = 0;
+                    getCells.stop(robot);
 
                     start_inches = robot.getDistanceInchesLeft();
                     startingYaw = robot.getYaw();
