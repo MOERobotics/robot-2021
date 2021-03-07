@@ -24,6 +24,8 @@ public class GalacticA extends GenericAutonomous {
     double correction = 0;
 
 
+public static double color = 0;
+
     @Override
     protected void printSmartDashboardInternal(){
         SmartDashboard.putNumber("Autonomous Step", autonomousStep);
@@ -63,7 +65,7 @@ public class GalacticA extends GenericAutonomous {
 
         if (cell_check){
             correction = myPID.calculate(robot.getYaw() - startingYaw);
-            robot.setMotorPowerPercentage(default_speed*(1-correction),default_speed*(1+correction));
+            robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
             inches_traveled = (robot.getDistanceInchesLeft() - start_inches); // subtract start distance to get distance traveled
 
             if (inches_traveled >= desired_distance) { // drive up to power cell at C3
@@ -71,6 +73,9 @@ public class GalacticA extends GenericAutonomous {
                 // check if power cell is there
                 start_inches = robot.getDistanceInchesLeft();
                 startingYaw = robot.getYaw();
+                if (startingYaw < 0){
+                    startingYaw += 360;
+                }
                 myPID.reset();
                 myPID.enableContinuousInput(-180,180);
 
@@ -81,6 +86,7 @@ public class GalacticA extends GenericAutonomous {
 
                 }
                 else{
+                    color = 1;
                     blue = true;
                     desired_distance = 5*Math.sqrt(13)/2*12;
                     desired_yaw = 105.255;
@@ -107,6 +113,9 @@ public class GalacticA extends GenericAutonomous {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
@@ -114,12 +123,15 @@ public class GalacticA extends GenericAutonomous {
                     break;
                 case 1: // drive to next power cell
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1-correction),default_speed*(1+correction));
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                     inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
                     if (inches_traveled >= 5 * Math.sqrt(5)/ 2 * 12) {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
@@ -137,6 +149,9 @@ public class GalacticA extends GenericAutonomous {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
@@ -144,13 +159,16 @@ public class GalacticA extends GenericAutonomous {
                     break;
                 case 3: // drive to next power cell
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1-correction),default_speed*(1+correction));
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                     desired_distance = 5*Math.sqrt(10)/2*12;
                     inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
                     if (inches_traveled >= 5 * Math.sqrt(10)/ 2 * 12) {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
@@ -168,6 +186,9 @@ public class GalacticA extends GenericAutonomous {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
@@ -175,21 +196,22 @@ public class GalacticA extends GenericAutonomous {
                     break;
                 case 5: //drive to end zone
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1-correction),default_speed*(1+correction));
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1+correction));
                     desired_distance = 25*6;
                     inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
                     if (inches_traveled >= 25*6) {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
                     }
                     break;
 
-                case 5000:
-                    robot.setMotorPowerPercentage(0,0);
             }
 
         }
@@ -200,12 +222,15 @@ public class GalacticA extends GenericAutonomous {
             switch (autonomousStep){
                 case 0: // drive to power cell from C3
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1-correction),default_speed*(1+correction));
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                     inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
                     if (inches_traveled >= 5*Math.sqrt(13)/2*12) {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
@@ -222,6 +247,9 @@ public class GalacticA extends GenericAutonomous {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
@@ -229,13 +257,16 @@ public class GalacticA extends GenericAutonomous {
                     break;
                 case 2: // drive to power cell
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1-correction),default_speed*(1+correction));
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                     desired_distance = 5 * Math.sqrt(10) / 2 * 12;
                     inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
                     if (inches_traveled >= 5 * Math.sqrt(10) / 2 * 12) {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
@@ -253,6 +284,9 @@ public class GalacticA extends GenericAutonomous {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
@@ -260,13 +294,16 @@ public class GalacticA extends GenericAutonomous {
                     break;
                 case 4: //drive to power cell
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1-correction),default_speed*(1+correction));
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                     desired_distance = 5 * Math.sqrt(5) / 2 * 12;
                     inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
                     if (inches_traveled >= 5 * Math.sqrt(5) / 2 * 12) {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
@@ -284,6 +321,9 @@ public class GalacticA extends GenericAutonomous {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
@@ -291,21 +331,21 @@ public class GalacticA extends GenericAutonomous {
                     break;
                 case 6: // drive to end zone
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1-correction),default_speed*(1+correction));
+                    robot.setMotorPowerPercentage(default_speed*(1+correction),default_speed*(1-correction));
                     desired_distance = 5 * 12;
                     inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
                     if (inches_traveled >= 5 * 12) {
                         robot.setMotorPowerPercentage(0, 0);
                         start_inches = robot.getDistanceInchesLeft();
                         startingYaw = robot.getYaw();
+                        if (startingYaw < 0){
+                            startingYaw += 360;
+                        }
                         myPID.reset();
                         myPID.enableContinuousInput(-180, 180);
                         autonomousStep += 1;
                     }
                     break;
-
-                case 5000:
-                    robot.setMotorPowerPercentage(0,0);
             }
 
         }

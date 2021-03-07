@@ -28,6 +28,9 @@ public class GalacticB extends GenericAutonomous {
     boolean drive = false;
     double startingTime = 0;
 
+    double leftPower = 0;
+    double rightPower = 0;
+
     double dist1 = 0;
     double dist2 = 0;
     double dist3 = 0;
@@ -92,31 +95,45 @@ public class GalacticB extends GenericAutonomous {
     public void autonomousPeriodic(GenericRobot robot) {
 
         if (cellPathCheck){
-            inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
-            if (inches_traveled >= desired_distance) {
-                robot.setMotorPowerPercentage(0, 0);
-                start_inches = robot.getDistanceInchesLeft();
-                startingYaw = robot.getYaw();
-                if (startingYaw < 0) {
-                    startingYaw += 360;
-                }
-                myPID.reset();
-                myPID.enableContinuousInput(-180, 180);
-                autonomousStep += 1;
-            }
+
 
             switch (autonomousStep){
-                case -1:
+                case -1: //reset and wait
                     robot.resetAttitude();
                     robot.resetEncoders();
                     if (System.currentTimeMillis() >= startingTime + 100) {
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
                         autonomousStep += 1;
                     }
                     break;
                 case 0:
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1+correction), default_speed*(1-correction));
+
+                    leftPower = default_speed*(1+correction);
+                    rightPower = default_speed*(1-correction);
+
                     desired_distance = 60;
+
+                    inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
+                    if (inches_traveled >= desired_distance) {
+
+                        leftPower = 0;
+                        rightPower = 0;
+
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
+                        myPID.reset();
+                        myPID.enableContinuousInput(-180, 180);
+                        autonomousStep += 1;
+                    }
+
                     break;
                 case 1:
                     if (cellThere()) {
@@ -148,8 +165,27 @@ public class GalacticB extends GenericAutonomous {
                     break;
                 case 2:
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1+correction), default_speed*(1-correction));
+
+                    leftPower = default_speed*(1+correction);
+                    rightPower = default_speed*(1-correction);
+
                     desired_distance = 60;
+
+                    inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
+                    if (inches_traveled >= desired_distance) {
+
+                        leftPower = 0;
+                        rightPower = 0;
+
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
+                        myPID.reset();
+                        myPID.enableContinuousInput(-180, 180);
+                        autonomousStep += 1;
+                    }
 
                     break;
                 case 3:
@@ -180,8 +216,27 @@ public class GalacticB extends GenericAutonomous {
                     break;
                 case 4:
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1+correction), default_speed*(1-correction));
+
+                    leftPower = default_speed*(1+correction);
+                    rightPower = default_speed*(1-correction);
+
                     desired_distance = 30;
+
+                    inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
+                    if (inches_traveled >= desired_distance) {
+
+                        leftPower = 0;
+                        rightPower = 0;
+
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
+                        myPID.reset();
+                        myPID.enableContinuousInput(-180, 180);
+                        autonomousStep += 1;
+                    }
 
                     break;
                 case 5:
@@ -238,84 +293,232 @@ public class GalacticB extends GenericAutonomous {
 
         if (drive) {
 
-            inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
-            if (inches_traveled >= desired_distance) {
-                robot.setMotorPowerPercentage(0, 0);
-                start_inches = robot.getDistanceInchesLeft();
-                startingYaw = robot.getYaw();
-                if (startingYaw < 0){
-                    startingYaw += 360;
-                }
-                myPID.reset();
-                myPID.enableContinuousInput(-180, 180);
-                autonomousStep += 1;
-            }
-
-            currYaw = robot.getYaw();
-            if (currYaw < 0) {
-                currYaw += 360;
-            }
-            yawChange = Math.abs(currYaw-startingYaw);
-            yawChange = Math.min(yawChange, 360 - yawChange);
-            if (yawChange >= desired_yaw) {
-                robot.setMotorPowerPercentage(0, 0);
-                start_inches = robot.getDistanceInchesLeft();
-                startingYaw = robot.getYaw();
-                if (startingYaw < 0){
-                    startingYaw += 360;
-                }
-                myPID.reset();
-                myPID.enableContinuousInput(-180, 180);
-                autonomousStep += 1;
-            }
-
             switch (autonomousStep) {
+
                 case 0:
                     //turn
-                    robot.setMotorPowerPercentage(dir1Left,dir1Right);
+                    leftPower = dir1Left;
+                    rightPower = dir1Right;
+
                     desired_yaw = ang1;
+
+                    currYaw = robot.getYaw();
+                    if (currYaw < 0) {
+                        currYaw += 360;
+                    }
+                    yawChange = Math.abs(currYaw - startingYaw);
+                    yawChange = Math.min(yawChange, 360 - yawChange);
+                    if (yawChange >= desired_yaw) {
+
+                        leftPower = 0;
+                        rightPower = 0;
+
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
+                        myPID.reset();
+                        myPID.enableContinuousInput(-180, 180);
+                        autonomousStep += 1;
+                    }
+
                     break;
                 case 1:
                     //drive
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1+correction), default_speed*(1-correction));
+
+                    leftPower = default_speed * (1 + correction);
+                    rightPower = default_speed * (1 - correction);
+
                     desired_distance = dist1;
+
+                    inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
+                    if (inches_traveled >= desired_distance) {
+
+                        leftPower = 0;
+                        rightPower = 0;
+
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
+                        myPID.reset();
+                        myPID.enableContinuousInput(-180, 180);
+                        autonomousStep += 1;
+                    }
+
                     break;
                 case 2:
                     //turn
-                    robot.setMotorPowerPercentage(dir2Left,dir2Right);
+                    leftPower = dir2Left;
+                    rightPower = dir2Right;
+
                     desired_yaw = ang2;
+
+                    currYaw = robot.getYaw();
+                    if (currYaw < 0) {
+                        currYaw += 360;
+                    }
+                    yawChange = Math.abs(currYaw - startingYaw);
+                    yawChange = Math.min(yawChange, 360 - yawChange);
+                    if (yawChange >= desired_yaw) {
+
+                        leftPower = 0;
+                        rightPower = 0;
+
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
+                        myPID.reset();
+                        myPID.enableContinuousInput(-180, 180);
+                        autonomousStep += 1;
+                    }
+
                     break;
                 case 3:
                     //drive
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1+correction), default_speed*(1-correction));
+
                     desired_distance = dist2;
+
+                    leftPower = default_speed * (1 + correction);
+                    rightPower = default_speed * (1 - correction);
+
+                    inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
+                    if (inches_traveled >= desired_distance) {
+
+                        leftPower = 0;
+                        rightPower = 0;
+
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
+                        myPID.reset();
+                        myPID.enableContinuousInput(-180, 180);
+                        autonomousStep += 1;
+                    }
+
                     break;
                 case 4:
                     //turn
-                    robot.setMotorPowerPercentage(dir3Left,dir3Right);
+                    leftPower = dir3Left;
+                    rightPower = dir3Right;
+
                     desired_yaw = ang3;
+
+                    currYaw = robot.getYaw();
+                    if (currYaw < 0) {
+                        currYaw += 360;
+                    }
+                    yawChange = Math.abs(currYaw - startingYaw);
+                    yawChange = Math.min(yawChange, 360 - yawChange);
+                    if (yawChange >= desired_yaw) {
+
+                        leftPower = 0;
+                        rightPower = 0;
+
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
+                        myPID.reset();
+                        myPID.enableContinuousInput(-180, 180);
+                        autonomousStep += 1;
+                    }
+
                     break;
                 case 5:
                     //drive
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1+correction), default_speed*(1-correction));
+
+                    leftPower = default_speed * (1 + correction);
+                    rightPower = default_speed * (1 - correction);
+
                     desired_distance = dist3;
+
+                    inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
+                    if (inches_traveled >= desired_distance) {
+
+                        leftPower = 0;
+                        rightPower = 0;
+
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
+                        myPID.reset();
+                        myPID.enableContinuousInput(-180, 180);
+                        autonomousStep += 1;
+                    }
+
                     break;
                 case 6:
                     //turn
-                    robot.setMotorPowerPercentage(dir4Left,dir4Right);
+                    leftPower = dir4Left;
+                    rightPower = dir4Right;
+
                     desired_yaw = ang4;
+
+                    currYaw = robot.getYaw();
+                    if (currYaw < 0) {
+                        currYaw += 360;
+                    }
+                    yawChange = Math.abs(currYaw - startingYaw);
+                    yawChange = Math.min(yawChange, 360 - yawChange);
+                    if (yawChange >= desired_yaw) {
+
+                        leftPower = 0;
+                        rightPower = 0;
+
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
+                        myPID.reset();
+                        myPID.enableContinuousInput(-180, 180);
+                        autonomousStep += 1;
+                    }
+
                     break;
                 case 7:
                     //drive
                     correction = myPID.calculate(robot.getYaw() - startingYaw);
-                    robot.setMotorPowerPercentage(default_speed*(1+correction), default_speed*(1-correction));
+
+                    leftPower = default_speed * (1 + correction);
+                    rightPower = default_speed * (1 - correction);
+
                     desired_distance = dist4;
+
+                    inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
+                    if (inches_traveled >= desired_distance) {
+
+                        leftPower = 0;
+                        rightPower = 0;
+
+                        start_inches = robot.getDistanceInchesLeft();
+                        startingYaw = robot.getYaw();
+                        if (startingYaw < 0) {
+                            startingYaw += 360;
+                        }
+                        myPID.reset();
+                        myPID.enableContinuousInput(-180, 180);
+                        autonomousStep += 1;
+                    }
+
                     break;
 
             }
+
+            robot.setMotorPowerPercentage(leftPower, rightPower);
         }
 
     }
