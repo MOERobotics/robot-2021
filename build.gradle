@@ -49,6 +49,7 @@ repositories {
 // Also defines JUnit 4.
 dependencies {
     implementation group: 'pw.otake.pseudoresonance', name: 'pixy2-java-api', version: '1.4.1'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.2'
     implementation wpi.deps.wpilib()
