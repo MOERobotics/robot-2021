@@ -25,7 +25,7 @@ public class AutoNavSlalom extends GenericAutonomous {
     double outerRadius = 48; //explicitly for S-turns
     double outerArcLength = 69.7; //explicitly for S-turns
 
-    double semiCircleOuterRadius = 47; //turning radius + wheelbase (28")
+    double semiCircleOuterRadius = 48; //turning radius + wheelbase (28")
 
     PIDController PIDSteering;
 
@@ -47,59 +47,63 @@ public class AutoNavSlalom extends GenericAutonomous {
                 autoInitiate(robot);
                 break;
 
-            case -29: //s-turn 1/2
-                arcLeft(robot, outerArcLength);
-                break;
-
-            case -28: //s-turn reset
-                rightArcReset(robot);
-                break;
-
-            case -27: //s-turn 2/2
-                arcRight(robot, outerArcLength);
-                break;
-
-            case -26: //straightaway reset
-                straightReset(robot, 0);
-                break;
-
-            case -25: //straightaway
-                straightaway(robot, 120);
-                break;
-
-            case -24: //s-turn pre-reset
-                rightArcReset(robot);
-                break;
-
-            case -23: //s-turn 1/2
-                arcRight(robot, outerArcLength);
-                break;
-
-            case -22: //s-turn reset
+            case -29:
                 leftArcReset(robot);
                 break;
 
-            case -21: //s-turn 2/2
+            case -28: //s-turn 1/2
                 arcLeft(robot, outerArcLength);
                 break;
 
-            case -20: //semicircle pre-reset
+            case -27: //s-turn reset
+                rightArcReset(robot);
+                break;
+
+            case -26: //s-turn 2/2
+                arcRight(robot, outerArcLength);
+                break;
+
+            case -25: //straightaway reset
+                straightReset(robot, 0);
+                break;
+
+            case -24: //straightaway
+                straightaway(robot, 120);
+                break;
+
+            case -23: //s-turn pre-reset
+                rightArcReset(robot);
+                break;
+
+            case -22: //s-turn 1/2
+                arcRight(robot, outerArcLength);
+                break;
+
+            case -21: //s-turn reset
+                leftArcReset(robot);
+                break;
+
+            case -20: //s-turn 2/2
+                arcLeft(robot, outerArcLength);
+                break;
+
+            case -19: //semicircle pre-reset
                 circumference = (2 * Math.PI * semiCircleOuterRadius); //calculate circumference 2pir (inner or outer radius)
                 leftArcReset(robot);
                 break;
 
-            case -19: //semicircle 1/2
+            case -18: //semicircle 1/2
                 circumferenceQuarter = circumference / 4;
                 arcLeft(robot, circumferenceQuarter);
                 break;
 
-            case -18: //semicircle reset prep
+            case -17: //semicircle reset prep
                 localStartDistance = robot.getDistanceInchesRight();
                 startingYaw = robot.getYaw();
                 autonomousStep += 1;
                 break;
 
-            case -17: //semicircle 2/2
+            case -16: //semicircle 2/2
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                 currentDistance = robot.getDistanceInchesRight();
                 correction = PIDSteering.calculate(semiCircleOuterRadius * yawDifference + (currentDistance - localStartDistance));
@@ -112,53 +116,53 @@ public class AutoNavSlalom extends GenericAutonomous {
 
             //---post loop
 
-            case -16: //s-turn pre-reset
+            case -15: //s-turn pre-reset
                 leftArcReset(robot);
                 break;
 
-            case -15: //s-turn 1/2
+            case -14: //s-turn 1/2
                 arcLeft(robot, outerArcLength);
                 break;
 
-            case -14: //s-turn reset
+            case -13: //s-turn reset
                 rightArcReset(robot);
                 break;
 
-            case -13: //s-turn 2/2
+            case -12: //s-turn 2/2
                 arcRight(robot, outerArcLength);
                 break;
 
-            case -12: //straightaway reset
+            case -11: //straightaway reset
                 straightReset(robot, 180);
                 break;
 
-            case -11: //straightaway
+            case -10: //straightaway
                 straightaway(robot, 120);
                 break;
 
-            case -10: //s-turn pre-reset
+            case -9: //s-turn pre-reset
                 rightArcReset(robot);
                 break;
 
-            case -9: //s-turn 1/2
+            case -8: //s-turn 1/2
                 arcRight(robot, outerArcLength);
                 break;
 
-            case -8: //s-turn reset
+            case -7: //s-turn reset
                 leftArcReset(robot);
                 break;
 
-            case -7: //s-turn 1/2
+            case -6: //s-turn 1/2
                 arcLeft(robot, outerArcLength);
                 break;
 
-            case -6: //cease thine auto routine
+            case -5: //cease thine auto routine
                 robot.driveForward(0);
                 break;
 
             //---------------------------------------------- Non-Method Version Below ----------------------------------------------
 
-            /*
+
             case -1: //resets navx, encoders, PID and waits (first arc reset (1/2))
 
 
@@ -405,7 +409,6 @@ public class AutoNavSlalom extends GenericAutonomous {
                 robot.driveForward(0);
                 break;
 
-             */
 
         }
 
@@ -418,7 +421,6 @@ public class AutoNavSlalom extends GenericAutonomous {
         PIDSteering.disableContinuousInput();
         robot.resetAttitude();
         robot.resetEncoders();
-        startingDistance = robot.getDistanceInchesRight();
 
         currentYaw = 0;
         if (System.currentTimeMillis() >= startingTime + 100)
@@ -469,7 +471,6 @@ public class AutoNavSlalom extends GenericAutonomous {
 
         currentYaw = optimalYaw; //0 if facing forward, 180 if facing backward (relative to starting position)
         startingDistance = robot.getDistanceInchesLeft();
-        startingYaw = robot.getYaw();
 
         autonomousStep += 1;
     }
