@@ -136,8 +136,8 @@ public class PathBRed extends GenericAutonomous {
                 getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
-                leftPower = default_speed*(1+correction);
-                rightPower = default_speed*(1-correction);
+                leftPower = default_speed + correction;
+                rightPower = default_speed - correction;
 
                 desired_distance = dist1;
 
@@ -196,8 +196,8 @@ public class PathBRed extends GenericAutonomous {
 
                 desired_distance = dist2;
 
-                leftPower = default_speed*(1+correction);
-                rightPower = default_speed*(1-correction);
+                leftPower = default_speed + correction;
+                rightPower = default_speed - correction;
 
                 inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
                 if (inches_traveled >= desired_distance) {
@@ -251,8 +251,8 @@ public class PathBRed extends GenericAutonomous {
                 getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
-                leftPower = default_speed*(1+correction);
-                rightPower = default_speed*(1-correction);
+                leftPower = default_speed + correction;
+                rightPower = default_speed - correction;
 
                 desired_distance = dist3;
 
@@ -308,8 +308,8 @@ public class PathBRed extends GenericAutonomous {
                 getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
-                leftPower = default_speed*(1+correction);
-                rightPower = default_speed*(1-correction);
+                leftPower = default_speed + correction;
+                rightPower = default_speed - correction;
 
                 desired_distance = dist4;
 
