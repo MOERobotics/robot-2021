@@ -84,6 +84,10 @@ public class TurretBot extends GenericRobot{
     public double getShooterVelocityRPMLower(){
         return shooterB.getEncoder().getVelocity();
     }
+    @Override
+    public void setTurretPowerPercentageInternal(double power) {
+        speeeen.set(power);
+    }
 
 
 
