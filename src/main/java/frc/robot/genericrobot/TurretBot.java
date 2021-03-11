@@ -91,14 +91,14 @@ public class TurretBot extends GenericRobot {
         return shooterB.getEncoder().getVelocity();
     }
 
+
     @Override
     public void setTurretPowerPercentageInternal(double power) {
         speeeen.set(power);
     }
 
-
-    public double getTurretAngle() {
-        System.out.println("I don't have a turret ...");
-        return 0;
+    @Override
+    public double getTurretAngleDegrees() {
+        return speeeen.getEncoder().getPosition();
     }
 }

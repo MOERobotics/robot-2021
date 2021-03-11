@@ -477,6 +477,10 @@ public abstract class GenericRobot {
         System.out.println("I don't have a turret...");
     }
 
+    public double getTurretAngleDegrees() {
+        System.out.println("I don't have a turret ...");
+        return 0;
+    }
     //***********************************************************************//
 
 
