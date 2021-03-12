@@ -30,8 +30,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import java.io.OutputStream;
-
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
@@ -44,7 +42,7 @@ public class Robot extends TimedRobot {
     ElevationControl  shooterController = new ElevationControl();
     boolean shooterOn = false;
 
-    OutputStream outstream = null;
+    JsonGenerator pixyWriter = null;
 
     double deadZone = 0.10;
     long timeEscalatorStarted = 0;
@@ -74,12 +72,19 @@ public class Robot extends TimedRobot {
         System.out.println("Klaatu barada nikto");
 
         try{
-            outstream = new FileOutputStream(
-                    System.getProperty("user.home") + File.separatorChar + "pixycamData.txt"
+            FileOutputStream outputStream = new FileOutputStream(
+                System.getProperty("user.home") + File.separatorChar + "pixycamData.txt"
             );
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+            pixyWriter = mapper
+                .writerWithDefaultPrettyPrinter()
+                .forType(PixyCam.Block[].class)
+                .createGenerator(outputStream);
         } catch (Exception e){
             System.err.println(
-                    "Unable to open pixycamData.txt forw writing."
+                "Unable to open pixycamData.txt for writing."
             );
         }
     }
@@ -139,6 +144,13 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButtonReleased(5)){
             //brake mode
             robot.setClimberBrake(BrakeModeState.BRAKE);
+        }
+
+
+        if (leftJoystick.getRawButtonPressed(2) && pixyWriter != null){
+            PixyCam.Block[] pixycamData = robot.getPixyCamBlocks();
+            try { pixyWriter.writeObject(pixycamData); }
+            catch (Exception e) { e.printStackTrace(); }
         }
 
     }
@@ -434,18 +446,6 @@ public class Robot extends TimedRobot {
             ballShootCounted = false;
         }
 
-        if (leftJoystick.getRawButtonPressed(1) && outstream != null){
-            PixyCam.Block[] pixycamData = robot.getPixyCamBlocks();
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
-            try{
-                mapper.writerFor(PixyCam.Block[].class);
-                mapper.writeValue(outstream, pixycamData);
-                outstream.write('\n');
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
     }
 

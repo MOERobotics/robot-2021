@@ -2,28 +2,19 @@ package frc.robot.genericrobot;
 
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
-import io.github.pseudoresonance.pixy2api.Pixy2Line;
 import io.github.pseudoresonance.pixy2api.links.SPILink;
-
 import lombok.Value;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PixyCam implements Runnable {
-    public volatile boolean isRunning = false;
+    public boolean isRunning = false;
     private SPILink pixySPI = new SPILink();
     private Pixy2 pixyCam = Pixy2.createInstance(pixySPI);
     private Thread pixyThread;
-
-    PixyCam.Block[] blockList = null;
-
-    public void init() {
-        //Init pixycam
-        pixyCam.init();
-    }
+    PixyCam.Block[] blockList = new PixyCam.Block[0];
 
     public void start() {
+        pixyCam.init();
         pixyThread = new Thread(this);
         this.isRunning = true;
         pixyThread.start();
@@ -31,14 +22,16 @@ public class PixyCam implements Runnable {
 
     public void stop() {
         if (this.isRunning) {
-            this.isRunning = false;
             pixyThread.interrupt();
+            pixyCam.close();
+            this.isRunning = false;
         }
     }
 
     public void run() {
         while (this.isRunning) {
             try {
+                blockList.wait();
                 int ballsFound = pixyCam.getCCC().getBlocks(true);
                 if (ballsFound > 0) {
                     ArrayList<Pixy2CCC.Block> blocksList = pixyCam.getCCC().getBlockCache();
@@ -58,8 +51,9 @@ public class PixyCam implements Runnable {
                         ourBlockList[i] = ourBlock;
                     }
                     this.blockList = ourBlockList;
+                    blocksList.clear();
+                    System.gc();
                 }
-                pixyCam.getLine().getAllFeatures();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -68,8 +62,9 @@ public class PixyCam implements Runnable {
 
 
     public PixyCam.Block[] getPowerCellLocations() {
-
-        return null;
+        PixyCam.Block[] blockList = this.blockList;
+        blockList.notify();
+        return blockList;
     }
 
     @Value public static class Block {
