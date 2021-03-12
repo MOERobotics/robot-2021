@@ -2,7 +2,7 @@ package frc.robot.genericrobot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.simulation.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Util;
 
@@ -76,12 +76,14 @@ public class SiMOElator extends GenericRobot {
 		resetEncoderRight();
 		drawRobot();
 	}
+
 	private void drawRobot() {
 		drawing.setRobotPose(
 			x_meters,
 			y_meters,
 			new Rotation2d(EAST - theta_rad)
 		);
+		SmartDashboard.putData("Field", drawing);
 	}
 
 	private double coolDeadzone(double input, double deadzone) {
@@ -92,7 +94,7 @@ public class SiMOElator extends GenericRobot {
 
 	@Override
 	protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
-		double linearComponent = (leftPower + rightPower) / 2.0;
+		double  linearComponent = (leftPower + rightPower) / 2.0;
 		double angularComponent = (linearComponent - rightPower)*2*12/28;
 
 		//linearComponent = coolDeadzone( linearComponent, 0.15);

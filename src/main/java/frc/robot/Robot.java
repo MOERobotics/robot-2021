@@ -29,14 +29,13 @@ import java.util.stream.Collectors;
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram = new AutoNavSlalom(); //Auto routine to be used?
-    GenericCommand activeCommand = new LimelightAlign(-2, .8);
-    SmartClimb smartClimb = new SmartClimb();
-    GenericRobot robot = new SiMOElator(m_ds);
-    //GenericRobot      robot             = new Falcon();
-    Joystick leftJoystick = new Joystick(0);
-    XboxController xboxJoystick = new XboxController(1);
-    ElevationControl shooterController = new ElevationControl();
+    GenericAutonomous autoProgram       = new DriveStraightFourFeet(); //Auto routine to be used?
+    GenericCommand    activeCommand     = new LimelightAlign(-2,.8);
+    SmartClimb        smartClimb        = new SmartClimb();
+    GenericRobot      robot             = new SiMOElator(m_ds);
+    Joystick          leftJoystick      = new Joystick(0);
+    XboxController    xboxJoystick      = new XboxController(1);
+    ElevationControl  shooterController = new ElevationControl();
     boolean shooterOn = false;
 
     double deadZone = 0.10;
