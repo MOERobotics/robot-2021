@@ -50,6 +50,7 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Escalator Power"               , escalatorPower                                    );
         SmartDashboard.putBoolean ("Escalator Sensor Low"          , getEscalatorSensorLow()                           );
         SmartDashboard.putBoolean ("Escalator Sensor Medium"       , getEscalatorSensorMedium()                        );
+        SmartDashboard.putBoolean ("Escalator Sensor Medium High"  , getEscalatorSensorMediumHigh());
         SmartDashboard.putBoolean ("Escalator Sensor High"         , getEscalatorSensorHigh()                          );
         SmartDashboard.putNumber  ("Escalator Power"               , escalatorPower                                    );
         SmartDashboard.putNumber  ("Indexer Power"                 , indexerPower                                      );
@@ -620,10 +621,15 @@ public abstract class GenericRobot {
         System.out.println("I don't have a high elevator sensor :'(");
         return false;
     }
+    protected boolean getEscalatorSensorMediumHighInternal(){
+        System.out.println("I don't have a medium high elevator sensor :'(");
+        return false;
+    }
 
     public boolean getEscalatorSensorLow(){ return getEscalatorSensorLowInternal();}
     public boolean getEscalatorSensorMedium(){ return getEscalatorSensorMediumInternal();}
     public boolean getEscalatorSensorHigh(){ return getEscalatorSensorHighInternal();}
+    public boolean getEscalatorSensorMediumHigh(){ return getEscalatorSensorMediumHighInternal();}
 
 
     public void setEscalatorLights(boolean onOff){
