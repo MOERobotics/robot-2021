@@ -232,7 +232,7 @@ public class FullBounce extends GenericAutonomous{
                 startingDistance = robot.getDistanceInchesLeft();
                 startingYaw = -90;
                 PIDBounce.reset();
-                outerRadius = 44; //calculated, needs testing
+                outerRadius =  44; //calculated, needs testing
                 outerArcLength = (Math.PI * outerRadius)/2;
                 PIDBounce.disableContinuousInput();
                 autonomousStep += 1;
