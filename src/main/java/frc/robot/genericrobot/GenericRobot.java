@@ -416,7 +416,7 @@ public abstract class GenericRobot {
         double errorUpper = Math.abs((getShooterVelocityRPMUpper() + targetUpper) / targetUpper); //upperRPM is negative for shooting operation, think about this later
         double errorLower = Math.abs((getShooterVelocityRPMLower() - targetLower) / targetLower);
         if((errorUpper < 0.02) && (errorLower < 0.02)) {
-            if (System.currentTimeMillis() - startTime > 100) return true;
+            if (System.currentTimeMillis() - startTime > 300) return true;
         } else {
             startTime = System.currentTimeMillis();
         }

@@ -309,7 +309,7 @@ public class Robot extends TimedRobot {
         POVDirection xboxDPadDirection = POVDirection.getDirection(xboxJoystick.getPOV());
 
         switch (xboxDPadDirection) {
-            case NORTH: //high velocity (long range)
+            case SOUTH: //high velocity (long range)
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
                 limelightAlignChosen = limelightAlignFarDistance;
@@ -318,10 +318,12 @@ public class Robot extends TimedRobot {
                 shooterController.setSetPoint(125);
                 break;
 
-            case SOUTH: //low velocity (short range)
+            case NORTH: //low velocity (short range)
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.SHORT_RANGE);
                 robot.limelight.table.getEntry("pipeline").setNumber(0);
                 limelightAlignChosen = limeLightAlignCloseDistance;
+                shooterController.setEnabled(true);
+                shooterController.setSetPoint(154);
                 break;
 
             case EAST: //medium velocity (mid range)
