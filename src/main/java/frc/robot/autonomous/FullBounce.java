@@ -173,7 +173,7 @@ public class FullBounce extends GenericAutonomous{
                 currentDistance = robot.getDistanceInchesLeft();
                 if (currentDistance - startingDistance < -108) { //6 ft
                     robot.driveForward(0);
-                    autonomousStep += 29;
+                    autonomousStep += 1;
                 }
                 break;
             case 15: //PID reset for forwards roll four (from A6)
@@ -189,7 +189,7 @@ public class FullBounce extends GenericAutonomous{
                 currentDistance = robot.getDistanceInchesLeft();
                 if (currentDistance - startingDistance < 108) { //6 ft > needs testing
                     robot.driveForward(0);
-                    autonomousStep += 29;
+                    autonomousStep += 1;
                 }
                 break;
             case 17: //PID reset for bounce to A9
@@ -225,7 +225,7 @@ public class FullBounce extends GenericAutonomous{
                 currentDistance = robot.getDistanceInchesLeft();
                 if (currentDistance - startingDistance < 108) { //6 ft > needs testing
                     robot.driveForward(0);
-                    autonomousStep += 29;
+                    autonomousStep += 1;
                 }
                 break;
             case 21: //PID reset for arc to finish
