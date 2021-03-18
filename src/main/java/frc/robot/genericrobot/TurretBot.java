@@ -19,12 +19,10 @@ public class TurretBot extends GenericRobot {
                 "Believe it or not, these fools didn't give me a drive motor");
     }
 
-    CANSparkMax indexer = new CANSparkMax(40, kBrushed);
-    CANSparkMax speeeen = new CANSparkMax(41, kBrushless);
-    CANSparkMax shooterA = new CANSparkMax(42, kBrushless);
-    ;
-    CANSparkMax shooterB = new CANSparkMax(49, kBrushless);
-    ;
+    CANSparkMax indexer   = new CANSparkMax(40, kBrushed);
+    CANSparkMax speeeen   = new CANSparkMax(41, kBrushless);
+    CANSparkMax shooterA  = new CANSparkMax(42, kBrushless);
+    CANSparkMax shooterB  = new CANSparkMax(49, kBrushless);
     CANSparkMax collector = new CANSparkMax(43, kBrushed);
 
 
@@ -33,8 +31,6 @@ public class TurretBot extends GenericRobot {
         super.setShooterPowerPercentageInternal(upperPower, lowerPower);
         shooterA.set(upperPower);
         shooterB.set(lowerPower);
-
-
     }
 
     @Override

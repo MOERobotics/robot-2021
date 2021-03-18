@@ -473,40 +473,36 @@ public class Robot extends TimedRobot {
             robot.setIndexerPower(0);
         }
 
-        //Vert Adjust
+        //Shooter
         if (leftJoystick.getRawButton(6)) {
-            robot.aimUp(.4);
+            robot.setShooterRPM(1000);
         } else if (leftJoystick.getRawButton(9)) {
-            robot.aimDown(.4);
+            robot.setShooterRPM(-1000);
         } else {
-            robot.setAimAdjusterPower(0);
+            robot.setShooterRPM(0);
         }
 
-        //CP
+        //Indexer
         if (leftJoystick.getRawButton(5)) {
-            robot.spinControlPanel(-.2);
-        } else if (leftJoystick.getRawButton(10)) {
-            robot.spinControlPanel(.2);
-        } else {
-            robot.spinControlPanel(0);
+            robot.setIndexerPower(-0.1);
+        }
+        if (leftJoystick.getRawButton(10)) {
+            robot.setIndexerPower(0.1);
+        }
+        if ( (!leftJoystick.getRawButton(5)) && !(leftJoystick.getRawButton(10)) ) {
+            robot.setIndexerPower(0);
         }
 
-        //Climber
-        if (leftJoystick.getRawButton(2)) {
-            robot.setClimbVerticalPower(.6);
-        } else if (leftJoystick.getRawButton(1)) {
-            robot.setClimbVerticalPower(-.2);
-        } else {
-            robot.setClimbVerticalPower(0.0);
-        }
-
-        //Left individual control
+        //Turret test
         if (leftJoystick.getRawButton(3)) {
-            robot.setClimbVerticalStarboardPower(0);
+            robot.setTurretPowerPercentage(-0.1);
         }
-        //Right individual control
         if (leftJoystick.getRawButton(4)) {
-            robot.setClimbVerticalPortPower(0);
+            robot.setTurretPowerPercentage(0.1);
+        }
+        if ( (!leftJoystick.getRawButton(3)) && !(leftJoystick.getRawButton(4)) )
+        {
+            robot.setTurretPowerPercentage(0.0);
         }
 
 
