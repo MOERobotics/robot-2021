@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
     GenericAutonomous autoProgram       = new PlanE(); //Auto routine to be used?
     GenericCommand    activeCommand     = new LimelightAlign(-2,.8);
     SmartClimb        smartClimb        = new SmartClimb();
-    GenericRobot      robot             = new Falcon();
+    GenericRobot      robot             = new TurretBot();
     Joystick          leftJoystick      = new Joystick(0);
     XboxController    xboxJoystick      = new XboxController(1);
     ElevationControl  shooterController = new ElevationControl();
