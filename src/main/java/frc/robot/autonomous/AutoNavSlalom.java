@@ -449,7 +449,7 @@ public class AutoNavSlalom extends GenericAutonomous {
         yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
         currentDistance = robot.getDistanceInchesRight();
         correction = PIDSteering.calculate((currentDistance - startingDistance) + outerRadius * yawDifference);
-        robot.setMotorPowerPercentage((defaultSpeed * .75 * correction), (defaultSpeed * 1.5 * correction));
+        robot.setMotorPowerPercentage((defaultSpeed * .75) + correction, (defaultSpeed * 1.5) - correction);
 
         if (currentDistance - startingDistance > outArcLength)
             autonomousStep += 1;
@@ -459,7 +459,7 @@ public class AutoNavSlalom extends GenericAutonomous {
         yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
         currentDistance = robot.getDistanceInchesLeft();
         correction = PIDSteering.calculate(-(currentDistance - startingDistance) + outerRadius * yawDifference);
-        robot.setMotorPowerPercentage((defaultSpeed * 1.5 * correction), (defaultSpeed * .75 * correction));
+        robot.setMotorPowerPercentage((defaultSpeed * 1.5) + correction, (defaultSpeed * .75) - correction);
 
         if (currentDistance - startingDistance > outArcLength)
             autonomousStep += 1;
@@ -478,7 +478,7 @@ public class AutoNavSlalom extends GenericAutonomous {
 
     public void straightaway(GenericRobot robot, double finalDistance) {
         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-        robot.setMotorPowerPercentage((defaultSpeed * correction), (defaultSpeed * correction));
+        robot.setMotorPowerPercentage((defaultSpeed + correction), (defaultSpeed - correction));
 
         currentDistance = robot.getDistanceInchesLeft();
 
