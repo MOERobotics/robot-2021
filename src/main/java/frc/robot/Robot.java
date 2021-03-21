@@ -313,7 +313,7 @@ public class Robot extends TimedRobot {
                 limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
-                shooterController.setSetPoint(125);
+                shooterController.setSetPoint(131);
                 break;
 
             case NORTH: //low velocity (short range)
@@ -330,7 +330,7 @@ public class Robot extends TimedRobot {
                 limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
-                shooterController.setSetPoint(140);
+                shooterController.setSetPoint(137);
 
                 break;
 
