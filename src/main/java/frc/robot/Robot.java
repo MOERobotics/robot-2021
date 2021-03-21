@@ -330,7 +330,7 @@ public class Robot extends TimedRobot {
                 limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
-                shooterController.setSetPoint(135);
+                shooterController.setSetPoint(140);
 
                 break;
 
