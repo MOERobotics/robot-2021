@@ -171,7 +171,7 @@ public class FullBounce extends GenericAutonomous{
                 correction = PIDBounce.calculate(robot.getYaw() - startingYaw);
                 robot.setMotorPowerPercentage(-defaultSpeed * (1 - correction), -defaultSpeed * (1 + correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance < -108) { //6 ft
+                if (currentDistance - startingDistance < -112) { //6 ft
                     robot.driveForward(0);
                     autonomousStep += 1;
                 }
@@ -187,7 +187,7 @@ public class FullBounce extends GenericAutonomous{
                 correction = PIDBounce.calculate(robot.getYaw() - startingYaw);
                 robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance > 70) { //6 ft > needs testing
+                if (currentDistance - startingDistance > 74) { //6 ft > needs testing
                     robot.driveForward(0);
                     autonomousStep += 1;
                 }
@@ -197,7 +197,7 @@ public class FullBounce extends GenericAutonomous{
                 startingYaw = 90;
                 PIDBounce.reset();
                 outerRadius = 59; //calculated, needs testing
-                outerArcLength = (Math.PI * outerRadius);
+                outerArcLength = (Math.PI * outerRadius) / 2;
                 PIDBounce.disableContinuousInput();
                 autonomousStep += 1;
                 break;
@@ -209,7 +209,7 @@ public class FullBounce extends GenericAutonomous{
                 if (currentDistance - startingDistance > outerArcLength) {
                     currentYaw = robot.getYaw();
                     robot.driveForward(0);
-                    autonomousStep += 1;
+                    autonomousStep = 25; //NOTE: JUMP TO 25 FOR DEBUG
                 }
                 break;
             case 19: //PID reset for forwards roll five (to A9)
@@ -217,7 +217,7 @@ public class FullBounce extends GenericAutonomous{
                 startingYaw = 0;
                 PIDBounce.reset();
                 outerRadius = 59; //calculated, needs testing
-                outerArcLength = (Math.PI * outerRadius);
+                outerArcLength = (Math.PI * outerRadius) / 2;
                 PIDBounce.disableContinuousInput();
                 autonomousStep += 1;
                 break;
