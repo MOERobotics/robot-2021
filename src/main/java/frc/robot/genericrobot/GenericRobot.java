@@ -499,7 +499,7 @@ public abstract class GenericRobot {
 
     public void setShooterLights(boolean onOff){
         //System.out.println("I don't have shooter lights");
-        Logger.log("setShooterLights","I don't have shooter lights" );
+        Logger.logOnce("setShooterLights","I don't have shooter lights" );
     }
 
 
@@ -550,7 +550,7 @@ public abstract class GenericRobot {
 
     ){
         //System.out.println("I don't have an Indexer ; (");
-        Logger.log("setIndexerPowerInternal", "I don't have an indexer :'(");
+        Logger.logOnce("setIndexerPowerInternal", "I don't have an indexer :'(");
     }
 
     //***********************************************************************//
@@ -703,7 +703,7 @@ public abstract class GenericRobot {
 
     public void setEscalatorLights(boolean onOff){
         //System.out.println("I don't have escalator lights");
-        Logger.log("setEscalatorLights", "I don't have escalator lights:'(");
+        Logger.logOnce("setEscalatorLights", "I don't have escalator lights:'(");
     }
 
     //***********************************************************************//

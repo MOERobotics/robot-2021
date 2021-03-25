@@ -80,18 +80,18 @@ public class Logger {
 
 		String hashString() {
 			return (hash == null)
-					? "--NULL--"
-					: String.format("%08X", hash);
+				? "--NULL--"
+				: String.format("%08X", hash);
 		}
 
 
 		static final DateTimeFormatter timeFormatter
-				= DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
+			= DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
 		String expiryTimeString() {
 			return (expiryTime == null)
-					? "Does Not Expire"
-					: timeFormatter.format(expiryTime);
+				? "Does Not Expire"
+				: timeFormatter.format(expiryTime);
 		}
 
 	}
@@ -135,15 +135,15 @@ public class Logger {
 			var oldMessage = loggedMessages.get(key);
 
 			if (
-					ignoreChecks == true ||
-							checkMessageExpired(oldMessage,newMessage) == true
+				ignoreChecks == true ||
+				checkMessageExpired(oldMessage,newMessage) == true
 			) {
 				System.out.printf(
-						"LOGGER: %12.12s | %16.16s | %8.8s | %s\n",
-						LoggedMessage.timeFormatter.format(now),
-						key,
-						newMessage.hashString(),
-						message
+					"LOGGER: %12.12s | %16.16s | %8.8s | %s%n",
+					LoggedMessage.timeFormatter.format(now),
+					key,
+					newMessage.hashString(),
+					message
 				);
 				loggedMessages.put(key,newMessage);
 			}
@@ -153,6 +153,7 @@ public class Logger {
 		}
 	}
 
+	@SuppressWarnings("RedundantIfStatement")
 	private static boolean checkMessageExpired (
 			LoggedMessage oldMsg,
 			LoggedMessage newMsg
@@ -161,16 +162,15 @@ public class Logger {
 		if (!Objects.equals(oldMsg.key, newMsg.key)) return true;
 		//Changed value case
 		if (
-				oldMsg.hash != null &&
-						newMsg.hash != null &&
-						Objects.equals(oldMsg.hash, newMsg.hash)
+			oldMsg.hash != null &&
+			newMsg.hash != null &&
+			!Objects.equals(oldMsg.hash, newMsg.hash)
 		) return true;
 		//Datetime expired case
 		if (
-				oldMsg.expiryTime != null &&
-						oldMsg.expiryTime.isBefore(LocalDateTime.now())
+			oldMsg.expiryTime != null &&
+			oldMsg.expiryTime.isBefore(LocalDateTime.now())
 		) return true;
-		int i = 1;
 		//Default
 		return false;
 	}

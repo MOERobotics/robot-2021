@@ -9,6 +9,7 @@ package frc.robot;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -24,6 +25,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +45,7 @@ public class Robot extends TimedRobot {
     ElevationControl  shooterController = new ElevationControl();
     boolean shooterOn = false;
 
+    OutputStream outputStream = null;
     JsonGenerator pixyWriter = null;
 
     double deadZone = 0.10;
@@ -72,7 +76,7 @@ public class Robot extends TimedRobot {
         System.out.println("Klaatu barada nikto");
 
         try{
-            FileOutputStream outputStream = new FileOutputStream(
+            outputStream = new FileOutputStream(
                 System.getProperty("user.home") + File.separatorChar + "pixycamData.txt"
             );
 
@@ -80,6 +84,8 @@ public class Robot extends TimedRobot {
             mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
             pixyWriter = mapper
                 .writerWithDefaultPrettyPrinter()
+                .with(SerializationFeature.FLUSH_AFTER_WRITE_VALUE)
+                .with(SerializationFeature.WRAP_ROOT_VALUE)
                 .forType(PixyCam.Block[].class)
                 .createGenerator(outputStream);
         } catch (Exception e){
@@ -149,8 +155,12 @@ public class Robot extends TimedRobot {
 
 
         if (leftJoystick.getRawButtonPressed(2) && pixyWriter != null){
+            Logger.log("PixyWriter", "Writing pixycam data to file");
             PixyCam.Block[] pixycamData = robot.getPixyCamBlocks();
-            try { pixyWriter.writeObject(pixycamData); }
+            try {
+                pixyWriter.writeObject(pixycamData);
+                outputStream.write('\n');
+            }
             catch (Exception e) { e.printStackTrace(); }
         }
 

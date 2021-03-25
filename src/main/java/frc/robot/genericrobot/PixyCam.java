@@ -53,6 +53,7 @@ public class PixyCam implements Runnable {
             synchronized (this) {
                 try {
                     this.wait();
+                    Logger.logTTL("PIXY_WAKE", "Looking for new data",300);
                     int ballsFound = pixyCam.getCCC().getBlocks(true);
 
                     switch (ballsFound) {

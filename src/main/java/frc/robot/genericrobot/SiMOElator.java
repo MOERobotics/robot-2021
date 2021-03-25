@@ -26,6 +26,7 @@ public class SiMOElator extends GenericRobot {
 	public SiMOElator(DriverStation robotControlCenter) {
 		this.robotControlCenter = robotControlCenter;
 		resetRobotSimulation();
+		pixyCam.start();
 	}
 
 	@Override protected void updateRobotInternal() {
