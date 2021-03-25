@@ -149,6 +149,13 @@ public abstract class GenericRobot {
                 setShooterLights((Math.abs(shooterUpperRPM) > ALMOST_ZERO) || (Math.abs(shooterLowerRPM) > ALMOST_ZERO));
                 break;
         }
+        updateRobotInternal();
+
+    }
+
+    protected void updateRobotInternal () {}
+    public void resetRobotSimulation() {
+        System.out.println("I am a real robot who cannot teleport");
     }
 
     //***********************************************************************//
