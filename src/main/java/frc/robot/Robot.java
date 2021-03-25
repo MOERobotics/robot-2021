@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
     ElevationControl  shooterController = new ElevationControl();
     boolean shooterOn = false;
 
+    int dataInd='a';
     OutputStream outputStream = null;
     JsonGenerator pixyWriter = null;
 
@@ -154,6 +155,16 @@ public class Robot extends TimedRobot {
         }
 
 
+        if (leftJoystick.getRawButtonPressed(2) && pixyWriter != null){
+            Logger.log("PixyWriter", "Writing pixycam data to file");
+            PixyCam.Block[] pixycamData = robot.getPixyCamBlocks();
+            try {
+                outputStream.write(dataInd++);
+                pixyWriter.writeObject(pixycamData);
+                outputStream.write('\n');
+            }
+            catch (Exception e) { e.printStackTrace(); }
+        }
         if (leftJoystick.getRawButtonPressed(2) && pixyWriter != null){
             Logger.log("PixyWriter", "Writing pixycam data to file");
             PixyCam.Block[] pixycamData = robot.getPixyCamBlocks();

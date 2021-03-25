@@ -1,0 +1,130 @@
+{
+  "BLUA": [
+    {
+      "age": 181,
+      "angle": 0,
+      "height": 9,
+      "index": 36,
+      "signature": 1,
+      "width": 12,
+      "x": 108,
+      "y": 39
+    },
+    {
+      "age": 255,
+      "angle": 0,
+      "height": 8,
+      "index": 183,
+      "signature": 1,
+      "width": 12,
+      "x": 256,
+      "y": 56
+    },
+    {
+      "age": 255,
+      "angle": 0,
+      "height": 2,
+      "index": 235,
+      "signature": 1,
+      "width": 4,
+      "x": 148,
+      "y": 31
+    }
+  ],
+  "BLUB": [
+    {
+      "age": 255,
+      "angle": 0,
+      "height": 9,
+      "index": 139,
+      "signature": 1,
+      "width": 12,
+      "x": 204,
+      "y": 51
+    },
+    {
+      "age": 255,
+      "angle": 0,
+      "height": 4,
+      "index": 146,
+      "signature": 1,
+      "width": 4,
+      "x": 114,
+      "y": 33
+    },
+    {
+      "age": 126,
+      "angle": 0,
+      "height": 3,
+      "index": 177,
+      "signature": 1,
+      "width": 4,
+      "x": 180,
+      "y": 30
+    }
+  ],
+  "REDA": [
+    {
+      "age": 255,
+      "angle": 0,
+      "height": 15,
+      "index": 64,
+      "signature": 1,
+      "width": 24,
+      "x": 160,
+      "y": 96
+    },
+    {
+      "age": 181,
+      "angle": 0,
+      "height": 11,
+      "index": 111,
+      "signature": 1,
+      "width": 12,
+      "x": 48,
+      "y": 43
+    },
+    {
+      "age": 255,
+      "angle": 0,
+      "height": 4,
+      "index": 78,
+      "signature": 1,
+      "width": 14,
+      "x": 215,
+      "y": 59
+    }
+  ],
+  "REDB": [
+    {
+      "age": 255,
+      "angle": 0,
+      "height": 18,
+      "index": 47,
+      "signature": 1,
+      "width": 30,
+      "x": 53,
+      "y": 96
+    },
+    {
+      "age": 255,
+      "angle": 0,
+      "height": 11,
+      "index": 9,
+      "signature": 1,
+      "width": 12,
+      "x": 216,
+      "y": 62
+    },
+    {
+      "age": 255,
+      "angle": 0,
+      "height": 5,
+      "index": 238,
+      "signature": 1,
+      "width": 6,
+      "x": 105,
+      "y": 37
+    }
+  ]
+}

@@ -88,7 +88,7 @@ public class PixyCam implements Runnable {
                                         theirBlock.getIndex(),
                                         theirBlock.getAge()
                                     );
-                                    ourBlockList[i] = ourBlock;
+                                    ourBlockList[i++] = ourBlock;
                                 }
                                 this.blockList = ourBlockList;
                                 blocksList.clear();
