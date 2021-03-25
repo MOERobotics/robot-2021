@@ -395,9 +395,6 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    public boolean getEscalatorSensorMediumHighInternal(){ return escalatorSensorMediumHigh.get();}
-
-    @Override
     protected void setClimberBrakeInternal(Util.BrakeModeState state){
         switch (state) {
             case BRAKE:
