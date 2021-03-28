@@ -23,7 +23,7 @@ public class AutoNavSlalom extends GenericAutonomous {
     double currentDistance;
 
     double outerRadius = 48; //explicitly for S-turns
-    double outerArcLength = 69.7; //explicitly for S-turns
+    double outerArcLength = 74; //69.7; //explicitly for S-turns
 
     double semiCircleOuterRadius = 44; //turning radius + wheelbase (28")
 
@@ -34,7 +34,7 @@ public class AutoNavSlalom extends GenericAutonomous {
         startingTime = System.currentTimeMillis();
         PIDSteering = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
         startingDistance = 0;
-        autonomousStep = -30; //-1 for non-method, -30 for method
+        autonomousStep = -36; //-1 for non-method, -30 for method
     }
 
     @Override
@@ -43,40 +43,63 @@ public class AutoNavSlalom extends GenericAutonomous {
 
         switch (autonomousStep) {
 
-            case -30: //initiate
+            case -36: //initiate
                 autoInitiate(robot);
                 break;
 
-            case -29:
-                leftArcReset(robot);
-                break;
-
-            case -28: //s-turn 1/2
-                arcLeft(robot, outerArcLength);
-                break;
-
-            case -27: //s-turn reset
-                rightArcReset(robot);
-                break;
-
-            case -26: //s-turn 2/2
-                arcRight(robot, outerArcLength);
-                break;
-
-            case -25: //straightaway reset
+            case -35: //straightaway reset
                 straightReset(robot, 0);
                 break;
 
-            case -24: //straightaway
-                straightaway(robot, 120);
+            case -34: //straightaway
+                straightaway(robot, 16);
+                break;
+            case -33:
+                leftArcReset(robot);
                 break;
 
-            case -23: //s-turn pre-reset
+            case -32: //s-turn 1/2
+                arcLeft(robot, outerArcLength);
+                break;
+
+            case -31: //straightaway reset
+                straightReset(robot, -90);
+                break;
+
+            case -30: //straightaway
+                straightaway(robot, 4);
+                break;
+
+            case -29: //s-turn reset
                 rightArcReset(robot);
                 break;
 
-            case -22: //s-turn 1/2
+            case -28: //s-turn 2/2
                 arcRight(robot, outerArcLength);
+                break;
+
+            case -27: //straightaway reset
+                straightReset(robot, 0);
+                break;
+
+            case -26: //straightaway
+                straightaway(robot, 120);
+                break;
+
+            case -25: //s-turn pre-reset
+                rightArcReset(robot);
+                break;
+
+            case -24: //s-turn 1/2
+                arcRight(robot, outerArcLength);
+                break;
+
+            case -23: //straightaway reset
+                straightReset(robot, 90);
+                break;
+
+            case -22: //straightaway
+                straightaway(robot, 4);
                 break;
 
             case -21: //s-turn reset
@@ -107,7 +130,7 @@ public class AutoNavSlalom extends GenericAutonomous {
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                 currentDistance = robot.getDistanceInchesRight();
                 correction = PIDSteering.calculate(semiCircleOuterRadius * yawDifference + (currentDistance - localStartDistance));
-                robot.setMotorPowerPercentage((defaultSpeed * .75 + correction), (defaultSpeed * 1.5 + correction));
+                robot.setMotorPowerPercentage((defaultSpeed * .75 + correction), (defaultSpeed * 1.5 - correction));
 
                 if (currentDistance - localStartDistance > circumferenceQuarter) {
                     autonomousStep += 1;
@@ -129,39 +152,47 @@ public class AutoNavSlalom extends GenericAutonomous {
                 arcLeft(robot, outerArcLength);
                 break;
 
-            case -13: //s-turn reset
+            case -13: //straightaway reset
+                straightReset(robot, 90);
+                break;
+
+            case -12: //straightaway
+                straightaway(robot, 4);
+                break;
+
+            case -11: //s-turn reset
                 rightArcReset(robot);
                 break;
 
-            case -12: //s-turn 2/2
+            case -10: //s-turn 2/2
                 arcRight(robot, outerArcLength);
                 break;
 
-            case -11: //straightaway reset
+            case -9: //straightaway reset
                 straightReset(robot, 180);
                 break;
 
-            case -10: //straightaway
+            case -8: //straightaway
                 straightaway(robot, 120);
                 break;
 
-            case -9: //s-turn pre-reset
+            case -7: //s-turn pre-reset
                 rightArcReset(robot);
                 break;
 
-            case -8: //s-turn 1/2
+            case -6: //s-turn 1/2
                 arcRight(robot, outerArcLength);
                 break;
 
-            case -7: //s-turn reset
+            case -5: //s-turn reset
                 leftArcReset(robot);
                 break;
 
-            case -6: //s-turn 1/2
+            case -4: //s-turn 1/2
                 arcLeft(robot, outerArcLength);
                 break;
 
-            case -5: //cease thine auto routine
+            case -3: //cease thine auto routine
                 robot.driveForward(0);
                 break;
 
