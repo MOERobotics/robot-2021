@@ -7,7 +7,7 @@ import frc.robot.genericrobot.GenericRobot;
 public class AutoNavSlalom extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
-    double defaultSpeed = 0.25;
+    double defaultSpeed = 0.15;
 
     static double startingYaw = 0.0;
     static double startingDistance = 0.0;
@@ -107,7 +107,7 @@ public class AutoNavSlalom extends GenericAutonomous {
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                 currentDistance = robot.getDistanceInchesRight();
                 correction = PIDSteering.calculate(semiCircleOuterRadius * yawDifference + (currentDistance - localStartDistance));
-                robot.setMotorPowerPercentage((defaultSpeed * .75 * correction), (defaultSpeed * 1.5 * correction));
+                robot.setMotorPowerPercentage((defaultSpeed * .75 + correction), (defaultSpeed * 1.5 + correction));
 
                 if (currentDistance - localStartDistance > circumferenceQuarter) {
                     autonomousStep += 1;
@@ -117,7 +117,12 @@ public class AutoNavSlalom extends GenericAutonomous {
             //---post loop
 
             case -15: //s-turn pre-reset
-                leftArcReset(robot);
+                PIDSteering.reset();
+                PIDSteering.disableContinuousInput();
+                startingDistance = robot.getDistanceInchesRight();
+                startingYaw = 180;
+
+                autonomousStep += 1;
                 break;
 
             case -14: //s-turn 1/2
