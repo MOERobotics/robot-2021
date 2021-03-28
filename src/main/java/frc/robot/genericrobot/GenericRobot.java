@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Logger;
 import frc.robot.Util.*;
 
 import static frc.robot.Util.ALMOST_ZERO;
@@ -217,11 +218,15 @@ public abstract class GenericRobot {
     }
 
     protected void shiftHighInternal() {
-        System.out.println("I don't have a shifter ;(");
+        //System.out.println("I don't have a shifter ;(");
+
+
     }
 
     protected void shiftLowInternal() {
-        System.out.println("I don't have a shifter ;(");
+        //System.out.println("I don't have a shifter ;(");
+        Logger.logOnce("shiftLowInternal","I don't have a shifter:'(");
+
     }
 
     public GearShiftState getShifterState() {
@@ -240,33 +245,44 @@ public abstract class GenericRobot {
     }
 
     public double getDistanceRatioLeft() {
-        System.out.println("I don't have an encoder :'(");
+        //System.out.println("I don't have an encoder :'(");
+        Logger.logOnce("getDistanceRatioLeft","I don't have an encoder:'(");
         return 0;
     }
 
     public double getDistanceTicksLeft() {
-        System.out.println("I don't have an encoder :'(");
+        //System.out.println("I don't have an encoder :'(");
+        Logger.logOnce("getDistanceTicksLeft","I don't have an encoder:'(");
+
         return 0;
     }
 
     public double getDistanceRatioRight() {
 
-        System.out.println("I don't have an encoder :'(");
+        //System.out.println("I don't have an encoder :'(");
+        Logger.logOnce("getDistanceRatioRight","I don't have an encoder:'(");
+
         return 0;
     }
 
     public double getDistanceTicksRight() {
-        System.out.println("I don't have an encoder :'(");
+        //System.out.println("I don't have an encoder :'(");
+        Logger.logOnce("getDistanceTicksRight","I don't have an encoder:'(");
+
         return 0;
     }
 
     public double getClimberVerticalPortAmperage() {
-        System.out.println("I don't have any current data for the port climber :'(");
+        //System.out.println("I don't have any current data for the port climber :'(");
+        Logger.logOnce("getClimberVerticalPortAmperage","I don't have any current data for the port climber :'(");
+
         return 0;
     }
 
     public double getClimberVerticalStarboardAmperage() {
-        System.out.println("I don't have any current data for the starboard side climber :'(");
+        //System.out.println("I don't have any current data for the starboard side climber :'(");
+        Logger.logOnce("getClimberVerticalStarboardAmperage","I don't have any current data for the port climber :'(");
+
         return 0;
     }
 
@@ -283,30 +299,42 @@ public abstract class GenericRobot {
     }
 
     public void resetEncoderLeft() {
-        System.out.println("I don't have encoders");
+        // System.out.println("I don't have encoders");
+        Logger.logOnce("resetEncodersLeft","I don't have encoders:'(");
+
     }
 
     public void resetEncoderRight() {
-        System.out.println("I don't have encoders");
+        //System.out.println("I don't have encoders");
+        Logger.logOnce("resetEncodersRight","I don't have encoders:'(");
+
     }
 
     public double getYaw() {
-        System.out.println("I don't have a navx :'(");
+        //System.out.println("I don't have a navx :'(");
+        Logger.logOnce("getYaw","I don't have a navx:'(");
+
         return 0;
     }
 
     public double getPitch() {
-        System.out.println("I don't have a navx :'(");
+        //System.out.println("I don't have a navx :'(");
+        Logger.logOnce("getPitch","I don't have a navx:'(");
+
         return 0;
     }
 
     public double getRoll() {
-        System.out.println("I don't have a navx :'(");
+        //System.out.println("I don't have a navx :'(");
+        Logger.logOnce("getRoll","I don't have a navx:'(");
+
         return 0;
     }
 
     public void resetAttitude() {
-        System.out.println("I don't have a navx :'(");
+        //System.out.println("I don't have a navx :'(");
+        Logger.logOnce("resetAttitude","I don't have a navx:'(");
+
     }
 
     public double getPIDmaneuverP() {return 0.0;}
@@ -366,14 +394,18 @@ public abstract class GenericRobot {
         double upperPower,
         double lowerPower
     ) {
-        System.out.println("I don't have a shooter :'(");
+        //System.out.println("I don't have a shooter :'(");
+        Logger.logOnce("setShooterPowerPercentageInternal","I don't have a shooter:'(");
+
     }
 
     protected void setShooterRPMInternal(
         double upperRPM,
         double lowerRPM
     ) {
-        System.out.println("I don't have a shooter :'(");
+        //System.out.println("I don't have a shooter :'(");
+        Logger.logOnce("setShooterRPMInternal","I don't have a shooter:'(");
+
     }
 
 
@@ -386,12 +418,16 @@ public abstract class GenericRobot {
     }
 
     public double getShooterVelocityRPMUpper(){
-        System.out.println("I don't have a shooter :'(");
+        //System.out.println("I don't have a shooter :'(");
+        Logger.logOnce("getShooterVelocityRPMUpper","I don't have a shooter:'(");
+
         return 0.0;
     }
 
     public double getShooterVelocityRPMLower(){
-        System.out.println("I don't have a shooter :'(");
+       // System.out.println("I don't have a shooter :'(");
+        Logger.logOnce("getShooterVelocityRPMLower","I don't have a shooter:'(");
+
         return 0.0;
     }
 
@@ -457,7 +493,8 @@ public abstract class GenericRobot {
     }
 
     public void setShooterLights(boolean onOff){
-        System.out.println("I don't have shooter lights");
+        //System.out.println("I don't have shooter lights");
+        Logger.log("setShooterLights","I don't have shooter lights" );
     }
 
 
@@ -504,7 +541,8 @@ public abstract class GenericRobot {
     }
 
     public char getCurrentControlPanelColor() {
-        System.out.println("I don't have a color sensor :'(");
+        //System.out.println("I don't have a color sensor :'(");
+        Logger.logOnce("getCurrentControlPanelColor","I don't have a color sensor :'(");
         return '?';
     }
 
@@ -526,7 +564,8 @@ public abstract class GenericRobot {
             double indexerPower
 
     ){
-        System.out.println("I don't have an Indexer ; (");
+        //System.out.println("I don't have an Indexer ; (");
+        Logger.log("setIndexerPowerInternal", "I don't have an indexer :'(");
     }
 
     //***********************************************************************//
@@ -547,7 +586,9 @@ public abstract class GenericRobot {
     protected void setCollectorPowerInternal(
             double collectorPower
     ){
-        System.out.println("I don't have a collector ; (");
+        //System.out.println("I don't have a collector ; (");
+        Logger.logOnce("setCollectorPowerInternal","I don't have a collector:'(");
+
     }
 
     //***********************************************************************//
@@ -573,11 +614,15 @@ public abstract class GenericRobot {
     }
 
     protected void setClimbVerticalPortInternal(double power) {
-        System.out.println("I don't have a portside climber :'(");
+        //System.out.println("I don't have a portside climber :'(");
+        Logger.logOnce("setClimbVerticalPortInternal","I don't have a portside climber:'(");
+
     }
 
     protected void setClimbVerticalStarboardInternal(double power) {
-        System.out.println("I don't have a starboard side climber :'(");
+        //System.out.println("I don't have a starboard side climber :'(");
+        Logger.logOnce("setClimbVerticlaStarboardInternal","messageY:'(");
+
     }
 
     public final void setClimbVerticalPower(double power){
@@ -586,12 +631,16 @@ public abstract class GenericRobot {
     }
 
     public double getClimberPortTicks(){
-        System.out.println("I don't have a climber starboard ;(");
+       // System.out.println("I don't have a climber starboard ;(");
+        Logger.logOnce("getClimberPortTicks","I don't have a climber port:'(");
+
         return 0; //?
     }
 
     public double getClimberStarboardTicks(){
-        System.out.println("I don't have a climber starboard ;(");
+       // System.out.println("I don't have a climber starboard ;(");
+        Logger.logOnce("getClimberStarboardTicks","I don't have a climber starboard:'(");
+
         return 0; //?
     }
 
@@ -604,7 +653,9 @@ public abstract class GenericRobot {
         climberBrakeModeState = state;
     }
     protected void setClimberBrakeInternal(BrakeModeState state) {
-        System.out.println("I don't have a climber that can enable brake mode :(");
+       // System.out.println("I don't have a climber that can enable brake mode :(");
+        Logger.logOnce("setClimberBrakeInternal","\"I don't have a climber that can enable brake mode:'(");
+
     }
 
     //***********************************************************************//
@@ -626,25 +677,35 @@ public abstract class GenericRobot {
     protected void setEscalatorPowerInternal (
             double power
     ){
-        System.out.println("I don't have a escalator ; (");
+        //System.out.println("I don't have a escalator ; (");
+        Logger.logOnce("setEscalatorPowerInternal","I don't have a escalator:'(");
+
     }
 
 
     protected boolean getEscalatorSensorLowInternal(){
-        System.out.println("I don't have a low elevator sensor :'(");
+        //System.out.println("I don't have a low elevator sensor :'(");
+        Logger.logOnce("getEscalatorSensorLowInternal","I don't have a low elevator sensor:'(");
+
         return false;
     }
 
     protected boolean getEscalatorSensorMediumInternal(){
-        System.out.println("I don't have a medium elevator sensor :'(");
+        //System.out.println("I don't have a medium elevator sensor :'(");
+        Logger.logOnce("getEscalatorSensorMediumInternal","I don't have a medium elevator sensor:'(");
+
         return false;
     }
     protected boolean getEscalatorSensorHighInternal(){
-        System.out.println("I don't have a high elevator sensor :'(");
+       // System.out.println("I don't have a high elevator sensor :'(");
+        Logger.logOnce("getEscalatorSensorHighInternal","I don't have a high elevator sensor:'(");
+
         return false;
     }
     protected boolean getEscalatorSensorMediumHighInternal(){
-        System.out.println("I don't have a medium high elevator sensor :'(");
+        //System.out.println("I don't have a medium high elevator sensor :'(");
+        Logger.logOnce("getEscalatorSensorMediumHighInternal","I don't have a medium high elevator sensor:'(");
+
         return false;
     }
 
@@ -655,7 +716,8 @@ public abstract class GenericRobot {
 
 
     public void setEscalatorLights(boolean onOff){
-        System.out.println("I don't have escalator lights");
+        //System.out.println("I don't have escalator lights");
+        Logger.log("setEscalatorLights", "I don't have escalator lights:'(");
     }
 
     //***********************************************************************//
@@ -676,6 +738,7 @@ public abstract class GenericRobot {
             double shiftPower
     ){
         //System.out.println("I don't have a generator shifter ; ("); //this is clogging our network
+        //Logger.logOnce("messaseX","messageY:'("); //This might still be clogging our network
     }
 
     //***********************************************************************//
@@ -689,7 +752,9 @@ public abstract class GenericRobot {
     }
 
     protected double getAimElevationInternal(){
-        System.out.println("I don't have an elevation.");
+        //System.out.println("I don't have an elevation.");
+        Logger.logOnce("getAimElevationInternal","I don't have an elevation:'(");
+
         return 0.0;
     }
 
@@ -702,7 +767,9 @@ public abstract class GenericRobot {
 
     }
     protected void setAimAdjusterPowerInternal(double aimPower){
-        System.out.println("I don't have an angle adjuster ;(");
+        //System.out.println("I don't have an angle adjuster ;(");
+        Logger.logOnce("setAimAdjusterPowerInternal","I don't have an angle adjuster:'(");
+
     }
 
     public double getShooterAngleMax(){return 0;}
@@ -745,7 +812,9 @@ public abstract class GenericRobot {
     }
 
     protected void setCameraTiltDegreesInternal(double angle) {
-        System.out.println("I don't have a camera servo :'(");
+        //System.out.println("I don't have a camera servo :'(");
+        Logger.logOnce("setCameraTiltDegreesInternal","I don't have a camera servo:'(");
+
     }
 
     public double getCameraTilt(){
@@ -756,7 +825,9 @@ public abstract class GenericRobot {
     //***********************************************************************//
 
     public Lidar getLidarSubsystem() {
-        System.out.println("I don't have a lidar bus :'(");
+        //System.out.println("I don't have a lidar bus :'(");
+        Logger.logOnce("getLidarSubsystem","I don't have a lidar bus :'(");
+
         return null;
     }
 
@@ -767,21 +838,29 @@ public abstract class GenericRobot {
     }
 
     public Double getLidarDistanceInchesFront() {
-        System.out.println("I don't have a front lidar :'(");
+        //System.out.println("I don't have a front lidar :'(");
+        Logger.logOnce("getLidarDistanceInchesFront","I don't have a front lidar:'(");
+
         return null;
     }
 
     public Double getLidarDistanceInchesRear() {
-        System.out.println("I don't have a rear lidar :'(");
+        //System.out.println("I don't have a rear lidar :'(");
+        Logger.logOnce("getLidarDistanceInchesRear","I don't have a rear lidar:'(");
+
         return null;
     }
     public Double getLidarDistanceInchesLeft() {
-        System.out.println("I don't have a left lidar :'(");
+        //System.out.println("I don't have a left lidar :'(");
+        Logger.logOnce("getLidarDistanceInchesLeft","I don't have a left lidar:'(");
+
         return null;
     }
 
     public Double getLidarDistanceInchesRight() {
-        System.out.println("I don't have a right lidar :'(");
+        //System.out.println("I don't have a right lidar :'(");
+        Logger.logOnce("getLidarDistanceInchesRight","I don't have a right lidar:'(");
+
         return null;
     }
 
