@@ -25,7 +25,7 @@ public class AutoNavSlalom extends GenericAutonomous {
     double outerRadius = 48; //explicitly for S-turns
     double outerArcLength = 69.7; //explicitly for S-turns
 
-    double semiCircleOuterRadius = 48; //turning radius + wheelbase (28")
+    double semiCircleOuterRadius = 44; //turning radius + wheelbase (28")
 
     PIDController PIDSteering;
 
