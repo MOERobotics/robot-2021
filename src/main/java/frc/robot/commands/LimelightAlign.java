@@ -15,7 +15,7 @@ public class LimelightAlign extends GenericCommand{
     long startTime;
     long timeoutTime = 4000;
     double correction;
-    double defaultSpeed = 0.35;
+    double defaultSpeed = 0.25;
     PIDController PIDPivot = new PIDController(6.0e-2, 1.0e-2, 1.0e-3);
 
     public LimelightAlign(double setPoint, double setPointDeadzone){
