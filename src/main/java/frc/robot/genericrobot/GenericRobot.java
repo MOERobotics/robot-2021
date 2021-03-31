@@ -28,7 +28,7 @@ public abstract class GenericRobot {
     private double             collectorPower              = 0;
     private double             indexerPower                = 0;
     private GearShiftState     gear                        = GearShiftState.UNKNOWN;
-    private MotorControlMethod shooterControlMethod = UNKNOWN;
+    private MotorControlMethod shooterControlMethod        = UNKNOWN;
     private BrakeModeState     climberBrakeModeState       = BrakeModeState.UNKNOWN;
     public  long               escalatorSpacing            = 40;
 

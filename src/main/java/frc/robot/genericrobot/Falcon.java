@@ -66,6 +66,7 @@ public class Falcon extends GenericRobot{
     DigitalInput escalatorSensorLow = new DigitalInput(1);
     DigitalInput escalatorSensorMedium = new DigitalInput(2);
     DigitalInput escalatorSensorHigh = new DigitalInput(3);
+    DigitalInput escalatorSensorMediumHigh = new DigitalInput(4);
 
     //Servo cameraTilt = new Servo(0);
 
@@ -188,7 +189,7 @@ public class Falcon extends GenericRobot{
 
      */
 
-    @Override
+    /*@Override
     public double getPIDmaneuverP(){return 8.0e-2;}
 
     @Override
@@ -196,6 +197,15 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getPIDmaneuverD(){return 1.6e-4;}
+*/
+    @Override
+    public double getPIDmaneuverP(){return (8.0e-2)*.4;}
+
+    @Override
+    public double getPIDmaneuverI(){return (8.0e-3)*.4;}
+
+    @Override
+    public double getPIDmaneuverD(){return (1.6e-4)*.4;}
 
     @Override
     public double getYaw() {
@@ -228,6 +238,7 @@ public class Falcon extends GenericRobot{
         shooterA.set(-upperPower);
         shooterB.set(lowerPower);
     }
+
 
 
     private static final ShooterSpeedPreset
