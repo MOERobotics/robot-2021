@@ -89,6 +89,7 @@ public class Falcon extends GenericRobot{
 
         escalator.setIdleMode(IdleMode.kBrake);
 
+        // REMOVE BEFORE FLIGHT... Just for testing.
         shooterA.setIdleMode(IdleMode.kCoast);
         shooterB.setIdleMode(IdleMode.kCoast);
 
@@ -120,8 +121,6 @@ public class Falcon extends GenericRobot{
         climberStarboard.setIdleMode(IdleMode.kBrake);
 
         indexer.setInverted(true);
-
-        pixyCam.start();
 
     }
 
@@ -178,6 +177,17 @@ public class Falcon extends GenericRobot{
         encoderRight.setPosition(0.0);
     }
 
+    /*@Override
+    public double getPIDmaneuverP(){return 1.0e-1;}
+
+    @Override
+    public double getPIDmaneuverI(){return 1.0e-2;}
+
+    @Override
+    public double getPIDmaneuverD(){return 2.0e-4;}
+
+     */
+
     @Override
     public double getPIDmaneuverP(){return 8.0e-2;}
 
@@ -222,7 +232,7 @@ public class Falcon extends GenericRobot{
 
     private static final ShooterSpeedPreset
             SHOOTER_SPEED_OFF   = new ShooterSpeedPreset(   0,    0),
-            SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2285, 2285),
+            SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(4000, 4000),
             SHOOTER_SPEED_MID   = new ShooterSpeedPreset(2620, 2620),
             SHOOTER_SPEED_LONG  = new ShooterSpeedPreset(4000, 3000), //not final
             SHOOTER_SPEED_YEET  = new ShooterSpeedPreset(5000, 5000);

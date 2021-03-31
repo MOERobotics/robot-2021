@@ -254,7 +254,7 @@ public class Robot extends TimedRobot {
         }
 
         //Collector
-        /*
+
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             if (robot.getEscalatorSensorMedium()) { //&& (ballCount<=3)
                 escalatorPower = 0.5;
@@ -269,7 +269,7 @@ public class Robot extends TimedRobot {
             robot.setCollectorPower(0);
         }
 
-         */
+         /*
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             escalatorPower = 0.0;
             collectorPower = 0.75;
@@ -294,7 +294,7 @@ public class Robot extends TimedRobot {
             if (waitingForMediumHigh && robot.getEscalatorSensorMediumHigh()){
                 waitingForMediumHigh = false;
             }
-
+*/
             /*if(waitingForMediumHigh && !robot.getEscalatorSensorMediumHigh()){
                 escalatorPower = 0.75;
                 waitToChange = true;
@@ -307,14 +307,15 @@ public class Robot extends TimedRobot {
 
              */
 
-
+/*
             if (robot.getEscalatorSensorLow() && robot.getEscalatorSensorMedium() && robot.getEscalatorSensorMediumHigh() && robot.getEscalatorSensorHigh()){
                 collectorPower = 0.0;
                 escalatorPower = 0.0;
             }
-
+*/
             //if (ballCount<=4){collectorPower = 1.0;}
             //if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
+        /*
             robot.collectorIn(collectorPower);
             robot.escalatorUp(escalatorPower);
         } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
@@ -322,7 +323,7 @@ public class Robot extends TimedRobot {
         } else {
             robot.setCollectorPower(0);
         }
-
+*/
         //Escalator
         if (xboxJoystick.getXButton()) {
             robot.escalatorUp(.5);
@@ -357,19 +358,21 @@ public class Robot extends TimedRobot {
         POVDirection xboxDPadDirection = POVDirection.getDirection(xboxJoystick.getPOV());
 
         switch (xboxDPadDirection) {
-            case NORTH: //high velocity (long range)
+            case SOUTH: //high velocity (long range)
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
                 limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
-                shooterController.setSetPoint(125);
+                shooterController.setSetPoint(131);
                 break;
 
-            case SOUTH: //low velocity (short range)
+            case NORTH: //low velocity (short range)
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.SHORT_RANGE);
                 robot.limelight.table.getEntry("pipeline").setNumber(0);
                 limelightAlignChosen = limeLightAlignCloseDistance;
+                shooterController.setEnabled(true);
+                shooterController.setSetPoint(154);
                 break;
 
             case EAST: //medium velocity (mid range)
@@ -378,7 +381,7 @@ public class Robot extends TimedRobot {
                 limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
-                shooterController.setSetPoint(131);
+                shooterController.setSetPoint(137);
 
                 break;
 
