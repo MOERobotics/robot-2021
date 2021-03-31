@@ -204,7 +204,7 @@ public class Robot extends TimedRobot {
         }
 
         //Collector
-        /*
+
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             if (robot.getEscalatorSensorMedium()) { //&& (ballCount<=3)
                 escalatorPower = 0.5;
@@ -219,7 +219,7 @@ public class Robot extends TimedRobot {
             robot.setCollectorPower(0);
         }
 
-         */
+         /*
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
             escalatorPower = 0.0;
             collectorPower = 0.75;
@@ -244,7 +244,7 @@ public class Robot extends TimedRobot {
             if (waitingForMediumHigh && robot.getEscalatorSensorMediumHigh()){
                 waitingForMediumHigh = false;
             }
-
+*/
             /*if(waitingForMediumHigh && !robot.getEscalatorSensorMediumHigh()){
                 escalatorPower = 0.75;
                 waitToChange = true;
@@ -257,14 +257,15 @@ public class Robot extends TimedRobot {
 
              */
 
-
+/*
             if (robot.getEscalatorSensorLow() && robot.getEscalatorSensorMedium() && robot.getEscalatorSensorMediumHigh() && robot.getEscalatorSensorHigh()){
                 collectorPower = 0.0;
                 escalatorPower = 0.0;
             }
-
+*/
             //if (ballCount<=4){collectorPower = 1.0;}
             //if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
+        /*
             robot.collectorIn(collectorPower);
             robot.escalatorUp(escalatorPower);
         } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
@@ -272,7 +273,7 @@ public class Robot extends TimedRobot {
         } else {
             robot.setCollectorPower(0);
         }
-
+*/
         //Escalator
         if (xboxJoystick.getXButton()) {
             robot.escalatorUp(.5);
