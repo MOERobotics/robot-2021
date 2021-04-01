@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram = new AutoNavBarrel(); //Auto routine to be used?
+    GenericAutonomous autoProgram = new AutoNavSlalom(); //Auto routine to be used?
     GenericCommand activeCommand = new LimelightAlign(-2, .8);
     SmartClimb smartClimb = new SmartClimb();
     //GenericRobot robot = new SiMOElator(m_ds);
@@ -309,7 +309,7 @@ public class Robot extends TimedRobot {
         POVDirection xboxDPadDirection = POVDirection.getDirection(xboxJoystick.getPOV());
 
         switch (xboxDPadDirection) {
-            case NORTH: //high velocity (long range)
+            case SOUTH: //high velocity (long range)
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
                 limelightAlignChosen = limelightAlignFarDistance;
@@ -318,10 +318,12 @@ public class Robot extends TimedRobot {
                 shooterController.setSetPoint(125);
                 break;
 
-            case SOUTH: //low velocity (short range)
+            case NORTH: //low velocity (short range)
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.SHORT_RANGE);
                 robot.limelight.table.getEntry("pipeline").setNumber(0);
                 limelightAlignChosen = limeLightAlignCloseDistance;
+                shooterController.setEnabled(true);
+                shooterController.setSetPoint(154);
                 break;
 
             case EAST: //medium velocity (mid range)

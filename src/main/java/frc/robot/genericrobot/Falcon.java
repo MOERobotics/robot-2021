@@ -114,6 +114,10 @@ public class Falcon extends GenericRobot{
         angleAdjusterDigitalInputForward = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
         angleAdjusterDigitalInputReverse = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
 
+        // REMOVE THESE TWO LINES AFTER LUCAS FIXES THE HARDWARD LIMIT SWITCHES
+        angleAdjusterDigitalInputReverse.enableLimitSwitch(false);
+        angleAdjusterDigitalInputForward.enableLimitSwitch(false);
+
         climberPort.setIdleMode     (IdleMode.kBrake);
         climberStarboard.setIdleMode(IdleMode.kBrake);
 
@@ -146,7 +150,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getDistanceRatioLeft() {
-        return 0.319;
+        return 0.306;
     }
 
     @Override
@@ -156,7 +160,7 @@ public class Falcon extends GenericRobot{
 
     @Override
     public double getDistanceRatioRight() {
-        return 0.319;
+        return 0.306;
         }
 
     @Override
@@ -174,14 +178,25 @@ public class Falcon extends GenericRobot{
         encoderRight.setPosition(0.0);
     }
 
-    @Override
-    public double getPIDmaneuverP(){return 8.0e-2 * 0.08;}
+    /*@Override
+    public double getPIDmaneuverP(){return 1.0e-1;}
 
     @Override
-    public double getPIDmaneuverI(){return 8.0e-3 * 0.08;}
+    public double getPIDmaneuverI(){return 1.0e-2;}
 
     @Override
-    public double getPIDmaneuverD(){return 1.6e-4 * 0.08;}
+    public double getPIDmaneuverD(){return 2.0e-4;}
+
+     */
+
+    @Override
+    public double getPIDmaneuverP(){return 8.0e-3;}
+
+    @Override
+    public double getPIDmaneuverI(){return 8.0e-4;}
+
+    @Override
+    public double getPIDmaneuverD(){return 1.6e-5;}
 
     @Override
     public double getYaw() {
@@ -216,13 +231,12 @@ public class Falcon extends GenericRobot{
     }
 
 
-
     private static final ShooterSpeedPreset
-            SHOOTER_SPEED_OFF = new ShooterSpeedPreset(0,0),
+            SHOOTER_SPEED_OFF   = new ShooterSpeedPreset(   0,    0),
             SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2285, 2285),
-            SHOOTER_SPEED_MID = new ShooterSpeedPreset(2620, 2620),
-            SHOOTER_SPEED_LONG = new ShooterSpeedPreset(4000, 3000), //not final
-            SHOOTER_SPEED_YEET = new ShooterSpeedPreset(5000, 5000);
+            SHOOTER_SPEED_MID   = new ShooterSpeedPreset(2620, 2620),
+            SHOOTER_SPEED_LONG  = new ShooterSpeedPreset(4000, 3000), //not final
+            SHOOTER_SPEED_YEET  = new ShooterSpeedPreset(5000, 5000);
 
 
 
@@ -291,13 +305,6 @@ public class Falcon extends GenericRobot{
     protected void setCollectorPowerInternal(double collectorPower) {
         collector.set(-collectorPower);
     }
-
-    /*@Override
-    protected void climbVerticalInternal(double climberPower) {
-        climberA.set( climberPower);
-        climberB.set(-climberPower);
-    }
-     */
 
     @Override
     protected void setClimbVerticalStarboardInternal(double power) {
