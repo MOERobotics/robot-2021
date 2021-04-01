@@ -112,5 +112,12 @@ public class PixyCam implements Runnable {
 
     @Value public static class Block {
         public int signature, x, y, width, height, angle, index, age;
+
+        public int getCenterX(){
+            return x + (width/2);
+        }
+        public int getCenterY(){
+            return y + (height/2);
+        }
     }
 }
