@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 
+import java.io.IOException;
+import java.util.Locale;
+
 public class AutoNavSlalom extends GenericAutonomous {
 
     //change speed depending on robot!! (CaMOElot = .4, TestBot = .3)
@@ -43,96 +46,104 @@ public class AutoNavSlalom extends GenericAutonomous {
 
         switch (autonomousStep) {
 
-            case -38: //initiate
+            case 0: //initiate
                 autoInitiate(robot);
                 break;
 
-            case -37: //straightaway reset
+            case 1: //straightaway reset
                 straightReset(robot, 0);
                 break;
 
-            case -36: //straightaway
-                straightaway(robot, 16);
+            case 2: //straightaway
+                straightaway(robot, 16, defaultSpeed);
                 break;
-            case -35:
-                leftArcReset(robot);
-                break;
-
-            case -34: //s-turn 1/2
-                arcLeft(robot, outerArcLength);
+            case 3:
+                //leftArcReset(robot);
+                arcReset(robot, "Left");
                 break;
 
-            case -33: //straightaway reset
+            case 4: //s-turn 1/2
+                //arcLeft(robot, outerArcLength);
+                arc(robot, "left", outerArcLength, defaultSpeed);
+                break;
+
+            case 5: //straightaway reset
                 straightReset(robot, -90);
                 break;
 
-            case -32: //straightaway
-                straightaway(robot, 2);
+            case 6: //straightaway
+                straightaway(robot, 2, defaultSpeed);
                 break;
 
-            case -31: //s-turn reset
-                rightArcReset(robot);
+            case 7: //s-turn reset
+                //rightArcReset(robot);
+                arcReset(robot, "right");
                 break;
 
-            case -30: //s-turn 2/2
-                arcRight(robot, outerArcLength);
+            case 8: //s-turn 2/2
+                //arcRight(robot, outerArcLength);
+                arc(robot, "right", outerArcLength, defaultSpeed);
                 break;
 
-            case -29: //straightaway reset
+            case 9: //straightaway reset
                 straightReset(robot, 0);
                 break;
 
-            case -28: //straightaway
-                defaultSpeed = 0.5;
-                straightaway(robot, 90);
+            case 10: //straightaway
+                straightaway(robot, 90, 0.5);
                 break;
 
-            case -27: //straightaway
-                defaultSpeed = 0.2;
-                straightaway(robot, 118);
+            case 11: //straightaway
+                straightaway(robot, 118, 0.2);
                 break;
 
-            case -26: //s-turn pre-reset
-                rightArcReset(robot);
+            case 12: //s-turn pre-reset
+                //rightArcReset(robot);
+                arcReset(robot, "right");
                 break;
 
-            case -25: //s-turn 1/2
-                arcRight(robot, outerArcLength);
+            case 13: //s-turn 1/2
+                //arcRight(robot, outerArcLength);
+                arc(robot, "right", outerArcLength, defaultSpeed);
                 break;
 
-            case -24: //straightaway reset
+            case 14: //straightaway reset
                 straightReset(robot, 90);
                 break;
 
-            case -23: //straightaway
-                straightaway(robot, 2);
+            case 15: //straightaway
+                straightaway(robot, 2, defaultSpeed);
                 break;
 
-            case -22: //s-turn reset
-                leftArcReset(robot);
+            case 16: //s-turn reset
+                //leftArcReset(robot);
+                arcReset(robot, "left");
                 break;
 
-            case -21: //s-turn 2/2
-                arcLeft(robot, outerArcLength);
+            case 17: //s-turn 2/2
+                //arcLeft(robot, outerArcLength);
+                arc(robot, "left", outerArcLength, defaultSpeed);
                 break;
 
-            case -20: //semicircle pre-reset
+            case 18: //semicircle pre-reset
                 circumference = (2 * Math.PI * semiCircleOuterRadius); //calculate circumference 2pir (inner or outer radius)
-                leftArcReset(robot);
+                //leftArcReset(robot);
+                arcReset(robot, "left");
                 break;
 
-            case -19: //semicircle 1/2
+            case 19: //semicircle 1/2
                 circumferenceQuarter = circumference / 4;
-                arcLeft(robot, circumferenceQuarter);
+                //arcLeft(robot, circumferenceQuarter);
+                arc(robot, "left", circumferenceQuarter, defaultSpeed);
                 break;
 
-            case -18: //semicircle reset prep
+            case 20: //semicircle reset prep
                 localStartDistance = robot.getDistanceInchesRight();
                 startingYaw = robot.getYaw();
                 autonomousStep += 1;
                 break;
 
-            case -17: //semicircle 2/2
+            case 21: //semicircle 2/2
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
                 currentDistance = robot.getDistanceInchesRight();
                 correction = PIDSteering.calculate(semiCircleOuterRadius * yawDifference + (currentDistance - localStartDistance));
@@ -143,17 +154,15 @@ public class AutoNavSlalom extends GenericAutonomous {
                 }
                 break;
 
-            //---post loop
-
-            case -16://reset
+            case 22://reset
                 straightReset(robot, 180);
                 break;
 
-            case -15: //straightaway
-                straightaway(robot, 4);
+            case 23: //straightaway
+                straightaway(robot, 4, defaultSpeed);
                 break;
 
-            case -14: //s-turn pre-reset
+            case 24: //s-turn pre-reset
                 PIDSteering.reset();
                 PIDSteering.disableContinuousInput();
                 startingDistance = robot.getDistanceInchesRight();
@@ -162,64 +171,218 @@ public class AutoNavSlalom extends GenericAutonomous {
                 autonomousStep += 1;
                 break;
 
-            case -13: //s-turn 1/2
-                arcLeft(robot, outerArcLength);
+            case 25: //s-turn 1/2
+                //arcLeft(robot, outerArcLength);
+                arc(robot, "left", outerArcLength, defaultSpeed);
                 break;
 
-            case -12: //straightaway reset
+            case 26: //straightaway reset
                 straightReset(robot, 90);
                 break;
 
-            case -11: //straightaway
-                straightaway(robot, 2);
+            case 27: //straightaway
+                straightaway(robot, 2, defaultSpeed);
                 break;
 
-            case -10: //s-turn reset
-                rightArcReset(robot);
+            case 28: //s-turn reset
+                //rightArcReset(robot);
+                arcReset(robot, "right");
                 break;
 
-            case -9: //s-turn 2/2
-                arcRight(robot, outerArcLength);
+            case 29: //s-turn 2/2
+                //arcRight(robot, outerArcLength);
+                arc(robot, "right", outerArcLength, defaultSpeed);
                 break;
 
-            case -8: //straightaway reset
+            case 30: //straightaway reset
                 straightReset(robot, 180);
                 break;
 
-            case -7: //straightaway
-                defaultSpeed = .50;
-                straightaway(robot, 100);
+            case 31: //straightaway
+                straightaway(robot, 100, 0.5);
                 break;
 
-            case -6: //straightaway
-                defaultSpeed = .2;
-                straightaway(robot, 128);
+            case 32: //straightaway
+                straightaway(robot, 128, 0.2);
                 break;
 
-            case -5: //s-turn pre-reset
-                rightArcReset(robot);
+            case 33: //s-turn pre-reset
+                //rightArcReset(robot);
+                arcReset(robot, "right");
                 break;
 
-            case -4: //s-turn 1/2
-                arcRight(robot, outerArcLength);
+            case 34: //s-turn 1/2
+                //arcRight(robot, outerArcLength);
+                arc(robot, "right", outerArcLength, defaultSpeed);
                 break;
 
-            case -3: //s-turn reset
-                leftArcReset(robot);
+            case 35: //s-turn reset
+                //leftArcReset(robot);
+                arcReset(robot, "left");
                 break;
 
-            case -2: //s-turn 1/2
-                arcLeft(robot, outerArcLength);
+            case 36: //s-turn 1/2
+                //arcLeft(robot, outerArcLength);
+                arc(robot, "left", outerArcLength, defaultSpeed);
                 break;
 
-            case -1: //cease thine auto routine
+            case 37: //cease thine auto routine
                 robot.driveForward(0);
                 break;
 
-            //---------------------------------------------- Non-Method Version Below ----------------------------------------------
+            //Non-Methods moved below methods to prevent annoying scrolling
+        }
+    }
+
+    //Methods for common autonomous routine maneuvers
+    public void autoInitiate(GenericRobot robot) {
+        PIDSteering.reset();
+        PIDSteering.disableContinuousInput();
+        robot.resetAttitude();
+        robot.resetEncoders();
+
+        currentYaw = 0;
+        if (System.currentTimeMillis() >= startingTime + 100) autonomousStep += 1;
+    }
+
+    public void arcReset(GenericRobot robot, String direction) {
+        PIDSteering.reset();
+        PIDSteering.disableContinuousInput();
+
+        if (direction.equalsIgnoreCase("left")) {
+            startingDistance = robot.getDistanceInchesRight();
+        } else if (direction.equalsIgnoreCase("right")) {
+            startingDistance = robot.getDistanceInchesLeft();
+        } else { //we got problems
+            System.out.println("ERROR: Define left or right arcReset");
+        }
+        startingYaw = robot.getYaw();
+
+        autonomousStep += 1;
+    }
+
+    public void arc(GenericRobot robot, String direction, double outArcLength, double desiredSpeed) {
+        yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+        currentDistance = robot.getDistanceInchesRight();
+
+        if (direction.equalsIgnoreCase("left")) {
+            correction = PIDSteering.calculate((currentDistance - startingDistance) + outerRadius * yawDifference);
+            robot.setMotorPowerPercentage((desiredSpeed * .75) + correction, (desiredSpeed * 1.5) - correction);
+        } else if (direction.equalsIgnoreCase("right")) {
+            correction = PIDSteering.calculate(-(currentDistance - startingDistance) + outerRadius * yawDifference);
+            robot.setMotorPowerPercentage((desiredSpeed * 1.5) + correction, (desiredSpeed * .75) - correction);
+        } else { //we got problems
+            System.out.println("ERROR: Define left or right arc");
+        }
+
+        if (currentDistance - startingDistance > outArcLength) autonomousStep += 1;
+    }
+
+    public void straightReset(GenericRobot robot, double optimalYaw) {
+        PIDSteering.reset();
+        PIDSteering.enableContinuousInput(-180, 180);
+
+        currentYaw = optimalYaw; //0 if facing forward, 180 if facing backward (relative to starting position)
+        startingDistance = robot.getDistanceInchesLeft();
+
+        autonomousStep += 1;
+    }
 
 
-            /*case -1: //resets navx, encoders, PID and waits (first arc reset (1/2))
+    public void straightaway(GenericRobot robot, double finalDistance, double desiredSpeed) { //desiredSpeed can be set to defaultSpeed
+        correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
+        robot.setMotorPowerPercentage((desiredSpeed + correction), (desiredSpeed - correction));
+
+        currentDistance = robot.getDistanceInchesLeft();
+
+        if (currentDistance - startingDistance > finalDistance) autonomousStep += 1;
+    }
+
+    //--------old methods--------
+    public void leftArcReset(GenericRobot robot) {
+        PIDSteering.reset();
+        PIDSteering.disableContinuousInput();
+        startingDistance = robot.getDistanceInchesRight();
+        startingYaw = robot.getYaw();
+
+        autonomousStep += 1;
+    }
+
+    public void rightArcReset(GenericRobot robot) {
+        PIDSteering.reset();
+        PIDSteering.disableContinuousInput();
+        startingDistance = robot.getDistanceInchesLeft();
+        startingYaw = robot.getYaw();
+
+        autonomousStep += 1;
+    }
+
+    public void arcLeft(GenericRobot robot, double outArcLength) {
+        yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+        currentDistance = robot.getDistanceInchesRight();
+        correction = PIDSteering.calculate((currentDistance - startingDistance) + outerRadius * yawDifference);
+        robot.setMotorPowerPercentage((defaultSpeed * .75) + correction, (defaultSpeed * 1.5) - correction);
+
+        if (currentDistance - startingDistance > outArcLength)
+            autonomousStep += 1;
+    }
+
+    public void arcRight(GenericRobot robot, double outArcLength) {
+        yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
+        currentDistance = robot.getDistanceInchesLeft();
+        correction = PIDSteering.calculate(-(currentDistance - startingDistance) + outerRadius * yawDifference);
+        robot.setMotorPowerPercentage((defaultSpeed * 1.5) + correction, (defaultSpeed * .75) - correction);
+
+        if (currentDistance - startingDistance > outArcLength)
+            autonomousStep += 1;
+    }
+
+    public double rightArcDiff(double deltaTheta) {
+        if (deltaTheta < 360) {
+            deltaTheta += 360;
+        }
+        deltaTheta = (deltaTheta * Math.PI) / 180;
+
+        return deltaTheta;
+    }
+
+    public double getSmartSpeedCoeff(double startingDistance, double currentDistance, double finalDistance) { //implement acceleration & deceleration (not yet implemented)
+
+        deltaDistance = currentDistance - startingDistance;
+        /*
+
+        (% of default speed)  33   | 66    | 100   | 66    | 33
+        (% of final distance) 0-20 | 20-35 | 35-80 | 80-90 | 90-100
+
+         */
+
+        if (deltaDistance < (finalDistance * .2)) { //0-20
+            smartSpeedCoeff = 0.33;
+        }
+
+        if (deltaDistance >= (finalDistance * .2) && (deltaDistance < (finalDistance * .35))) { //20-35
+            smartSpeedCoeff = 0.66;
+        }
+
+        if (deltaDistance >= (finalDistance * .35) && (deltaDistance < (finalDistance * .8))) { //35-80
+            smartSpeedCoeff = 1.00;
+        }
+
+        if (deltaDistance >= (finalDistance * .8) && (deltaDistance < (finalDistance * .9))) { //80-90
+            smartSpeedCoeff = 0.66;
+        }
+
+        if (deltaDistance >= (finalDistance * .9) && (deltaDistance < finalDistance)) { //90-100
+            smartSpeedCoeff = 0.33;
+        }
+
+
+        return smartSpeedCoeff; //defaultSpeed * smartSpeed(startingDistance, currentDistance), finalDistance)j
+    }
+
+    /* non-method version
+
+    case -1: //resets navx, encoders, PID and waits (first arc reset (1/2))
 
 
                 PIDSteering.reset();
@@ -466,124 +629,6 @@ public class AutoNavSlalom extends GenericAutonomous {
                 break;
 
 */
-        }
-
-
-    }
-
-    //Methods for common autonomous routine maneuvers
-    public void autoInitiate(GenericRobot robot) {
-        PIDSteering.reset();
-        PIDSteering.disableContinuousInput();
-        robot.resetAttitude();
-        robot.resetEncoders();
-
-        currentYaw = 0;
-        if (System.currentTimeMillis() >= startingTime + 100)
-            autonomousStep += 1;
-    }
-
-    public void leftArcReset(GenericRobot robot) {
-        PIDSteering.reset();
-        PIDSteering.disableContinuousInput();
-        startingDistance = robot.getDistanceInchesRight();
-        startingYaw = robot.getYaw();
-
-        autonomousStep += 1;
-    }
-
-    public void rightArcReset(GenericRobot robot) {
-        PIDSteering.reset();
-        PIDSteering.disableContinuousInput();
-        startingDistance = robot.getDistanceInchesLeft();
-        startingYaw = robot.getYaw();
-
-        autonomousStep += 1;
-    }
-
-    public void arcLeft(GenericRobot robot, double outArcLength) {
-        yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
-        currentDistance = robot.getDistanceInchesRight();
-        correction = PIDSteering.calculate((currentDistance - startingDistance) + outerRadius * yawDifference);
-        robot.setMotorPowerPercentage((defaultSpeed * .75) + correction, (defaultSpeed * 1.5) - correction);
-
-        if (currentDistance - startingDistance > outArcLength)
-            autonomousStep += 1;
-    }
-
-    public void arcRight(GenericRobot robot, double outArcLength) {
-        yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
-        currentDistance = robot.getDistanceInchesLeft();
-        correction = PIDSteering.calculate(-(currentDistance - startingDistance) + outerRadius * yawDifference);
-        robot.setMotorPowerPercentage((defaultSpeed * 1.5) + correction, (defaultSpeed * .75) - correction);
-
-        if (currentDistance - startingDistance > outArcLength)
-            autonomousStep += 1;
-    }
-
-    public void straightReset(GenericRobot robot, double optimalYaw) {
-        PIDSteering.reset();
-        PIDSteering.enableContinuousInput(-180, 180);
-
-        currentYaw = optimalYaw; //0 if facing forward, 180 if facing backward (relative to starting position)
-        startingDistance = robot.getDistanceInchesLeft();
-
-        autonomousStep += 1;
-    }
-
-
-    public void straightaway(GenericRobot robot, double finalDistance) {
-        correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-        robot.setMotorPowerPercentage((defaultSpeed + correction), (defaultSpeed - correction));
-
-        currentDistance = robot.getDistanceInchesLeft();
-
-        if (currentDistance - startingDistance > finalDistance)
-            autonomousStep += 1;
-    }
-
-    public double rightArcDiff(double deltaTheta) {
-        if (deltaTheta < 360) {
-            deltaTheta += 360;
-        }
-        deltaTheta = (deltaTheta * Math.PI) / 180;
-
-        return deltaTheta;
-    }
-
-    public double getSmartSpeedCoeff(double startingDistance, double currentDistance, double finalDistance) { //implement acceleration & deceleration (not yet implemented)
-
-        deltaDistance = currentDistance - startingDistance;
-        /*
-
-        (% of default speed)  33   | 66    | 100   | 66    | 33
-        (% of final distance) 0-20 | 20-35 | 35-80 | 80-90 | 90-100
-
-         */
-
-        if (deltaDistance < (finalDistance * .2)) { //0-20
-            smartSpeedCoeff = 0.33;
-        }
-
-        if (deltaDistance >= (finalDistance * .2) && (deltaDistance < (finalDistance * .35))) { //20-35
-            smartSpeedCoeff = 0.66;
-        }
-
-        if (deltaDistance >= (finalDistance * .35) && (deltaDistance < (finalDistance * .8))) { //35-80
-            smartSpeedCoeff = 1.00;
-        }
-
-        if (deltaDistance >= (finalDistance * .8) && (deltaDistance < (finalDistance * .9))) { //80-90
-            smartSpeedCoeff = 0.66;
-        }
-
-        if (deltaDistance >= (finalDistance * .9) && (deltaDistance < finalDistance)) { //90-100
-            smartSpeedCoeff = 0.33;
-        }
-
-
-        return smartSpeedCoeff; //defaultSpeed * smartSpeed(startingDistance, currentDistance), finalDistance)j
-    }
 }
 
 
