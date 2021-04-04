@@ -155,7 +155,7 @@ public abstract class GenericRobot {
 
     protected void updateRobotInternal () {}
     public void resetRobotSimulation() {
-        System.out.println("I am a real robot who cannot teleport");
+        Logger.logOnce("ResetSim","I am a real robot who cannot teleport");
     }
 
     //***********************************************************************//

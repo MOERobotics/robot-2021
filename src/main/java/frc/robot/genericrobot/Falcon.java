@@ -123,6 +123,8 @@ public class Falcon extends GenericRobot{
 
         indexer.setInverted(true);
 
+        pixyCam.start();
+
     }
 
     @Override
@@ -199,13 +201,13 @@ public class Falcon extends GenericRobot{
     public double getPIDmaneuverD(){return 1.6e-4;}
 */
     @Override
-    public double getPIDmaneuverP(){return (8.0e-2)*.4;}
+    public double getPIDmaneuverP(){return (8.0e-2)*.4/5;}
 
     @Override
-    public double getPIDmaneuverI(){return (8.0e-3)*.4;}
+    public double getPIDmaneuverI(){return (8.0e-3)*.4/5;}
 
     @Override
-    public double getPIDmaneuverD(){return (1.6e-4)*.4;}
+    public double getPIDmaneuverD(){return (1.6e-4)*.4/5;}
 
     @Override
     public double getYaw() {

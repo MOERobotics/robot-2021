@@ -1,6 +1,7 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Logger;
 import frc.robot.genericrobot.GenericRobot;
 import frc.robot.genericrobot.PixyCam;
 
@@ -31,13 +32,26 @@ public class GalacticSearchDecision extends GenericAutonomous{
         SmartDashboard.putString("GSD current chosen path", currentAnswer.toString());
 
         if (chosenPath != null) {
-            SmartDashboard.putString("Autonomous Program", chosenPath.getClass().getName());
+            chosenPath.printSmartDashboard();
         }
+    }
+
+    @Override
+    public void autonomousInit(GenericRobot robot) {
+        chosenPath = null;
+
+
+        paths.clear();
+        currentAnswer = Path.Unknown;
     }
 
     @Override
     public void autonomousPeriodic(GenericRobot robot){
         if (chosenPath == null) {
+
+            currentPath = parsePath(robot.getPixyCamBlocks());
+            Logger.log("GSD Path", currentPath.toString());
+            currentAnswer = readAndChoosePath(currentPath);
             switch(currentAnswer){
                 default: case Unknown: return;
                 case RedA: chosenPath = pathARed; break;
@@ -45,7 +59,9 @@ public class GalacticSearchDecision extends GenericAutonomous{
                 case BlueA: chosenPath = pathABlue; break;
                 case BlueB: chosenPath = pathBBlue; break;
             }
+            chosenPath.autonomousInit(robot);
         }
+        if (chosenPath != null) chosenPath.autonomousPeriodic(robot);
     }
 
 
@@ -56,7 +72,7 @@ public class GalacticSearchDecision extends GenericAutonomous{
     public Path readAndChoosePath(Path newPath) {
 
         paths.add(newPath);
-        if (paths.size() < 10) {
+        if (paths.size() < 8) {
             return Path.Unknown;
         } else {
             int
