@@ -13,7 +13,7 @@ public class PixyCam implements Runnable {
     private Pixy2 pixyCam = Pixy2.createInstance(pixySPI);
     private Thread pixyThread;
     PixyCam.Block[] blockList = new PixyCam.Block[0];
-
+// redundant
     public void start() {
         switch (pixyCam.init()) {
             case Pixy2.PIXY_RESULT_OK:
