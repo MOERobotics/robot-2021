@@ -143,7 +143,7 @@ public class AutoNavBarrel extends GenericAutonomous {
 
                 //double a = currentDistance - startingDistance;
                 //if (a > 120) autonomousStep += 1;
-                straightaway(robot, 105, defaultSpeed);
+                straightaway(robot, 100, defaultSpeed);
                 break;
             case 9: //second loop reset (1/?) (7/8th of a loop)
                 //PIDSteering.reset();
@@ -227,20 +227,20 @@ public class AutoNavBarrel extends GenericAutonomous {
                 //currentDistance = robot.getDistanceInchesRight();
 
                 //if (currentDistance - startingDistance > 82) autonomousStep += 1;
-                straightaway(robot, 82, defaultSpeed);
+                straightaway(robot, 104, defaultSpeed);
                 break;
             case 17: //third loop reset (1/?) (5/8th of a loop)
                 // THIRD LOOP UNTESTED AND UNREVIEWED
 
-                PIDSteering.reset();
-                PIDSteering.disableContinuousInput();
+                //PIDSteering.reset();
+                //PIDSteering.disableContinuousInput();
 
-                startingDistance = robot.getDistanceInchesRight(); //set starting distance prior to circumference path
-                startingYaw = robot.getYaw();
+                //startingDistance = robot.getDistanceInchesRight(); //set starting distance prior to circumference path
+                //startingYaw = robot.getYaw();
 
                 circumference = 2 * Math.PI * outerRadius * 0.625; //(5/8 of a loop)
 
-                autonomousStep += 1;
+                //autonomousStep += 1;
                 arcReset(robot, "left");
                 break;
             case 18: //third loop (1/3)
@@ -314,7 +314,7 @@ public class AutoNavBarrel extends GenericAutonomous {
                 //currentDistance = robot.getDistanceInchesRight();
 
                 //if (currentDistance - startingDistance > 272) autonomousStep += 1;
-                straightaway(robot, 272, defaultSpeed);
+                straightaway(robot, 256, defaultSpeed);
                 break;
             case 25: //temporary stop (for testing purposes only)
                 robot.driveForward(0);
