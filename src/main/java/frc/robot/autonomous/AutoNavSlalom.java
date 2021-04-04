@@ -37,7 +37,7 @@ public class AutoNavSlalom extends GenericAutonomous {
         startingTime = System.currentTimeMillis();
         PIDSteering = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
         startingDistance = 0;
-        autonomousStep = -38; //-1 for non-method, -30 for method
+        autonomousStep = 0; //-1 for non-method, -30 for method
     }
 
     @Override
@@ -263,12 +263,13 @@ public class AutoNavSlalom extends GenericAutonomous {
 
     public void arc(GenericRobot robot, String direction, double outArcLength, double desiredSpeed) {
         yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / 180 * Math.PI);
-        currentDistance = robot.getDistanceInchesRight();
 
         if (direction.equalsIgnoreCase("left")) {
+            currentDistance = robot.getDistanceInchesRight();
             correction = PIDSteering.calculate((currentDistance - startingDistance) + outerRadius * yawDifference);
             robot.setMotorPowerPercentage((desiredSpeed * .75) + correction, (desiredSpeed * 1.5) - correction);
         } else if (direction.equalsIgnoreCase("right")) {
+            currentDistance = robot.getDistanceInchesLeft();
             correction = PIDSteering.calculate(-(currentDistance - startingDistance) + outerRadius * yawDifference);
             robot.setMotorPowerPercentage((desiredSpeed * 1.5) + correction, (desiredSpeed * .75) - correction);
         } else { //we got problems
