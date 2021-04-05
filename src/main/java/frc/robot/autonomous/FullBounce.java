@@ -5,7 +5,7 @@ import frc.robot.genericrobot.GenericRobot;
 
 public class FullBounce extends GenericAutonomous{
 
-    double defaultSpeed = 0.15;
+    double defaultSpeed = 0.2;
     static double startingYaw = 0.0;
     double correction;
     static double currentYaw = 0.0;
@@ -14,40 +14,65 @@ public class FullBounce extends GenericAutonomous{
     double outerRadius = 0.0;
     double outerArcLength = 0.0;
     double currentDistance = 0.0;
+    double straightSpeedScaling = 1.0;
     long startingTime;
     double deltaDistance;
     double smartSpeedCoeff;
     PIDController PIDBounce;
+    double innerPowerScaling;
+    double outerPowerScaling;
 
     @Override
     public void autonomousInit(GenericRobot robot) {
-        autonomousStep = -1;
-        startingTime = 0;
+        autonomousStep = -3;
+        startingTime = System.currentTimeMillis();
         PIDBounce = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
         currentYaw = 0;
     }
 
     @Override
     public void autonomousPeriodic(GenericRobot robot){
+        outerRadius = 44;
+        outerPowerScaling = Math.sqrt(outerRadius/(outerRadius-28));
+        innerPowerScaling = 1/ outerPowerScaling;
         switch(autonomousStep) {
-            case -1: //start-up
-                PIDBounce.reset();
-                PIDBounce.disableContinuousInput();
+
+            case -3: //start up
                 robot.resetEncoders();
                 robot.resetAttitude();
                 startingYaw = 0;
                 startingDistance = robot.getDistanceInchesRight();
-                outerRadius = 44;
-                outerArcLength = (2 * Math.PI * outerRadius)/4; // Needs to be tested
+                PIDBounce.reset();
+                currentYaw = 0; // Needs to be tested
+                PIDBounce.enableContinuousInput(-180, 180);
                 if (System.currentTimeMillis() >= startingTime + 100) {
                     autonomousStep += 1;
                 }
+                break;
+
+            case -2: //straight away one
+                correction = PIDBounce.calculate(robot.getYaw() - currentYaw);
+                robot.setMotorPowerPercentage(straightSpeedScaling*defaultSpeed * (1 + correction), straightSpeedScaling*defaultSpeed * (1 - correction));
+                currentDistance = robot.getDistanceInchesRight();
+                if (currentDistance - startingDistance > 22) { // Needs to travel 2 feet (24)
+                    autonomousStep = +1;
+                }
+                break;
+            case -1: //first turn
+                PIDBounce.reset();
+                PIDBounce.disableContinuousInput();
+                startingYaw = 0;
+                startingDistance = robot.getDistanceInchesRight();
+                outerRadius = 44;
+                outerPowerScaling = Math.sqrt(outerRadius/(outerRadius-28));
+                innerPowerScaling = 1/ outerPowerScaling;
+                outerArcLength = (2 * Math.PI * outerRadius)/4; // Needs to be tested
                 break;
             case 0: //90 degree arc to A3
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / (180 * Math.PI));
                 currentDistance = robot.getDistanceInchesRight();
                 correction = PIDBounce.calculate(outerRadius * yawDifference + (currentDistance - startingDistance));
-                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
+                robot.setMotorPowerPercentage(innerPowerScaling *defaultSpeed * (1 + correction), outerPowerScaling *defaultSpeed * (1 - correction));
                 if(currentDistance - startingDistance > outerArcLength){
                     autonomousStep += 1;
                 }
@@ -61,9 +86,9 @@ public class FullBounce extends GenericAutonomous{
                 break;
             case 2: //straight away one
                 correction = PIDBounce.calculate(robot.getYaw() - currentYaw);
-                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
+                robot.setMotorPowerPercentage(straightSpeedScaling*defaultSpeed * (1 + correction), straightSpeedScaling*defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance > 30) { // Needs to travel 2 feet (24)
+                if (currentDistance - startingDistance > 36) { // Needs to travel 2 feet (24)
                     autonomousStep += +1;
                 }
                 break;
@@ -78,7 +103,7 @@ public class FullBounce extends GenericAutonomous{
                 correction = PIDBounce.calculate(robot.getYaw() - startingYaw);
                 robot.setMotorPowerPercentage(-defaultSpeed * (1 - correction), -defaultSpeed * (1 + correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance < -6) { //6 ft
+                if (currentDistance - startingDistance < -18) {
                     autonomousStep += 1;
                 }
                 break;
@@ -86,8 +111,7 @@ public class FullBounce extends GenericAutonomous{
                 startingDistance = robot.getDistanceInchesLeft();
                 startingYaw = -90;
                 PIDBounce.reset();
-                outerRadius = 44;
-                outerArcLength = (2*Math.PI * outerRadius)*35/360;
+                outerArcLength = (2*Math.PI * outerRadius)/12.0;
                 PIDBounce.disableContinuousInput();
                 autonomousStep += 1;
                 break;
@@ -95,7 +119,7 @@ public class FullBounce extends GenericAutonomous{
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / (180 * Math.PI));
                 currentDistance = robot.getDistanceInchesLeft();
                 correction = PIDBounce.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
-                robot.setMotorPowerPercentage(-defaultSpeed * (1 - correction), -defaultSpeed * (1 + correction));
+                robot.setMotorPowerPercentage(-outerPowerScaling*defaultSpeed * (1 - correction), -innerPowerScaling*defaultSpeed * (1 + correction));
                 if (currentDistance - startingDistance < -outerArcLength) {
                     currentYaw = robot.getYaw();
                     autonomousStep += 1;
@@ -103,25 +127,24 @@ public class FullBounce extends GenericAutonomous{
                 break;
             case 7: //PID reset for straight away two
                 startingDistance = robot.getDistanceInchesLeft();
-                startingYaw = -125;
+                startingYaw = -120;
                 PIDBounce.reset();
                 PIDBounce.enableContinuousInput(-180, 180);
                 autonomousStep += 1;
                 break;
             case 8: //straight away two
                 correction = PIDBounce.calculate(robot.getYaw() - startingYaw);
-                robot.setMotorPowerPercentage(-defaultSpeed * (1 - correction), -defaultSpeed * (1 + correction));
+                robot.setMotorPowerPercentage(-straightSpeedScaling*defaultSpeed * (1 - correction), -straightSpeedScaling*defaultSpeed * (1 + correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance < -72) { //6 ft
+                if (currentDistance - startingDistance < -64) { //6 ft
                     autonomousStep += 1;
                 }
                 break;
             case 9: //PID reset for bounce to A6
                 startingDistance = robot.getDistanceInchesLeft();
-                startingYaw = -125;
+                startingYaw = -120;
                 PIDBounce.reset();
-                outerRadius = 44-8.8;
-                outerArcLength = (2*Math.PI * outerRadius)*(55+11)/360;
+                outerArcLength = (2*Math.PI * outerRadius)*60/360;
                 PIDBounce.disableContinuousInput();
                 autonomousStep += 1;
                 break;
@@ -129,71 +152,84 @@ public class FullBounce extends GenericAutonomous{
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / (180 * Math.PI));
                 currentDistance = robot.getDistanceInchesLeft();
                 correction = PIDBounce.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
-                robot.setMotorPowerPercentage(-defaultSpeed * (1 - correction), -defaultSpeed * (1 + correction));
+                robot.setMotorPowerPercentage(-outerPowerScaling*defaultSpeed * (1 - correction), -innerPowerScaling*defaultSpeed * (1 + correction));
                 if (currentDistance - startingDistance < -outerArcLength) {
                     currentYaw = robot.getYaw();
                     autonomousStep += 1;
                 }
                 break;
-            case 11: //PID reset for bounce to A6
+
+            case 11:
+                straightReset(-180, robot.getDistanceInchesLeft(), robot.getYaw());
+                break;
+
+            case 12: //backwards straight
+                correction = PIDBounce.calculate(robot.getYaw() - startingYaw);
+                robot.setMotorPowerPercentage(-straightSpeedScaling*defaultSpeed * (1 - correction), -straightSpeedScaling*defaultSpeed * (1 + correction));
+                currentDistance = robot.getDistanceInchesLeft();
+                if (currentDistance - startingDistance < -6) { //6 ft
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 13: //PID reset for bounce to A6
                 startingDistance = robot.getDistanceInchesLeft();
-                startingYaw = -180;
+                startingYaw = 180;
                 PIDBounce.reset();
-                outerRadius = 44;
-                outerArcLength = (2*Math.PI * outerRadius)*100/360;
+                outerArcLength = (2*Math.PI * outerRadius)*30/360;
                 PIDBounce.disableContinuousInput();
                 autonomousStep += 1;
                 break;
-            case 12: //Bounce backwards right arc to A6 (2/2)
+            case 14: //Bounce backwards right arc to A6 (2/2)
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / (180 * Math.PI));
                 currentDistance = robot.getDistanceInchesLeft();
                 correction = PIDBounce.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
-                robot.setMotorPowerPercentage(-defaultSpeed * (1 - correction), -defaultSpeed * (1 + correction));
+                robot.setMotorPowerPercentage(-outerPowerScaling*defaultSpeed * (1 - correction), -innerPowerScaling*defaultSpeed * (1 + correction));
                 if (currentDistance - startingDistance < -outerArcLength) {
                     currentYaw = robot.getYaw();
                     autonomousStep += 1;
                 }
                 break;
-            case 13: //PID reset for backwards straight away three (to A6)
+            case 15: //PID reset for backwards straight away three (to A6)
                 startingDistance = robot.getDistanceInchesLeft();
                 startingYaw = 90;
                 PIDBounce.reset();
                 PIDBounce.enableContinuousInput(-180, 180);
                 autonomousStep += 1;
                 break;
-            case 14: //backwards straight away three (to A6)
+            case 16: //backwards straight away three (to A6)
                 correction = PIDBounce.calculate(robot.getYaw() - startingYaw);
-                robot.setMotorPowerPercentage(-defaultSpeed * (1 - correction), -defaultSpeed * (1 + correction));
+                robot.setMotorPowerPercentage(-straightSpeedScaling*defaultSpeed * (1 - correction), -straightSpeedScaling*defaultSpeed * (1 + correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance < -112) { //6 ft
+                if (currentDistance - startingDistance < -128) { //6 ft
                     autonomousStep += 1;
                 }
                 break;
-            case 15: //PID reset for forwards roll four (from A6)
+            case 17: //PID reset for forwards roll four (from A6)
                 startingDistance = robot.getDistanceInchesLeft();
                 startingYaw = 90;
                 PIDBounce.reset();
                 PIDBounce.enableContinuousInput(-180, 180);
                 autonomousStep += 1;
                 break;
-            case 16: //forwards roll four (from A6)
+            case 18: //forwards roll four (from A6)
                 correction = PIDBounce.calculate(robot.getYaw() - startingYaw);
-                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
+                robot.setMotorPowerPercentage(straightSpeedScaling*defaultSpeed * (1 + correction), straightSpeedScaling*defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance > 66) { //6 ft > needs testing
+                if (currentDistance - startingDistance > 54) { //6 ft > needs testing
                     autonomousStep += 1;
                 }
                 break;
-            case 17: //PID reset for bounce to A9
+            case 19: //PID reset for bounce to A9
                 startingDistance = robot.getDistanceInchesRight();
                 startingYaw = 90;
                 PIDBounce.reset();
-                outerRadius = 44; //calculated, needs testing
+                //outerRadius = 44; //calculated, needs testing
                 outerArcLength = (Math.PI * outerRadius) / 2;
                 PIDBounce.disableContinuousInput();
                 autonomousStep += 1;
                 break;
-            case 18: //Bounce left arc to A9
+            case 20: //Bounce left arc to A9
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / (180 * Math.PI));
                 currentDistance = robot.getDistanceInchesRight();
                 correction = PIDBounce.calculate(outerRadius * yawDifference + (robot.getDistanceInchesRight() - startingDistance));
@@ -204,14 +240,14 @@ public class FullBounce extends GenericAutonomous{
                 }
                 break;
 
-            case 19:
+            case 21:
                  straightReset(0, robot.getDistanceInchesLeft(), robot.getYaw());
                 break;
 
-            case 20:
+            case 22:
                 straightaway(robot, robot.getYaw(), robot.getDistanceInchesLeft(), 24);
                 break;
-            case 21: //PID reset for forwards roll five (to A9)
+            case 23: //PID reset for forwards roll five (to A9)
                 startingDistance = robot.getDistanceInchesRight();
                 startingYaw = 0;
                 PIDBounce.reset();
@@ -221,7 +257,7 @@ public class FullBounce extends GenericAutonomous{
                 autonomousStep += 1;
                 break;
 
-            case 22: //PID reset for bounce to A9
+            case 24: //PID reset for bounce to A9
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / (180 * Math.PI));
                 currentDistance = robot.getDistanceInchesRight();
                 correction = PIDBounce.calculate(outerRadius * yawDifference + (robot.getDistanceInchesRight() - startingDistance));
@@ -232,22 +268,36 @@ public class FullBounce extends GenericAutonomous{
                 }
                 break;
 
-            case 23: //PID reset for forwards roll five (to A9)
+            case 25: //PID reset for forwards roll five (to A9)
                 startingDistance = robot.getDistanceInchesLeft();
                 startingYaw = -90;
                 PIDBounce.reset();
                 PIDBounce.enableContinuousInput(-180, 180);
                 autonomousStep += 1;
                 break;
-            case 24: //forwards roll five (to A9)
+            case 26: //forwards roll five (to A9)
                 correction = PIDBounce.calculate(robot.getYaw() - startingYaw);
-                robot.setMotorPowerPercentage(defaultSpeed * (1 + correction), defaultSpeed * (1 - correction));
+                robot.setMotorPowerPercentage(straightSpeedScaling*defaultSpeed * (1 + correction), straightSpeedScaling*defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance > 100) { //6 ft > needs testing
+                if (currentDistance - startingDistance > 97) { //6 ft > needs testing
                     autonomousStep += 1;
                 }
                 break;
-            case 25: //PID reset for arc to finish
+
+            case 27:
+                straightReset(-90, robot.getDistanceInchesLeft(), robot.getYaw());
+                break;
+
+            case 28: //backwards straight
+                correction = PIDBounce.calculate(robot.getYaw() - startingYaw);
+                robot.setMotorPowerPercentage(-straightSpeedScaling*defaultSpeed * (1 - correction), -straightSpeedScaling*defaultSpeed * (1 + correction));
+                currentDistance = robot.getDistanceInchesLeft();
+                if (currentDistance - startingDistance < -12) { //6 ft
+                    autonomousStep += 1;
+                }
+                break;
+
+            case 29: //PID reset for arc to finish
                 startingDistance = robot.getDistanceInchesLeft();
                 startingYaw = -90;
                 PIDBounce.reset();
@@ -256,17 +306,18 @@ public class FullBounce extends GenericAutonomous{
                 PIDBounce.disableContinuousInput();
                 autonomousStep += 1;
                 break;
-            case 26: //final arc to finish zone
+
+            case 30: //final arc to finish zone
                 yawDifference = continuousAngleDiff((robot.getYaw() - startingYaw) / (180 * Math.PI));
                 currentDistance = robot.getDistanceInchesLeft();
                 correction = PIDBounce.calculate(outerRadius * yawDifference - (robot.getDistanceInchesLeft() - startingDistance));
-                robot.setMotorPowerPercentage(-defaultSpeed * (1 - correction), -defaultSpeed * (1 + correction));
+                robot.setMotorPowerPercentage(-outerPowerScaling*defaultSpeed * (1 - correction), -innerPowerScaling*defaultSpeed * (1 + correction));
                 if (currentDistance - startingDistance < -outerArcLength) {
                     currentYaw = robot.getYaw();
                     autonomousStep += 1;
                 }
                 break;
-            case 27:
+            case 31:
                 robot.setMotorPowerPercentage(0, 0);
                 break;
         }
