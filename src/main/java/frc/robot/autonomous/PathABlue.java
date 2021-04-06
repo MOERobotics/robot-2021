@@ -7,7 +7,7 @@ import frc.robot.genericrobot.GenericRobot;
 
 import java.lang.Math;
 
-// robot starts on start zone on the c1 line
+// robot starts on start zone on the c1 line.
 public class PathABlue extends GenericAutonomous {
 
     PIDController myPID = new PIDController(0,0,0);
