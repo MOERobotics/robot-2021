@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
@@ -174,6 +175,8 @@ public class Robot extends TimedRobot {
             }
             catch (Exception e) { e.printStackTrace(); }
         }
+
+        SmartDashboard.putString("Kevin Hax", GalacticSearchDecision.parsePath(robot.getPixyCamBlocks()).toString());
 
     }
 

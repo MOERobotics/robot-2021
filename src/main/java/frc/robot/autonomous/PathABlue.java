@@ -29,7 +29,7 @@ public class PathABlue extends GenericAutonomous {
     double rightPower = 0;
 
     double dist1 = 30*Math.sqrt(29);
-    double dist2 = 30*Math.sqrt(10);
+    double dist2 = 30*Math.sqrt(10)+4;
     double dist3 = 30*Math.sqrt(20);
 
     double ang1 = Math.toDegrees(Math.atan(2.0/5.0));
@@ -244,8 +244,8 @@ public class PathABlue extends GenericAutonomous {
                 getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
-                leftPower = default_speed + correction;
-                rightPower = default_speed - correction;
+                leftPower = .8 + correction;
+                rightPower = .8 - correction;
 
                 desired_distance = dist3;
 

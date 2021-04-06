@@ -48,8 +48,11 @@ public class GalacticSearchDecision extends GenericAutonomous{
     @Override
     public void autonomousPeriodic(GenericRobot robot){
         if (chosenPath == null) {
-
-            currentPath = parsePath(robot.getPixyCamBlocks());
+            PixyCam.Block[] blocks = robot.getPixyCamBlocks();
+            int blockCount = 0;
+            if (blocks != null) blockCount = blocks.length;
+            Logger.log("GSD blocks", String.format("There are... %d lights...", blockCount));
+            currentPath = parsePath(blocks);
             Logger.log("GSD Path", currentPath.toString());
             currentAnswer = readAndChoosePath(currentPath);
             switch(currentAnswer){
