@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 
 import com.revrobotics.ControlType;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.Logger;
 
 import java.beans.Encoder;
@@ -13,18 +14,26 @@ import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 
 public class TurretBot extends GenericRobot {
 
-    @Override
-    protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
-        Logger.logOnce("TurretBotDriveMotors",
-                "Believe it or not, these fools didn't give me a drive motor");
-    }
-
     CANSparkMax indexer   = new CANSparkMax(40, kBrushed);
     CANSparkMax speeeen   = new CANSparkMax(41, kBrushless);
     CANSparkMax shooterA  = new CANSparkMax(42, kBrushless);
     CANSparkMax shooterB  = new CANSparkMax(49, kBrushless);
     CANSparkMax collector = new CANSparkMax(43, kBrushed);
+    CANSparkMax leftMotorA = new CANSparkMax(20, kBrushless);
+    CANSparkMax leftMotorB = new CANSparkMax(1, kBrushless);
+    CANSparkMax rightMotorA = new CANSparkMax(14, kBrushless);
+    CANSparkMax rightMotorB = new CANSparkMax(15, kBrushless);
+    Solenoid    shifter = new Solenoid(0);
 
+    @Override
+    protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
+        //super.setMotorPowerPercentageInternal(leftPower,rightPower);
+
+        leftMotorA.set(leftPower);
+        leftMotorB.set(leftPower);
+        rightMotorA.set(rightPower);
+        rightMotorB.set(rightPower);
+    }
 
     @Override
     protected void setShooterPowerPercentageInternal(double upperPower, double lowerPower) {
