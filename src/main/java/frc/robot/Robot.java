@@ -251,10 +251,10 @@ public class Robot extends TimedRobot {
 
         //Elevation Adjuster
         if (xboxJoystick.getY(GenericHID.Hand.kLeft) < -0.5){
-            robot.aimUp(0.6);
+            robot.aimUp(1.0);
             shooterController.setEnabled(false);
         } else if (xboxJoystick.getY(GenericHID.Hand.kLeft) > 0.5){
-            robot.aimDown(0.6);
+            robot.aimUp(0.1);
             shooterController.setEnabled(false);
         } else if (!shooterController.getEnabled()){
             robot.aimUp(0);
@@ -263,6 +263,7 @@ public class Robot extends TimedRobot {
 
         POVDirection xboxDPadDirection = POVDirection.getDirection(xboxJoystick.getPOV());
 
+        double turretPower = 0;
         switch (xboxDPadDirection) {
             case SOUTH: //high velocity (long range)
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
@@ -282,7 +283,7 @@ public class Robot extends TimedRobot {
                 break;
 
             case EAST: //medium velocity (mid range)
-                robot.setTurretPowerPercentage(0.2);
+                turretPower = 0.4;
 /*
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
@@ -294,8 +295,8 @@ public class Robot extends TimedRobot {
                 break;
 
             case WEST: //YEET
-                robot.setTurretPowerPercentage(-0.2);
-/*
+                turretPower = -0.4;
+    /*
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
                 limelightAlignChosen = limelightAlignFarDistance;
@@ -306,6 +307,7 @@ public class Robot extends TimedRobot {
                 break;
 
         }
+        robot.setTurretPowerPercentage(turretPower);
 
         //Shooter
         if (xboxJoystick.getYButtonPressed()) {
