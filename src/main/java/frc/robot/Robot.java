@@ -220,59 +220,17 @@ public class Robot extends TimedRobot {
 
          */
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
-            escalatorPower = 0.0;
             collectorPower = 0.75;
-
-            //two power cells
-            if (robot.getEscalatorSensorLow() && robot.getEscalatorSensorMedium() && !robot.getEscalatorSensorMediumHigh()){
-                waitingForMediumHigh = true;
-            }
-
-            //three and four power cells
-            if (robot.getEscalatorSensorLow() && robot.getEscalatorSensorMedium() && robot.getEscalatorSensorMediumHigh() && !robot.getEscalatorSensorHigh()){
-                waitingForChange = true;
-                waitingForMediumHigh = false;
-            }
-            if (waitingForChange && !robot.getEscalatorSensorMediumHigh()){
-                waitingForChange = false;
-                waitingForMediumHigh = true;
-            }
-            if (waitingForMediumHigh || waitingForChange){
-                escalatorPower = 0.7;
-            }
-            if (waitingForMediumHigh && robot.getEscalatorSensorMediumHigh()){
-                waitingForMediumHigh = false;
-            }
-
-            /*if(waitingForMediumHigh && !robot.getEscalatorSensorMediumHigh()){
-                escalatorPower = 0.75;
-                waitToChange = true;
-            }
-            if (waitToChange && robot.getEscalatorSensorMediumHigh()){
-                escalatorPower = 0.0;
-                waitingForMediumHigh = false;
-                waitToChange = false;
-            }
-
-             */
-
-
-            if (robot.getEscalatorSensorLow() && robot.getEscalatorSensorMedium() && robot.getEscalatorSensorMediumHigh() && robot.getEscalatorSensorHigh()){
-                collectorPower = 0.0;
-                escalatorPower = 0.0;
-            }
-
-            //if (ballCount<=4){collectorPower = 1.0;}
-            //if ((ballCount == 4) && !(robot.getEscalatorSensorLow())) { collectorPower = 0.0;}
-            robot.collectorIn(collectorPower);
-            robot.escalatorUp(escalatorPower);
-        } else if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
-            robot.collectorOut(1.0);
-        } else {
-            robot.setCollectorPower(0);
+        }
+       if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kLeft) > 0) {
+           collectorPower = -0.75;
         }
 
+        robot.collectorIn(collectorPower);
+    //robot.escalatorUp(escalatorPower);
+
         //Escalator
+        /*
         if (xboxJoystick.getXButton()) {
             robot.escalatorUp(.5);
         } else if (xboxJoystick.getAButton()) {
@@ -280,7 +238,7 @@ public class Robot extends TimedRobot {
         } else if (!(xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0)) {
             robot.setEscalatorPower(0);
         }
-
+    */
 
         //Indexer
         if (xboxJoystick.getBumper(GenericHID.Hand.kRight)) {

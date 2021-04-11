@@ -38,12 +38,14 @@ public class TurretBot extends GenericRobot {
     @Override
     protected void setShooterPowerPercentageInternal(double upperPower, double lowerPower) {
         super.setShooterPowerPercentageInternal(upperPower, lowerPower);
+        shooterB.follow(shooterA,true);
         shooterA.set(upperPower);
         //shooterB.set(lowerPower);
     }
 
     @Override
     protected void setShooterRPMInternal(double upperRPM, double lowerRPM) {
+        super.setShooterPowerPercentageInternal(upperRPM, lowerRPM);
         shooterB.follow(shooterA,true);
         shooterA.getPIDController().setReference(upperRPM, ControlType.kVelocity);
         //shooterB.getPIDController().setReference(lowerRPM, ControlType.kVelocity);
