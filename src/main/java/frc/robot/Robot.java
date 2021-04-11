@@ -282,22 +282,27 @@ public class Robot extends TimedRobot {
                 break;
 
             case EAST: //medium velocity (mid range)
+                robot.setTurretPowerPercentage(0.2);
+/*
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
                 limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
                 shooterController.setSetPoint(131);
-
+*/
                 break;
 
             case WEST: //YEET
+                robot.setTurretPowerPercentage(-0.2);
+/*
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
                 limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
                 shooterController.setSetPoint(127);
+ */
                 break;
 
         }

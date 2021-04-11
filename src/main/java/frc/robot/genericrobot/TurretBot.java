@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 
 import com.revrobotics.ControlType;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.Logger;
 
@@ -24,6 +25,8 @@ public class TurretBot extends GenericRobot {
     CANSparkMax rightMotorA = new CANSparkMax(14, kBrushless);
     CANSparkMax rightMotorB = new CANSparkMax(15, kBrushless);
     Solenoid    shifter = new Solenoid(0);
+    Servo       elevationLeft = new Servo(0);
+    Servo       elevationRight = new Servo(1);
 
     @Override
     protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
@@ -34,6 +37,13 @@ public class TurretBot extends GenericRobot {
         rightMotorA.set(rightPower);
         rightMotorB.set(rightPower);
     }
+
+    /*
+    @Override
+    protected void setAimAdjustorPowerInternal(double power) {
+        elevationLeft.set(power);
+    }
+     */
 
     @Override
     protected void setShooterPowerPercentageInternal(double upperPower, double lowerPower) {
