@@ -65,7 +65,6 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         System.out.println("Klaatu barada nikto");
 
-
     }
 
     @Override
@@ -459,13 +458,6 @@ public class Robot extends TimedRobot {
             robot.setEscalatorPower(0);
         }
 
-        //Shooter
-        if (leftJoystick.getRawButton(13)) {
-            robot.setShooterRPM(3500, 2500);
-        } else if (leftJoystick.getRawButton(14)) {
-            robot.setShooterPowerPercentage(0);
-        }
-
         //Indexer
         if (leftJoystick.getRawButton(7)) {
             robot.indexerLoad(1.0);
@@ -486,10 +478,10 @@ public class Robot extends TimedRobot {
 
         //Indexer
         if (leftJoystick.getRawButton(5)) {
-            robot.setIndexerPower(-0.1);
+            robot.setIndexerPower(-0.3);
         }
         if (leftJoystick.getRawButton(10)) {
-            robot.setIndexerPower(0.1);
+            robot.setIndexerPower(0.3);
         }
         if ( (!leftJoystick.getRawButton(5)) && !(leftJoystick.getRawButton(10)) ) {
             robot.setIndexerPower(0);

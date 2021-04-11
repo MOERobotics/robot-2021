@@ -143,10 +143,14 @@ public abstract class GenericRobot {
 
         switch (shooterControlMethod) {
             case POWER:
+                System.out.println("Shooter control method power");
                 setShooterPowerPercentageInternal(shooterUpperPower, shooterLowerPower);
+                System.out.println("I'm sending something to the shooter");
+                System.out.println(shooterUpperPower);
                 setShooterLights((Math.abs(shooterUpperPower) > ALMOST_ZERO) || (Math.abs(shooterLowerPower) > ALMOST_ZERO));
                 break;
             case VELOCITY:
+                System.out.println("Shooter control method velocity");
                 setShooterRPMInternal(shooterUpperRPM, shooterLowerRPM);
                 setShooterLights((Math.abs(shooterUpperRPM) > ALMOST_ZERO) || (Math.abs(shooterLowerRPM) > ALMOST_ZERO));
                 break;
