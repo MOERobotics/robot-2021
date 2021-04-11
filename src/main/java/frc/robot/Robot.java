@@ -179,6 +179,11 @@ public class Robot extends TimedRobot {
         double  leftPower = -leftJoystick.getY() + leftJoystick.getX();
         double rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
+        double wheelBase = 28;
+        double driveScale = wheelBase/4;
+
+        leftPower  = -0.5*leftJoystick.getY()*(1 + wheelBase*leftJoystick.getX()/2/driveScale);
+        rightPower = -0.5*leftJoystick.getY()*(1 - wheelBase*leftJoystick.getX()/2/driveScale);
 
         double driverRestriction = 0.75;
 
