@@ -16,7 +16,7 @@ public class PathBRed extends GenericAutonomous {
     double inches_traveled = 0;
     double desired_distance = 60;
     double desired_yaw = 0;
-    double default_speed = .2;
+    double default_speed = .3;
     double start_inches = 0;
     double startingYaw = 0;
     double currYaw = 0;
@@ -30,25 +30,25 @@ public class PathBRed extends GenericAutonomous {
 
     double dist1 = 30*Math.sqrt(5);
     double dist2 = 60*Math.sqrt(2);
-    double dist3 = 60*Math.sqrt(2);
-    double dist4 = 120;
+    double dist3 = 60*Math.sqrt(2)+6;
+    double dist4 = 102;
 
     double ang1 = -Math.toDegrees(Math.atan(1.0/2.0));
-    double ang2 = 45;
-    double ang3 = -45;
+    double ang2 = 50;
+    double ang3 = -55;
     double ang4 = 0;
 
-    double dir1Left = -.2;
+    double dir1Left = -.3;
     double dir1Right = .2;
 
-    double dir2Left = .2;
-    double dir2Right = -.2;
+    double dir2Left = .3;
+    double dir2Right = -.3;
 
-    double dir3Left = -.2;
-    double dir3Right = .2;
+    double dir3Left = -.3;
+    double dir3Right = .3;
 
-    double dir4Left = .2;
-    double dir4Right = -.2;
+    double dir4Left = .3;
+    double dir4Right = -.3;
 
 
 
@@ -308,8 +308,8 @@ public class PathBRed extends GenericAutonomous {
                 getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
-                leftPower = default_speed + correction;
-                rightPower = default_speed - correction;
+                leftPower = .8 + correction;
+                rightPower = .8 - correction;
 
                 desired_distance = dist4;
 

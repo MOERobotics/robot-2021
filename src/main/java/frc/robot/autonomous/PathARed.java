@@ -16,7 +16,7 @@ public class PathARed extends GenericAutonomous {
     double inches_traveled = 0;
     double desired_distance = 60;
     double desired_yaw = 0;
-    double default_speed = .2;
+    double default_speed = .3;
     double start_inches = 0;
     double startingYaw = 0;
     double currYaw = 0;
@@ -30,12 +30,12 @@ public class PathARed extends GenericAutonomous {
 
     double dist1 = 54;
     double dist2 = 30*Math.sqrt(5);
-    double dist3 = 30*Math.sqrt(10);
-    double dist4 = 150;
+    double dist3 = 30*Math.sqrt(10)+6;
+    double dist4 = 172;
 
     double ang1 = 0;
     double ang2 = Math.toDegrees(Math.atan(1.0/2.0));
-    double ang3 = -1*Math.toDegrees(Math.atan(3.0));
+    double ang3 = -1*Math.toDegrees(Math.atan(3.0))-20;
     double ang4 = 0;
 
     double dir1Left = 0;
@@ -290,7 +290,7 @@ public class PathARed extends GenericAutonomous {
                     leftPower = 0;
                     rightPower = 0;
 
-                    start_inches = robot.getDistanceInchesLeft();
+                    start_inches = robot.getDistanceInchesRight();
                     startingYaw = ang4;
                     if (startingYaw < 0){
                         startingYaw += 360;
@@ -306,12 +306,12 @@ public class PathARed extends GenericAutonomous {
                 getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
-                leftPower = default_speed + correction;
-                rightPower = default_speed - correction;
+                leftPower = .8 + correction;
+                rightPower = .8 - correction;
 
                 desired_distance = dist4;
 
-                inches_traveled = (robot.getDistanceInchesLeft() - start_inches);
+                inches_traveled = (robot.getDistanceInchesRight() - start_inches);
                 if (inches_traveled >= desired_distance) {
 
                     leftPower = 0;
@@ -329,6 +329,12 @@ public class PathARed extends GenericAutonomous {
                 }
 
                 break;
+            case 8:
+                leftPower = 0;
+                rightPower = 0;
+                getCells.stop(robot);
+                break;
+
 
         }
 

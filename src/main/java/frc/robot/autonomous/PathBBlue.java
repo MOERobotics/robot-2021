@@ -16,7 +16,7 @@ public class PathBBlue extends GenericAutonomous {
     double inches_traveled = 0;
     double desired_distance = 60;
     double desired_yaw = 0;
-    double default_speed = .2;
+    double default_speed = .3;
     double start_inches = 0;
     double startingYaw = 0;
     double currYaw = 0;
@@ -33,17 +33,17 @@ public class PathBBlue extends GenericAutonomous {
     double dist3 = 90*Math.sqrt(2);
 
     double ang1 = Math.toDegrees(Math.atan(1.0/5.0));
-    double ang2 = -45;
+    double ang2 = -65;
     double ang3 = 45;
 
-    double dir1Left = .2;
-    double dir1Right = -.2;
+    double dir1Left = .3;
+    double dir1Right = -.3;
 
-    double dir2Left = -.2;
-    double dir2Right = .2;
+    double dir2Left = -.3;
+    double dir2Right = .3;
 
-    double dir3Left = .2;
-    double dir3Right = -.2;
+    double dir3Left = .3;
+    double dir3Right = -.3;
 
 
 
@@ -245,8 +245,8 @@ public class PathBBlue extends GenericAutonomous {
                 getCells.run(robot);
                 correction = myPID.calculate(robot.getYaw() - startingYaw);
 
-                leftPower = default_speed + correction;
-                rightPower = default_speed - correction;
+                leftPower = .3 + correction;
+                rightPower = .3 - correction;
 
                 desired_distance = dist3;
 
