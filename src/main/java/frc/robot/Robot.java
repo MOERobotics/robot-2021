@@ -185,11 +185,11 @@ public class Robot extends TimedRobot {
         double y = leftJoystick.getY();
 
         if (x >0){
-            driveScale = x*(1-x)/(x*x+1.0e-10);
+            driveScale = 10*x*(1-x)/((Math.pow(x, 2)+1.0e-10));
             leftPower = -y;
             rightPower = -y*(driveScale - wheelBase/2)/(driveScale+wheelBase/2);
         } else{
-            driveScale = -1*(x*(1+x))/(x*x+1.0e-10);
+            driveScale = -10*(x*(1+x))/((Math.pow(x, 2)+1.0e-10));
             leftPower = -y/(driveScale+wheelBase/2)*(driveScale-wheelBase/2);
             rightPower = -y;
         }
