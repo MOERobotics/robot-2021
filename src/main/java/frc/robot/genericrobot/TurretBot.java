@@ -40,6 +40,8 @@ public class TurretBot extends GenericRobot {
 
     @Override
     protected void setAimAdjusterPowerInternal(double power) {
+        elevationLeft.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
+        elevationRight.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
         elevationLeft.set(power);
         elevationRight.set(power);
     }
