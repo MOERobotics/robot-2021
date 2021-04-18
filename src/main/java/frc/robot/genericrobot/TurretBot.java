@@ -15,11 +15,11 @@ import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 
 public class TurretBot extends GenericRobot {
 
-    CANSparkMax indexer   = new CANSparkMax(40, kBrushed);
+    CANSparkMax indexer   = new CANSparkMax(40, kBrushless);
     CANSparkMax speeeen   = new CANSparkMax(41, kBrushless);
     CANSparkMax shooterA  = new CANSparkMax(42, kBrushless);
     CANSparkMax shooterB  = new CANSparkMax(49, kBrushless);
-    CANSparkMax collector = new CANSparkMax(43, kBrushed);
+    CANSparkMax collector = new CANSparkMax(43, kBrushless);
     CANSparkMax leftMotorA = new CANSparkMax(20, kBrushless);
     CANSparkMax leftMotorB = new CANSparkMax(1, kBrushless);
     CANSparkMax rightMotorA = new CANSparkMax(14, kBrushless);
