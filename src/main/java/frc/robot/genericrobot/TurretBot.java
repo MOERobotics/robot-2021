@@ -29,6 +29,12 @@ public class TurretBot extends GenericRobot {
     Servo       elevationRight = new Servo(1);
 
     @Override
+    public double getShooterAngleMax(){return 1;}
+
+    @Override
+    public double getShooterAngleMin(){return -1;}
+
+    @Override
     protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
         //super.setMotorPowerPercentageInternal(leftPower,rightPower);
 
@@ -42,8 +48,16 @@ public class TurretBot extends GenericRobot {
     protected void setAimAdjusterPowerInternal(double power) {
         elevationLeft.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
         elevationRight.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
-        elevationLeft.set(power);
-        elevationRight.set(power);
+        elevationLeft.setSpeed(power);
+        elevationRight.setSpeed(power);
+
+    }
+
+    @Override
+    protected double getAimElevationInternal(){
+        elevationLeft.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
+        elevationRight.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
+        return (elevationLeft.getSpeed());
     }
 
     @Override

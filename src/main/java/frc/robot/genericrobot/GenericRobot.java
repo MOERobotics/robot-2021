@@ -104,11 +104,11 @@ public abstract class GenericRobot {
 
 
         if ((getAimElevationInternal() > getShooterAngleMax()) && (angleAdjusterPower > 0)){
-            angleAdjusterPower = 0;
+            angleAdjusterPower = 1;
         }
 
         if ((getAimElevationInternal() < getShooterAngleMin()) && (angleAdjusterPower < 0)){
-            angleAdjusterPower = 0;
+            angleAdjusterPower = -1;
         }
 
         if ((getClimberPortTicks() < getClimberVerticalPortPositionMin()) && (climbVerticalPortPower < 0)){

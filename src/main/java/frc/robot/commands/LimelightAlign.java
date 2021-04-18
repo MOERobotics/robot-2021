@@ -16,6 +16,7 @@ public class LimelightAlign extends GenericCommand{
     long timeoutTime = 4000;
     double correction;
     double defaultSpeed = 0.25;
+    double turretPower = .4;
     PIDController PIDPivot = new PIDController(6.0e-2, 1.0e-2, 1.0e-3);
 
     public LimelightAlign(double setPoint, double setPointDeadzone){
@@ -51,21 +52,28 @@ public class LimelightAlign extends GenericCommand{
             //Pivots to the left
             targetCentered = false;
 
-            correction = PIDPivot.calculate(setPoint - robot.limelight.getLimelightX());
+            /*correction = PIDPivot.calculate(setPoint - robot.limelight.getLimelightX());
             leftPower = defaultSpeed * correction;
-            rightPower = -defaultSpeed * correction;
+            rightPower = -defaultSpeed * correction;*/
+
+            turretPower = .4;
+
 
 
         } else if (robot.limelight.getLimelightX() > setPointDeadzone + setPoint) {
             //Pivots to the right
             targetCentered = false;
-            correction = PIDPivot.calculate(robot.limelight.getLimelightX() - setPoint);
+
+            /*correction = PIDPivot.calculate(robot.limelight.getLimelightX() - setPoint);
             leftPower = -defaultSpeed * correction;
-            rightPower = defaultSpeed * correction;
+            rightPower = defaultSpeed * correction;*/
+
+            turretPower = -.4;
 
         } else {
             leftPower = 0;
             rightPower = 0;
+            turretPower = 0;
             if (!targetCentered) {
                 startingTime = System.currentTimeMillis();
                 targetCentered = true;
@@ -82,7 +90,8 @@ public class LimelightAlign extends GenericCommand{
             setEnabled(false);
         }
 
-        robot.setMotorPowerPercentage(leftPower, rightPower);
+        //robot.setMotorPowerPercentage(leftPower, rightPower);
+        robot.setTurretPowerPercentage(turretPower);
 
     }
 

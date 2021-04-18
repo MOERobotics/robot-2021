@@ -47,6 +47,8 @@ public class Robot extends TimedRobot {
     boolean waitingForMediumHigh = false;
     boolean waitingForChange = false;
 
+    boolean adjustElevation = true;
+
     public static final Map<String, GenericAutonomous> autonomousMap
         = new HashMap<String, GenericAutonomous> () {{
             put(PlanA.class.getName(), new PlanA());
@@ -251,13 +253,23 @@ public class Robot extends TimedRobot {
 
         //Elevation Adjuster
         if (xboxJoystick.getY(GenericHID.Hand.kLeft) < -0.5){
-            robot.aimUp(1.0);
+            if (adjustElevation){
+                robot.aimUp(Math.min(1,robot.getAimElevation() +.25));
+                adjustElevation = false;
+            }
+
+            //robot.aimUp(.05);
             shooterController.setEnabled(false);
         } else if (xboxJoystick.getY(GenericHID.Hand.kLeft) > 0.5){
-            robot.aimUp(0.1);
+            if (adjustElevation){
+                robot.aimUp(Math.max(-1.0, robot.getAimElevation()-.25));
+                adjustElevation = false;
+            }
+
+            //robot.aimUp(-0.5);
             shooterController.setEnabled(false);
-        } else if (!shooterController.getEnabled()){
-            robot.aimUp(0);
+        } else{
+            adjustElevation = true;
         }
 
 
