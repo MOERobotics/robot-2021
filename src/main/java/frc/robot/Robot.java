@@ -181,13 +181,27 @@ public class Robot extends TimedRobot {
 
         double wheelBase = 28;
         double driveScale = wheelBase/4;
+        double x = leftJoystick.getX();
+        double y = leftJoystick.getY();
 
-        leftPower  = -0.5*leftJoystick.getY()*(1 + wheelBase*leftJoystick.getX()/2/driveScale);
-        rightPower = -0.5*leftJoystick.getY()*(1 - wheelBase*leftJoystick.getX()/2/driveScale);
+        if (x >0){
+            driveScale = x*(1-x)/(x*x+1.0e-10);
+            leftPower = -y;
+            rightPower = -y*(driveScale - wheelBase/2)/(driveScale+wheelBase/2);
+        } else{
+            driveScale = -1*(x*(1+x))/(x*x+1.0e-10);
+            leftPower = -y/(driveScale+wheelBase/2)*(driveScale-wheelBase/2);
+            rightPower = -y;
+        }
+
+
+
+        //leftPower  = -0.5*leftJoystick.getY()*(1 + wheelBase*leftJoystick.getX()/2/driveScale);
+        //rightPower = -0.5*leftJoystick.getY()*(1 - wheelBase*leftJoystick.getX()/2/driveScale);
 
         double driverRestriction = 0.75;
 
-         leftPower = driverRestriction * deadzoneValue( leftPower, deadZone);
+        leftPower = driverRestriction * deadzoneValue( leftPower, deadZone);
         rightPower = driverRestriction * deadzoneValue(rightPower, deadZone);
 
         if (leftJoystick.getRawButton(3)) { //nudge left
