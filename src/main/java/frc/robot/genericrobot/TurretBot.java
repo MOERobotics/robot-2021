@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 
 import com.revrobotics.ControlType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.Logger;
@@ -27,6 +28,8 @@ public class TurretBot extends GenericRobot {
     Solenoid    shifter = new Solenoid(0);
     Servo       elevationLeft = new Servo(0);
     Servo       elevationRight = new Servo(1);
+
+    DigitalInput homeSensor = new DigitalInput(1);
 
     @Override
     public double getShooterAngleMax(){return 1;}
@@ -133,5 +136,10 @@ public class TurretBot extends GenericRobot {
     @Override
     public double getTurretAngleDegrees() {
         return speeeen.getEncoder().getPosition();
+    }
+
+    @Override
+    public boolean getHomeSensor() {
+        return homeSensor.get();
     }
 }

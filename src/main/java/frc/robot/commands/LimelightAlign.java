@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 
-public class LimelightAlign extends GenericCommand{
+public class LimelightAlign extends GenericCommand{ //567 counts rotation == ~270deg
     double leftPower;
     double rightPower;
     private boolean aligning;

@@ -321,6 +321,12 @@ public class Robot extends TimedRobot {
         }
         robot.setTurretPowerPercentage(turretPower);
 
+        if(robot.getHomeSensor() == true){
+            //not at home
+        }else{
+            //at home
+        }
+
         //Shooter
         if (xboxJoystick.getYButtonPressed()) {
             shooterOn = true;

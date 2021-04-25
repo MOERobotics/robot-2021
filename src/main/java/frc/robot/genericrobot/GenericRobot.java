@@ -52,7 +52,7 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Escalator Power"               , escalatorPower                                    );
         SmartDashboard.putBoolean ("Escalator Sensor Low"          , getEscalatorSensorLow()                           );
         SmartDashboard.putBoolean ("Escalator Sensor Medium"       , getEscalatorSensorMedium()                        );
-        SmartDashboard.putBoolean ("Escalator Sensor Medium High"  , getEscalatorSensorMediumHigh());
+        //SmartDashboard.putBoolean ("Escalator Sensor Medium High"  , getEscalatorSensorMediumHigh());
         SmartDashboard.putBoolean ("Escalator Sensor High"         , getEscalatorSensorHigh()                          );
         SmartDashboard.putNumber  ("Escalator Power"               , escalatorPower                                    );
         SmartDashboard.putNumber  ("Indexer Power"                 , indexerPower                                      );
@@ -94,6 +94,8 @@ public abstract class GenericRobot {
         SmartDashboard.putBoolean ("Shooter Under Limit"           , (getAimElevation() < getShooterAngleMin())           );
 
         SmartDashboard.putNumber  ("Camera Tilt"                   , getCameraTilt()                                   );
+        SmartDashboard.putBoolean  ("Home Sensor"                   , getHomeSensor()                                 );
+
 
         printSmartDashboardInternal();
     }
@@ -709,11 +711,17 @@ public abstract class GenericRobot {
         return false;
     }
 
+    protected boolean getHomeSensorInternal(){
+        Logger.logOnce("getHomeSensorInternal","I don't have a home sensor:'(");
+
+        return false;
+    }
+
     public boolean getEscalatorSensorLow(){ return getEscalatorSensorLowInternal();}
     public boolean getEscalatorSensorMedium(){ return getEscalatorSensorMediumInternal();}
     public boolean getEscalatorSensorHigh(){ return getEscalatorSensorHighInternal();}
     public boolean getEscalatorSensorMediumHigh(){ return getEscalatorSensorMediumHighInternal();}
-
+    public boolean getHomeSensor(){ return getHomeSensorInternal();}
 
     public void setEscalatorLights(boolean onOff){
         //System.out.println("I don't have escalator lights");
