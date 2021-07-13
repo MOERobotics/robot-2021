@@ -40,11 +40,11 @@ public class TurretBot extends GenericRobot {
     @Override
     protected void setMotorPowerPercentageInternal(double leftPower, double rightPower) {
         //super.setMotorPowerPercentageInternal(leftPower,rightPower);
-
+        // fix using some reverse function. see rev robotics manual
         leftMotorA.set(leftPower);
         leftMotorB.set(leftPower);
-        rightMotorA.set(rightPower);
-        rightMotorB.set(rightPower);
+        rightMotorA.set(-rightPower);
+        rightMotorB.set(-rightPower);
     }
 
     @Override

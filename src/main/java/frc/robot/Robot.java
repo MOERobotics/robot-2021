@@ -278,12 +278,26 @@ public class Robot extends TimedRobot {
         double turretPower = 0;
         switch (xboxDPadDirection) {
             case SOUTH: //high velocity (long range)
-                robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
+
+                // autoAim
+
+                if (robot.limelight.getLimelightX() > 0){
+                    turretPower = -0.2;
+                }
+                else{
+                    turretPower = 0.2;
+                }
+
+                if (Math.abs(robot.limelight.getLimelightX()) <= 5){
+                    turretPower = turretPower/2;
+                }
+
+               /* robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
                 limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
-                shooterController.setSetPoint(125);
+                shooterController.setSetPoint(125); */
                 break;
 
             case NORTH: //low velocity (short range)
@@ -295,7 +309,7 @@ public class Robot extends TimedRobot {
                 break;
 
             case EAST: //medium velocity (mid range)
-                turretPower = 0.4;
+                turretPower = 0.2;
 /*
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
@@ -307,7 +321,7 @@ public class Robot extends TimedRobot {
                 break;
 
             case WEST: //YEET
-                turretPower = -0.4;
+                turretPower = -0.2;
     /*
                 robot.setShooterSpeedPresetName(ShooterSpeedPresetName.YEET);
                 robot.limelight.table.getEntry("pipeline").setNumber(1);
@@ -318,6 +332,22 @@ public class Robot extends TimedRobot {
  */
                 break;
 
+        }
+        // autoAim
+
+        if (robot.limelight.getLimelightX() > 0){
+            turretPower = -0.3;
+        }
+        else{
+            turretPower = 0.3;
+        }
+
+        if (Math.abs(robot.limelight.getLimelightX()) <= 3){
+            turretPower = turretPower/2;
+        }
+
+        if (Math.abs(robot.limelight.getLimelightX())<=1){
+            turretPower = 0;
         }
         robot.setTurretPowerPercentage(turretPower);
 
@@ -472,10 +502,10 @@ public class Robot extends TimedRobot {
 
         //Turret test
         if (leftJoystick.getRawButton(3)) {
-            robot.setTurretPowerPercentage(-0.1);
+            robot.setTurretPowerPercentage(-0.3);
         }
         if (leftJoystick.getRawButton(4)) {
-            robot.setTurretPowerPercentage(0.1);
+            robot.setTurretPowerPercentage(0.3);
         }
         if ( (!leftJoystick.getRawButton(3)) && !(leftJoystick.getRawButton(4)) )
         {
