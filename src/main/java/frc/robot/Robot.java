@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
@@ -37,6 +38,8 @@ public class Robot extends TimedRobot {
     XboxController    xboxJoystick      = new XboxController(1);
     ElevationControl  shooterController = new ElevationControl();
     boolean shooterOn = false;
+
+    boolean louDrive = false;
 
     double deadZone = 0.10;
     long timeEscalatorStarted = 0;
@@ -83,6 +86,14 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
+        SmartDashboard.putBoolean("louDrive", louDrive);
+        if (leftJoystick.getRawButton(3)){
+            louDrive = true;
+        }
+
+        if(leftJoystick.getRawButton(4)){
+            louDrive = false;
+        }
         if (leftJoystick.getTriggerPressed()) {
             robot.resetAttitude();
             robot.resetEncoders();
@@ -174,8 +185,28 @@ public class Robot extends TimedRobot {
             if (activeCommand.locksControls()) return;
         }
 
-        double  leftPower = -leftJoystick.getY() + leftJoystick.getX();
-        double rightPower = -leftJoystick.getY() - leftJoystick.getX();
+        double wheelBase = 28;
+        double driveScale = wheelBase / 4;
+        double x = leftJoystick.getX();
+        double y = leftJoystick.getY();
+        double leftPower;
+        double rightPower;
+
+        if (louDrive) {
+
+            if (x > 0) {
+                driveScale = 10 * x * (1 - x) / ((Math.pow(x, 2) + 1.0e-10));
+                leftPower = -y;
+                rightPower = -y * (driveScale - wheelBase / 2) / (driveScale + wheelBase / 2);
+            } else {
+                driveScale = -10 * (x * (1 + x)) / ((Math.pow(x, 2) + 1.0e-10));
+                leftPower = -y / (driveScale + wheelBase / 2) * (driveScale - wheelBase / 2);
+                rightPower = -y;
+            }
+        } else {
+            leftPower = -leftJoystick.getY() + leftJoystick.getX();
+            rightPower = -leftJoystick.getY() - leftJoystick.getX();
+        }
 
 
         double driverRestriction = 0.75;
