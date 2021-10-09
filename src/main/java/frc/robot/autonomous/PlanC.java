@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class PlanC extends GenericAutonomous {
 
       //change speed depending on robot!! (CaMOElot = .4, TestBot = .2)
-      double defaultSpeed = 0.25;
+      double defaultSpeed = 0.30;
 
       static double startingYaw = 0.0; //start at an angle, figure out later
       static double startingDistance = 0.0;
@@ -118,7 +118,7 @@ public class PlanC extends GenericAutonomous {
                         robot.setMotorPowerPercentage(speedScale * defaultSpeed * (1 + correction),
                                 speedScale * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 104) { //maybe change depending on how far we need to go
+                        if (currentDistance - startingDistance > 114) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
                               autonomousStep += 1;
                         }

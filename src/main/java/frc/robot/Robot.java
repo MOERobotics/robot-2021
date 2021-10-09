@@ -234,6 +234,9 @@ public class Robot extends TimedRobot {
 
         //Collector
         if (xboxJoystick.getTriggerAxis(GenericHID.Hand.kRight) > 0) {
+            shooterController.begin(robot);
+            shooterController.setEnabled(true);
+            shooterController.setSetPoint(153);
             if (robot.getEscalatorSensorMedium()) { //&& (ballCount<=3)
                 escalatorPower = 0.5;
             }
@@ -287,7 +290,7 @@ public class Robot extends TimedRobot {
                 limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
-                shooterController.setSetPoint(125);
+                shooterController.setSetPoint(138);
                 break;
 
             case SOUTH: //low velocity (short range)
@@ -305,7 +308,7 @@ public class Robot extends TimedRobot {
                 limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
-                shooterController.setSetPoint(140);
+                shooterController.setSetPoint(142);
 
                 break;
 
