@@ -291,9 +291,12 @@ public class Robot extends TimedRobot {
                 break;
 
             case SOUTH: //low velocity (short range)
-                robot.setShooterSpeedPresetName(ShooterSpeedPresetName.SHORT_RANGE);
+                robot.setShooterSpeedPresetName(ShooterSpeedPresetName.MID_RANGE);
                 robot.limelight.table.getEntry("pipeline").setNumber(0);
                 limelightAlignChosen = limeLightAlignCloseDistance;
+                shooterController.begin(robot);
+                shooterController.setEnabled(true);
+                shooterController.setSetPoint(153);
                 break;
 
             case EAST: //medium velocity (mid range)
@@ -302,7 +305,7 @@ public class Robot extends TimedRobot {
                 limelightAlignChosen = limelightAlignFarDistance;
                 shooterController.begin(robot);
                 shooterController.setEnabled(true);
-                shooterController.setSetPoint(131);
+                shooterController.setSetPoint(140);
 
                 break;
 
