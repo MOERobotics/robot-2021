@@ -162,7 +162,7 @@ public class PlanF extends GenericAutonomous {
                 yawDifference = -continuousAngleDiff((robot.getYaw() - currentYaw) / 180 * Math.PI);
                 currentDistance = robot.getDistanceInchesRight();
                 correction = PIDSteering.calculate((-currentDistance + startingDistance) + outerRadius * yawDifference);
-                robot.setMotorPowerPercentage ( (-defaultSpeed * .75) - correction, (-defaultSpeed * 1.5) + correction);
+                robot.setMotorPowerPercentage ( (-defaultSpeed * .75) + correction, (-defaultSpeed * 1.5) - correction);
 
                 if (currentDistance - startingDistance > outerArcLength) {
                     autonomousStep += 1;
