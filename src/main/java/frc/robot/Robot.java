@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
             put(PlanC.class.getName(), new PlanC());
             put(PlanD.class.getName(), new PlanD());
             put(PlanE.class.getName(), new PlanE());
+            put(PlanF.class.getName(), new PlanF());
     }};
 
     public static final LimelightAlign
@@ -121,6 +122,9 @@ public class Robot extends TimedRobot {
         if (leftJoystick.getRawButtonPressed(8)) {
             autoProgram = autonomousMap.get(PlanE.class.getName());
         }
+        if (leftJoystick.getRawButtonPressed(9)) {
+            autoProgram = autonomousMap.get(PlanF.class.getName());
+        }
 
         robot.limelight.table.getEntry("ledMode").setNumber(0);
 
@@ -160,6 +164,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        SmartDashboard.putNumber("joystickReadingX", leftJoystick.getX());
+        SmartDashboard.putNumber("joystickReadingY", leftJoystick.getY());
+
         double escalatorPower = 0.0;
         double collectorPower = 0.0;
 
@@ -207,6 +214,8 @@ public class Robot extends TimedRobot {
             leftPower = -leftJoystick.getY() + leftJoystick.getX();
             rightPower = -leftJoystick.getY() - leftJoystick.getX();
         }
+        leftPower = -leftJoystick.getY() + leftJoystick.getX();
+        rightPower = -leftJoystick.getY() - leftJoystick.getX();
 
 
         double driverRestriction = 0.75;

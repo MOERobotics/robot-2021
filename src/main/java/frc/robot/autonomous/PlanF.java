@@ -118,7 +118,7 @@ public class PlanF extends GenericAutonomous {
                 robot.setMotorPowerPercentage(speedScale * defaultSpeed * (1 + correction),
                         speedScale * defaultSpeed * (1 - correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance > 114) { //maybe change depending on how far we need to go
+                if (currentDistance - startingDistance > 84) { //maybe change depending on how far we need to go
                     robot.driveForward(0);
                     autonomousStep += 1;
                 }
@@ -129,10 +129,10 @@ public class PlanF extends GenericAutonomous {
                 startingDistance = robot.getDistanceInchesRight();
                 PIDSteering.reset();
                 PIDSteering.disableContinuousInput();
-                startingYaw = robot.getYaw();
+                currentYaw = robot.getYaw();
                 autonomousStep += 1;
-                outerArcLength = 33;
-                outerRadius = 36.6;
+                outerArcLength = 60;
+                outerRadius = 56;
 
                 break;
 
@@ -143,7 +143,7 @@ public class PlanF extends GenericAutonomous {
                 robot.setMotorPowerPercentage ( (defaultSpeed * .75) + correction, (defaultSpeed * 1.5) - correction);
 
                 if (currentDistance - startingDistance > outerArcLength) {
-                    autonomousStep += 1;
+                    autonomousStep = 21;
                 }
                 break;
             case 7: //reset for arc

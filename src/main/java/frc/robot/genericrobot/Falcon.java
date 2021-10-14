@@ -45,8 +45,8 @@ public class Falcon extends GenericRobot{
     CANEncoder encoderShootA    = new CANEncoder(shooterA);
     CANEncoder encoderShootB    = new CANEncoder(shooterB);
 
-    CANEncoder encoderClimbPort = new CANEncoder(climberPort);
-    CANEncoder encoderClimbStarboard = new CANEncoder(climberStarboard);
+    CANEncoder encoderClimbPort = climberPort.getEncoder();
+    CANEncoder encoderClimbStarboard = climberStarboard.getEncoder();
 
     Lidar lidar = new Lidar();
 
@@ -113,8 +113,10 @@ public class Falcon extends GenericRobot{
         angleAdjusterDigitalInputReverse = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
 
         climberPort.setIdleMode     (IdleMode.kBrake);
-        climberPort.setInverted(true);
+        //climberPort.setInverted(true);
+        //climberStarboard.setInverted(true);
         climberStarboard.setIdleMode(IdleMode.kBrake);
+
 
         indexer.setInverted(true);
 
@@ -174,13 +176,13 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
-    public double getPIDmaneuverP(){return 1.0e-1;}
+    public double getPIDmaneuverP(){return 1.0e-2;}
 
     @Override
-    public double getPIDmaneuverI(){return 1.0e-2;}
+    public double getPIDmaneuverI(){return 1.0e-3;}
 
     @Override
-    public double getPIDmaneuverD(){return 2.0e-4;}
+    public double getPIDmaneuverD(){return 2.0e-5;}
 
     @Override
     public double getYaw() {
