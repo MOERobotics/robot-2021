@@ -140,10 +140,10 @@ public class PlanF extends GenericAutonomous {
                 yawDifference = continuousAngleDiff((robot.getYaw() - currentYaw) / 180 * Math.PI);
                 currentDistance = robot.getDistanceInchesRight();
                 correction = PIDSteering.calculate((currentDistance - startingDistance) + outerRadius * yawDifference);
-                robot.setMotorPowerPercentage ( (defaultSpeed * .75) + correction, (defaultSpeed * 1.5) - correction);
+                robot.setMotorPowerPercentage ( (defaultSpeed * .75) + correction/3, (defaultSpeed * 1.5) - correction/3);
 
                 if (currentDistance - startingDistance > outerArcLength) {
-                    autonomousStep = 21;
+                    autonomousStep = +1;
                 }
                 break;
             case 7: //reset for arc
@@ -154,15 +154,15 @@ public class PlanF extends GenericAutonomous {
                 PIDSteering.disableContinuousInput();
                 startingYaw = robot.getYaw();
                 autonomousStep += 1;
-                outerArcLength = 33;
-                outerRadius = 36.6;
+                //outerArcLength = 33;
+                //outerRadius = 36.6;
 
                 break;
             case 8: // backwards arc back to previous position
                 yawDifference = -continuousAngleDiff((robot.getYaw() - currentYaw) / 180 * Math.PI);
                 currentDistance = robot.getDistanceInchesRight();
                 correction = PIDSteering.calculate((-currentDistance + startingDistance) + outerRadius * yawDifference);
-                robot.setMotorPowerPercentage ( (-defaultSpeed * .75) + correction, (-defaultSpeed * 1.5) - correction);
+                robot.setMotorPowerPercentage ( (-defaultSpeed * .75) + correction/3, (-defaultSpeed * 1.5) - correction/3);
 
                 if (currentDistance - startingDistance > outerArcLength) {
                     autonomousStep += 1;
@@ -188,7 +188,7 @@ public class PlanF extends GenericAutonomous {
                 currentDistance = robot.getDistanceInchesLeft();
                 if (currentDistance - startingDistance < -64) { //maybe change depending on how far we need to go
                     robot.driveForward(0);
-                    autonomousStep = 13;
+                    autonomousStep = 18; // Jump to shooting.
                 }
                 break;
 
