@@ -110,7 +110,10 @@ public class Falcon extends GenericRobot{
         angleAdj.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
 
         angleAdjusterDigitalInputForward = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
-        angleAdjusterDigitalInputReverse = angleAdj.getForwardLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
+        angleAdjusterDigitalInputReverse = angleAdj.getReverseLimitSwitch(CANDigitalInput.LimitSwitchPolarity.kNormallyClosed);
+
+        angleAdjusterDigitalInputForward.enableLimitSwitch(false);
+        angleAdjusterDigitalInputReverse.enableLimitSwitch(false);
 
         climberPort.setIdleMode     (IdleMode.kBrake);
         //climberPort.setInverted(true);
@@ -219,7 +222,7 @@ public class Falcon extends GenericRobot{
 
     private static final ShooterSpeedPreset
             SHOOTER_SPEED_OFF   = new ShooterSpeedPreset(   0,    0),
-            SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2285, 2285),
+            SHOOTER_SPEED_SHORT = new ShooterSpeedPreset(2275, 2275),
             SHOOTER_SPEED_MID   = new ShooterSpeedPreset(2620, 2620),
             SHOOTER_SPEED_LONG  = new ShooterSpeedPreset(4000, 3000), //not final
             SHOOTER_SPEED_YEET  = new ShooterSpeedPreset(5000, 5000);

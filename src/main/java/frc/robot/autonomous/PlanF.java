@@ -186,7 +186,7 @@ public class PlanF extends GenericAutonomous {
                 robot.setMotorPowerPercentage(-1.3 * defaultSpeed * (1 - correction),
                         -1.3 * defaultSpeed * (1 + correction));
                 currentDistance = robot.getDistanceInchesLeft();
-                if (currentDistance - startingDistance < -64) { //maybe change depending on how far we need to go
+                if (currentDistance - startingDistance < -84) { //maybe change depending on how far we need to go
                     robot.driveForward(0);
                     autonomousStep = 18; // Jump to shooting.
                 }

@@ -1,6 +1,7 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import frc.robot.commands.ElevationControl;
 import frc.robot.commands.GenericCommand;
 import frc.robot.commands.LimelightAlign;
 import frc.robot.genericrobot.GenericRobot;
@@ -29,6 +30,8 @@ public class PlanC extends GenericAutonomous {
       long alignWait = 2000;
       GenericCommand activeCommand = new LimelightAlign( -0.5, .8); //planA set setPoint to -2
       CollectPowerCells getCells = new CollectPowerCells();
+
+      ElevationControl shooterController = new ElevationControl();
 
       @Override
       public void autonomousInit(GenericRobot robot) {
@@ -73,6 +76,7 @@ public class PlanC extends GenericAutonomous {
 
                         } else {
                               robot.limelight.table.getEntry("ledMode").setNumber(1);
+                              robot.setMotorPowerPercentage(0,0);
                               autonomousStep += 1;
                         }
                         break;
@@ -112,13 +116,17 @@ public class PlanC extends GenericAutonomous {
 
                   case 4: //straightaway
                         double speedScale = 1.2 - (0.2/104) * robot.getDistanceInchesLeft();
+                        speedScale = 2.5;
                         getCells.run(robot);
+                        shooterController.begin(robot);
+                        shooterController.setEnabled(true);
+                        shooterController.setSetPoint(153);
 
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                         robot.setMotorPowerPercentage(speedScale * defaultSpeed * (1 + correction),
                                 speedScale * defaultSpeed * (1 - correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance > 114) { //maybe change depending on how far we need to go
+                        if (currentDistance - startingDistance > 126) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
                               autonomousStep += 1;
                         }
@@ -126,6 +134,9 @@ public class PlanC extends GenericAutonomous {
 
                   case 5: //reset for backward straight-away
                         getCells.run(robot);
+                        shooterController.begin(robot);
+                        shooterController.setEnabled(true);
+                        shooterController.setSetPoint(153);
 
                         startingDistance = robot.getDistanceInchesLeft();
                         PIDSteering.reset();
@@ -136,12 +147,16 @@ public class PlanC extends GenericAutonomous {
 
                   case 6: //backward straight-away
                         getCells.run(robot);
+                        shooterController.begin(robot);
+                        shooterController.setEnabled(true);
+                        shooterController.setSetPoint(153);
+                        speedScale = 2.5;
 
                         correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                        robot.setMotorPowerPercentage(-1.3 * defaultSpeed * (1 - correction),
-                                -1.3 * defaultSpeed * (1 + correction));
+                        robot.setMotorPowerPercentage(-1 * speedScale * defaultSpeed * (1 - correction),
+                                -1 * defaultSpeed * speedScale * (1 + correction));
                         currentDistance = robot.getDistanceInchesLeft();
-                        if (currentDistance - startingDistance < -64) { //maybe change depending on how far we need to go
+                        if (currentDistance - startingDistance < -126) { //maybe change depending on how far we need to go
                               robot.driveForward(0);
                               autonomousStep = 13;
                         }
