@@ -362,7 +362,7 @@ public class Robot extends TimedRobot {
             smartClimb.step(robot);
         }
         if (leftJoystick.getRawButton(13)) {
-            robot.raiseClimberArms(.2);
+            robot.raiseClimberArms(.4);
             smartClimb.setHolding(false);
         }
 
