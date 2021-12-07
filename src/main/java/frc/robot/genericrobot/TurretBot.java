@@ -29,7 +29,7 @@ public class TurretBot extends GenericRobot {
     Servo       elevationLeft = new Servo(0);
     Servo       elevationRight = new Servo(1);
 
-    DigitalInput homeSensor = new DigitalInput(1);
+    DigitalInput homeSensor = new DigitalInput(6);
 
     @Override
     public double getShooterAngleMax(){return 1;}

@@ -7,18 +7,15 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
 
 import static frc.robot.Util.*;
 import static frc.robot.genericrobot.GenericRobot.*;
-
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,6 +36,7 @@ public class Robot extends TimedRobot {
     boolean shooterOn = false;
 
     double deadZone = 0.10;
+    double turretPower;
     long timeEscalatorStarted = 0;
     //boolean escalatorSpaceCounting =false;
     int ballCount = 0;
@@ -46,8 +44,13 @@ public class Robot extends TimedRobot {
     boolean ballShootCounted = false;
     boolean waitingForMediumHigh = false;
     boolean waitingForChange = false;
+    boolean wakeUp = true;
+    boolean positive = true;
 
     boolean adjustElevation = true;
+
+    DigitalInput magnetSensor = new DigitalInput(0);
+    DigitalInput magnetSensor2 = new DigitalInput(1);
 
     public static final Map<String, GenericAutonomous> autonomousMap
         = new HashMap<String, GenericAutonomous> () {{
@@ -75,6 +78,10 @@ public class Robot extends TimedRobot {
         robot.printSmartDashboard();
         autoProgram.printSmartDashboard();
         activeCommand.printSmartDashboard();
+
+        SmartDashboard.putBoolean("magnetSensor0", magnetSensor.get());
+        SmartDashboard.putBoolean("magnetSensor1", magnetSensor2.get());
+
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
@@ -335,18 +342,23 @@ public class Robot extends TimedRobot {
         }
         // autoAim
 
-        if (robot.limelight.getLimelightX() > 0){
-            turretPower = -0.3;
+        if (robot.limelight.getLimelightV() == 1.0) { // do we see the target?
+            if (robot.limelight.getLimelightX() > 0) {
+                turretPower = -0.2;
+            } else {
+                turretPower = 0.2;
+            }
+
+            if (Math.abs(robot.limelight.getLimelightX()) <= 3) {
+                turretPower = turretPower / 2;
+            }
+
+            if (Math.abs(robot.limelight.getLimelightX()) <= 1) {
+                turretPower = 0;
+            }
+
         }
         else{
-            turretPower = 0.3;
-        }
-
-        if (Math.abs(robot.limelight.getLimelightX()) <= 3){
-            turretPower = turretPower/2;
-        }
-
-        if (Math.abs(robot.limelight.getLimelightX())<=1){
             turretPower = 0;
         }
         robot.setTurretPowerPercentage(turretPower);
@@ -443,6 +455,22 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic() {
 
+        if (wakeUp){
+            if (robot.getTurretAngleDegrees() <= 50 && positive){
+                turretPower = .2;
+            }
+            else{
+                positive = false;
+                turretPower = -.2;
+            }
+            if (!magnetSensor.get()){
+                robot.resetEncoders();
+                turretPower = 0;
+                wakeUp = false;
+            }
+            robot.setTurretPowerPercentage(turretPower);
+        }
+
         LiveWindow.setEnabled(false);
 
         double leftPower = -leftJoystick.getY() + leftJoystick.getX();
@@ -512,6 +540,16 @@ public class Robot extends TimedRobot {
             robot.setTurretPowerPercentage(0.0);
         }
 
+        //autoRecalibrate
+        if(leftJoystick.getRawButton(14)){
+            wakeUp = true;
+            positive = true;
+        }
+        //add zeroed out
+        if (leftJoystick.getRawButton(13)){
+            robot.resetEncoders();
+        }
+
 
 
     }
@@ -550,5 +588,7 @@ public class Robot extends TimedRobot {
             return directionMap.getOrDefault(angle, POVDirection.NULL);
         }
     }
+
+
 
 }

@@ -795,6 +795,7 @@ public abstract class GenericRobot {
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
         NetworkTableEntry ta = table.getEntry("ta");
+        NetworkTableEntry tv = table.getEntry("tv");
 
         private Limelight() {
             table.getEntry("pipeline").setNumber(0);
@@ -807,6 +808,8 @@ public abstract class GenericRobot {
         public double getLimelightY() {
             return ty.getDouble(0.0);
         }
+
+        public double getLimelightV() {return tv.getDouble(0.0);}
 
         public double getLimelightArea() {
             return ta.getDouble(0.0);
