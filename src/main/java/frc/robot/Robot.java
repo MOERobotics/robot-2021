@@ -357,6 +357,14 @@ public class Robot extends TimedRobot {
                 turretPower = 0;
             }
 
+            //hard stop if too far out
+            if (robot.getTurretAngleDegrees() >=  90 && turretPower > 0){
+                turretPower = 0;
+            }
+            if (robot.getTurretAngleDegrees()<= -90 && turretPower <0){
+                turretPower = 0;
+            }
+
         }
         else{
             turretPower = 0;
