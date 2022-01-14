@@ -400,6 +400,9 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
+    public boolean getEscalatorSensorMediumHighInternal() { return escalatorSensorMediumHigh.get();}
+
+    @Override
     public boolean getEscalatorSensorHighInternal(){
         return escalatorSensorHigh.get();
     }
