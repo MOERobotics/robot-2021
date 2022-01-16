@@ -71,8 +71,8 @@ public class TapeAlign extends GenericAutonomous{
                 }
                 break;
             case 3:
-                leftPower = defaultPower + .05;
-                rightPower = defaultPower - .05;
+                leftPower = defaultPower - .05;
+                rightPower = defaultPower + .05;
                 currentYaw = robot.getYaw();
                 if (Math.abs(currentYaw - startAngle) >= theta){
                     leftPower = 0;
@@ -85,7 +85,7 @@ public class TapeAlign extends GenericAutonomous{
                 rightPower = 0;
                 break;
         }
-        robot.setMotorPowerPercentage(-leftPower,-rightPower);
+        robot.setMotorPowerPercentage(leftPower,rightPower);
 
     }
 
