@@ -64,7 +64,7 @@ public class Falcon extends GenericRobot{
     private AnalogPotentiometer elevation = new AnalogPotentiometer(input, 180, 90);
 
     DigitalInput escalatorSensorLow = new DigitalInput(1);
-    DigitalInput escalatorSensorMedium = new DigitalInput(2);
+    DigitalInput escalatorSensorMedium = new DigitalInput(6);
     DigitalInput escalatorSensorHigh = new DigitalInput(3);
 
     //Servo cameraTilt = new Servo(0);
