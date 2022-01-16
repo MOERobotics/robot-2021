@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.genericrobot.GenericRobot;
 
-public class tapeAlign extends GenericAutonomous{
+public class TapeAlign extends GenericAutonomous{
 
     double startAngle;
 
@@ -22,6 +22,8 @@ public class tapeAlign extends GenericAutonomous{
 
     double correction;
     double currentYaw;
+
+    long startingTime = 0;
 
     public void autonomousInit(GenericRobot robot) {
         startingTime = System.currentTimeMillis();
