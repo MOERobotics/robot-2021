@@ -23,6 +23,14 @@ public class TapeAlign extends GenericAutonomous{
 
     long startingTime = 0;
 
+    boolean leftSensor = false;
+    boolean rightSensor = false;
+
+    double outerDistArc;
+    double lTraveled;
+
+    double fwd = 60;
+
     public void autonomousInit(GenericRobot robot) {
         startingTime = System.currentTimeMillis();
         autonomousStep = -1;
@@ -51,33 +59,66 @@ public class TapeAlign extends GenericAutonomous{
                 break;
             case 1:
                 correction = PIDSteering.calculate(robot.getYaw() - startAngle);
-                leftPower = defaultPower * (1 + correction);
-                rightPower = defaultPower * (1 - correction);
+                leftPower = defaultPower + correction; //didn't we stop doing this?
+                rightPower = defaultPower - correction;
+
                 if (! robot.getEscalatorSensorMediumHigh()) {
                     startDistance = robot.getDistanceInchesLeft();
+                    leftSensor = true;
+                    autonomousStep += 1;
+                }
+                else if (! robot.getEscalatorSensorMedium()) {
+                    startDistance = robot.getDistanceInchesLeft();
+                    rightSensor = true;
                     autonomousStep += 1;
                 }
                 break;
             case 2:
                 correction = PIDSteering.calculate(robot.getYaw() - startAngle);
-                leftPower = defaultPower * (1 + correction);
-                rightPower = defaultPower * (1 - correction);
-                if (! robot.getEscalatorSensorMedium()) {
+                leftPower = defaultPower + correction; //confusion
+                rightPower = defaultPower - correction;
+
+                if ( !rightSensor && ! robot.getEscalatorSensorMedium()) {
                     differenceDistance = Math.abs(robot.getDistanceInchesLeft() - startDistance);
                     theta = Math.atan(differenceDistance / sensorDist)*180/Math.PI;
+                    outerDistArc = robot.getDistanceInchesRight();
+                    autonomousStep += 1;
+                }
+                else if (!leftSensor && ! robot.getEscalatorSensorMediumHigh()){
+                    differenceDistance = Math.abs(robot.getDistanceInchesLeft() - startDistance);
+                    theta = Math.atan(differenceDistance / sensorDist)*180/Math.PI;
+                    outerDistArc = robot.getDistanceInchesLeft();
                     autonomousStep += 1;
                 }
                 break;
             case 3:
-                leftPower = defaultPower*1.2;
-                rightPower = defaultPower*0.8;
+                if (leftSensor){
+                    leftPower = defaultPower*1.2;
+                    rightPower = defaultPower*0.8;
+                }
+                else {
+                    rightPower = defaultPower * 1.2;
+                    leftPower = defaultPower * 0.8;
+                }
                 currentYaw = robot.getYaw();
-                if ( (currentYaw - startAngle <= -theta) ) {
+                if ( Math.abs(currentYaw - startAngle) >= Math.abs(theta) ) {
+                    if (rightSensor){
+                        outerDistArc = robot.getDistanceInchesLeft() - outerDistArc;
+                    }
+                    else {
+                        outerDistArc = robot.getDistanceInchesRight() - outerDistArc;
+                    }
+                    lTraveled = outerDistArc/(theta*Math.PI/180)*Math.sin(theta*Math.PI/180);
                     autonomousStep += 1;
                 }
                 break;
             case 4:
-                currentYaw = startAngle-theta;
+                if (leftSensor) {
+                    currentYaw = startAngle - theta; //currentYaw = targetYaw because we are lazy
+                }
+                else{
+                    currentYaw = startAngle + theta; //currentYaw = targetYaw because we are lazy
+                }
                 PIDSteering.reset();
                 PIDSteering.enableContinuousInput(-180, 180);
                 startDistance = robot.getDistanceInchesLeft();
@@ -85,9 +126,9 @@ public class TapeAlign extends GenericAutonomous{
                 break;
             case 5:
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                leftPower = defaultPower * (1 - correction);
-                rightPower = defaultPower * (1 + correction);
-                if (Math.abs(robot.getDistanceInchesLeft()-startDistance)>12) {
+                leftPower = defaultPower - correction;
+                rightPower = defaultPower + correction;
+                if (Math.abs(robot.getDistanceInchesLeft()-startDistance)> (fwd-lTraveled)) {
                     leftPower = 0;
                     rightPower = 0;
                     autonomousStep += 1;
