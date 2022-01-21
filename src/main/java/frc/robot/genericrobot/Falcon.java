@@ -17,12 +17,12 @@ public class Falcon extends GenericRobot{
 
     AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 50);
 
-    CANSparkMax leftDriveA      = new CANSparkMax(13, MotorType.kBrushless);
-    CANSparkMax leftDriveB      = new CANSparkMax(14, MotorType.kBrushless);
-    CANSparkMax leftDriveC      = new CANSparkMax(15, MotorType.kBrushless);
-    CANSparkMax rightDriveA     = new CANSparkMax(20, MotorType.kBrushless);
-    CANSparkMax rightDriveB     = new CANSparkMax( 1, MotorType.kBrushless);
-    CANSparkMax rightDriveC     = new CANSparkMax( 2, MotorType.kBrushless);
+    CANSparkMax leftDriveA      = new CANSparkMax(20, MotorType.kBrushless);
+    CANSparkMax leftDriveB      = new CANSparkMax(1, MotorType.kBrushless);
+    CANSparkMax leftDriveC      = new CANSparkMax(2, MotorType.kBrushless);
+    CANSparkMax rightDriveA     = new CANSparkMax(13, MotorType.kBrushless);
+    CANSparkMax rightDriveB     = new CANSparkMax( 14, MotorType.kBrushless);
+    CANSparkMax rightDriveC     = new CANSparkMax( 15, MotorType.kBrushless);
 
     CANSparkMax climberPort = new CANSparkMax(12, MotorType.kBrushless);
     CANSparkMax climberStarboard = new CANSparkMax( 3, MotorType.kBrushless);
@@ -86,9 +86,9 @@ public class Falcon extends GenericRobot{
         rightDriveB.setInverted(true);
         rightDriveC.setInverted(true);
 
-        /*leftDriveA.setInverted(true);
-        leftDriveB.setInverted(true);
-        leftDriveC.setInverted(true);*/
+        leftDriveA.setInverted(false);
+        leftDriveB.setInverted(false);
+        leftDriveC.setInverted(false);
 
         collector.setInverted(true);
 

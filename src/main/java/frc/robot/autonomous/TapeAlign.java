@@ -29,7 +29,7 @@ public class TapeAlign extends GenericAutonomous{
     double outerDistArc;
     double lTraveled;
 
-    double fwd = 24;
+    double fwd = 48;
 
     public void autonomousInit(GenericRobot robot) {
         startingTime = System.currentTimeMillis();
@@ -44,6 +44,7 @@ public class TapeAlign extends GenericAutonomous{
         SmartDashboard.putBoolean("MediumHigh", robot.getEscalatorSensorMediumHigh());
         SmartDashboard.putBoolean("Medium", robot.getEscalatorSensorMedium());
         SmartDashboard.putNumber("theta", theta);
+        SmartDashboard.putNumber("l", lTraveled);
         switch (autonomousStep) {
             case -1:
                 robot.resetEncoders();
@@ -110,7 +111,7 @@ public class TapeAlign extends GenericAutonomous{
                     else {
                         outerDistArc = robot.getDistanceInchesRight() - outerDistArc;
                     }
-                    lTraveled = outerDistArc/(theta*Math.PI/180)*Math.sin(theta*Math.PI/180);
+                    lTraveled = Math.abs(outerDistArc/(theta*Math.PI/180)*Math.sin(theta*Math.PI/180));
                     autonomousStep += 1;
                 }
                 break;
