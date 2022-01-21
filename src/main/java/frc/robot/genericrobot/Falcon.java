@@ -29,9 +29,9 @@ public class Falcon extends GenericRobot{
     CANSparkMax generatorShift  = null;//new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     CANSparkMax shooterA                   = new CANSparkMax( 5, MotorType.kBrushless);
-    CANPIDController shooterAPIDController = new CANPIDController(shooterA);
+    CANPIDController shooterAPIDController = shooterA.getPIDController();
     CANSparkMax shooterB                   = new CANSparkMax( 4, MotorType.kBrushless);
-    CANPIDController shooterBPIDController = new CANPIDController(shooterB);
+    CANPIDController shooterBPIDController = shooterB.getPIDController();
     CANSparkMax indexer         = new CANSparkMax( 6, MotorType.kBrushless);
     CANSparkMax escalator       = new CANSparkMax( 7, MotorType.kBrushless);
     CANSparkMax angleAdj        = new CANSparkMax( 8, MotorType.kBrushless);
@@ -40,13 +40,13 @@ public class Falcon extends GenericRobot{
 
     CANSparkMax collector       = new CANSparkMax(10, MotorType.kBrushless);
 
-    CANEncoder encoderRight     = new CANEncoder(rightDriveA);
-    CANEncoder encoderLeft      = new CANEncoder( leftDriveA);
-    CANEncoder encoderShootA    = new CANEncoder(shooterA);
-    CANEncoder encoderShootB    = new CANEncoder(shooterB);
+    CANEncoder encoderRight     = rightDriveA.getEncoder();
+    CANEncoder encoderLeft      = leftDriveA.getEncoder();
+    CANEncoder encoderShootA    = shooterA.getEncoder();
+    CANEncoder encoderShootB    = shooterB.getEncoder();
 
-    CANEncoder encoderClimbPort = new CANEncoder(climberPort);
-    CANEncoder encoderClimbStarboard = new CANEncoder(climberStarboard);
+    CANEncoder encoderClimbPort = climberPort.getEncoder();
+    CANEncoder encoderClimbStarboard = climberStarboard.getEncoder();
 
     Lidar lidar = new Lidar();
 
@@ -82,9 +82,13 @@ public class Falcon extends GenericRobot{
         leftDriveB .setIdleMode(IdleMode.kBrake);
         leftDriveC .setIdleMode(IdleMode.kBrake);
 
-        rightDriveA.setInverted(true);
+       rightDriveA.setInverted(true);
         rightDriveB.setInverted(true);
         rightDriveC.setInverted(true);
+
+        /*leftDriveA.setInverted(true);
+        leftDriveB.setInverted(true);
+        leftDriveC.setInverted(true);*/
 
         collector.setInverted(true);
 

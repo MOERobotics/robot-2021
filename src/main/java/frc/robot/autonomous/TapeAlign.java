@@ -10,7 +10,7 @@ public class TapeAlign extends GenericAutonomous{
 
     double leftPower;
     double rightPower;
-    double defaultPower = -.3;
+    double defaultPower = .2;
 
     double startDistance;
     double differenceDistance;
@@ -29,11 +29,13 @@ public class TapeAlign extends GenericAutonomous{
     double outerDistArc;
     double lTraveled;
 
-    double fwd = 60;
+    double fwd = 24;
 
     public void autonomousInit(GenericRobot robot) {
         startingTime = System.currentTimeMillis();
         autonomousStep = -1;
+        leftSensor = false;
+        rightSensor = false;
     }
 
     public void autonomousPeriodic(GenericRobot robot){
@@ -93,15 +95,15 @@ public class TapeAlign extends GenericAutonomous{
                 break;
             case 3:
                 if (leftSensor){
-                    leftPower = defaultPower*1.2;
-                    rightPower = defaultPower*0.8;
+                    leftPower = defaultPower*.8;
+                    rightPower = defaultPower*1.2;
                 }
                 else {
-                    rightPower = defaultPower * 1.2;
-                    leftPower = defaultPower * 0.8;
+                    rightPower = defaultPower * .8;
+                    leftPower = defaultPower * 1.2;
                 }
                 currentYaw = robot.getYaw();
-                if ( Math.abs(currentYaw - startAngle) >= Math.abs(theta) ) {
+                if ( Math.abs(Math.signum(currentYaw - startAngle)*(((Math.abs(currentYaw - startAngle) + 180) % 360) - 180)) >= Math.abs(theta) ) {
                     if (rightSensor){
                         outerDistArc = robot.getDistanceInchesLeft() - outerDistArc;
                     }
@@ -126,8 +128,8 @@ public class TapeAlign extends GenericAutonomous{
                 break;
             case 5:
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
-                leftPower = defaultPower - correction;
-                rightPower = defaultPower + correction;
+                leftPower = defaultPower + correction;
+                rightPower = defaultPower - correction;
                 if (Math.abs(robot.getDistanceInchesLeft()-startDistance)> (fwd-lTraveled)) {
                     leftPower = 0;
                     rightPower = 0;
