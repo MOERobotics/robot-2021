@@ -43,7 +43,7 @@ public class TapeAlign extends GenericAutonomous{
     public void autonomousPeriodic(GenericRobot robot){
         PIDController PIDSteering = new PIDController(robot.getPIDmaneuverP(), robot.getPIDmaneuverI(), robot.getPIDmaneuverD());
         double yawError;
-        SmartDashboard.putBoolean("MediumHigh", robot.getEscalatorSensorMediumHigh());
+        SmartDashboard.putBoolean("High", robot.getEscalatorSensorHigh());
         SmartDashboard.putBoolean("Medium", robot.getEscalatorSensorMedium());
         SmartDashboard.putNumber("theta", theta);
         SmartDashboard.putNumber("l", lTraveled);
@@ -68,7 +68,7 @@ public class TapeAlign extends GenericAutonomous{
                 leftPower = defaultPower + correction; //didn't we stop doing this?
                 rightPower = defaultPower - correction;
 
-                if (! robot.getEscalatorSensorMediumHigh()) {
+                if (! robot.getEscalatorSensorHigh()) {
                     startDistance = robot.getDistanceInchesLeft();
                     leftSensor = true;
                     autonomousStep += 1;
@@ -90,7 +90,7 @@ public class TapeAlign extends GenericAutonomous{
                     outerDistArc = robot.getDistanceInchesRight();
                     autonomousStep += 1;
                 }
-                else if (!leftSensor && ! robot.getEscalatorSensorMediumHigh()){
+                else if (!leftSensor && ! robot.getEscalatorSensorHigh()){
                     differenceDistance = Math.abs(robot.getDistanceInchesLeft() - startDistance);
                     theta = Math.atan(differenceDistance / sensorDist)*180/Math.PI;
                     outerDistArc = robot.getDistanceInchesLeft();
