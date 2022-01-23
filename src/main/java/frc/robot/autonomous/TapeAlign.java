@@ -29,13 +29,15 @@ public class TapeAlign extends GenericAutonomous{
     double outerDistArc;
     double lTraveled;
 
-    double fwd = 48;
+    double fwd = 60;
 
     public void autonomousInit(GenericRobot robot) {
         startingTime = System.currentTimeMillis();
         autonomousStep = -1;
         leftSensor = false;
         rightSensor = false;
+        lTraveled = 0;
+        fwd = 60;
     }
 
     public void autonomousPeriodic(GenericRobot robot){
@@ -45,6 +47,7 @@ public class TapeAlign extends GenericAutonomous{
         SmartDashboard.putBoolean("Medium", robot.getEscalatorSensorMedium());
         SmartDashboard.putNumber("theta", theta);
         SmartDashboard.putNumber("l", lTraveled);
+        SmartDashboard.putNumber("outerArcDist", outerDistArc);
         switch (autonomousStep) {
             case -1:
                 robot.resetEncoders();
@@ -91,17 +94,17 @@ public class TapeAlign extends GenericAutonomous{
                     differenceDistance = Math.abs(robot.getDistanceInchesLeft() - startDistance);
                     theta = Math.atan(differenceDistance / sensorDist)*180/Math.PI;
                     outerDistArc = robot.getDistanceInchesLeft();
-                    autonomousStep += 1;
+                    autonomousStep = 4;
                 }
                 break;
-            case 3:
+            case 3://///////////////////////////////////////////////////////////////////skip this step
                 if (leftSensor){
-                    leftPower = defaultPower*.8;
-                    rightPower = defaultPower*1.2;
+                    leftPower = defaultPower*.5;
+                    rightPower = defaultPower*2;
                 }
                 else {
-                    rightPower = defaultPower * .8;
-                    leftPower = defaultPower * 1.2;
+                    rightPower = defaultPower * .5;
+                    leftPower = defaultPower * 2;
                 }
                 currentYaw = robot.getYaw();
                 if ( Math.abs(Math.signum(currentYaw - startAngle)*(((Math.abs(currentYaw - startAngle) + 180) % 360) - 180)) >= Math.abs(theta) ) {
@@ -111,9 +114,9 @@ public class TapeAlign extends GenericAutonomous{
                     else {
                         outerDistArc = robot.getDistanceInchesRight() - outerDistArc;
                     }
-                    lTraveled = Math.abs(outerDistArc/(theta*Math.PI/180)*Math.sin(theta*Math.PI/180));
+                    lTraveled = Math.abs(outerDistArc/(theta*Math.PI/180)*Math.sin(Math.abs(theta*Math.PI/180)));
                     autonomousStep += 1;
-                }
+                }///////////////////////////////////////this step is skipped
                 break;
             case 4:
                 if (leftSensor) {
@@ -131,7 +134,7 @@ public class TapeAlign extends GenericAutonomous{
                 correction = PIDSteering.calculate(robot.getYaw() - currentYaw);
                 leftPower = defaultPower + correction;
                 rightPower = defaultPower - correction;
-                if (Math.abs(robot.getDistanceInchesLeft()-startDistance)> (fwd-lTraveled)) {
+                if (Math.abs(robot.getDistanceInchesLeft()-startDistance) >= (fwd-lTraveled)) {
                     leftPower = 0;
                     rightPower = 0;
                     autonomousStep += 1;
