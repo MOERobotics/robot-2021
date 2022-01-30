@@ -300,6 +300,12 @@ public class Falcon extends GenericRobot{
     }
 
     @Override
+    public Integer getLidarRawBack(){return lidar.getLidarRaw(0);}
+
+    @Override
+    public Integer getLidarRawFront(){return lidar.getLidarRaw(3);}
+
+    @Override
     protected void setIndexerPowerInternal(double indexerPower) {
         indexer.set(indexerPower);
     }

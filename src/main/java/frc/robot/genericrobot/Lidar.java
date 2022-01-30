@@ -46,6 +46,11 @@ class Lidar extends Thread {
         return lidarInches;
     }
 
+    public Integer getLidarRaw(int lidarID){
+        Integer lidarReading = getDistance(lidarID);
+        return lidarReading;
+    }
+
     private void writeDistance(int lidarID, int distance) {
         try {
             dataLock.lock();

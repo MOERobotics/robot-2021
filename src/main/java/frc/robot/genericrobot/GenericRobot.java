@@ -83,6 +83,9 @@ public abstract class GenericRobot {
         SmartDashboard.putNumber  ("Lidar Left"                    , coalesce(getLidarDistanceInchesLeft () , -9999.0) );
         SmartDashboard.putNumber  ("Lidar Right"                   , coalesce(getLidarDistanceInchesRight() , -9999.0) );
 
+        SmartDashboard.putNumber   ("Lidar Back Raw"                , coalesce(getLidarRawBack() , -9999) );
+        SmartDashboard.putNumber   ("Lidar Front Raw"              , coalesce(getLidarRawFront() , -9999) );
+
         SmartDashboard.putNumber  ("Limelight X"                   , limelight.getLimelightX   ()                      );
         SmartDashboard.putNumber  ("Limelight Y"                   , limelight.getLimelightY   ()                      );
         SmartDashboard.putNumber  ("Limelight A"                   , limelight.getLimelightArea()                      );
@@ -760,6 +763,13 @@ public abstract class GenericRobot {
 
     public Double getLidarDistanceInchesRight() {
         System.out.println("I don't have a right lidar :'(");
+        return null;
+    }
+
+    public Integer getLidarRawBack(){
+        return null;
+    }
+    public Integer getLidarRawFront(){
         return null;
     }
 

@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.*;
 import frc.robot.commands.*;
 import frc.robot.genericrobot.*;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 public class Robot extends TimedRobot {
 
@@ -46,6 +48,14 @@ public class Robot extends TimedRobot {
     boolean ballShootCounted = false;
     boolean waitingForMediumHigh = false;
     boolean waitingForChange = false;
+
+    int count = 0;
+    double xOneAr[] = new double[10];
+    double xTwoAr[] = new double[10];
+    double x_one = 0;
+    double x_two = 0;
+    double theta;
+    double LidarGap = 9.25;
 
     public static final Map<String, GenericAutonomous> autonomousMap
         = new HashMap<String, GenericAutonomous> () {{
@@ -74,6 +84,25 @@ public class Robot extends TimedRobot {
         robot.printSmartDashboard();
         autoProgram.printSmartDashboard();
         activeCommand.printSmartDashboard();
+
+        if (count < 5) {
+            xOneAr[count] = robot.getLidarDistanceInchesFront()+1;
+            xTwoAr[count] = robot.getLidarDistanceInchesLeft();
+        } else {
+            xOneAr[count % 5] = robot.getLidarDistanceInchesFront()+1;
+            xTwoAr[count % 5] = robot.getLidarDistanceInchesLeft();
+            x_one = DoubleStream.of(xOneAr).sum() / 5;
+            x_two = DoubleStream.of(xTwoAr).sum() / 5;
+        }
+        count += 1;
+
+        theta = Math.toDegrees(Math.atan((x_one-x_two)/ LidarGap));
+
+        double x_avg = (x_one + x_two) / 2 * Math.cos(theta);
+        SmartDashboard.putNumber("theta", theta);
+        SmartDashboard.putNumber("xOne", x_one);
+        SmartDashboard.putNumber("xTwo", x_two);
+        SmartDashboard.putNumber("x_Average", x_avg);
 
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
