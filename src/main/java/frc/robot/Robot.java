@@ -107,6 +107,7 @@ public class Robot extends TimedRobot {
         //SmartDashboard.putString("Instant Color", colorWheel.getAndStoreInstantColor().toString());
         //SmartDashboard.putString("Inferred Color",  colorWheel.getInferredColor().toString());
 
+
     }
 
     @Override
