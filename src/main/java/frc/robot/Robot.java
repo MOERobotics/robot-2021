@@ -31,7 +31,7 @@ import java.util.stream.DoubleStream;
 public class Robot extends TimedRobot {
 
     //WheelOfFortune    colorWheel   = new WheelOfFortune();
-    GenericAutonomous autoProgram       = new wallFollow(); //Auto routine to be used?
+    GenericAutonomous autoProgram       = new TapeAlign(); //Auto routine to be used?
     GenericCommand    activeCommand     = new LimelightAlign(-2,.8);
     SmartClimb        smartClimb        = new SmartClimb();
     GenericRobot      robot             = new Falcon();
